@@ -1,6 +1,8 @@
 #pragma once
 
-#include "targetver.h"
+#ifdef _WINDOWS
+	#include "targetver.h"
+#endif
 
 #include <stdio.h>
 #include <tchar.h>
