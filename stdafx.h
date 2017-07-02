@@ -2,10 +2,10 @@
 
 #ifdef _WINDOWS
 	#include "targetver.h"
+	#include <stdio.h>
+	#include <tchar.h>
 #endif
 
-#include <stdio.h>
-#include <tchar.h>
 #include <iostream>
 
 
