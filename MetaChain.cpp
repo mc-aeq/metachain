@@ -1,7 +1,7 @@
+#include "stdafx.h"
 /*
 	start point for the metachain
 */
-#include "stdafx.h"
 #ifdef _WINDOWS
 	
 #endif
@@ -15,7 +15,8 @@ using namespace std;
 // main entry point
 int main( int argc, char* argv[] )
 {
-	cout << "base start for a platform independent setup" << endl;
+	Logger::getInstance().log("-------------------------------");
+
 	cin.get();
 
 	// end metachain
