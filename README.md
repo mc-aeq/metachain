@@ -18,14 +18,22 @@ Perfect, then register in our [forum] and get in touch with us!
 Since we're currently in heavy development, we don't suggest installing the MetaChain yet. As soon as this changes we'll publish the installation details.
 #### Using binaries
 currently not supported
-#### Building for source
+#### Building for source on windows
+- clone the git repository using github for Desktop
+- open the MetaChain.sln in Microsoft Visual Studio
+- build for Debug or Release
+#### Building for source on linux
+g++, automake and autoconf as well as regular dev tools are required!
 Clone the github repository:
 ```sh
-$ cd
-$ mkdir metachain
-$ cd metachain
 $ git clone https://github.com/TrustChainTechnologies/metachain.git
+$ cd metachain
+$ ./configure
+$ ./make
 ```
+
+# External resources used in the source code
+- [brofield/simpleini] - for parsing ini files
 
 License
 ----
@@ -41,3 +49,4 @@ GPL
    [roadmap]: <https://forum.trustchaintechnologies.io/showthread.php?tid=13&pid=21#pid21>
    [whitepaper]: <https://backoffice.trustchaintechnologies.io/downloads/whitepaper.pdf>
    [forum]: <https://forum.trustchaintechnologies.io>
+   [brofield/simpleini]: <https://github.com/brofield/simpleini>
