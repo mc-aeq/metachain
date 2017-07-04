@@ -136,6 +136,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="src\external\SimpleIni.h" />
     <ClInclude Include="src\header\defines.h" />
     <ClInclude Include="src\header\logger.h" />
     <ClInclude Include="stdafx.h" />

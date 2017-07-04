@@ -33,6 +33,9 @@
     <ClInclude Include="src\header\logger.h">
       <Filter>Headerdateien\Logger</Filter>
     </ClInclude>
+    <ClInclude Include="src\external\SimpleIni.h">
+      <Filter>Headerdateien</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
