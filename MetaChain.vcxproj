@@ -104,6 +104,7 @@
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
+      <AdditionalDependencies>ws2_32.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -138,17 +139,52 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="src\defines.h" />
+    <ClInclude Include="src\external\byteswap.h" />
+    <ClInclude Include="src\external\crypto\aes.h" />
+    <ClInclude Include="src\external\crypto\chacha20.h" />
+    <ClInclude Include="src\external\crypto\common.h" />
+    <ClInclude Include="src\external\crypto\ctaes\ctaes.h" />
+    <ClInclude Include="src\external\crypto\hmac_sha256.h" />
+    <ClInclude Include="src\external\crypto\hmac_sha512.h" />
+    <ClInclude Include="src\external\crypto\ripemd160.h" />
+    <ClInclude Include="src\external\crypto\sha1.h" />
+    <ClInclude Include="src\external\crypto\sha256.h" />
+    <ClInclude Include="src\external\crypto\sha512.h" />
+    <ClInclude Include="src\external\endian.h" />
+    <ClInclude Include="src\external\hash.h" />
+    <ClInclude Include="src\external\prevector.h" />
     <ClInclude Include="src\external\SimpleIni.h" />
+    <ClInclude Include="src\external\tinyformat.h" />
+    <ClInclude Include="src\external\uint256.h" />
+    <ClInclude Include="src\external\utilstrencodings.h" />
     <ClInclude Include="src\logger.h" />
     <ClInclude Include="src\MetaChain.h" />
+    <ClInclude Include="src\network\CNetAddr.h" />
+    <ClInclude Include="src\network\CService.h" />
+    <ClInclude Include="src\network\CSubNet.h" />
     <ClInclude Include="src\network\NetworkManager.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="targetver.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="node.cpp" />
+    <ClCompile Include="src\external\crypto\aes.cpp" />
+    <ClCompile Include="src\external\crypto\chacha20.cpp" />
+    <ClCompile Include="src\external\crypto\ctaes\ctaes.c" />
+    <ClCompile Include="src\external\crypto\hmac_sha256.cpp" />
+    <ClCompile Include="src\external\crypto\hmac_sha512.cpp" />
+    <ClCompile Include="src\external\crypto\ripemd160.cpp" />
+    <ClCompile Include="src\external\crypto\sha1.cpp" />
+    <ClCompile Include="src\external\crypto\sha256.cpp" />
+    <ClCompile Include="src\external\crypto\sha512.cpp" />
+    <ClCompile Include="src\external\hash.cpp" />
+    <ClCompile Include="src\external\uint256.cpp" />
+    <ClCompile Include="src\external\utilstrencodings.cpp" />
     <ClCompile Include="src\logger.cpp" />
     <ClCompile Include="src\MetaChain.cpp" />
+    <ClCompile Include="src\network\CNetAddr.cpp" />
+    <ClCompile Include="src\network\CService.cpp" />
+    <ClCompile Include="src\network\CSubnet.cpp" />
     <ClCompile Include="src\network\NetworkManager.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>

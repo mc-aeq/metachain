@@ -2,13 +2,6 @@
 /*
 	start point for the metachain
 */
-#ifdef _WINDOWS
-	
-#endif
-
-#ifdef _LINUX
-	
-#endif
 
 using namespace std;
 
@@ -21,7 +14,7 @@ int main( int argc, char* argv[] )
 	// load our ini file and create our iniFile object
 	LOG("loading file", "INI");
 	CSimpleIniA *iniFile = new CSimpleIniA(true, false, false);
-	SI_Error eErr = iniFile->LoadFile("metachain.ini");
+	SI_Error eErr = iniFile->LoadFile("node.ini");
 
 	if( eErr == SI_OK )	// everything is OK with the ini file, we go on with our initialization
 	{
@@ -31,7 +24,15 @@ int main( int argc, char* argv[] )
 		Logger::getInstance().initialize(iniFile);
 		LOG("successfully initialized", "LOGGER");
 
+		LOG("creating MetaChain", "MC");
+		MetaChain *pMC = new MetaChain();
+
 		LOG("initializing MetaChain", "MC");
+		if (!pMC->initialize(iniFile))
+		{
+			LOG_ERROR("Something terrible happened, we're terminating for security reasons.", "MC");
+			return 1;
+		}
 
 		cin.get();
 		// end metachain 
