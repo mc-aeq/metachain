@@ -19,6 +19,18 @@
     <Filter Include="Quelldateien\Logger">
       <UniqueIdentifier>{9bf21418-00ea-4b26-a7ab-1a9a846048b5}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Headerdateien\MetaChain">
+      <UniqueIdentifier>{8568985c-d503-4842-b788-108b2d0d7eb0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Quelldateien\MetaChain">
+      <UniqueIdentifier>{b0e541b9-94d7-40f9-8853-6bb8dc632fed}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Headerdateien\MetaChain\Network">
+      <UniqueIdentifier>{3704ea5b-4eb2-432f-9c21-0ddf03f2d987}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Quelldateien\MetaChain\Network">
+      <UniqueIdentifier>{e39a9f6e-eadb-46ff-b786-65c784dca28f}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
@@ -27,22 +39,34 @@
     <ClInclude Include="targetver.h">
       <Filter>Headerdateien</Filter>
     </ClInclude>
-    <ClInclude Include="src\header\defines.h">
-      <Filter>Headerdateien</Filter>
-    </ClInclude>
-    <ClInclude Include="src\header\logger.h">
-      <Filter>Headerdateien\Logger</Filter>
-    </ClInclude>
     <ClInclude Include="src\external\SimpleIni.h">
       <Filter>Headerdateien</Filter>
+    </ClInclude>
+    <ClInclude Include="src\defines.h">
+      <Filter>Headerdateien</Filter>
+    </ClInclude>
+    <ClInclude Include="src\logger.h">
+      <Filter>Headerdateien\Logger</Filter>
+    </ClInclude>
+    <ClInclude Include="src\network\NetworkManager.h">
+      <Filter>Headerdateien\MetaChain\Network</Filter>
+    </ClInclude>
+    <ClInclude Include="src\MetaChain.h">
+      <Filter>Headerdateien\MetaChain</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
       <Filter>Quelldateien</Filter>
     </ClCompile>
-    <ClCompile Include="MetaChain.cpp">
+    <ClCompile Include="node.cpp">
       <Filter>Quelldateien</Filter>
+    </ClCompile>
+    <ClCompile Include="src\network\NetworkManager.cpp">
+      <Filter>Quelldateien\MetaChain\Network</Filter>
+    </ClCompile>
+    <ClCompile Include="src\MetaChain.cpp">
+      <Filter>Quelldateien\MetaChain</Filter>
     </ClCompile>
     <ClCompile Include="src\logger.cpp">
       <Filter>Quelldateien\Logger</Filter>
