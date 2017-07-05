@@ -34,6 +34,7 @@ $ ./make
 
 # External resources used in the source code
 - [brofield/simpleini] - for parsing ini files
+- [bitcoin/bitcoin] - parts of the network communication, parts of the crypto sources (e.g. sha256 etc). Everything heavily modified, changed for our demands and integrated into our structure
 
 License
 ----
@@ -50,3 +51,4 @@ GPL
    [whitepaper]: <https://backoffice.trustchaintechnologies.io/downloads/whitepaper.pdf>
    [forum]: <https://forum.trustchaintechnologies.io>
    [brofield/simpleini]: <https://github.com/brofield/simpleini>
+   [bitcoin/bitcoin]: <https://github.com/bitcoin/bitcoin>
