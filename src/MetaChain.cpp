@@ -7,6 +7,10 @@ MetaChain::MetaChain() :
 
 bool MetaChain::initialize(CSimpleIniA* iniFile)
 {
+	// start the lightweight scheduling thread
+	CScheduler::Function serviceLoop = boost::bind(&CScheduler::serviceQueue, &m_scheduler);
+	m_threadGroup.create_thread(boost::bind(&TraceThread<CScheduler::Function>, "scheduler", serviceLoop));
+
 	// create a new network manager
 	m_pNetworkManager = new NetworkManager(this);
 
@@ -15,7 +19,7 @@ bool MetaChain::initialize(CSimpleIniA* iniFile)
 		return false;
 
 	// finally everything is initialized and we print our copyright info
-	this->LicenseInfo();
+	LicenseInfo();
 
 	// everything is fine
 	return true;

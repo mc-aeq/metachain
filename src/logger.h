@@ -23,6 +23,9 @@ class Logger
 		string				m_strFileName;
 		ofstream			m_streamLogFile;
 
+		// mutex to secure thread safe output
+		mutex				m_mutexOutput;
+
 		// functions
 		Logger();
 		Logger(Logger const& copy);					// not implemented

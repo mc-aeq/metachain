@@ -15,6 +15,9 @@ Logger& Logger::getInstance()
 
 void Logger::log( string strLogLine, facility logFacility, string strModule)
 {
+	// since we're using multiple threads we're using a mutex to ensure proper output
+	std::lock_guard<std::mutex> lock(m_mutexOutput);
+
 	/*
 		Time processing
 	*/
@@ -46,15 +49,15 @@ void Logger::log( string strLogLine, facility logFacility, string strModule)
 
 	// make the strModule more fancy if set
 	if (strModule != "")
-		strModule = " [" + strModule + "] ";
+		strModule = " [" + strModule + "] ";	
 	
 	// output to stdout if configured
-	if(this->m_bLogToStdout)
+	if (this->m_bLogToStdout)
 		cout << this->m_caTimeBuf << m_strFacility << strModule << strLogLine << endl;
 
 	// output to file if configured
-	if(this->m_bLogToFile)
-		m_streamLogFile << this->m_caTimeBuf <<  m_strFacility << strModule << strLogLine << endl;
+	if (this->m_bLogToFile)
+		m_streamLogFile << this->m_caTimeBuf << m_strFacility << strModule << strLogLine << endl;
 }
 
 void Logger::initialize(CSimpleIniA* iniFile)

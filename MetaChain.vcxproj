@@ -101,10 +101,13 @@
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
+      <AdditionalIncludeDirectories>C:\Office\metachain\dependencies\boost_1_64_0;C:\Office\metachain\dependencies\openssl-x64\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <MinimalRebuild>false</MinimalRebuild>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
-      <AdditionalDependencies>ws2_32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>ws2_32.lib;libssl.lib;libcrypto.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>C:\Office\metachain\dependencies\boost_1_64_0\bin.v2\libs\chrono\build\msvc-14.1\debug\address-model-64\link-static\threading-multi;C:\Office\metachain\dependencies\boost_1_64_0\bin.v2\libs\system\build\msvc-14.1\debug\address-model-64\link-static\threading-multi;C:\Office\metachain\dependencies\boost_1_64_0\bin.v2\libs\date_time\build\msvc-14.1\debug\address-model-64\link-static\threading-multi;C:\Office\metachain\dependencies\boost_1_64_0\bin.v2\libs\thread\build\msvc-14.1\debug\address-model-64\link-static\threading-multi;C:\Office\metachain\dependencies\openssl-x64\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -150,13 +153,18 @@
     <ClInclude Include="src\external\crypto\sha1.h" />
     <ClInclude Include="src\external\crypto\sha256.h" />
     <ClInclude Include="src\external\crypto\sha512.h" />
+    <ClInclude Include="src\external\cThreadInterrupt.h" />
     <ClInclude Include="src\external\endian.h" />
     <ClInclude Include="src\external\hash.h" />
     <ClInclude Include="src\external\prevector.h" />
+    <ClInclude Include="src\external\random.h" />
+    <ClInclude Include="src\external\reverselock.h" />
+    <ClInclude Include="src\external\scheduler.h" />
     <ClInclude Include="src\external\SimpleIni.h" />
     <ClInclude Include="src\external\tinyformat.h" />
     <ClInclude Include="src\external\uint256.h" />
     <ClInclude Include="src\external\utilstrencodings.h" />
+    <ClInclude Include="src\functions.h" />
     <ClInclude Include="src\logger.h" />
     <ClInclude Include="src\MetaChain.h" />
     <ClInclude Include="src\network\CNetAddr.h" />
@@ -177,9 +185,13 @@
     <ClCompile Include="src\external\crypto\sha1.cpp" />
     <ClCompile Include="src\external\crypto\sha256.cpp" />
     <ClCompile Include="src\external\crypto\sha512.cpp" />
+    <ClCompile Include="src\external\cThreadInterrupt.cpp" />
     <ClCompile Include="src\external\hash.cpp" />
+    <ClCompile Include="src\external\random.cpp" />
+    <ClCompile Include="src\external\scheduler.cpp" />
     <ClCompile Include="src\external\uint256.cpp" />
     <ClCompile Include="src\external\utilstrencodings.cpp" />
+    <ClCompile Include="src\functions.cpp" />
     <ClCompile Include="src\logger.cpp" />
     <ClCompile Include="src\MetaChain.cpp" />
     <ClCompile Include="src\network\CNetAddr.cpp" />

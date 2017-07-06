@@ -7,16 +7,46 @@ This is the main class that'll hold all information about the chain and handle a
 */
 class NetworkManager
 {
-private:
-	MetaChain				*m_pMC;
-	CService				*m_pServiceLocal;
+	private:
+		MetaChain				*m_pMC;
+		CService				*m_pServiceLocal;
 
-	bool					startListeningSocket();
-	bool					SetSocketNonBlocking(SOCKET& hSocket, bool fNonBlocking);
-	string					NetworkErrorString(int err);
-	bool					CloseSocket(SOCKET& hSocket);
+		// thread interrupts and message processing variables
+		CThreadInterrupt		m_interruptNet;
+		bool					m_bfMsgProcWake;
+		condition_variable		m_condMsgProc;
+		mutex					m_mutexMsgProc;
+		atomic<bool>			m_abflagInterruptMsgProc;
 
-public:
-							NetworkManager(MetaChain *mc);
-	bool					initialize(CSimpleIniA* iniFile);
+		// socket functions
+		bool					startListeningSocket();
+		bool					SetSocketNonBlocking(SOCKET& hSocket, bool fNonBlocking);
+		string					NetworkErrorString(int err);
+		bool					CloseSocket(SOCKET& hSocket);
+
+		// thread functions and variables
+		thread					threadSocketHandler;
+		thread					threadOpenAddedConnections;
+		thread					threadOpenConnections;
+		thread					threadMessageHandler;
+		void					startThreads();
+		void					interruptSocks5(bool bInterrupt);
+		void					ThreadSocketHandler();
+		void					ThreadOpenAddedConnections();
+		void					ThreadOpenConnections();
+		void					ThreadMessageHandler();
+
+		// functions to update the peers and ban lists
+		void					DumpData();
+		void					DumpPeers();
+		void					DumpBans();
+
+		// destructor functions
+		void					Interrupt();
+		void					Stop();
+
+	public:
+								NetworkManager(MetaChain *mc);
+								~NetworkManager();
+		bool					initialize(CSimpleIniA* iniFile);
 };

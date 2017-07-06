@@ -18,6 +18,9 @@ Perfect, then register in our [forum] and get in touch with us!
 Since we're currently in heavy development, we don't suggest installing the MetaChain yet. As soon as this changes we'll publish the installation details.
 #### Using binaries
 currently not supported
+#### Dependencies
+- for compiling from source you'll need a working [boost] installation with all libraries built.
+- [openssl] is widely used in this project. you'll need a working installation with all libraries.
 #### Building for source on windows
 - clone the git repository using github for Desktop
 - open the MetaChain.sln in Microsoft Visual Studio
@@ -35,6 +38,8 @@ $ ./make
 # External resources used in the source code
 - [brofield/simpleini] - for parsing ini files
 - [bitcoin/bitcoin] - parts of the network communication, parts of the crypto sources (e.g. sha256 etc). Everything heavily modified, changed for our demands and integrated into our structure
+- [boost] - used for special timings, threads and scheduling
+- [openssl] - used for securing communications as well as some crypto functionalities.
 
 License
 ----
@@ -52,3 +57,5 @@ GPL
    [forum]: <https://forum.trustchaintechnologies.io>
    [brofield/simpleini]: <https://github.com/brofield/simpleini>
    [bitcoin/bitcoin]: <https://github.com/bitcoin/bitcoin>
+   [boost]: <http://www.boost.org/>
+   [openssl]: <https://github.com/openssl/openssl>

@@ -9,11 +9,17 @@ This is the main class that'll hold all information about the chain and handle a
 class MetaChain
 {
 private:
-	NetworkManager		*m_pNetworkManager;
+	NetworkManager				*m_pNetworkManager;
+	boost::thread_group			m_threadGroup;
+	CScheduler					m_scheduler;
 
-	void				LicenseInfo();
+	void						LicenseInfo();
 
 public:
-						MetaChain();
-	bool				initialize(CSimpleIniA* iniFile);
-};
+								MetaChain();
+	bool						initialize(CSimpleIniA* iniFile);
+
+	// simple getter
+	CScheduler*					getScheduler() { return &m_scheduler; };
+	boost::thread_group*		getThreadGroup() { return &m_threadGroup; };
+};	

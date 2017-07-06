@@ -3,6 +3,9 @@
 /metachain
 /MetaChain.o
 /output.log
+/dependencies
+libcrypto-1_1-x64.dll
+libssl-1_1-x64.dll
 
 *.tar.gz
 *.exe

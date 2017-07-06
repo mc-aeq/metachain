@@ -126,6 +126,21 @@
     <ClInclude Include="src\external\crypto\ctaes\ctaes.h">
       <Filter>Headerdateien\crypto\ctaes</Filter>
     </ClInclude>
+    <ClInclude Include="src\external\cThreadInterrupt.h">
+      <Filter>Headerdateien</Filter>
+    </ClInclude>
+    <ClInclude Include="src\functions.h">
+      <Filter>Headerdateien</Filter>
+    </ClInclude>
+    <ClInclude Include="src\external\scheduler.h">
+      <Filter>Headerdateien</Filter>
+    </ClInclude>
+    <ClInclude Include="src\external\random.h">
+      <Filter>Headerdateien</Filter>
+    </ClInclude>
+    <ClInclude Include="src\external\reverselock.h">
+      <Filter>Headerdateien</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -187,6 +202,18 @@
     </ClCompile>
     <ClCompile Include="src\external\crypto\ctaes\ctaes.c">
       <Filter>Quelldateien\crypto\ctaes</Filter>
+    </ClCompile>
+    <ClCompile Include="src\external\cThreadInterrupt.cpp">
+      <Filter>Quelldateien</Filter>
+    </ClCompile>
+    <ClCompile Include="src\functions.cpp">
+      <Filter>Quelldateien</Filter>
+    </ClCompile>
+    <ClCompile Include="src\external\scheduler.cpp">
+      <Filter>Quelldateien</Filter>
+    </ClCompile>
+    <ClCompile Include="src\external\random.cpp">
+      <Filter>Quelldateien</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

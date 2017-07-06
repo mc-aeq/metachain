@@ -1,5 +1,6 @@
 #pragma once
 
+// windows special includes
 #ifdef _WINDOWS
 	#include "targetver.h"
 	#include <stdio.h>
@@ -8,11 +9,20 @@
 	#include <WS2tcpip.h>
 #endif
 
+// special include if it's a microsoft visual studio dev IDE
+#ifdef _MSC_VER
+	#include <basetsd.h>
+	typedef SSIZE_T ssize_t;
+#endif
+
+// linux special includes
 #ifdef _LINUX
 	#include <sys/socket.h>
 	#include <netinet/in.h>
 #endif
 
+
+// standard includes from standard libraries
 #include <iostream>
 #include <string>
 #include <time.h>
@@ -22,9 +32,19 @@
 #include <stdint.h>
 #include <limits>
 #include <errno.h>
+#include <atomic>
+#include <chrono>
+#include <mutex>
+#include <thread>
 
+// openssl includes
+#include <openssl/crypto.h>
+
+// defines and general functions
 #include "src/defines.h"
+#include "src/functions.h"
 
+// includes from external sources
 #include "src/external/SimpleIni.h"
 #include "src/external/tinyformat.h"
 #include "src/external/byteswap.h"
@@ -41,8 +61,13 @@
 #include "src/external/crypto/sha1.h"
 #include "src/external/crypto/sha256.h"
 #include "src/external/crypto/sha512.h"
+#include "src/external/random.h"
+#include "src/external/reverselock.h"
 #include "src/external/hash.h"
+#include "src/external/cThreadInterrupt.h"
+#include "src/external/scheduler.h"
 
+// includes of our own sources
 #include "src/logger.h"
 #include "src/network/CNetAddr.h"
 #include "src/network/CSubNet.h"
