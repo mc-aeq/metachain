@@ -8,3 +8,7 @@
 #define LOG_WARNING(logline, module) Logger::getInstance().log(##logline, Logger::facility::warning, ##module)
 #define LOG_DEBUG(logline, module) Logger::getInstance().log(##logline, Logger::facility::debug, ##module)
 #define LOG_ERROR(logline, module) Logger::getInstance().log(##logline, Logger::facility::error, ##module)
+
+// network define standard values
+#define NET_STANDARD_PORT_LISTENING 5634
+#define NET_STANDARD_CATCHALL_LISTENING "*"

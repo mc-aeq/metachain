@@ -72,14 +72,17 @@ CService::CService(const char *caHost, unsigned short usPort)
 			if (aiTrav->ai_family == AF_INET)
 			{
 				assert(aiTrav->ai_addrlen >= sizeof(sockaddr_in));
-				::CService(CNetAddr(((struct sockaddr_in*)(aiTrav->ai_addr))->sin_addr), usPort);
+				SetRaw(NET_IPV4, (const uint8_t*)&((struct sockaddr_in*)(aiTrav->ai_addr))->sin_addr);
+				port = usPort;
 			}
 
 			if (aiTrav->ai_family == AF_INET6)
 			{
 				assert(aiTrav->ai_addrlen >= sizeof(sockaddr_in6));
 				struct sockaddr_in6* s6 = (struct sockaddr_in6*) aiTrav->ai_addr;
-				::CService(CNetAddr(s6->sin6_addr, s6->sin6_scope_id), usPort);
+				SetRaw(NET_IPV6, (const uint8_t*)&s6->sin6_addr);
+				scopeId = s6->sin6_scope_id;
+				port = usPort;
 			}
 
 			aiTrav = aiTrav->ai_next;
@@ -163,24 +166,24 @@ std::vector<unsigned char> CService::GetKey() const
 	return vKey;
 }
 
-std::string CService::ToStringPort() const
+std::string CService::toStringPort() const
 {
 	return strprintf("%u", port);
 }
 
-std::string CService::ToStringIPPort() const
+std::string CService::toStringIPPort() const
 {
 	if (IsIPv4()) {
-		return ToStringIP() + ":" + ToStringPort();
+		return ToStringIP() + ":" + toStringPort();
 	}
 	else {
-		return "[" + ToStringIP() + "]:" + ToStringPort();
+		return "[" + ToStringIP() + "]:" + toStringPort();
 	}
 }
 
-std::string CService::ToString() const
+std::string CService::toString() const
 {
-	return ToStringIPPort();
+	return toStringIPPort();
 }
 
 void CService::SetPort(unsigned short portIn)

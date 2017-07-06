@@ -33,7 +33,7 @@ class CService : public CNetAddr
 		friend bool						operator<(const CService& a, const CService& b);
 
 		std::vector<unsigned char>		GetKey() const;
-		std::string						ToString() const;
-		std::string						ToStringPort() const;
-		std::string						ToStringIPPort() const;
+		std::string						toString() const;
+		std::string						toStringPort() const;
+		std::string						toStringIPPort() const;
 };

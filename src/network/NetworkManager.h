@@ -11,6 +11,11 @@ private:
 	MetaChain				*m_pMC;
 	CService				*m_pServiceLocal;
 
+	bool					startListeningSocket();
+	bool					SetSocketNonBlocking(SOCKET& hSocket, bool fNonBlocking);
+	string					NetworkErrorString(int err);
+	bool					CloseSocket(SOCKET& hSocket);
+
 public:
 							NetworkManager(MetaChain *mc);
 	bool					initialize(CSimpleIniA* iniFile);

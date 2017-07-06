@@ -25,13 +25,194 @@ bool NetworkManager::initialize(CSimpleIniA* iniFile)
 	// creating a CService class for the listener and storing it for further purposes
 	try
 	{
-		m_pServiceLocal = new CService(iniFile->GetValue("network", "listening_ip", "*"), (unsigned short)iniFile->GetLongValue("network", "listening_port", 5634));
+		m_pServiceLocal = new CService(iniFile->GetValue("network", "listening_ip", NET_STANDARD_CATCHALL_LISTENING), (unsigned short)iniFile->GetLongValue("network", "listening_port", NET_STANDARD_PORT_LISTENING));
 	}
 	catch (exception e)
 	{
 		LOG_ERROR("That wasn't good. An error occured creating the local service listener. Please check your configuration file.", "NET");
 		return false;
 	}
+
+	// now we start the listening socket
+	if (!this->startListeningSocket())
+	{
+		LOG_ERROR("Not able to bind listening Socket", "NET");
+		return false;
+	}
+
+	// everything went smoothly
+	return true;
+}
+
+bool NetworkManager::startListeningSocket()
+{
+	int nOne = 1;
+
+	// Create socket for listening for incoming connections
+	struct sockaddr_storage sockaddr;
+	socklen_t len = sizeof(sockaddr);
+	if(!m_pServiceLocal->GetSockAddr((struct sockaddr*)&sockaddr, &len))
+	{
+		LOG_ERROR("Bind address family not supported - " + m_pServiceLocal->toString(), "NET");
+		return false;
+	}
+
+	SOCKET hListenSocket = socket(((struct sockaddr*)&sockaddr)->sa_family, SOCK_STREAM, IPPROTO_TCP);
+	if(hListenSocket == INVALID_SOCKET)
+	{
+		LOG_ERROR("Couldn't open socket for incoming connections - Socket error: " + NetworkErrorString(WSAGetLastError()), "NET");
+		return false;
+	}
+
+#ifndef _WINDOWS
+#ifdef SO_NOSIGPIPE
+	// Different way of disabling SIGPIPE on BSD
+	setsockopt(hListenSocket, SOL_SOCKET, SO_NOSIGPIPE, (void*)&nOne, sizeof(int));
+#endif
+	// Allow binding if the port is still in TIME_WAIT state after
+	// the program was closed and restarted.
+	setsockopt(hListenSocket, SOL_SOCKET, SO_REUSEADDR, (void*)&nOne, sizeof(int));
+	// Disable Nagle's algorithm
+	setsockopt(hListenSocket, IPPROTO_TCP, TCP_NODELAY, (void*)&nOne, sizeof(int));
+#else
+	setsockopt(hListenSocket, SOL_SOCKET, SO_REUSEADDR, (const char*)&nOne, sizeof(int));
+	setsockopt(hListenSocket, IPPROTO_TCP, TCP_NODELAY, (const char*)&nOne, sizeof(int));
+#endif
+
+	// Set to non-blocking, incoming connections will also inherit this
+	if(!SetSocketNonBlocking(hListenSocket, true))
+	{
+		LOG_ERROR("BindListenPort: Setting listening socket to non-blocking failed - " + NetworkErrorString(WSAGetLastError()), "NET");
+		return false;
+	}
+
+	// some systems don't have IPV6_V6ONLY but are always v6only; others do have the option
+	// and enable it by default or not. Try to enable it, if possible.
+	if(m_pServiceLocal->IsIPv6())
+	{
+#ifdef IPV6_V6ONLY
+#ifdef _WINDOWS
+		setsockopt(hListenSocket, IPPROTO_IPV6, IPV6_V6ONLY, (const char*)&nOne, sizeof(int));
+#else
+		setsockopt(hListenSocket, IPPROTO_IPV6, IPV6_V6ONLY, (void*)&nOne, sizeof(int));
+#endif
+#endif
+#ifdef _WINDOWS
+		int nProtLevel = PROTECTION_LEVEL_UNRESTRICTED;
+		setsockopt(hListenSocket, IPPROTO_IPV6, IPV6_PROTECTION_LEVEL, (const char*)&nProtLevel, sizeof(int));
+#endif
+	}
+
+	if (::bind(hListenSocket, (struct sockaddr*)&sockaddr, len) == SOCKET_ERROR)
+	{
+		int nErr = WSAGetLastError();
+		if (nErr == WSAEADDRINUSE)
+			LOG_ERROR( strprintf("Unable to bind to %s on this computer. A process is already running.", m_pServiceLocal->toString() ), "NET");
+		else
+			LOG_ERROR( strprintf("Unable to bind to %s on this computer (bind returned error %s)", m_pServiceLocal->toString(), NetworkErrorString(nErr)), "NET");
+			
+		CloseSocket(hListenSocket);
+		return false;
+	}
+	LOG( "Bound to " + m_pServiceLocal->toString(), "NET" );
+
+	// Listen for incoming connections
+	if (listen(hListenSocket, SOMAXCONN) == SOCKET_ERROR)
+	{
+		LOG_ERROR( strprintf("Listening for incoming connections failed (listen returned error %s)", NetworkErrorString(WSAGetLastError())), "NET");
+		CloseSocket(hListenSocket);
+		return false;
+	}
+
+	/*vhListenSocket.push_back(ListenSocket(hListenSocket, fWhitelisted));
+
+	if (addrBind.IsRoutable() && fDiscover && !fWhitelisted)
+		AddLocal(addrBind, LOCAL_BIND);
+		*/
+	return true;
+}
+
+#ifdef WIN32
+string NetworkManager::NetworkErrorString(int err)
+{
+	char buf[256];
+	buf[0] = 0;
+	if (FormatMessageA(FORMAT_MESSAGE_FROM_SYSTEM | FORMAT_MESSAGE_IGNORE_INSERTS | FORMAT_MESSAGE_MAX_WIDTH_MASK,
+		NULL, err, MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT),
+		buf, sizeof(buf), NULL))
+	{
+		return strprintf("%s (%d)", buf, err);
+	}
+	else
+	{
+		return strprintf("Unknown error (%d)", err);
+	}
+}
+#else
+string NetworkManager::NetworkErrorString(int err)
+{
+	char buf[256];
+	buf[0] = 0;
+	/* Too bad there are two incompatible implementations of the
+	* thread-safe strerror. */
+	const char *s;
+#ifdef STRERROR_R_CHAR_P /* GNU variant can return a pointer outside the passed buffer */
+	s = strerror_r(err, buf, sizeof(buf));
+#else /* POSIX variant always returns message in buffer */
+	s = buf;
+	if (strerror_r(err, buf, sizeof(buf)))
+		buf[0] = 0;
+#endif
+	return strprintf("%s (%d)", s, err);
+}
+#endif
+
+bool NetworkManager::CloseSocket(SOCKET& hSocket)
+{
+	if (hSocket == INVALID_SOCKET)
+		return false;
+#ifdef WIN32
+	int ret = closesocket(hSocket);
+#else
+	int ret = close(hSocket);
+#endif
+	hSocket = INVALID_SOCKET;
+	return ret != SOCKET_ERROR;
+}
+
+bool NetworkManager::SetSocketNonBlocking( SOCKET& hSocket, bool fNonBlocking )
+{
+	if(fNonBlocking)
+	{
+#ifdef _WINDOWS
+		u_long nOne = 1;
+		if(ioctlsocket(hSocket, FIONBIO, &nOne) == SOCKET_ERROR)
+		{
+#else
+		int fFlags = fcntl(hSocket, F_GETFL, 0);
+		if(fcntl(hSocket, F_SETFL, fFlags | O_NONBLOCK) == SOCKET_ERROR)
+		{
+#endif
+			CloseSocket(hSocket);
+			return false;
+		}
+	}
+	else
+	{
+#ifdef _WINDOWS
+		u_long nZero = 0;
+		if(ioctlsocket(hSocket, FIONBIO, &nZero) == SOCKET_ERROR)
+		{
+#else
+		int fFlags = fcntl(hSocket, F_GETFL, 0);
+		if(fcntl(hSocket, F_SETFL, fFlags & ~O_NONBLOCK) == SOCKET_ERROR)
+		{
+#endif
+			CloseSocket(hSocket);
+			return false;
+		}
+	}
+
 	return true;
 }
 
@@ -73,50 +254,6 @@ bool CConnman::Start(CScheduler& scheduler, Options connOptions)
 		return false;
 	}
 
-	vWhitelistedRange = connOptions.vWhitelistedRange;
-
-	for (const auto& strDest : connOptions.vSeedNodes) {
-		AddOneShot(strDest);
-	}
-
-	if (clientInterface) {
-		clientInterface->InitMessage(_("Loading P2P addresses..."));
-	}
-	// Load addresses from peers.dat
-	int64_t nStart = GetTimeMillis();
-	{
-		CAddrDB adb;
-		if (adb.Read(addrman))
-			LogPrintf("Loaded %i addresses from peers.dat  %dms\n", addrman.size(), GetTimeMillis() - nStart);
-		else {
-			addrman.Clear(); // Addrman can be in an inconsistent state after failure, reset it
-			LogPrintf("Invalid or missing peers.dat; recreating\n");
-			DumpAddresses();
-		}
-	}
-	if (clientInterface)
-		clientInterface->InitMessage(_("Loading banlist..."));
-	// Load addresses from banlist.dat
-	nStart = GetTimeMillis();
-	CBanDB bandb;
-	banmap_t banmap;
-	if (bandb.Read(banmap)) {
-		SetBanned(banmap); // thread save setter
-		SetBannedSetDirty(false); // no need to write down, just read data
-		SweepBanned(); // sweep out unused entries
-
-		LogPrint(BCLog::NET, "Loaded %d banned node ips/subnets from banlist.dat  %dms\n",
-			banmap.size(), GetTimeMillis() - nStart);
-	}
-	else {
-		LogPrintf("Invalid or missing banlist.dat; recreating\n");
-		SetBannedSetDirty(true); // force write
-		DumpBanlist();
-	}
-
-	uiInterface.InitMessage(_("Starting network threads..."));
-
-	fAddressesInitialized = true;
 
 	if (semOutbound == NULL) {
 		// initialize semaphore
@@ -162,132 +299,4 @@ bool CConnman::Start(CScheduler& scheduler, Options connOptions)
 
 	return true;
 }
-
-
-bool CConnman::InitBinds(const std::vector<CService>& binds, const std::vector<CService>& whiteBinds) {
-	bool fBound = false;
-	for (const auto& addrBind : binds) {
-		fBound |= Bind(addrBind, (BF_EXPLICIT | BF_REPORT_ERROR));
-	}
-	for (const auto& addrBind : whiteBinds) {
-		fBound |= Bind(addrBind, (BF_EXPLICIT | BF_REPORT_ERROR | BF_WHITELIST));
-	}
-	if (binds.empty() && whiteBinds.empty()) {
-		struct in_addr inaddr_any;
-		inaddr_any.s_addr = INADDR_ANY;
-		fBound |= Bind(CService(in6addr_any, GetListenPort()), BF_NONE);
-		fBound |= Bind(CService(inaddr_any, GetListenPort()), !fBound ? BF_REPORT_ERROR : BF_NONE);
-	}
-	return fBound;
-}
-
-bool CConnman::Bind(const CService &addr, unsigned int flags) {
-	if (!(flags & BF_EXPLICIT) && IsLimited(addr))
-		return false;
-	std::string strError;
-	if (!BindListenPort(addr, strError, (flags & BF_WHITELIST) != 0)) {
-		if ((flags & BF_REPORT_ERROR) && clientInterface) {
-			clientInterface->ThreadSafeMessageBox(strError, "", CClientUIInterface::MSG_ERROR);
-		}
-		return false;
-	}
-	return true;
-}
-
-bool CConnman::BindListenPort(const CService &addrBind, std::string& strError, bool fWhitelisted)
-{
-	strError = "";
-	int nOne = 1;
-
-	// Create socket for listening for incoming connections
-	struct sockaddr_storage sockaddr;
-	socklen_t len = sizeof(sockaddr);
-	if (!addrBind.GetSockAddr((struct sockaddr*)&sockaddr, &len))
-	{
-		strError = strprintf("Error: Bind address family for %s not supported", addrBind.ToString());
-		LogPrintf("%s\n", strError);
-		return false;
-	}
-
-	SOCKET hListenSocket = socket(((struct sockaddr*)&sockaddr)->sa_family, SOCK_STREAM, IPPROTO_TCP);
-	if (hListenSocket == INVALID_SOCKET)
-	{
-		strError = strprintf("Error: Couldn't open socket for incoming connections (socket returned error %s)", NetworkErrorString(WSAGetLastError()));
-		LogPrintf("%s\n", strError);
-		return false;
-	}
-	if (!IsSelectableSocket(hListenSocket))
-	{
-		strError = "Error: Couldn't create a listenable socket for incoming connections";
-		LogPrintf("%s\n", strError);
-		return false;
-	}
-
-
-#ifndef WIN32
-#ifdef SO_NOSIGPIPE
-	// Different way of disabling SIGPIPE on BSD
-	setsockopt(hListenSocket, SOL_SOCKET, SO_NOSIGPIPE, (void*)&nOne, sizeof(int));
-#endif
-	// Allow binding if the port is still in TIME_WAIT state after
-	// the program was closed and restarted.
-	setsockopt(hListenSocket, SOL_SOCKET, SO_REUSEADDR, (void*)&nOne, sizeof(int));
-	// Disable Nagle's algorithm
-	setsockopt(hListenSocket, IPPROTO_TCP, TCP_NODELAY, (void*)&nOne, sizeof(int));
-#else
-	setsockopt(hListenSocket, SOL_SOCKET, SO_REUSEADDR, (const char*)&nOne, sizeof(int));
-	setsockopt(hListenSocket, IPPROTO_TCP, TCP_NODELAY, (const char*)&nOne, sizeof(int));
-#endif
-
-	// Set to non-blocking, incoming connections will also inherit this
-	if (!SetSocketNonBlocking(hListenSocket, true)) {
-		strError = strprintf("BindListenPort: Setting listening socket to non-blocking failed, error %s\n", NetworkErrorString(WSAGetLastError()));
-		LogPrintf("%s\n", strError);
-		return false;
-	}
-
-	// some systems don't have IPV6_V6ONLY but are always v6only; others do have the option
-	// and enable it by default or not. Try to enable it, if possible.
-	if (addrBind.IsIPv6()) {
-#ifdef IPV6_V6ONLY
-#ifdef WIN32
-		setsockopt(hListenSocket, IPPROTO_IPV6, IPV6_V6ONLY, (const char*)&nOne, sizeof(int));
-#else
-		setsockopt(hListenSocket, IPPROTO_IPV6, IPV6_V6ONLY, (void*)&nOne, sizeof(int));
-#endif
-#endif
-#ifdef WIN32
-		int nProtLevel = PROTECTION_LEVEL_UNRESTRICTED;
-		setsockopt(hListenSocket, IPPROTO_IPV6, IPV6_PROTECTION_LEVEL, (const char*)&nProtLevel, sizeof(int));
-#endif
-	}
-
-	if (::bind(hListenSocket, (struct sockaddr*)&sockaddr, len) == SOCKET_ERROR)
-	{
-		int nErr = WSAGetLastError();
-		if (nErr == WSAEADDRINUSE)
-			strError = strprintf(_("Unable to bind to %s on this computer. %s is probably already running."), addrBind.ToString(), _(PACKAGE_NAME));
-		else
-			strError = strprintf(_("Unable to bind to %s on this computer (bind returned error %s)"), addrBind.ToString(), NetworkErrorString(nErr));
-		LogPrintf("%s\n", strError);
-		CloseSocket(hListenSocket);
-		return false;
-	}
-	LogPrintf("Bound to %s\n", addrBind.ToString());
-
-	// Listen for incoming connections
-	if (listen(hListenSocket, SOMAXCONN) == SOCKET_ERROR)
-	{
-		strError = strprintf(_("Error: Listening for incoming connections failed (listen returned error %s)"), NetworkErrorString(WSAGetLastError()));
-		LogPrintf("%s\n", strError);
-		CloseSocket(hListenSocket);
-		return false;
-	}
-
-	vhListenSocket.push_back(ListenSocket(hListenSocket, fWhitelisted));
-
-	if (addrBind.IsRoutable() && fDiscover && !fWhitelisted)
-		AddLocal(addrBind, LOCAL_BIND);
-
-	return true;
-}*/
+*/
