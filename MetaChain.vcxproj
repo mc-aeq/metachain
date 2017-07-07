@@ -165,6 +165,8 @@
     <ClInclude Include="src\external\uint256.h" />
     <ClInclude Include="src\external\utilstrencodings.h" />
     <ClInclude Include="src\functions.h" />
+    <ClInclude Include="src\io\ipContainer.h" />
+    <ClInclude Include="src\io\peerContainer.h" />
     <ClInclude Include="src\logger.h" />
     <ClInclude Include="src\MetaChain.h" />
     <ClInclude Include="src\network\CNetAddr.h" />
@@ -192,6 +194,8 @@
     <ClCompile Include="src\external\uint256.cpp" />
     <ClCompile Include="src\external\utilstrencodings.cpp" />
     <ClCompile Include="src\functions.cpp" />
+    <ClCompile Include="src\io\ipContainer.cpp" />
+    <ClCompile Include="src\io\peerContainer.cpp" />
     <ClCompile Include="src\logger.cpp" />
     <ClCompile Include="src\MetaChain.cpp" />
     <ClCompile Include="src\network\CNetAddr.cpp" />

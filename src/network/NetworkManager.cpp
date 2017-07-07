@@ -24,6 +24,15 @@ bool NetworkManager::initialize(CSimpleIniA* iniFile)
 		return false;
 #endif
 
+	// initialize the ban list
+	LOG("initializing the Ban List", "NET");
+	m_pBanList = new ipContainer(iniFile->GetValue("network", "ban_file", "bans.dat"));
+	m_pBanList->readContents();
+
+	// initialize the peer list
+	LOG("initializing the Peer List", "NET");
+	//m_pPeerList = new peerContainer(iniFile->GetValue("network", "peer_file", "peers.dat"));
+
 	// creating a CService class for the listener and storing it for further purposes
 	try
 	{
@@ -248,7 +257,7 @@ void NetworkManager::startThreads()
 	threadMessageHandler = std::thread(&TraceThread<std::function<void()> >, "msghand", std::function<void()>(std::bind(&NetworkManager::ThreadMessageHandler, this)));
 
 	// Dump network addresses with a lightweight scheduler
-	m_pMC->getScheduler()->scheduleEvery(std::bind(&NetworkManager::DumpData, this), DUMP_INTERVAL * 10);//000);
+	m_pMC->getScheduler()->scheduleEvery(std::bind(&NetworkManager::DumpData, this), DUMP_INTERVAL * 1000);
 }
 
 void NetworkManager::interruptSocks5(bool bInterrupt)
@@ -809,33 +818,22 @@ void NetworkManager::ThreadMessageHandler()
 	}
 }
 
-void NetworkManager::DumpPeers()
-{
-	/*int64_t nStart = GetTimeMillis();
-
-	CAddrDB adb;
-	adb.Write(addrman);
-
-	LogPrint(BCLog::NET, "Flushed %d addresses to peers.dat  %dms\n",
-		addrman.size(), GetTimeMillis() - nStart);
-		*/
-}
-
-void NetworkManager::DumpBans()
-{
-
-}
 
 void NetworkManager::DumpData()
 {
-	DumpPeers();
-	DumpBans();
+	// write the ban list
+	m_pBanList->writeContents();
 }
 
 NetworkManager::~NetworkManager()
 {
+	// stop and delete the threads
 	Interrupt();
 	Stop();
+
+	// delete the ipContainers
+	delete m_pBanList;
+	//delete m_pPeerList;
 }
 
 void NetworkManager::Interrupt()

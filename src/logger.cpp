@@ -13,6 +13,12 @@ Logger& Logger::getInstance()
 	return instance;
 }
 
+Logger::~Logger()
+{
+	if (this->m_bLogToFile)
+		m_streamLogFile.close();
+}
+
 void Logger::log( string strLogLine, facility logFacility, string strModule)
 {
 	// since we're using multiple threads we're using a mutex to ensure proper output

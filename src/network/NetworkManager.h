@@ -10,6 +10,8 @@ class NetworkManager
 	private:
 		MetaChain				*m_pMC;
 		CService				*m_pServiceLocal;
+		ipContainer				*m_pBanList;
+		//peerContainer			*m_pPeerList;
 
 		// thread interrupts and message processing variables
 		CThreadInterrupt		m_interruptNet;
@@ -38,8 +40,6 @@ class NetworkManager
 
 		// functions to update the peers and ban lists
 		void					DumpData();
-		void					DumpPeers();
-		void					DumpBans();
 
 		// destructor functions
 		void					Interrupt();

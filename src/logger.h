@@ -10,26 +10,26 @@ class Logger
 {
 	private:
 		// variables for faster time processing
-		time_t				m_timeCur;
-		tm					m_timeStruct;
-		char				m_caTimeBuf[80];
+		time_t						m_timeCur;
+		tm							m_timeStruct;
+		char						m_caTimeBuf[80];
 
 		// variables for faster facility processing
-		string				m_strFacility;
+		string						m_strFacility;
 
 		// configuration variables
-		bool				m_bLogToStdout;
-		bool				m_bLogToFile;
-		string				m_strFileName;
-		ofstream			m_streamLogFile;
+		bool						m_bLogToStdout;
+		bool						m_bLogToFile;
+		string						m_strFileName;
+		ofstream					m_streamLogFile;
 
 		// mutex to secure thread safe output
-		mutex				m_mutexOutput;
+		mutex						m_mutexOutput;
 
-		// functions
-		Logger();
-		Logger(Logger const& copy);					// not implemented
-		Logger&		operator=(Logger const& copy);	// not implemented
+		// constructor and operator
+									Logger();
+									Logger(Logger const& copy);					// not implemented
+		Logger&						operator=(Logger const& copy);	// not implemented
 
 	public:
 		enum facility {
@@ -39,7 +39,8 @@ class Logger
 			error
 		};
 
-		static		Logger& getInstance();
-		void		log(string strLogLine, facility logFacility = facility::info, string strModule = "");
-		void		initialize(CSimpleIniA* iniFile);
+		static						Logger& getInstance();
+									~Logger();
+		void						log(string strLogLine, facility logFacility = facility::info, string strModule = "");
+		void						initialize(CSimpleIniA* iniFile);
 };
