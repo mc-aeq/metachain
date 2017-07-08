@@ -28,6 +28,7 @@ class ipContainer
 Template class implementation
 */
 #include <boost/algorithm/string.hpp>
+#include <boost/date_time/posix_time/posix_time.hpp>
 
 template <class T>
 ipContainer<T>::ipContainer()
@@ -96,13 +97,18 @@ void ipContainer<T>::writeContents()
 	ofstream streamOut;
 	streamOut.open(m_strFileName, ios_base::out | ios_base::trunc);
 
+	// create a date/time string
+	basic_stringstream<char> wss;
+	wss.imbue(locale(wcout.getloc(), new boost::posix_time::wtime_facet(L"%Y.%m.%d %H:%M:%S")));
+	wss << boost::posix_time::second_clock::universal_time();
+
 	// write standard header
-	streamOut << "# generation of the file: " << endl;
+	streamOut << "# generation of the file: " << wss.str() << endl;
 	streamOut << "# it will be automatically updated through the TCT blockchain" << endl;
 	streamOut << "# any manual changes will be overridden!" << endl << endl;
 
 	for (vector<T>::iterator it = m_vecIP.begin(); it != m_vecIP.end(); it++)
-		streamOut << (*it).ToStringIP() << endl;
+		streamOut << (*it).toString() << endl;
 
 	streamOut.close();
 

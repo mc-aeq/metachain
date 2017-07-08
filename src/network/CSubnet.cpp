@@ -120,7 +120,7 @@ std::string CSubNet::ToString() const
 				netmask[12] << 8 | netmask[13], netmask[14] << 8 | netmask[15]);
 	}
 
-	return network.ToString() + "/" + strNetmask;
+	return network.toString() + "/" + strNetmask;
 }
 
 bool CSubNet::IsValid() const

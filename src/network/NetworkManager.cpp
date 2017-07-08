@@ -31,7 +31,8 @@ bool NetworkManager::initialize(CSimpleIniA* iniFile)
 
 	// initialize the peer list
 	LOG("initializing the Peer List", "NET");
-	//m_pPeerList = new peerContainer(iniFile->GetValue("network", "peer_file", "peers.dat"));
+	m_pPeerList = new ipContainer< netPeers >(iniFile->GetValue("network", "peer_file", "peers.dat"));
+	m_pPeerList->readContents();
 
 	// creating a CService class for the listener and storing it for further purposes
 	try
@@ -823,6 +824,7 @@ void NetworkManager::DumpData()
 {
 	// write the ban list
 	m_pBanList->writeContents();
+	m_pPeerList->writeContents();
 }
 
 NetworkManager::~NetworkManager()
@@ -833,7 +835,7 @@ NetworkManager::~NetworkManager()
 
 	// delete the ipContainers
 	delete m_pBanList;
-	//delete m_pPeerList;
+	delete m_pPeerList;
 }
 
 void NetworkManager::Interrupt()

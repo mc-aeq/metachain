@@ -120,10 +120,10 @@ std::string CService::toStringPort() const
 std::string CService::toStringIPPort() const
 {
 	if (IsIPv4()) {
-		return ToStringIP() + ":" + toStringPort();
+		return toStringIP() + ":" + toStringPort();
 	}
 	else {
-		return "[" + ToStringIP() + "]:" + toStringPort();
+		return "[" + toStringIP() + "]:" + toStringPort();
 	}
 }
 

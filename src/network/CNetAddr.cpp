@@ -260,7 +260,7 @@ enum Network CNetAddr::GetNetwork() const
 	return NET_IPV6;
 }
 
-std::string CNetAddr::ToStringIP() const
+std::string CNetAddr::toStringIP() const
 {
 	CService serv(*this, 0);
 	struct sockaddr_storage sockaddr;
@@ -280,9 +280,9 @@ std::string CNetAddr::ToStringIP() const
 			GetByte(3) << 8 | GetByte(2), GetByte(1) << 8 | GetByte(0));
 }
 
-std::string CNetAddr::ToString() const
+std::string CNetAddr::toString() const
 {
-	return ToStringIP();
+	return toStringIP();
 }
 
 bool operator==(const CNetAddr& a, const CNetAddr& b)

@@ -11,6 +11,7 @@ class NetworkManager
 		MetaChain							*m_pMC;
 		CService							*m_pServiceLocal;
 		ipContainer< CNetAddr >				*m_pBanList;
+		ipContainer< netPeers >				*m_pPeerList;
 
 		// thread interrupts and message processing variables
 		CThreadInterrupt					m_interruptNet;
