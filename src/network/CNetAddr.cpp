@@ -2,10 +2,71 @@
 
 static const unsigned char pchIPv4[12] = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0xff, 0xff };
 
-void CNetAddr::Init()
+bool CNetAddr::init()
 {
 	memset(ip, 0, sizeof(ip));
 	scopeId = 0;
+
+	return true;
+}
+
+// constructor to parse a single string line with an IP and transform it into a CNetAddr obj
+bool CNetAddr::init(string strEntry)
+{
+	// lets check if it's a *, then it's quite easy
+	if (strEntry == "*")
+	{
+		struct in_addr bind_address;
+		bind_address.s_addr = INADDR_ANY;
+		SetRaw(NET_IPV4, (const uint8_t*)&bind_address);
+	}
+	else
+	{
+		// convert those IP adresses to CNetAddr and add them to our vector
+		struct addrinfo aiHint;
+		memset(&aiHint, 0, sizeof(struct addrinfo));
+
+		aiHint.ai_socktype = SOCK_STREAM;
+		aiHint.ai_protocol = IPPROTO_TCP;
+		aiHint.ai_family = AF_UNSPEC;
+#ifdef _WINDOWS
+		aiHint.ai_flags = 0;
+#else
+		aiHint.ai_flags = AI_ADDRCONFIG;
+#endif
+
+		struct addrinfo *aiRes = NULL;
+		int nErr = getaddrinfo(strEntry.c_str(), NULL, &aiHint, &aiRes);
+		if (nErr)
+		{
+			LOG_ERROR("Error resolving hostname: " + strEntry + " - Error No: " + to_string(nErr), "NET-ADDR");
+			return false;
+		}
+
+		struct addrinfo *aiTrav = aiRes;
+		while (aiTrav != NULL)
+		{
+			if (aiTrav->ai_family == AF_INET)
+			{
+				assert(aiTrav->ai_addrlen >= sizeof(sockaddr_in));
+				SetRaw(NET_IPV4, (const uint8_t*)&((struct sockaddr_in*)(aiTrav->ai_addr))->sin_addr);
+			}
+
+			if (aiTrav->ai_family == AF_INET6)
+			{
+				assert(aiTrav->ai_addrlen >= sizeof(sockaddr_in6));
+				struct sockaddr_in6* s6 = (struct sockaddr_in6*) aiTrav->ai_addr;
+
+				SetRaw(NET_IPV6, (const uint8_t*)&s6->sin6_addr);
+				scopeId = s6->sin6_scope_id;
+			}
+
+			aiTrav = aiTrav->ai_next;
+		}
+
+		freeaddrinfo(aiRes);
+	}
+	return true;
 }
 
 void CNetAddr::SetIP(const CNetAddr& ipIn)
@@ -29,10 +90,9 @@ void CNetAddr::SetRaw(Network network, const uint8_t *ip_in)
 	}
 }
 
-
 CNetAddr::CNetAddr()
 {
-	Init();
+	init();
 }
 
 CNetAddr::CNetAddr(const struct in_addr& ipv4Addr)

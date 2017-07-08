@@ -26,7 +26,8 @@ class CNetAddr
 										CNetAddr();
 										CNetAddr(const struct in_addr& ipv4Addr);
 										CNetAddr(const struct in6_addr& pipv6Addr, const uint32_t scope = 0);
-		void							Init();
+		bool							init();
+		bool							init(string strEntry);
 		void							SetIP(const CNetAddr& ip);
 
 		/**

@@ -26,7 +26,7 @@ bool NetworkManager::initialize(CSimpleIniA* iniFile)
 
 	// initialize the ban list
 	LOG("initializing the Ban List", "NET");
-	m_pBanList = new ipContainer(iniFile->GetValue("network", "ban_file", "bans.dat"));
+	m_pBanList = new ipContainer< CNetAddr >(iniFile->GetValue("network", "ban_file", "bans.dat"));
 	m_pBanList->readContents();
 
 	// initialize the peer list

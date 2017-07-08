@@ -150,9 +150,6 @@
     <ClInclude Include="src\io\ipContainer.h">
       <Filter>Headerdateien\IO</Filter>
     </ClInclude>
-    <ClInclude Include="src\io\peerContainer.h">
-      <Filter>Headerdateien\IO</Filter>
-    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -226,12 +223,6 @@
     </ClCompile>
     <ClCompile Include="src\external\random.cpp">
       <Filter>Quelldateien</Filter>
-    </ClCompile>
-    <ClCompile Include="src\io\ipContainer.cpp">
-      <Filter>Quelldateien\IO</Filter>
-    </ClCompile>
-    <ClCompile Include="src\io\peerContainer.cpp">
-      <Filter>Quelldateien\IO</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

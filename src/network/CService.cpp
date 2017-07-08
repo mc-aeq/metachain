@@ -34,62 +34,8 @@ CService::CService(const struct sockaddr_in6 &addr) : CNetAddr(addr.sin6_addr, a
 
 CService::CService(const char *caHost, unsigned short usPort)
 {
-	string strHost = caHost;
-
-	// lets check if it's a *, then it's quite easy
-	if (strHost == "*")
-	{
-		struct in_addr bind_address;
-		bind_address.s_addr = INADDR_ANY;
-		::CService(bind_address, usPort);
-	}
-	else
-	{
-		// now we need to resolve the hostname into an IP address v4 or v6
-		struct addrinfo aiHint;
-		memset(&aiHint, 0, sizeof(struct addrinfo));
-
-		aiHint.ai_socktype = SOCK_STREAM;
-		aiHint.ai_protocol = IPPROTO_TCP;
-		aiHint.ai_family = AF_UNSPEC;
-#ifdef _WINDOWS
-		aiHint.ai_flags = 0;
-#else
-		aiHint.ai_flags = AI_ADDRCONFIG;
-#endif
-
-		struct addrinfo *aiRes = NULL;
-		int nErr = getaddrinfo(caHost, NULL, &aiHint, &aiRes);
-		if (nErr)
-		{
-			LOG_ERROR("Error resolving hostname: " + strHost + " - Error No: " + to_string(nErr), "CService");
-			throw exception("Error resolving hostname", nErr);
-		}
-
-		struct addrinfo *aiTrav = aiRes;
-		while( aiTrav != NULL )
-		{
-			if (aiTrav->ai_family == AF_INET)
-			{
-				assert(aiTrav->ai_addrlen >= sizeof(sockaddr_in));
-				SetRaw(NET_IPV4, (const uint8_t*)&((struct sockaddr_in*)(aiTrav->ai_addr))->sin_addr);
-				port = usPort;
-			}
-
-			if (aiTrav->ai_family == AF_INET6)
-			{
-				assert(aiTrav->ai_addrlen >= sizeof(sockaddr_in6));
-				struct sockaddr_in6* s6 = (struct sockaddr_in6*) aiTrav->ai_addr;
-				SetRaw(NET_IPV6, (const uint8_t*)&s6->sin6_addr);
-				scopeId = s6->sin6_scope_id;
-				port = usPort;
-			}
-
-			aiTrav = aiTrav->ai_next;
-		}
-
-		freeaddrinfo(aiRes);
-	}
+	init(caHost);
+	port = usPort;
 }
 
 bool CService::SetSockAddr(const struct sockaddr *paddr)

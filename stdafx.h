@@ -74,5 +74,4 @@
 #include "src/network/CService.h"
 #include "src/MetaChain.h"
 #include "src/io/ipContainer.h"
-//#include "src/io/peerContainer.h"
 #include "src/network/NetworkManager.h"
