@@ -63,7 +63,7 @@ class CNetAddr
 		int								GetReachabilityFrom(const CNetAddr *paddrPartner = NULL) const;		
 		bool							GetIn6Addr(struct in6_addr* pipv6Addr) const;
 
-		friend bool						operator==(const CNetAddr& a, const CNetAddr& b);
+		bool							operator==(const CNetAddr& rhs) const { return (memcmp(this->ip, rhs.ip, 16) == 0); };
 		friend bool						operator!=(const CNetAddr& a, const CNetAddr& b);
 		friend bool						operator<(const CNetAddr& a, const CNetAddr& b);
 

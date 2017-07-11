@@ -71,9 +71,22 @@ void ipContainer<T>::readContents()
 #ifdef _DEBUG
 		LOG_DEBUG("line content: " + strLine, "IPC");
 #endif
+
 		T tmp;
-		if( tmp.init(strLine) )
+		if (tmp.init(strLine))
+		{
+			// we check for doubletts, sice we dont want that
+			if (find(vecIP.begin(), vecIP.end(), tmp) != vecIP.end())
+#ifdef _DEBUG
+			{
+				LOG_DEBUG("removing doublett: " + strLine, "IPC");
+#endif
+				continue;
+#ifdef _DEBUG
+			}
+#endif
 			vecIP.push_back(tmp);
+		}
 		else
 		{
 			LOG_ERROR("unable to add the following IP into our system: " + strLine, "IPC");

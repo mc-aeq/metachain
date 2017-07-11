@@ -285,11 +285,6 @@ std::string CNetAddr::toString() const
 	return toStringIP();
 }
 
-bool operator==(const CNetAddr& a, const CNetAddr& b)
-{
-	return (memcmp(a.ip, b.ip, 16) == 0);
-}
-
 bool operator!=(const CNetAddr& a, const CNetAddr& b)
 {
 	return (memcmp(a.ip, b.ip, 16) != 0);

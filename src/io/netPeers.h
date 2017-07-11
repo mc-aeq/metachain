@@ -19,6 +19,7 @@ private:
 public:
 									netPeers();
 									~netPeers();
+
 	bool							init(string strEntry);
 	string							toString() const;
 
@@ -26,6 +27,8 @@ public:
 	bool							isConnected() { return m_bConnected; };
 	bool							tooManyTries() { return (m_usConnectionTries >= NET_DEFAULT_CONNECT_TRIES ? true : false); };
 	int64_t							getTimeLastTry() { return m_timeLastTry; };
+
+	bool							operator==(const netPeers& b) const { return this->toString() == b.toString(); };
 
 	CSemaphoreGrant					semGrantOutbound;
 };
