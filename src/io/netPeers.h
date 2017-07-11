@@ -7,9 +7,20 @@ class netPeers
 {
 private:
 	CService						m_CService;
+	SOCKET							m_hSocket;
+	bool							m_bConnected;
+
+	// variable that counts connection tries. over a certain limit we throw this peer away as unusable
+	unsigned short					m_usConnectionTries;
+
+	bool							SetSocketNoDelay();
 
 public:
-	netPeers();
+									netPeers();
 	bool							init(string strEntry);
-	std::string						toString() const;
+	string							toString() const;
+
+	bool							tryConnect();
+	bool							isConnected() { return m_bConnected; };
+	bool							tooManyTries() { return (m_usConnectionTries >= NET_DEFAULT_CONNECT_TRIES ? true : false); };
 };

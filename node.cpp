@@ -25,10 +25,10 @@ int main( int argc, char* argv[] )
 		LOG("successfully initialized", "LOGGER");
 
 		LOG("creating MetaChain", "MC");
-		MetaChain *pMC = new MetaChain();
+		MetaChain::getInstance();
 
 		LOG("initializing MetaChain", "MC");
-		if (!pMC->initialize(iniFile))
+		if (!MetaChain::getInstance().initialize(iniFile))
 		{
 			LOG_ERROR("Something terrible happened, we're terminating for security reasons.", "MC");
 			return 1;

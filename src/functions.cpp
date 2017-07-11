@@ -50,3 +50,93 @@ std::string FormatException(const std::exception* pex, const char* pszThread)
 			"UNKNOWN EXCEPTION       \n%s in %s       \n", pszModule, pszThread);
 }
 
+#ifdef _WINDOWS
+string NetworkErrorString(int err)
+{
+	char buf[256];
+	buf[0] = 0;
+	if (FormatMessageA(FORMAT_MESSAGE_FROM_SYSTEM | FORMAT_MESSAGE_IGNORE_INSERTS | FORMAT_MESSAGE_MAX_WIDTH_MASK,
+		NULL, err, MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT),
+		buf, sizeof(buf), NULL))
+	{
+		return strprintf("%s (%d)", buf, err);
+	}
+	else
+	{
+		return strprintf("Unknown error (%d)", err);
+	}
+}
+#else
+string NetworkErrorString(int err)
+{
+	char buf[256];
+	buf[0] = 0;
+	/* Too bad there are two incompatible implementations of the
+	* thread-safe strerror. */
+	const char *s;
+#ifdef STRERROR_R_CHAR_P /* GNU variant can return a pointer outside the passed buffer */
+	s = strerror_r(err, buf, sizeof(buf));
+#else /* POSIX variant always returns message in buffer */
+	s = buf;
+	if (strerror_r(err, buf, sizeof(buf)))
+		buf[0] = 0;
+#endif
+	return strprintf("%s (%d)", s, err);
+}
+#endif
+
+
+bool SetSocketNonBlocking(SOCKET& hSocket, bool fNonBlocking)
+{
+	if (fNonBlocking)
+	{
+#ifdef _WINDOWS
+		u_long nOne = 1;
+		if (ioctlsocket(hSocket, FIONBIO, &nOne) == SOCKET_ERROR)
+		{
+#else
+		int fFlags = fcntl(hSocket, F_GETFL, 0);
+		if (fcntl(hSocket, F_SETFL, fFlags | O_NONBLOCK) == SOCKET_ERROR)
+		{
+#endif
+			return false;
+		}
+		}
+	else
+	{
+#ifdef _WINDOWS
+		u_long nZero = 0;
+		if (ioctlsocket(hSocket, FIONBIO, &nZero) == SOCKET_ERROR)
+		{
+#else
+		int fFlags = fcntl(hSocket, F_GETFL, 0);
+		if (fcntl(hSocket, F_SETFL, fFlags & ~O_NONBLOCK) == SOCKET_ERROR)
+		{
+#endif
+			return false;
+		}
+		}
+
+	return true;
+}
+
+bool CloseSocket(SOCKET& hSocket)
+{
+	if (hSocket == INVALID_SOCKET)
+		return false;
+#ifdef _WINDOWS
+	int ret = closesocket(hSocket);
+#else
+	int ret = close(hSocket);
+#endif
+	hSocket = INVALID_SOCKET;
+	return ret != SOCKET_ERROR;
+}
+
+struct timeval MillisToTimeval(int64_t nTimeout)
+{
+	struct timeval timeout;
+	timeout.tv_sec = nTimeout / 1000;
+	timeout.tv_usec = (nTimeout % 1000) * 1000;
+	return timeout;
+}

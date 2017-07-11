@@ -3,7 +3,8 @@
 static std::atomic<bool> interruptSocks5Recv(false);
 
 NetworkManager::NetworkManager(MetaChain *mc) :
-	m_pMC(mc)
+	m_pMC(mc),
+	m_iNetConnectTimeout(NET_DEFAULT_CONNECT_TIMEOUT)
 {
 #ifdef _DEBUG
 	LOG_DEBUG("instantiate NetworkManager", "NET");
@@ -15,6 +16,9 @@ bool NetworkManager::initialize(CSimpleIniA* iniFile)
 #ifdef _DEBUG
 	LOG_DEBUG("initializing NetworkManager", "NET");
 #endif
+
+	// read the default connect timeout from the settings, if it's not set, we'll use our default value
+	m_iNetConnectTimeout = iniFile->GetLongValue("network", "default_connect_timeout", NET_DEFAULT_CONNECT_TIMEOUT);
 
 #ifdef _WINDOWS
 	// Initialize Windows Sockets
@@ -98,6 +102,7 @@ bool NetworkManager::startListeningSocket()
 	// Set to non-blocking, incoming connections will also inherit this
 	if(!SetSocketNonBlocking(hListenSocket, true))
 	{
+		CloseSocket(hListenSocket);
 		LOG_ERROR("BindListenPort: Setting listening socket to non-blocking failed - " + NetworkErrorString(WSAGetLastError()), "NET");
 		return false;
 	}
@@ -148,90 +153,6 @@ bool NetworkManager::startListeningSocket()
 	return true;
 }
 
-#ifdef WIN32
-string NetworkManager::NetworkErrorString(int err)
-{
-	char buf[256];
-	buf[0] = 0;
-	if (FormatMessageA(FORMAT_MESSAGE_FROM_SYSTEM | FORMAT_MESSAGE_IGNORE_INSERTS | FORMAT_MESSAGE_MAX_WIDTH_MASK,
-		NULL, err, MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT),
-		buf, sizeof(buf), NULL))
-	{
-		return strprintf("%s (%d)", buf, err);
-	}
-	else
-	{
-		return strprintf("Unknown error (%d)", err);
-	}
-}
-#else
-string NetworkManager::NetworkErrorString(int err)
-{
-	char buf[256];
-	buf[0] = 0;
-	/* Too bad there are two incompatible implementations of the
-	* thread-safe strerror. */
-	const char *s;
-#ifdef STRERROR_R_CHAR_P /* GNU variant can return a pointer outside the passed buffer */
-	s = strerror_r(err, buf, sizeof(buf));
-#else /* POSIX variant always returns message in buffer */
-	s = buf;
-	if (strerror_r(err, buf, sizeof(buf)))
-		buf[0] = 0;
-#endif
-	return strprintf("%s (%d)", s, err);
-}
-#endif
-
-bool NetworkManager::CloseSocket(SOCKET& hSocket)
-{
-	if (hSocket == INVALID_SOCKET)
-		return false;
-#ifdef WIN32
-	int ret = closesocket(hSocket);
-#else
-	int ret = close(hSocket);
-#endif
-	hSocket = INVALID_SOCKET;
-	return ret != SOCKET_ERROR;
-}
-
-bool NetworkManager::SetSocketNonBlocking( SOCKET& hSocket, bool fNonBlocking )
-{
-	if(fNonBlocking)
-	{
-#ifdef _WINDOWS
-		u_long nOne = 1;
-		if(ioctlsocket(hSocket, FIONBIO, &nOne) == SOCKET_ERROR)
-		{
-#else
-		int fFlags = fcntl(hSocket, F_GETFL, 0);
-		if(fcntl(hSocket, F_SETFL, fFlags | O_NONBLOCK) == SOCKET_ERROR)
-		{
-#endif
-			CloseSocket(hSocket);
-			return false;
-		}
-	}
-	else
-	{
-#ifdef _WINDOWS
-		u_long nZero = 0;
-		if(ioctlsocket(hSocket, FIONBIO, &nZero) == SOCKET_ERROR)
-		{
-#else
-		int fFlags = fcntl(hSocket, F_GETFL, 0);
-		if(fcntl(hSocket, F_SETFL, fFlags & ~O_NONBLOCK) == SOCKET_ERROR)
-		{
-#endif
-			CloseSocket(hSocket);
-			return false;
-		}
-	}
-
-	return true;
-}
-
 void NetworkManager::startThreads()
 {
 	LOG("Starting Threads", "NET");
@@ -248,7 +169,7 @@ void NetworkManager::startThreads()
 	// Send and receive from sockets, accept connections
 	threadSocketHandler = thread(&TraceThread<function<void()> >, "net", function<void()>(bind(&NetworkManager::ThreadSocketHandler, this)));
 
-	// Initiate outbound connections
+	// new connections
 	threadOpenAddedConnections = std::thread(&TraceThread<std::function<void()> >, "addcon", std::function<void()>(std::bind(&NetworkManager::ThreadOpenAddedConnections, this)));
 
 	// Initiate outbound connections

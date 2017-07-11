@@ -13,3 +13,5 @@
 #define NET_STANDARD_PORT_LISTENING 5634
 #define NET_STANDARD_CATCHALL_LISTENING "*"
 #define DUMP_INTERVAL 600	// all 10 minutes we dump the peers and ban list into our files and store it
+#define NET_DEFAULT_CONNECT_TIMEOUT 5000
+#define NET_DEFAULT_CONNECT_TRIES	5

@@ -5,6 +5,12 @@ MetaChain::MetaChain() :
 {
 }
 
+MetaChain& MetaChain::getInstance()
+{
+	static MetaChain instance;
+	return instance;
+}
+
 bool MetaChain::initialize(CSimpleIniA* iniFile)
 {
 	// start the lightweight scheduling thread

@@ -12,6 +12,7 @@ class NetworkManager
 		CService							*m_pServiceLocal;
 		ipContainer< CNetAddr >				*m_pBanList;
 		ipContainer< netPeers >				*m_pPeerList;
+		int									m_iNetConnectTimeout;
 
 		// thread interrupts and message processing variables
 		CThreadInterrupt					m_interruptNet;
@@ -22,9 +23,6 @@ class NetworkManager
 
 		// socket functions
 		bool								startListeningSocket();
-		bool								SetSocketNonBlocking(SOCKET& hSocket, bool fNonBlocking);
-		string								NetworkErrorString(int err);
-		bool								CloseSocket(SOCKET& hSocket);
 
 		// thread functions and variables
 		thread								threadSocketHandler;
@@ -49,4 +47,5 @@ class NetworkManager
 											NetworkManager(MetaChain *mc);
 											~NetworkManager();
 		bool								initialize(CSimpleIniA* iniFile);
+		int									getTimeout() { return m_iNetConnectTimeout; };
 };
