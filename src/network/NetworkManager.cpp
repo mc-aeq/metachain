@@ -561,7 +561,10 @@ void NetworkManager::ThreadOpenConnections()
 		{
 			// the connection was not successfull, check if we're already above our possible tries - if so we remove him
 			if (itPeer->tooManyTries())
+			{
+				LOG("removing node due to too many connection errors - " + itPeer->toString(), "NET");
 				m_pPeerList->vecIP.erase(itPeer);
+			}
 		}
 	}
 }
@@ -622,7 +625,7 @@ vector< netPeers >::iterator NetworkManager::getNextNode(bool bConnected, bool b
 		if (it->isConnected() != bConnected)
 			continue;
 
-		if (bCheckTimeDelta && (it->getTimeLastTry() - GetTime() >= m_iTimeBetweenConnects))
+		if (bCheckTimeDelta && (it->getTimeLastTry() != 0) && (GetTime() - it->getTimeLastTry() <= m_iTimeBetweenConnects))
 			continue;
 
 		return it;
