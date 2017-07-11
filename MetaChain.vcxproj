@@ -153,6 +153,7 @@
     <ClInclude Include="src\external\crypto\sha1.h" />
     <ClInclude Include="src\external\crypto\sha256.h" />
     <ClInclude Include="src\external\crypto\sha512.h" />
+    <ClInclude Include="src\external\cSemaphore.h" />
     <ClInclude Include="src\external\cThreadInterrupt.h" />
     <ClInclude Include="src\external\endian.h" />
     <ClInclude Include="src\external\hash.h" />

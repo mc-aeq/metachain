@@ -66,6 +66,7 @@
 #include "src/external/hash.h"
 #include "src/external/cThreadInterrupt.h"
 #include "src/external/scheduler.h"
+#include "src/external/cSemaphore.h"
 
 // includes of our own sources
 #include "src/logger.h"

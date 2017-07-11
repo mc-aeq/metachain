@@ -11,9 +11,6 @@ class ipContainer
 	private:
 		string									m_strFileName;
 
-		// this vector holds the read information
-		vector< T >								m_vecIP;
-
 	public:
 												ipContainer();
 												ipContainer(string strFileName);
@@ -22,6 +19,9 @@ class ipContainer
 		void									setFileName(string strFileName) { m_strFileName = strFileName; };
 		void									readContents();		
 		void									writeContents();
+
+		// this vector holds all the IP information corresponding to the template class
+		vector< T >								vecIP;
 };
 
 /*
@@ -73,7 +73,7 @@ void ipContainer<T>::readContents()
 #endif
 		T tmp;
 		if( tmp.init(strLine) )
-			m_vecIP.push_back(tmp);
+			vecIP.push_back(tmp);
 		else
 		{
 			LOG_ERROR("unable to add the following IP into our system: " + strLine, "IPC");
@@ -83,7 +83,7 @@ void ipContainer<T>::readContents()
 
 #ifdef _DEBUG
 	LOG_DEBUG("done reading contents of file: " + m_strFileName, "IPC");
-	LOG_DEBUG("elements in the vector: " + to_string(m_vecIP.size()), "IPC");
+	LOG_DEBUG("elements in the vector: " + to_string(vecIP.size()), "IPC");
 #endif
 }
 
@@ -107,8 +107,8 @@ void ipContainer<T>::writeContents()
 	streamOut << "# it will be automatically updated through the TCT blockchain" << endl;
 	streamOut << "# any manual changes will be overridden!" << endl << endl;
 
-	for (vector<T>::iterator it = m_vecIP.begin(); it != m_vecIP.end(); it++)
-		streamOut << (*it).toString() << endl;
+	for (vector<T>::iterator it = vecIP.begin(); it != vecIP.end(); it++)
+		streamOut << it->toString() << endl;
 
 	streamOut.close();
 

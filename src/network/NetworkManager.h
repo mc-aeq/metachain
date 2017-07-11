@@ -11,8 +11,9 @@ class NetworkManager
 		MetaChain							*m_pMC;
 		CService							*m_pServiceLocal;
 		ipContainer< CNetAddr >				*m_pBanList;
-		ipContainer< netPeers >				*m_pPeerList;
 		int									m_iNetConnectTimeout;
+		int									m_iTimeBetweenConnects;
+		bool								m_bActiveNetwork;
 
 		// thread interrupts and message processing variables
 		CThreadInterrupt					m_interruptNet;
@@ -20,6 +21,7 @@ class NetworkManager
 		condition_variable					m_condMsgProc;
 		mutex								m_mutexMsgProc;
 		atomic<bool>						m_abflagInterruptMsgProc;
+		CSemaphore							*m_pSemOutbound;
 
 		// socket functions
 		bool								startListeningSocket();
@@ -38,6 +40,10 @@ class NetworkManager
 
 		// functions to update the peers and ban lists
 		void								DumpData();
+
+		// functions and variables for our peers list and their management
+		ipContainer< netPeers >				*m_pPeerList;
+		vector< netPeers >::iterator		getNextNode(bool bConnected = true, bool bCheckTimeDelta = true);
 
 		// destructor functions
 		void								Interrupt();

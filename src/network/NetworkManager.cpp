@@ -4,7 +4,10 @@ static std::atomic<bool> interruptSocks5Recv(false);
 
 NetworkManager::NetworkManager(MetaChain *mc) :
 	m_pMC(mc),
-	m_iNetConnectTimeout(NET_DEFAULT_CONNECT_TIMEOUT)
+	m_iNetConnectTimeout(NET_DEFAULT_CONNECT_TIMEOUT),
+	m_bActiveNetwork(false),
+	m_iTimeBetweenConnects(0),
+	m_pSemOutbound(NULL)
 {
 #ifdef _DEBUG
 	LOG_DEBUG("instantiate NetworkManager", "NET");
@@ -18,7 +21,13 @@ bool NetworkManager::initialize(CSimpleIniA* iniFile)
 #endif
 
 	// read the default connect timeout from the settings, if it's not set, we'll use our default value
-	m_iNetConnectTimeout = iniFile->GetLongValue("network", "default_connect_timeout", NET_DEFAULT_CONNECT_TIMEOUT);
+	m_iNetConnectTimeout = iniFile->GetLongValue("network", "connect_timeout", NET_DEFAULT_CONNECT_TIMEOUT);
+
+	// read the time in seconds between two connects that were not succesfull
+	m_iTimeBetweenConnects = iniFile->GetLongValue("network", "time_between_unsuccessfull_connects", NET_DEFAULT_TIME_BETWEEN_UNSUCCESSFUL);
+
+	// initialize the outbound semaphore
+	m_pSemOutbound = new CSemaphore((std::min)(iniFile->GetLongValue("network", "max_outgoing_connections", NET_DEFAULT_MAX_OUTGOING_CONNECTIONS), iniFile->GetLongValue("network", "max_total_connections", NET_DEFAULT_MAX_TOTAL_CONNECTIONS)));
 
 #ifdef _WINDOWS
 	// Initialize Windows Sockets
@@ -61,6 +70,7 @@ bool NetworkManager::initialize(CSimpleIniA* iniFile)
 	startThreads();
 
 	// everything went smoothly
+	m_bActiveNetwork = true;
 	return true;
 }
 
@@ -519,175 +529,40 @@ void NetworkManager::ThreadOpenAddedConnections()
 
 void NetworkManager::ThreadOpenConnections()
 {
-	/*// Connect to specific addresses
-	if (gArgs.IsArgSet("-connect"))
-	{
-		for (int64_t nLoop = 0;; nLoop++)
-		{
-			ProcessOneShot();
-			for (const std::string& strAddr : gArgs.GetArgs("-connect"))
-			{
-				CAddress addr(CService(), NODE_NONE);
-				OpenNetworkConnection(addr, false, NULL, strAddr.c_str());
-				for (int i = 0; i < 10 && i < nLoop; i++)
-				{
-					if (!interruptNet.sleep_for(std::chrono::milliseconds(500)))
-						return;
-				}
-			}
-			if (!interruptNet.sleep_for(std::chrono::milliseconds(500)))
-				return;
-		}
-	}
-
-	// Initiate network connections
-	int64_t nStart = GetTime();
-
-	// Minimum time before next feeler connection (in microseconds).
-	int64_t nNextFeeler = PoissonNextSend(nStart * 1000 * 1000, FEELER_INTERVAL);*/
+	// run this loop until we interrupt it
 	while (!m_interruptNet)
 	{
-		/*ProcessOneShot();
-
-		if (!interruptNet.sleep_for(std::chrono::milliseconds(500)))
+		// is the network up and running
+		if (!m_bActiveNetwork)
 			return;
 
-		CSemaphoreGrant grant(*semOutbound);
-		if (interruptNet)
+		// sleep for 500 ms
+		if (!m_interruptNet.sleep_for(std::chrono::milliseconds(500)))
 			return;
 
-		// Add seed nodes if DNS seeds are all down (an infrastructure attack?).
-		if (addrman.size() == 0 && (GetTime() - nStart > 60)) {
-			static bool done = false;
-			if (!done) {
-				LogPrintf("Adding fixed seed nodes as DNS doesn't seem to be available.\n");
-				CNetAddr local;
-				local.SetInternal("fixedseeds");
-				addrman.Add(convertSeed6(Params().FixedSeeds()), local);
-				done = true;
-			}
-		}
+		// get the semaphone grant
+		CSemaphoreGrant grant(*m_pSemOutbound);
+		if (m_interruptNet)
+			return;
+		
+		// get the first one in the vector which is not connected
+		vector<netPeers>::iterator itPeer = getNextNode(false, true);
+		if (itPeer == m_pPeerList->vecIP.end())
+			continue;
 
-		//
-		// Choose an address to connect to based on most recently seen
-		//
-		CAddress addrConnect;
-
-		// Only connect out to one peer per network group (/16 for IPv4).
-		// Do this here so we don't have to critsect vNodes inside mapAddresses critsect.
-		int nOutbound = 0;
-		int nOutboundRelevant = 0;
-		std::set<std::vector<unsigned char> > setConnected;
+		// try to connect
+		if (itPeer->tryConnect())
 		{
-			LOCK(cs_vNodes);
-			for (CNode* pnode : vNodes) {
-				if (!pnode->fInbound && !pnode->fAddnode) {
-
-					// Count the peers that have all relevant services
-					if (pnode->fSuccessfullyConnected && !pnode->fFeeler && ((pnode->nServices & nRelevantServices) == nRelevantServices)) {
-						nOutboundRelevant++;
-					}
-					// Netgroups for inbound and addnode peers are not excluded because our goal here
-					// is to not use multiple of our limited outbound slots on a single netgroup
-					// but inbound and addnode peers do not use our outbound slots.  Inbound peers
-					// also have the added issue that they're attacker controlled and could be used
-					// to prevent us from connecting to particular hosts if we used them here.
-					setConnected.insert(pnode->addr.GetGroup());
-					nOutbound++;
-				}
-			}
+			// connection successfull move the semaphore
+			if (grant)
+				grant.MoveTo(itPeer->semGrantOutbound);
 		}
-
-		// Feeler Connections
-		//
-		// Design goals:
-		//  * Increase the number of connectable addresses in the tried table.
-		//
-		// Method:
-		//  * Choose a random address from new and attempt to connect to it if we can connect
-		//    successfully it is added to tried.
-		//  * Start attempting feeler connections only after node finishes making outbound
-		//    connections.
-		//  * Only make a feeler connection once every few minutes.
-		//
-		bool fFeeler = false;
-		if (nOutbound >= nMaxOutbound) {
-			int64_t nTime = GetTimeMicros(); // The current time right now (in microseconds).
-			if (nTime > nNextFeeler) {
-				nNextFeeler = PoissonNextSend(nTime, FEELER_INTERVAL);
-				fFeeler = true;
-			}
-			else {
-				continue;
-			}
-		}
-
-		int64_t nANow = GetAdjustedTime();
-		int nTries = 0;
-		while (!interruptNet)
+		else
 		{
-			CAddrInfo addr = addrman.Select(fFeeler);
-
-			// if we selected an invalid address, restart
-			if (!addr.IsValid() || setConnected.count(addr.GetGroup()) || IsLocal(addr))
-				break;
-
-			// If we didn't find an appropriate destination after trying 100 addresses fetched from addrman,
-			// stop this loop, and let the outer loop run again (which sleeps, adds seed nodes, recalculates
-			// already-connected network ranges, ...) before trying new addrman addresses.
-			nTries++;
-			if (nTries > 100)
-				break;
-
-			if (IsLimited(addr))
-				continue;
-
-			// only connect to full nodes
-			if ((addr.nServices & REQUIRED_SERVICES) != REQUIRED_SERVICES)
-				continue;
-
-			// only consider very recently tried nodes after 30 failed attempts
-			if (nANow - addr.nLastTry < 600 && nTries < 30)
-				continue;
-
-			// only consider nodes missing relevant services after 40 failed attempts and only if less than half the outbound are up.
-			ServiceFlags nRequiredServices = nRelevantServices;
-			if (nTries >= 40 && nOutbound < (nMaxOutbound >> 1)) {
-				nRequiredServices = REQUIRED_SERVICES;
-			}
-
-			if ((addr.nServices & nRequiredServices) != nRequiredServices) {
-				continue;
-			}
-
-			// do not allow non-default ports, unless after 50 invalid addresses selected already
-			if (addr.GetPort() != Params().GetDefaultPort() && nTries < 50)
-				continue;
-
-			addrConnect = addr;
-
-			// regardless of the services assumed to be available, only require the minimum if half or more outbound have relevant services
-			if (nOutboundRelevant >= (nMaxOutbound >> 1)) {
-				addrConnect.nServices = REQUIRED_SERVICES;
-			}
-			else {
-				addrConnect.nServices = nRequiredServices;
-			}
-			break;
+			// the connection was not successfull, check if we're already above our possible tries - if so we remove him
+			if (itPeer->tooManyTries())
+				m_pPeerList->vecIP.erase(itPeer);
 		}
-
-		if (addrConnect.IsValid()) {
-
-			if (fFeeler) {
-				// Add small amount of random noise before connection to avoid synchronization.
-				int randsleep = GetRandInt(FEELER_SLEEP_WINDOW * 1000);
-				if (!interruptNet.sleep_for(std::chrono::milliseconds(randsleep)))
-					return;
-				LogPrint(BCLog::NET, "Making feeler connection to %s\n", addrConnect.ToString());
-			}
-
-			OpenNetworkConnection(addrConnect, (int)setConnected.size() >= std::min(nMaxConnections - 1, 2), &grant, NULL, false, fFeeler);
-		}*/
 	}
 }
 
@@ -738,6 +613,21 @@ void NetworkManager::ThreadMessageHandler()
 		}
 		fMsgProcWake = false;*/
 	}
+}
+
+vector< netPeers >::iterator NetworkManager::getNextNode(bool bConnected, bool bCheckTimeDelta)
+{
+	for (vector< netPeers >::iterator it = m_pPeerList->vecIP.begin(); it != m_pPeerList->vecIP.end(); it++ )
+	{
+		if (it->isConnected() != bConnected)
+			continue;
+
+		if (bCheckTimeDelta && (it->getTimeLastTry() - GetTime() >= m_iTimeBetweenConnects))
+			continue;
+
+		return it;
+	}
+	return m_pPeerList->vecIP.end();
 }
 
 

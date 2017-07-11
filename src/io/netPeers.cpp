@@ -6,8 +6,16 @@
 netPeers::netPeers():
 	m_bConnected( false ),
 	m_hSocket( INVALID_SOCKET ),
-	m_usConnectionTries(0)
+	m_usConnectionTries(0),
+	m_timeLastTry(0)
 {
+}
+
+netPeers::~netPeers()
+{
+	semGrantOutbound.Release();
+
+	CloseSocket(m_hSocket);
 }
 
 bool netPeers::init(string strEntry)
@@ -42,8 +50,9 @@ bool netPeers::tryConnect()
 	if (m_bConnected)
 		return true;
 
-	// increment the connection try.
+	// increment the connection try and update the timestamp
 	m_usConnectionTries++;
+	m_timeLastTry = GetTime();
 
 	// when we're over a certain limit of connection tries (look at define.h for standard value), we don't even try it anymore to not stress the node
 	if (tooManyTries())
@@ -145,6 +154,7 @@ bool netPeers::tryConnect()
 #endif
 
 	// everything is fine, yay!
+	m_bConnected = true;
 	return true;
 }
 
