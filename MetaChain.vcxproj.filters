@@ -156,6 +156,9 @@
     <ClInclude Include="src\external\cSemaphore.h">
       <Filter>Headerdateien</Filter>
     </ClInclude>
+    <ClInclude Include="src\external\cCriticalSection.h">
+      <Filter>Headerdateien</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">

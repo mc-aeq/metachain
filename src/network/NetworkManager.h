@@ -10,9 +10,10 @@ class NetworkManager
 	private:
 		MetaChain							*m_pMC;
 		CService							*m_pServiceLocal;
-		ipContainer< CNetAddr >				*m_pBanList;
 		int									m_iNetConnectTimeout;
 		int									m_iTimeBetweenConnects;
+		int									m_iMaxOutboundConnections;
+		int									m_iMaxInboundConnections;
 		bool								m_bActiveNetwork;
 
 		// thread interrupts and message processing variables
@@ -21,10 +22,11 @@ class NetworkManager
 		condition_variable					m_condMsgProc;
 		mutex								m_mutexMsgProc;
 		atomic<bool>						m_abflagInterruptMsgProc;
-		CSemaphore							*m_pSemOutbound;
 
-		// socket functions
+		// socket functions and variables
+		SOCKET								m_hListenSocket;
 		bool								startListeningSocket();
+		void								AcceptConnection();
 
 		// thread functions and variables
 		thread								threadSocketHandler;
@@ -42,8 +44,17 @@ class NetworkManager
 		void								DumpData();
 
 		// functions and variables for our peers list and their management
-		ipContainer< netPeers >				*m_pPeerList;
-		vector< netPeers >::iterator		getNextNode(bool bConnected = true, bool bCheckTimeDelta = true);
+		ipContainer< netPeers >				*m_pPeerListOut;
+		mutable cCriticalSection			m_csPeerListOut;
+		CSemaphore							*m_pSemOutbound;
+		ipContainer< netPeers >				*m_pPeerListIn;
+		mutable cCriticalSection			m_csPeerListIn;
+		CSemaphore							*m_pSemInbound;
+		vector< netPeers >::iterator		getNextOutNode(bool bConnected = true, bool bCheckTimeDelta = true);
+
+		// functions and variables for our banned list and their management
+		ipContainer< CNetAddr >				*m_pBanList;
+		bool								isBanned(string strAddress);
 
 		// destructor functions
 		void								Interrupt();

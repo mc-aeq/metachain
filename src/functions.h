@@ -24,6 +24,9 @@ extern bool CloseSocket(SOCKET& hSocket);
 // function that converts milli seconds to timeval struct
 extern struct timeval MillisToTimeval(int64_t nTimeout);
 
+// function to set a socket to non delay operation mode
+extern bool SetSocketNoDelay(SOCKET& hSocket);
+
 // thread tracing
 template <typename Callable> void TraceThread(const char* name, Callable func)
 {

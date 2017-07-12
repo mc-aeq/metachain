@@ -6,15 +6,11 @@ this class is used as template type for ipContainer. Especially to store and ret
 class netPeers
 {
 private:
-	CService						m_CService;
-	SOCKET							m_hSocket;
 	bool							m_bConnected;
 	int64_t							m_timeLastTry;
 
 	// variable that counts connection tries. over a certain limit we throw this peer away as unusable
 	unsigned short					m_usConnectionTries;
-
-	bool							SetSocketNoDelay();
 
 public:
 									netPeers();
@@ -23,12 +19,14 @@ public:
 	bool							init(string strEntry);
 	string							toString() const;
 
-	bool							tryConnect();
+	bool							tryConnectOutbound();
 	bool							isConnected() { return m_bConnected; };
-	bool							tooManyTries() { return (m_usConnectionTries >= NET_DEFAULT_CONNECT_TRIES ? true : false); };
+	bool							tooManyTriesOutbound() { return (m_usConnectionTries >= NET_DEFAULT_CONNECT_TRIES ? true : false); };
 	int64_t							getTimeLastTry() { return m_timeLastTry; };
 
 	bool							operator==(const netPeers& b) const { return this->toString() == b.toString(); };
 
-	CSemaphoreGrant					semGrantOutbound;
+	CSemaphoreGrant					semaphoreGrant;
+	SOCKET							hSocket;
+	CService						csAddress;
 };

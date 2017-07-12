@@ -140,3 +140,10 @@ struct timeval MillisToTimeval(int64_t nTimeout)
 	timeout.tv_usec = (nTimeout % 1000) * 1000;
 	return timeout;
 }
+
+bool SetSocketNoDelay(SOCKET& hSocket)
+{
+	int set = 1;
+	int rc = setsockopt(hSocket, IPPROTO_TCP, TCP_NODELAY, (const char*)&set, sizeof(int));
+	return rc == 0;
+}

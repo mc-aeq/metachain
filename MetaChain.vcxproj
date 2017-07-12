@@ -143,6 +143,7 @@
   <ItemGroup>
     <ClInclude Include="src\defines.h" />
     <ClInclude Include="src\external\byteswap.h" />
+    <ClInclude Include="src\external\cCriticalSection.h" />
     <ClInclude Include="src\external\crypto\aes.h" />
     <ClInclude Include="src\external\crypto\chacha20.h" />
     <ClInclude Include="src\external\crypto\common.h" />
