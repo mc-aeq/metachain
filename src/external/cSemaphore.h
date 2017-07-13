@@ -9,7 +9,7 @@
 #include <boost/thread/mutex.hpp>
 #include <boost/thread/recursive_mutex.hpp>
 
-class CSemaphore
+class cSemaphore
 {
 private:
 	boost::condition_variable condition;
@@ -17,7 +17,7 @@ private:
 	int value;
 
 public:
-	CSemaphore(int init) : value(init) {}
+	cSemaphore(int init) : value(init) {}
 
 	void wait()
 	{
@@ -48,10 +48,10 @@ public:
 };
 
 /** RAII-style semaphore lock */
-class CSemaphoreGrant
+class cSemaphoreGrant
 {
 private:
-	CSemaphore* sem;
+	cSemaphore* sem;
 	bool fHaveGrant;
 
 public:
@@ -78,7 +78,7 @@ public:
 		return fHaveGrant;
 	}
 
-	void MoveTo(CSemaphoreGrant& grant)
+	void MoveTo(cSemaphoreGrant& grant)
 	{
 		grant.Release();
 		grant.sem = sem;
@@ -86,9 +86,9 @@ public:
 		fHaveGrant = false;
 	}
 
-	CSemaphoreGrant() : sem(NULL), fHaveGrant(false) {}
+	cSemaphoreGrant() : sem(NULL), fHaveGrant(false) {}
 
-	CSemaphoreGrant(CSemaphore& sema, bool fTry = false) : sem(&sema), fHaveGrant(false)
+	cSemaphoreGrant(cSemaphore& sema, bool fTry = false) : sem(&sema), fHaveGrant(false)
 	{
 		if (fTry)
 			TryAcquire();
@@ -96,7 +96,7 @@ public:
 			Acquire();
 	}
 
-	~CSemaphoreGrant()
+	~cSemaphoreGrant()
 	{
 		Release();
 	}

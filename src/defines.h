@@ -18,3 +18,13 @@
 #define NET_DEFAULT_MAX_OUTGOING_CONNECTIONS 100
 #define NET_DEFAULT_MAX_INCOMING_CONNECTIONS 200
 #define NET_DEFAULT_TIME_BETWEEN_UNSUCCESSFUL 300
+
+// HAVE_MSG_NOSIGNAL may not be available on all platforms
+#if !defined(HAVE_MSG_NOSIGNAL)
+#define MSG_NOSIGNAL 0
+#endif
+
+// MSG_DONTWAIT is not available on some platforms, if it doesn't exist define it as 0
+#if !defined(HAVE_MSG_DONTWAIT)
+#define MSG_DONTWAIT 0
+#endif

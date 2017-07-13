@@ -3,19 +3,82 @@
 #include <boost/algorithm/string.hpp>
 #include <boost/lexical_cast.hpp>
 
-netPeers::netPeers():
-	m_bConnected( false ),
+netPeers::netPeers() :
+	m_bConnected(false),
+	m_bToDestroy(false),
 	hSocket( INVALID_SOCKET ),
 	m_usConnectionTries(0),
 	m_timeLastTry(0)
 {
+	pcshSocket = new cCriticalSection();
+	m_pcsvRecv = new cCriticalSection();
+}
+
+netPeers::netPeers(SOCKET *listenSocket, cSemaphore *semaphore)
+{
+	m_bConnected = false;
+	m_bToDestroy = false;
+	m_usConnectionTries = 0;
+	m_timeLastTry = 0;
+	pcshSocket = new cCriticalSection();
+	m_pcsvRecv = new cCriticalSection();
+
+	struct sockaddr_storage sockaddr;
+	socklen_t len = sizeof(sockaddr);
+
+	hSocket = accept(*listenSocket, (struct sockaddr*)&sockaddr, &len);
+
+	// some security checks that the socket is really useable
+	if ((hSocket != INVALID_SOCKET) && (!csAddress.SetSockAddr((const struct sockaddr*)&sockaddr)))
+		LOG_ERROR("Warning: Unknown socket family", "NET");
+
+	if (hSocket == INVALID_SOCKET)
+	{
+		int nErr = WSAGetLastError();
+		if (nErr != WSAEWOULDBLOCK)
+			LOG_ERROR("socket error accept failed - " + NetworkErrorString(nErr), "NET-PEERS");
+		markDestroy();
+		return;
+	}
+
+	if (!IsSelectableSocket(hSocket))
+	{
+		LOG_ERROR("connection dropped: non-selectable socket - " + csAddress.toString(), "NET-PEERS");
+		markDestroy();
+		return;
+	}
+
+	// According to the internet TCP_NODELAY is not carried into accepted sockets
+	// on all platforms.  Set it again here just to be sure.
+	SetSocketNoDelay(hSocket);	
+
+	// get the semaphore grant without blocking
+	semaphoreGrant = cSemaphoreGrant(*semaphore, true);
+	if (!semaphoreGrant)
+	{
+		LOG("too many open connections - connection dropped", "NET-PEERS");
+		markDestroy();
+		return;
+	}
+
+	LOG("connection accepted - " + csAddress.toString(), "NET-PEERS");
 }
 
 netPeers::~netPeers()
 {
 	semaphoreGrant.Release();
 
-	CloseSocket(hSocket);
+	LOCK(pcshSocket);
+	if (hSocket != INVALID_SOCKET)
+	{
+		LOG("disconnecting peer - " + toString(), "NET-PEERS");
+		CloseSocket(hSocket);
+	}
+	else
+		LOG("removing peer - " + toString(), "NET-PEERS");
+
+	delete m_pcsvRecv;
+	delete pcshSocket;
 }
 
 bool netPeers::init(string strEntry)
@@ -155,5 +218,58 @@ bool netPeers::tryConnectOutbound()
 
 	// everything is fine, yay!
 	m_bConnected = true;
+	return true;
+}
+
+bool netPeers::ReceiveMsgBytes(const char *pch, unsigned int nBytes, bool& complete)
+{
+	complete = false;
+	int64_t nTimeMicros = GetTimeMicros();
+	LOCK(m_pcsvRecv);
+	//nLastRecv = nTimeMicros / 1000000;
+	//nRecvBytes += nBytes;
+	while (nBytes > 0) {
+		nBytes = 0;
+		/*
+		// get current incomplete message, or create a new one
+		if (vRecvMsg.empty() ||
+			vRecvMsg.back().complete())
+			vRecvMsg.push_back(CNetMessage(Params().MessageStart(), SER_NETWORK, INIT_PROTO_VERSION));
+
+		CNetMessage& msg = vRecvMsg.back();
+
+		// absorb network data
+		int handled;
+		if (!msg.in_data)
+			handled = msg.readHeader(pch, nBytes);
+		else
+			handled = msg.readData(pch, nBytes);
+
+		if (handled < 0)
+			return false;
+
+		if (msg.in_data && msg.hdr.nMessageSize > MAX_PROTOCOL_MESSAGE_LENGTH) {
+			LogPrint(BCLog::NET, "Oversized message from peer=%i, disconnecting\n", GetId());
+			return false;
+		}
+
+		pch += handled;
+		nBytes -= handled;
+
+		if (msg.complete()) {
+
+			//store received bytes per message command
+			//to prevent a memory DOS, only allow valid commands
+			mapMsgCmdSize::iterator i = mapRecvBytesPerMsgCmd.find(msg.hdr.pchCommand);
+			if (i == mapRecvBytesPerMsgCmd.end())
+				i = mapRecvBytesPerMsgCmd.find(NET_MESSAGE_COMMAND_OTHER);
+			assert(i != mapRecvBytesPerMsgCmd.end());
+			i->second += msg.hdr.nMessageSize + CMessageHeader::HEADER_SIZE;
+
+			msg.nTime = nTimeMicros;
+			complete = true;
+		}*/
+	}
+
 	return true;
 }

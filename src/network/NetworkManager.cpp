@@ -1,13 +1,12 @@
 #include "../../stdafx.h"
 
-static std::atomic<bool> interruptSocks5Recv(false);
-
 NetworkManager::NetworkManager(MetaChain *mc) :
 	m_pMC(mc),
 	m_iNetConnectTimeout(NET_DEFAULT_CONNECT_TIMEOUT),
 	m_bActiveNetwork(false),
 	m_iTimeBetweenConnects(0),
 	m_pSemOutbound(NULL),
+	m_pSemInbound(NULL),
 	m_iMaxOutboundConnections(0),
 	m_iMaxInboundConnections(0)
 {
@@ -35,8 +34,8 @@ bool NetworkManager::initialize(CSimpleIniA* iniFile)
 	m_iMaxInboundConnections = iniFile->GetLongValue("network", "max_incoming_connections", NET_DEFAULT_MAX_INCOMING_CONNECTIONS);
 
 	// initialize the semaphores
-	m_pSemOutbound = new CSemaphore(m_iMaxOutboundConnections);
-	m_pSemInbound = new CSemaphore(m_iMaxInboundConnections);
+	m_pSemOutbound = new cSemaphore(m_iMaxOutboundConnections);
+	m_pSemInbound = new cSemaphore(m_iMaxInboundConnections);
 
 #ifdef _WINDOWS
 	// Initialize Windows Sockets
@@ -48,16 +47,16 @@ bool NetworkManager::initialize(CSimpleIniA* iniFile)
 
 	// initialize the ban list
 	LOG("initializing the Ban List", "NET");
-	m_pBanList = new ipContainer< CNetAddr >(iniFile->GetValue("network", "ban_file", "bans.dat"));
-	m_pBanList->readContents();
+	m_pvecBanList = new ipContainer< CNetAddr >(iniFile->GetValue("network", "ban_file", "bans.dat"));
+	m_pvecBanList->readContents();
 
 	// initialize the outbound peer list
 	LOG("initializing the Peer List", "NET");
-	m_pPeerListOut = new ipContainer< netPeers >(iniFile->GetValue("network", "peer_file", "peers.dat"));
-	m_pPeerListOut->readContents();
+	m_pvecPeerListOut = new ipContainer< netPeers >(iniFile->GetValue("network", "peer_file", "peers.dat"));
+	m_pvecPeerListOut->readContents();
 
 	// initialize the inbound peer list (which is ofc empty at start)
-	m_pPeerListIn = new ipContainer< netPeers >();
+	m_pvecPeerListIn = new ipContainer< netPeers >();
 
 	// creating a CService class for the listener and storing it for further purposes
 	try
@@ -166,7 +165,7 @@ bool NetworkManager::startListeningSocket()
 		CloseSocket(m_hListenSocket);
 		return false;
 	}
-
+	
 	return true;
 }
 
@@ -174,7 +173,6 @@ void NetworkManager::startThreads()
 {
 	LOG("Starting Threads", "NET");
 
-	interruptSocks5(false);
 	m_interruptNet.reset();
 	m_abflagInterruptMsgProc = false;
 
@@ -185,10 +183,7 @@ void NetworkManager::startThreads()
 
 	// Send and receive from sockets, accept connections
 	threadSocketHandler = thread(&TraceThread<function<void()> >, "net", function<void()>(bind(&NetworkManager::ThreadSocketHandler, this)));
-
-	// new connections
-	threadOpenAddedConnections = std::thread(&TraceThread<std::function<void()> >, "addcon", std::function<void()>(std::bind(&NetworkManager::ThreadOpenAddedConnections, this)));
-
+	
 	// Initiate outbound connections
 	threadOpenConnections = std::thread(&TraceThread<std::function<void()> >, "opencon", std::function<void()>(std::bind(&NetworkManager::ThreadOpenConnections, this)));
 
@@ -199,14 +194,8 @@ void NetworkManager::startThreads()
 	m_pMC->getScheduler()->scheduleEvery(std::bind(&NetworkManager::DumpData, this), DUMP_INTERVAL * 1000);
 }
 
-void NetworkManager::interruptSocks5(bool bInterrupt)
-{
-	interruptSocks5Recv = bInterrupt;
-}
-
 void NetworkManager::ThreadSocketHandler()
 {
-	unsigned int nPrevNodeCount = 0;
 	while (!m_interruptNet)
 	{
 		fd_set fdsetRecv;
@@ -216,73 +205,70 @@ void NetworkManager::ThreadSocketHandler()
 		FD_ZERO(&fdsetRecv);
 		FD_ZERO(&fdsetSend);
 		FD_ZERO(&fdsetError);
-
-		
-		// Find which sockets have data to receive
 		struct timeval timeout;
 		timeout.tv_sec = 0;
 		timeout.tv_usec = 50000; // frequency to poll
 
 		SOCKET hSocketMax = 0;
+
+		// first delete nodes that disconnected gracefully or on error
+		{
+			LOCK(m_csPeerListIn);
+			for (vector< netPeers >::iterator it = m_pvecPeerListIn->vecIP.begin(); it != m_pvecPeerListIn->vecIP.end(); )
+			{
+				if( it->toDestroy())
+					it = m_pvecPeerListIn->vecIP.erase(it);
+				else
+					it++;
+			}
+		}
 		
+		// flag the listening socket to read from him		
 		FD_SET(m_hListenSocket, &fdsetRecv);
 		hSocketMax = m_hListenSocket;
-		have_fds = true;
 
-		/*{
-			LOCK(cs_vNodes);
-			for (CNode* pnode : vNodes)
+		// prepare the inbound sockets for receiving and sending data (if necessary)
+		{
+			LOCK(m_csPeerListIn);
+			for (vector< netPeers >::iterator it = m_pvecPeerListIn->vecIP.begin(); it != m_pvecPeerListIn->vecIP.end(); it++)
 			{
-				// Implement the following logic:
-				// * If there is data to send, select() for sending data. As this only
-				//   happens when optimistic write failed, we choose to first drain the
-				//   write buffer in this case before receiving more. This avoids
-				//   needlessly queueing received data, if the remote peer is not themselves
-				//   receiving data. This means properly utilizing TCP flow control signalling.
-				// * Otherwise, if there is space left in the receive buffer, select() for
-				//   receiving data.
-				// * Hand off all complete messages to the processor, to be handled without
-				//   blocking here.
-
-				bool select_recv = !pnode->fPauseRecv;
+				// check if the peer has something to send
 				bool select_send;
 				{
-					LOCK(pnode->cs_vSend);
-					select_send = !pnode->vSendMsg.empty();
+					// todo: lock vector of messages to send - query and set select_send to true if something is to send
+					select_send = false;
 				}
 
-				LOCK(pnode->cs_hSocket);
-				if (pnode->hSocket == INVALID_SOCKET)
+				LOCK(it->pcshSocket);
+				if (it->hSocket == INVALID_SOCKET)
 					continue;
 
-				FD_SET(pnode->hSocket, &fdsetError);
-				hSocketMax = std::max(hSocketMax, pnode->hSocket);
-				have_fds = true;
+				FD_SET(it->hSocket, &fdsetError);
+				hSocketMax = (std::max)(hSocketMax, it->hSocket);
 
-				if (select_send) {
-					FD_SET(pnode->hSocket, &fdsetSend);
+				// when we have to send something, we dont receive this round
+				if( select_send )
+				{
+					FD_SET(it->hSocket, &fdsetSend);
 					continue;
 				}
-				if (select_recv) {
-					FD_SET(pnode->hSocket, &fdsetRecv);
-				}
+
+				// we always try to receive data unless we send data
+				FD_SET(it->hSocket, &fdsetRecv);
 			}
-		}*/
+		}
 
-		int nSelect = select(have_fds ? hSocketMax + 1 : 0,
-			&fdsetRecv, &fdsetSend, &fdsetError, &timeout);
+		int nSelect = select(hSocketMax + 1, &fdsetRecv, &fdsetSend, &fdsetError, &timeout);
 		if (m_interruptNet)
 			return;
 
 		if (nSelect == SOCKET_ERROR)
 		{
-			if (have_fds)
-			{
-				int nErr = WSAGetLastError();
-				LOG_ERROR("socket select error - " + NetworkErrorString(nErr), "NET");
-				for (unsigned int i = 0; i <= hSocketMax; i++)
-					FD_SET(i, &fdsetRecv);
-			}
+			int nErr = WSAGetLastError();
+			LOG_ERROR("socket select error - " + NetworkErrorString(nErr), "NET");
+			for (unsigned int i = 0; i <= hSocketMax; i++)
+				FD_SET(i, &fdsetRecv);
+
 			FD_ZERO(&fdsetSend);
 			FD_ZERO(&fdsetError);
 			if (!m_interruptNet.sleep_for(std::chrono::milliseconds(timeout.tv_usec / 1000)))
@@ -290,38 +276,42 @@ void NetworkManager::ThreadSocketHandler()
 		}
 
 		// Accept new connections
-		if(m_hListenSocket != INVALID_SOCKET && FD_ISSET(m_hListenSocket, &fdsetRecv))
-			AcceptConnection();
+		if (m_hListenSocket != INVALID_SOCKET && FD_ISSET(m_hListenSocket, &fdsetRecv))
+		{
+			LOCK(m_csPeerListIn);
+			m_pvecPeerListIn->vecIP.emplace_back(&m_hListenSocket, m_pSemInbound);
 
-		/*
-		//
-		// Service each socket
-		//
-		std::vector<CNode*> vNodesCopy;
-		{
-			LOCK(cs_vNodes);
-			vNodesCopy = vNodes;
-			for (CNode* pnode : vNodesCopy)
-				pnode->AddRef();
+			// todo: when c++17 is adopted into compilers, use the reference returned from emplace_back instead of using the back() function.			 
+			// check if the ip address isnt banned
+			if (!m_pvecPeerListIn->vecIP.back().toDestroy() && isBanned(m_pvecPeerListIn->vecIP.back().csAddress.toStringIP()))
+			{
+				LOG("connection dropped - banned - " + m_pvecPeerListIn->vecIP.back().csAddress.toStringIP(), "NET");
+				m_pvecPeerListIn->vecIP.back().markDestroy();
+			}
 		}
-		for (CNode* pnode : vNodesCopy)
+
+		
+		// inbound socket handling
+		for (vector< netPeers >::iterator it = m_pvecPeerListIn->vecIP.begin(); it != m_pvecPeerListIn->vecIP.end(); it++)
 		{
-			if (interruptNet)
+			if (m_interruptNet)
 				return;
 
-			//
+			// is this peer about to be destroyed? if so, dont work with it
+			if (it->toDestroy())
+				continue;
+
 			// Receive
-			//
 			bool recvSet = false;
 			bool sendSet = false;
 			bool errorSet = false;
 			{
-				LOCK(pnode->cs_hSocket);
-				if (pnode->hSocket == INVALID_SOCKET)
+				LOCK(it->pcshSocket);
+				if (it->hSocket == INVALID_SOCKET)
 					continue;
-				recvSet = FD_ISSET(pnode->hSocket, &fdsetRecv);
-				sendSet = FD_ISSET(pnode->hSocket, &fdsetSend);
-				errorSet = FD_ISSET(pnode->hSocket, &fdsetError);
+				recvSet = FD_ISSET(it->hSocket, &fdsetRecv);
+				sendSet = FD_ISSET(it->hSocket, &fdsetSend);
+				errorSet = FD_ISSET(it->hSocket, &fdsetError);
 			}
 			if (recvSet || errorSet)
 			{
@@ -329,19 +319,19 @@ void NetworkManager::ThreadSocketHandler()
 				char pchBuf[0x10000];
 				int nBytes = 0;
 				{
-					LOCK(pnode->cs_hSocket);
-					if (pnode->hSocket == INVALID_SOCKET)
+					LOCK(it->pcshSocket);
+					if (it->hSocket == INVALID_SOCKET)
 						continue;
-					nBytes = recv(pnode->hSocket, pchBuf, sizeof(pchBuf), MSG_DONTWAIT);
+					nBytes = recv(it->hSocket, pchBuf, sizeof(pchBuf), MSG_DONTWAIT);
 				}
 				if (nBytes > 0)
 				{
 					bool notify = false;
-					if (!pnode->ReceiveMsgBytes(pchBuf, nBytes, notify))
-						pnode->CloseSocketDisconnect();
-					RecordBytesRecv(nBytes);
+					if (!it->ReceiveMsgBytes(pchBuf, nBytes, notify))
+						it->markDestroy();
+
 					if (notify) {
-						size_t nSizeAdded = 0;
+						/*size_t nSizeAdded = 0;
 						auto it(pnode->vRecvMsg.begin());
 						for (; it != pnode->vRecvMsg.end(); ++it) {
 							if (!it->complete())
@@ -354,16 +344,14 @@ void NetworkManager::ThreadSocketHandler()
 							pnode->nProcessQueueSize += nSizeAdded;
 							pnode->fPauseRecv = pnode->nProcessQueueSize > nReceiveFloodSize;
 						}
-						WakeMessageHandler();
+						WakeMessageHandler();*/
 					}
 				}
 				else if (nBytes == 0)
 				{
 					// socket closed gracefully
-					if (!pnode->fDisconnect) {
-						LogPrint(BCLog::NET, "socket closed\n");
-					}
-					pnode->CloseSocketDisconnect();
+					it->markDestroy();
+					LOG("socket closed", "NET");
 				}
 				else if (nBytes < 0)
 				{
@@ -371,13 +359,12 @@ void NetworkManager::ThreadSocketHandler()
 					int nErr = WSAGetLastError();
 					if (nErr != WSAEWOULDBLOCK && nErr != WSAEMSGSIZE && nErr != WSAEINTR && nErr != WSAEINPROGRESS)
 					{
-						if (!pnode->fDisconnect)
-							LogPrintf("socket recv error %s\n", NetworkErrorString(nErr));
-						pnode->CloseSocketDisconnect();
+						it->markDestroy();
+						LOG_ERROR("socket recv error - " + NetworkErrorString(nErr), "NET");
 					}
 				}
 			}
-
+			/*
 			//
 			// Send
 			//
@@ -428,40 +415,7 @@ void NetworkManager::ThreadSocketHandler()
 			for (CNode* pnode : vNodesCopy)
 				pnode->Release();
 		}*/
-	}
-}
-
-void NetworkManager::ThreadOpenAddedConnections()
-{
-	/*{
-		LOCK(cs_vAddedNodes);
-		vAddedNodes = gArgs.GetArgs("-addnode");
-	}*/
-
-	while (true)
-	{/*
-		CSemaphoreGrant grant(*semAddnode);
-		std::vector<AddedNodeInfo> vInfo = GetAddedNodeInfo();
-		bool tried = false;
-		for (const AddedNodeInfo& info : vInfo) {
-			if (!info.fConnected) {
-				if (!grant.TryAcquire()) {
-					// If we've used up our semaphore and need a new one, lets not wait here since while we are waiting
-					// the addednodeinfo state might change.
-					break;
-				}
-				// If strAddedNode is an IP/port, decode it immediately, so
-				// OpenNetworkConnection can detect existing connections to that IP/port.
-				tried = true;
-				CService service(LookupNumeric(info.strAddedNode.c_str(), Params().GetDefaultPort()));
-				OpenNetworkConnection(CAddress(service, NODE_NONE), false, &grant, info.strAddedNode.c_str(), false, false, true);
-				if (!interruptNet.sleep_for(std::chrono::milliseconds(500)))
-					return;
-			}
 		}
-		// Retry every 60 seconds if a connection was attempted, otherwise two seconds
-		if (!interruptNet.sleep_for(std::chrono::seconds(tried ? 60 : 2)))
-			return;*/
 	}
 }
 
@@ -479,13 +433,13 @@ void NetworkManager::ThreadOpenConnections()
 			return;
 
 		// get the semaphore grant
-		CSemaphoreGrant grant(*m_pSemOutbound);
+		cSemaphoreGrant grant(*m_pSemOutbound);
 		if (m_interruptNet)
 			return;
 		
 		// get the first one in the vector which is not connected
 		vector<netPeers>::iterator itPeer = getNextOutNode(false, true);
-		if (itPeer == m_pPeerListOut->vecIP.end())
+		if (itPeer == m_pvecPeerListOut->vecIP.end())
 			continue;
 
 		// try to connect
@@ -503,7 +457,7 @@ void NetworkManager::ThreadOpenConnections()
 				LOG("removing node due to too many connection errors - " + itPeer->toString(), "NET");
 				{
 					LOCK(m_csPeerListOut);
-					m_pPeerListOut->vecIP.erase(itPeer);
+					m_pvecPeerListOut->vecIP.erase(itPeer);
 				}
 			}
 		}
@@ -513,7 +467,9 @@ void NetworkManager::ThreadOpenConnections()
 void NetworkManager::ThreadMessageHandler()
 {
 	while (!m_abflagInterruptMsgProc)
-	{/*
+	{
+		bool fMoreWork = false;
+		/*
 		std::vector<CNode*> vNodesCopy;
 		{
 			LOCK(cs_vNodes);
@@ -550,19 +506,19 @@ void NetworkManager::ThreadMessageHandler()
 			for (CNode* pnode : vNodesCopy)
 				pnode->Release();
 		}
+*/
+		unique_lock< mutex> lock(m_mutexMsgProc);
+		if (!fMoreWork)
+			m_condMsgProc.wait_until(lock, chrono::steady_clock::now() + chrono::milliseconds(100), [this] { return m_bfMsgProcWake; });
 
-		std::unique_lock<std::mutex> lock(mutexMsgProc);
-		if (!fMoreWork) {
-			condMsgProc.wait_until(lock, std::chrono::steady_clock::now() + std::chrono::milliseconds(100), [this] { return fMsgProcWake; });
-		}
-		fMsgProcWake = false;*/
+		m_bfMsgProcWake = false;
 	}
 }
 
 vector< netPeers >::iterator NetworkManager::getNextOutNode(bool bConnected, bool bCheckTimeDelta)
 {
 	LOCK(m_csPeerListOut);
-	for (vector< netPeers >::iterator it = m_pPeerListOut->vecIP.begin(); it != m_pPeerListOut->vecIP.end(); it++ )
+	for (vector< netPeers >::iterator it = m_pvecPeerListOut->vecIP.begin(); it != m_pvecPeerListOut->vecIP.end(); it++ )
 	{
 		if (it->isConnected() != bConnected)
 			continue;
@@ -572,18 +528,18 @@ vector< netPeers >::iterator NetworkManager::getNextOutNode(bool bConnected, boo
 
 		return it;
 	}
-	return m_pPeerListOut->vecIP.end();
+	return m_pvecPeerListOut->vecIP.end();
 }
 
 
 void NetworkManager::DumpData()
 {
 	// write the ban list
-	m_pBanList->writeContents();
+	m_pvecBanList->writeContents();
 
 	// write the Peer List Out
 	LOCK(m_csPeerListOut);
-	m_pPeerListOut->writeContents();
+	m_pvecPeerListOut->writeContents();
 }
 
 NetworkManager::~NetworkManager()
@@ -596,9 +552,9 @@ NetworkManager::~NetworkManager()
 	DumpData();
 
 	// delete the ipContainers
-	delete m_pBanList;
-	delete m_pPeerListOut;
-	delete m_pPeerListIn;
+	delete m_pvecBanList;
+	delete m_pvecPeerListOut;
+	delete m_pvecPeerListIn;
 
 	// delete the semaphores
 	delete m_pSemInbound;
@@ -614,7 +570,6 @@ void NetworkManager::Interrupt()
 	m_condMsgProc.notify_all();
 
 	m_interruptNet();
-	interruptSocks5(true);
 }
 
 void NetworkManager::Stop()
@@ -623,80 +578,13 @@ void NetworkManager::Stop()
 		threadMessageHandler.join();
 	if (threadOpenConnections.joinable())
 		threadOpenConnections.join();
-	if (threadOpenAddedConnections.joinable())
-		threadOpenAddedConnections.join();
 	if (threadSocketHandler.joinable())
 		threadSocketHandler.join();
 }
 
-void NetworkManager::AcceptConnection()
-{
-	netPeers tmpPeer;
-	struct sockaddr_storage sockaddr;
-	socklen_t len = sizeof(sockaddr);
-
-	tmpPeer.hSocket = accept(m_hListenSocket, (struct sockaddr*)&sockaddr, &len);
-
-	// some security checks that the socket is really useable
-	if ((tmpPeer.hSocket != INVALID_SOCKET) && (!tmpPeer.csAddress.SetSockAddr((const struct sockaddr*)&sockaddr)))
-			LOG_ERROR( "Warning: Unknown socket family", "NET" );
-
-	if (tmpPeer.hSocket == INVALID_SOCKET)
-	{
-		int nErr = WSAGetLastError();
-		if (nErr != WSAEWOULDBLOCK)
-			LOG_ERROR("socket error accept failed - " + NetworkErrorString(nErr), "NET");
-		return;
-	}
-
-	if (!m_bActiveNetwork)
-	{
-		LOG_ERROR("connection dropped: network not initialized - " + tmpPeer.csAddress.toString(), "NET");
-		CloseSocket(tmpPeer.hSocket);
-		return;
-	}
-
-	if (!IsSelectableSocket(tmpPeer.hSocket))
-	{
-		LOG_ERROR("connection dropped: non-selectable socket - " + tmpPeer.csAddress.toString(), "NET");
-		CloseSocket(tmpPeer.hSocket);
-		return;
-	}
-
-	// According to the internet TCP_NODELAY is not carried into accepted sockets
-	// on all platforms.  Set it again here just to be sure.
-	SetSocketNoDelay(tmpPeer.hSocket);
-
-	// check if the ip address isnt banned
-	if (isBanned(tmpPeer.csAddress.toStringIP()))
-	{
-		LOG("connection dropped - banned - " + tmpPeer.csAddress.toString(), "NET");
-		CloseSocket(tmpPeer.hSocket);
-		return;
-	}
-
-	// get the semaphore grant without blocking
-	CSemaphoreGrant grant(*m_pSemInbound, true);
-	if (!grant)
-	{
-		LOG("too many open connections - connection dropped", "NET");
-		CloseSocket(tmpPeer.hSocket);
-		return;
-	}
-	else
-		grant.MoveTo(tmpPeer.semaphoreGrant);
-
-	// everything went smooth, we add this inbound connection to our vector
-	{
-		LOCK(m_csPeerListIn);
-		m_pPeerListIn->vecIP.push_back(tmpPeer);
-	}
-	LOG("connection accepted - " + tmpPeer.csAddress.toString(), "NET");
-}
-
 bool NetworkManager::isBanned(string strAddress)
 {
-	for (vector< CNetAddr >::iterator it = m_pBanList->vecIP.begin(); it != m_pBanList->vecIP.end(); it++)
+	for (vector< CNetAddr >::iterator it = m_pvecBanList->vecIP.begin(); it != m_pvecBanList->vecIP.end(); it++)
 	{
 		if (it->toString() == strAddress)
 			return true;

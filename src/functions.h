@@ -6,9 +6,6 @@ void RenameThread(const char* name);
 // Attempt to overwrite data in the specified memory span.
 void memory_cleanse(void *ptr, size_t len);
 
-// get current time
-int64_t GetTime();
-
 // format exceptions
 extern std::string FormatException(const std::exception* pex, const char* pszThread);
 
@@ -26,6 +23,12 @@ extern struct timeval MillisToTimeval(int64_t nTimeout);
 
 // function to set a socket to non delay operation mode
 extern bool SetSocketNoDelay(SOCKET& hSocket);
+
+// some time and date functions
+int64_t GetTime();
+int64_t GetTimeMillis();
+int64_t GetTimeMicros();
+int64_t GetSystemTimeInSeconds(); // Like GetTime(), but not mockable
 
 // thread tracing
 template <typename Callable> void TraceThread(const char* name, Callable func)
