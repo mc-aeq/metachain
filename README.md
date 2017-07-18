@@ -21,6 +21,7 @@ currently not supported
 #### Dependencies
 - for compiling from source you'll need a working [boost] installation with all libraries built.
 - [openssl] is widely used in this project. you'll need a working installation with all libraries.
+- C++ compiler needs to have C++11 compability. As soon as C++17.2 is available, changes will be made to use the C++17.2 standard as dependency!
 #### Building for source on windows
 - clone the git repository using github for Desktop
 - open the MetaChain.sln in Microsoft Visual Studio
