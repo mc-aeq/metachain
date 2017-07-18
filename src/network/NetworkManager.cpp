@@ -216,7 +216,7 @@ void NetworkManager::ThreadSocketHandler()
 			LOCK(m_csPeerListIn);
 			for (vector< netPeers >::iterator it = m_pvecPeerListIn->vecIP.begin(); it != m_pvecPeerListIn->vecIP.end(); )
 			{
-				if( it->toDestroy())
+				if( it->toDestroy() && !it->inUse() )
 					it = m_pvecPeerListIn->vecIP.erase(it);
 				else
 					it++;
@@ -232,6 +232,8 @@ void NetworkManager::ThreadSocketHandler()
 			LOCK(m_csPeerListIn);
 			for (vector< netPeers >::iterator it = m_pvecPeerListIn->vecIP.begin(); it != m_pvecPeerListIn->vecIP.end(); it++)
 			{
+				it->mark();
+
 				// check if the peer has something to send
 				bool select_send;
 				{
@@ -241,7 +243,10 @@ void NetworkManager::ThreadSocketHandler()
 
 				LOCK(it->pcshSocket);
 				if (it->hSocket == INVALID_SOCKET)
+				{
+					it->unmark();
 					continue;
+				}
 
 				FD_SET(it->hSocket, &fdsetError);
 				hSocketMax = (std::max)(hSocketMax, it->hSocket);
@@ -250,11 +255,14 @@ void NetworkManager::ThreadSocketHandler()
 				if( select_send )
 				{
 					FD_SET(it->hSocket, &fdsetSend);
+					it->unmark();
 					continue;
 				}
 
 				// we always try to receive data unless we send data
 				FD_SET(it->hSocket, &fdsetRecv);
+
+				it->unmark();
 			}
 		}
 
@@ -281,13 +289,20 @@ void NetworkManager::ThreadSocketHandler()
 			LOCK(m_csPeerListIn);
 			m_pvecPeerListIn->vecIP.emplace_back(&m_hListenSocket, m_pSemInbound);
 
+			netPeers *newElem = &m_pvecPeerListIn->vecIP.back();
+			newElem->mark();
 			// todo: when c++17 is adopted into compilers, use the reference returned from emplace_back instead of using the back() function.			 
 			// check if the ip address isnt banned
-			if (!m_pvecPeerListIn->vecIP.back().toDestroy() && isBanned(m_pvecPeerListIn->vecIP.back().csAddress.toStringIP()))
+			if (!newElem->toDestroy() && isBanned(newElem->csAddress.toStringIP()))
 			{
-				LOG("connection dropped - banned - " + m_pvecPeerListIn->vecIP.back().csAddress.toStringIP(), "NET");
-				m_pvecPeerListIn->vecIP.back().markDestroy();
+				LOG("connection dropped - banned - " + newElem->csAddress.toStringIP(), "NET");
+				newElem->markDestroy();
 			}
+
+			// after we successfully received a connection, we send them our version info so that they know how to talk to us
+			LOCK(newElem->pcsvSend);
+			newElem->listSend.emplace_back( netMessage::SUBJECT::NET_VERSION, (void *)&g_cuint32tVersion, sizeof(g_cuint32tVersion), true);
+			newElem->unmark();
 		}
 
 		
@@ -297,9 +312,15 @@ void NetworkManager::ThreadSocketHandler()
 			if (m_interruptNet)
 				return;
 
+			it->mark();
+
 			// is this peer about to be destroyed? if so, dont work with it
-			if (it->toDestroy())
+			// also when there are too many messages, skip the reading
+			if (it->toDestroy() || it->readStop())
+			{
+				it->unmark();
 				continue;
+			}
 
 			// Receive
 			bool recvSet = false;
@@ -308,7 +329,11 @@ void NetworkManager::ThreadSocketHandler()
 			{
 				LOCK(it->pcshSocket);
 				if (it->hSocket == INVALID_SOCKET)
+				{
+					it->markDestroy();
+					it->unmark();
 					continue;
+				}
 				recvSet = FD_ISSET(it->hSocket, &fdsetRecv);
 				sendSet = FD_ISSET(it->hSocket, &fdsetSend);
 				errorSet = FD_ISSET(it->hSocket, &fdsetError);
@@ -321,9 +346,14 @@ void NetworkManager::ThreadSocketHandler()
 				{
 					LOCK(it->pcshSocket);
 					if (it->hSocket == INVALID_SOCKET)
+					{
+						it->markDestroy();
+						it->unmark();
 						continue;
+					}
 					nBytes = recv(it->hSocket, pchBuf, sizeof(pchBuf), MSG_DONTWAIT);
 				}
+
 				if (nBytes > 0)
 				{
 					bool bNotifyWake = false;
@@ -332,14 +362,6 @@ void NetworkManager::ThreadSocketHandler()
 
 					if (bNotifyWake)
 						WakeMessageHandler();
-						/*
-						{
-							LOCK(pnode->cs_vProcessMsg);
-							pnode->vProcessMsg.splice(pnode->vProcessMsg.end(), pnode->vRecvMsg, pnode->vRecvMsg.begin(), it);
-							pnode->nProcessQueueSize += nSizeAdded;
-							pnode->fPauseRecv = pnode->nProcessQueueSize > nReceiveFloodSize;
-						}
-						*/
 				}
 				else if (nBytes == 0)
 				{
@@ -357,20 +379,66 @@ void NetworkManager::ThreadSocketHandler()
 						LOG_ERROR("socket recv error - " + NetworkErrorString(nErr), "NET");
 					}
 				}
+
+				it->unmark();
 			}
-			/*
-			//
+			
 			// Send
-			//
 			if (sendSet)
 			{
-				LOCK(pnode->cs_vSend);
-				size_t nBytes = SocketSendData(pnode);
-				if (nBytes) {
-					RecordBytesSent(nBytes);
-				}
+				it->mark();
+				LOCK(it->pcsvSend);
+				
+				list< netMessage >::iterator msg = it->listSend.begin();
+				size_t nSentSize = 0;
+
+				while( msg != it->listSend.end() )
+				{
+					int nBytes = 0;
+					{
+						LOCK(it->pcshSocket);
+						if (it->hSocket == INVALID_SOCKET)
+						{
+							it->unmark();
+							break;
+						}
+						nBytes = send(it->hSocket, reinterpret_cast<const char*>(msg->getPackage()) + nSentSize, msg->getPackageSize() - nSentSize, MSG_NOSIGNAL | MSG_DONTWAIT);
+					}
+					if (nBytes > 0)
+					{
+						nSentSize += nBytes;
+						if (nSentSize == msg->getPackageSize())
+						{
+							// msg fully sent
+							nSentSize = 0;
+							msg++;
+						}
+						else
+							// msg not fully sent, next try!
+							break;
+					}
+					else
+					{
+						if (nBytes < 0)
+						{
+							int nErr = WSAGetLastError();
+							if (nErr != WSAEWOULDBLOCK && nErr != WSAEMSGSIZE && nErr != WSAEINTR && nErr != WSAEINPROGRESS)
+							{
+								it->markDestroy();
+								LOG_ERROR("socket send error - " + NetworkErrorString(nErr), "NET");
+							}
+						}
+						// couldn't send anything at all
+						break;
+					}
+				}				
+
+				// remove the sent messages
+				it->listSend.erase(it->listSend.begin(), msg);
+				it->unmark();
 			}
 
+			/*
 			//
 			// Inactivity checking
 			//
@@ -403,11 +471,6 @@ void NetworkManager::ThreadSocketHandler()
 					pnode->fDisconnect = true;
 				}
 			}
-		}
-		{
-			LOCK(cs_vNodes);
-			for (CNode* pnode : vNodesCopy)
-				pnode->Release();
 		}*/
 		}
 	}
@@ -472,50 +535,93 @@ void NetworkManager::ThreadMessageHandler()
 	while (!m_abflagInterruptMsgProc)
 	{
 		bool fMoreWork = false;
-		/*
-		std::vector<CNode*> vNodesCopy;
+
+		for (vector< netPeers >::iterator it = m_pvecPeerListIn->vecIP.begin(); it != m_pvecPeerListIn->vecIP.end(); it++)
 		{
-			LOCK(cs_vNodes);
-			vNodesCopy = vNodes;
-			for (CNode* pnode : vNodesCopy) {
-				pnode->AddRef();
-			}
-		}
-
-		bool fMoreWork = false;
-
-		for (CNode* pnode : vNodesCopy)
-		{
-			if (pnode->fDisconnect)
-				continue;
-
-			// Receive messages
-			bool fMoreNodeWork = GetNodeSignals().ProcessMessages(pnode, *this, flagInterruptMsgProc);
-			fMoreWork |= (fMoreNodeWork && !pnode->fPauseSend);
-			if (flagInterruptMsgProc)
-				return;
-
-			// Send messages
+			it->mark();
+			if (it->toDestroy() || !it->hasMessage())
 			{
-				LOCK(pnode->cs_sendProcessing);
-				GetNodeSignals().SendMessages(pnode, *this, flagInterruptMsgProc);
+				it->unmark();
+				continue;
 			}
-			if (flagInterruptMsgProc)
-				return;
-		}
 
-		{
-			LOCK(cs_vNodes);
-			for (CNode* pnode : vNodesCopy)
-				pnode->Release();
-		}
-*/
-		unique_lock< mutex> lock(m_mutexMsgProc);
+			// process received messages
+			while (it->hasMessage())
+			{
+				netMessage cpy;
+
+				// we make a temporary copy of the message so that we can release the lock faster in order to not block other threads
+				{
+					LOCK(it->pcsvQueue);
+					cpy = it->getMessage();
+					it->popMessage();
+				}
+				if (!ProcessMessage(cpy, it))
+				{
+					LOG_ERROR("Error processing message - disconnecting peer " + it->toString(), "NET");
+					it->markDestroy();
+					it->unmark();
+					break;
+				}
+			}
+			it->unmark();
+
+			if (m_abflagInterruptMsgProc)
+				return;
+		}	
+
+		unique_lock<mutex> lock(m_mutexMsgProc);
 		if (!fMoreWork)
 			m_condMsgProc.wait_until(lock, chrono::steady_clock::now() + chrono::milliseconds(100), [this] { return m_bfMsgProcWake; });
 
-		m_bfMsgProcWake = false;
+		m_bfMsgProcWake = false;		
 	}
+}
+
+bool NetworkManager::ProcessMessage(netMessage msg, vector< netPeers >::iterator peer)
+{
+
+	// security check: when we receive a package that is not NET_VERSION in subject and validConnection() == false, it means we didnt receive the version string and the connection is possibly malicious. 
+	// we skip all messages and destroy the connection for security reasons
+	if (!peer->validConnection() && (msg.getHeader().ui16tSubject != netMessage::SUBJECT::NET_VERSION))
+	{
+		LOG_ERROR("Received a different package than NET_VERSION in the first communication. Destroying connection for security reasons!", "NET");
+		return false;
+	}
+
+	switch (msg.getHeader().ui16tSubject)
+	{
+	case netMessage::SUBJECT::NET_VERSION:
+#ifdef _DEBUG
+		LOG_DEBUG("Got Version Info from " + peer->toString() + " - Version: " + msg.getData(), "NET");
+#endif
+		// if the connected client has an older version than ours, we inform him about a new version and then destroy the connection
+		if (g_cuint32tVersion > (uint32_t)msg.getData())
+		{
+			LOCK(peer->pcsvSend);
+			peer->listSend.emplace_back(netMessage::SUBJECT::NET_VERSION_NEWER, (void *)&g_cuint32tVersion, sizeof(g_cuint32tVersion), true);
+
+			LOG("Connected client has a lower version than ours, inform and disconnect - " + peer->toString(), "NET");
+			return false;
+		}
+		// if the connected client is newer than ours, we increment a ticker in the metachain and also destroy this connection
+		else if (g_cuint32tVersion < (uint32_t)msg.getData())
+		{
+			MetaChain::getInstance().incrementNewerVersionTicker();
+
+			LOG("We have an older version than the connected client, increment the version ticker and disconnect - " + peer->toString(), "NET");
+			return false;
+		}
+		// wenn the version number is the same, we don't do anything except we set a flag that the initial communication was made and the peer is ready for full service
+		else
+			peer->validConnection(true);
+	break;
+
+	default:
+		return false;
+	}
+
+	return true;
 }
 
 vector< netPeers >::iterator NetworkManager::getNextOutNode(bool bConnected, bool bCheckTimeDelta)

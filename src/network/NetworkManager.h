@@ -57,6 +57,8 @@ class NetworkManager
 		void								Interrupt();
 		void								Stop();
 
+		bool								ProcessMessage(netMessage msg, vector< netPeers >::iterator peer);
+
 	public:
 											NetworkManager(MetaChain *mc);
 											~NetworkManager();

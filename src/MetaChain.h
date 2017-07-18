@@ -14,6 +14,8 @@ private:
 	boost::thread_group			m_threadGroup;
 	CScheduler					m_scheduler;
 
+	unsigned short				m_usNewerVersionTicker;
+
 	void						LicenseInfo();
 
 	// constructor and operator
@@ -24,6 +26,8 @@ private:
 public:
 	static						MetaChain& getInstance();
 	bool						initialize(CSimpleIniA* iniFile);
+
+	void						incrementNewerVersionTicker();
 
 	// simple getter
 	CScheduler*					getScheduler() { return &m_scheduler; };

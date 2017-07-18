@@ -7,6 +7,7 @@ class netPeers
 {
 private:
 	bool							m_bConnected;		// this value shows whether the socket is connected or not.
+	bool							m_bValidConnection;	// true when the initial communication with the version number worked and checked out
 	bool							m_bToDestroy;		// this marks whether this peer has to be destroyed. this will result in a delete of this instance
 	int64_t							m_timeLastTry;
 
@@ -16,11 +17,10 @@ private:
 	cCriticalSection				*m_pcsvRecv;
 	cSemaphoreGrant					m_semGrant;
 
-	uint64_t						nRecvBytes;
-	uint64_t						nSendBytes;
+	netMessage						*m_pNetMesg;
 
-	vector< netMessage >			m_vecMsgBuffer;
-	vector< netMessage >			m_vecMsgQueue;
+	int								m_iUsageCounter;
+	queue< netMessage >				m_queueMessages;
 
 public:
 									netPeers();
@@ -29,6 +29,9 @@ public:
 
 	bool							init(string strEntry);
 	string							toString() const;
+
+	void							validConnection(bool bValid) { m_bValidConnection = bValid; };
+	bool							validConnection() { return m_bValidConnection; };
 
 	bool							tryConnectOutbound();
 	bool							isConnected() { return m_bConnected; };
@@ -45,4 +48,17 @@ public:
 	bool							ReceiveMsgBytes(const char *pch, unsigned int nBytes, bool& complete);
 	void							markDestroy() { m_bToDestroy = true; };
 	bool							toDestroy() { return m_bToDestroy; };
+	
+	cCriticalSection				*pcsvQueue;
+	bool							readStop() { return (m_queueMessages.size() >= MAX_MSG_QUEUE); };
+	bool							hasMessage() { return !m_queueMessages.empty(); };
+	netMessage						getMessage() { return m_queueMessages.front(); };
+	void							popMessage() { m_queueMessages.pop(); };
+
+	cCriticalSection				*pcsvSend;
+	list< netMessage >				listSend;
+
+	void							mark() { m_iUsageCounter++; };					// mark this peer as currently used by a process.
+	void							unmark() { m_iUsageCounter--; };				// remove the marking or atleast decrement the number of processes using this peer
+	bool							inUse() { return (m_iUsageCounter != 0); };		// check whether a process is using this peer right now
 };

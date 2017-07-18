@@ -7,7 +7,38 @@ netMessage::netMessage():
 	i64tTimeStart(0),
 	i64tTimeDelta(0)
 {
+}
 
+// this constructor will most of the time be called by emplace_back. When called by emplace_back bDirectSend must be true to assemble the data correctly
+// when it's not constructed through emplace_back, bDirectSend shall be false and the data needs to be assembled manually
+netMessage::netMessage(netMessage::SUBJECT subj, void *ptrData, uint32_t uiDataSize, bool bDirectSend) :
+	m_bComplete(false),
+	m_bHeaderComplete(false),
+	m_uiPosition(0),
+	i64tTimeStart(0),
+	i64tTimeDelta(0)
+{
+	// assemble the header
+	m_sHeader.ui16tSubject = subj;
+	m_sHeader.ui32tPayloadSize = uiDataSize;
+
+	// allocate the buffer
+	prepareData();
+
+	// copy the data
+	memcpy((m_pBuffer + sizeof(sHeader)), ptrData, uiDataSize);
+
+	// set the complete flag for further processing
+	m_bComplete = true;
+
+	// get the hash and store it in the header
+	m_Hasher256.Write((const unsigned char*)ptrData, uiDataSize);
+	GetMessageHash();
+	memcpy(m_sHeader.ui8tChecksum, m_ui256DataHash.begin(), CHECKSUM_SIZE);
+
+#ifdef _DEBUG
+	LOG_DEBUG("Writing Header - Header Subj: " + to_string(m_sHeader.ui16tSubject) + " - Header PayloadSize: " + to_string(m_sHeader.ui32tPayloadSize) + " - Header Hash: " + (char*)m_sHeader.ui8tChecksum, "NET-MSG");
+#endif
 }
 
 int netMessage::readData(const char *pch, unsigned int nBytes)
@@ -36,7 +67,7 @@ int netMessage::readData(const char *pch, unsigned int nBytes)
 		m_uiPosition = 0;
 
 		// security check for payload DoS
-		if (m_sHeader.uiPayloadSize > MAX_PAYLOAD_SIZE)
+		if (m_sHeader.ui32tPayloadSize > MAX_PAYLOAD_SIZE)
 		{
 			LOG_ERROR("DoS data package filtered, disconnecting node", "NET-MSG");
 			return -1;
@@ -45,7 +76,7 @@ int netMessage::readData(const char *pch, unsigned int nBytes)
 #ifdef _DEBUG
 		uint256 tmpCmp;
 		memcpy(tmpCmp.begin(), m_sHeader.ui8tChecksum, CHECKSUM_SIZE );
-		LOG_DEBUG("Header Completed - Payload Size: " + to_string(m_sHeader.uiPayloadSize) + ", Header Hash: " + tmpCmp.ToString(), "NET-MSG");
+		LOG_DEBUG("Header Completed - Payload Size: " + to_string(m_sHeader.ui32tPayloadSize) + ", Header Hash: " + tmpCmp.ToString(), "NET-MSG");
 #endif
 
 		// everything smooth, return the bytes read
@@ -54,12 +85,12 @@ int netMessage::readData(const char *pch, unsigned int nBytes)
 	else
 	{
 		// calculate the remaining bytes of the message as well as the number of bytes to read
-		unsigned int uiRemaining = m_sHeader.uiPayloadSize - m_uiPosition;
+		unsigned int uiRemaining = m_sHeader.ui32tPayloadSize - m_uiPosition;
 		unsigned int uiBufSize = (std::min)(uiRemaining, nBytes);
 
 		// Allocate up to 256 KiB ahead, but never more than the total message size.
 		if (m_vRecv.size() < m_uiPosition + uiBufSize)
-			m_vRecv.resize((std::min)(m_sHeader.uiPayloadSize, m_uiPosition + uiBufSize + 256 * 1024));
+			m_vRecv.resize((std::min)(m_sHeader.ui32tPayloadSize, m_uiPosition + uiBufSize + 256 * 1024));
 
 		memcpy(&m_vRecv[m_uiPosition], pch, uiBufSize);
 		m_uiPosition += uiBufSize;
@@ -70,7 +101,7 @@ int netMessage::readData(const char *pch, unsigned int nBytes)
 #endif
 
 		// check wether we completed the data part
-		if (m_sHeader.uiPayloadSize == m_uiPosition)
+		if (m_sHeader.ui32tPayloadSize == m_uiPosition)
 		{
 			m_bComplete = true;
 			GetMessageHash();
@@ -97,4 +128,13 @@ uint256& netMessage::GetMessageHash()
 	if (m_ui256DataHash.IsNull())
 		m_Hasher256.Finalize(m_ui256DataHash.begin());
 	return m_ui256DataHash;
+}
+
+void netMessage::prepareData()
+{
+	// in this function we allocate the buffer, sanitize it and fill it with the header information.
+	// all functions that call this function must take care of filling the buffer with the corresponding data afterwards
+	m_pBuffer = new char[sizeof(sHeader) + m_sHeader.ui32tPayloadSize];
+	memset(m_pBuffer, '\0', sizeof(sHeader) + m_sHeader.ui32tPayloadSize);
+	memcpy(m_pBuffer, &m_sHeader, sizeof(sHeader));
 }

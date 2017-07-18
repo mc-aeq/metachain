@@ -36,6 +36,7 @@
 #include <chrono>
 #include <mutex>
 #include <thread>
+#include <queue>
 
 // openssl includes
 #include <openssl/crypto.h>

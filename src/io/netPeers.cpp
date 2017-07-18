@@ -5,23 +5,33 @@
 
 netPeers::netPeers() :
 	m_bConnected(false),
+	m_bValidConnection(false),
 	m_bToDestroy(false),
 	hSocket( INVALID_SOCKET ),
 	m_usConnectionTries(0),
-	m_timeLastTry(0)
+	m_timeLastTry(0),
+	m_iUsageCounter(0)
 {
 	pcshSocket = new cCriticalSection();
 	m_pcsvRecv = new cCriticalSection();
+	pcsvQueue = new cCriticalSection();
+	pcsvSend = new cCriticalSection();
+	m_pNetMesg = new netMessage();
 }
 
 netPeers::netPeers(SOCKET *listenSocket, cSemaphore *semaphore)
 {
 	m_bConnected = false;
+	m_bValidConnection = false;
 	m_bToDestroy = false;
 	m_usConnectionTries = 0;
 	m_timeLastTry = 0;
+	m_iUsageCounter = 0;
 	pcshSocket = new cCriticalSection();
 	m_pcsvRecv = new cCriticalSection();
+	pcsvQueue = new cCriticalSection();
+	pcsvSend = new cCriticalSection();
+	m_pNetMesg = new netMessage();
 
 	struct sockaddr_storage sockaddr;
 	socklen_t len = sizeof(sockaddr);
@@ -78,7 +88,10 @@ netPeers::~netPeers()
 		LOG("removing peer - " + toString(), "NET-PEERS");
 
 	delete m_pcsvRecv;
+	delete pcsvQueue;
 	delete pcshSocket;
+	delete pcsvSend;
+	delete m_pNetMesg;
 }
 
 bool netPeers::init(string strEntry)
@@ -229,14 +242,15 @@ bool netPeers::ReceiveMsgBytes(const char *pch, unsigned int nBytes, bool& compl
 
 	while (nBytes > 0)
 	{
-		// get current incomplete message, or create a new one
-		if( m_vecMsgBuffer.empty() || m_vecMsgBuffer.back().complete() )
-			m_vecMsgBuffer.push_back( netMessage() );
-
-		netMessage& msg = m_vecMsgBuffer.back();
+		// if we have more than MAX_MSG_QUEUE amount of messages to process, we skip reading. this prevents flodding from malicious nodes
+		if (m_queueMessages.size() >= MAX_MSG_QUEUE)
+		{
+			complete = true; // make sure the msg handler will be called to process those queued up msgs
+			return true;
+		}
 
 		// read network data
-		int handled = msg.readData(pch, nBytes);
+		int handled = m_pNetMesg->readData(pch, nBytes);
 
 		if (handled < 0)
 			return false;
@@ -244,12 +258,22 @@ bool netPeers::ReceiveMsgBytes(const char *pch, unsigned int nBytes, bool& compl
 		pch += handled;
 		nBytes -= handled;
 
-		if (msg.complete())
+		if (m_pNetMesg->complete())
 		{
 			// update some time stats and set the message to be complete
-			msg.i64tTimeStart = nTimeMicros;
-			msg.i64tTimeDelta = GetTimeMicros() - nTimeMicros;
+			m_pNetMesg->i64tTimeStart = nTimeMicros;
+			m_pNetMesg->i64tTimeDelta = GetTimeMicros() - nTimeMicros;
 			complete = true;
+
+			// push the message into our queue
+			{
+				LOCK(pcsvQueue);
+				m_queueMessages.push(*m_pNetMesg);
+			}
+
+			// reset the pointer to a new Message
+			delete(m_pNetMesg);
+			m_pNetMesg = new netMessage();
 		}
 	}
 
