@@ -326,26 +326,20 @@ void NetworkManager::ThreadSocketHandler()
 				}
 				if (nBytes > 0)
 				{
-					bool notify = false;
-					if (!it->ReceiveMsgBytes(pchBuf, nBytes, notify))
+					bool bNotifyWake = false;
+					if (!it->ReceiveMsgBytes(pchBuf, nBytes, bNotifyWake))
 						it->markDestroy();
 
-					if (notify) {
-						/*size_t nSizeAdded = 0;
-						auto it(pnode->vRecvMsg.begin());
-						for (; it != pnode->vRecvMsg.end(); ++it) {
-							if (!it->complete())
-								break;
-							nSizeAdded += it->vRecv.size() + CMessageHeader::HEADER_SIZE;
-						}
+					if (bNotifyWake)
+						WakeMessageHandler();
+						/*
 						{
 							LOCK(pnode->cs_vProcessMsg);
 							pnode->vProcessMsg.splice(pnode->vProcessMsg.end(), pnode->vRecvMsg, pnode->vRecvMsg.begin(), it);
 							pnode->nProcessQueueSize += nSizeAdded;
 							pnode->fPauseRecv = pnode->nProcessQueueSize > nReceiveFloodSize;
 						}
-						WakeMessageHandler();*/
-					}
+						*/
 				}
 				else if (nBytes == 0)
 				{
@@ -417,6 +411,15 @@ void NetworkManager::ThreadSocketHandler()
 		}*/
 		}
 	}
+}
+
+void NetworkManager::WakeMessageHandler()
+{
+	{
+		lock_guard<mutex> lock(m_mutexMsgProc);
+		m_bfMsgProcWake = true;
+	}
+	m_condMsgProc.notify_one();
 }
 
 void NetworkManager::ThreadOpenConnections()

@@ -16,10 +16,11 @@ private:
 	cCriticalSection				*m_pcsvRecv;
 	cSemaphoreGrant					m_semGrant;
 
-	/*atomic<int64_t>					nLastSend;
-	atomic<int64_t>					nLastRecv;*/
 	uint64_t						nRecvBytes;
 	uint64_t						nSendBytes;
+
+	vector< netMessage >			m_vecMsgBuffer;
+	vector< netMessage >			m_vecMsgQueue;
 
 public:
 									netPeers();

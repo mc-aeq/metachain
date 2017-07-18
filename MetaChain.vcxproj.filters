@@ -159,6 +159,18 @@
     <ClInclude Include="src\external\cCriticalSection.h">
       <Filter>Headerdateien</Filter>
     </ClInclude>
+    <ClInclude Include="src\network\netMessage.h">
+      <Filter>Headerdateien\MetaChain\Network</Filter>
+    </ClInclude>
+    <ClInclude Include="src\external\zeroAfterFree.h">
+      <Filter>Headerdateien</Filter>
+    </ClInclude>
+    <ClInclude Include="src\external\cDataStream.h">
+      <Filter>Headerdateien</Filter>
+    </ClInclude>
+    <ClInclude Include="src\external\crypto\cHash256.h">
+      <Filter>Headerdateien\crypto</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -235,6 +247,9 @@
     </ClCompile>
     <ClCompile Include="src\io\netPeers.cpp">
       <Filter>Quelldateien\IO</Filter>
+    </ClCompile>
+    <ClCompile Include="src\network\netMessage.cpp">
+      <Filter>Quelldateien\MetaChain\Network</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

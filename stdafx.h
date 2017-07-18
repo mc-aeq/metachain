@@ -61,6 +61,7 @@
 #include "src/external/crypto/sha1.h"
 #include "src/external/crypto/sha256.h"
 #include "src/external/crypto/sha512.h"
+#include "src/external/crypto/cHash256.h"
 #include "src/external/random.h"
 #include "src/external/reverselock.h"
 #include "src/external/hash.h"
@@ -68,6 +69,8 @@
 #include "src/external/scheduler.h"
 #include "src/external/cSemaphore.h"
 #include "src/external/cCriticalSection.h"
+#include "src/external/zeroAfterFree.h"
+#include "src/external/cDataStream.h"
 
 // includes of our own sources
 #include "src/logger.h"
@@ -75,6 +78,7 @@
 #include "src/network/CSubNet.h"
 #include "src/network/CService.h"
 #include "src/MetaChain.h"
+#include "src/network/netMessage.h"
 #include "src/io/ipContainer.h"
 #include "src/io/netPeers.h"
 #include "src/network/NetworkManager.h"

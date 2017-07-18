@@ -18,6 +18,8 @@
 #define NET_DEFAULT_MAX_OUTGOING_CONNECTIONS 100
 #define NET_DEFAULT_MAX_INCOMING_CONNECTIONS 200
 #define NET_DEFAULT_TIME_BETWEEN_UNSUCCESSFUL 300
+#define MAX_PAYLOAD_SIZE 33554432 // 32M in bytes
+#define	CHECKSUM_SIZE	4 // 4 bytes per network message as checksum
 
 // HAVE_MSG_NOSIGNAL may not be available on all platforms
 #if !defined(HAVE_MSG_NOSIGNAL)

@@ -22,6 +22,7 @@ class NetworkManager
 		bool								m_bfMsgProcWake;
 		condition_variable					m_condMsgProc;
 		mutex								m_mutexMsgProc;
+		void								WakeMessageHandler();
 
 		// socket functions and variables
 		SOCKET								m_hListenSocket;
