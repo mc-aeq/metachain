@@ -19,9 +19,9 @@ class netMessage
 		cDataStream			m_vRecv;
 		cHash256			m_Hasher256;
 		uint256				m_ui256DataHash;
+		unsigned int		m_uiPosition;
 
 		char				*m_pBuffer;
-		void				prepareData();
 
 	public:
 		// these are the communication definers we use as ui16tSubject
@@ -62,7 +62,6 @@ class netMessage
 		unsigned int		getPackageSize() { return sizeof(sHeader) + m_sHeader.ui32tPayloadSize; };
 		void*				getPackage() { return m_pBuffer; };
 		char*				getData() { return (m_pBuffer+sizeof(sHeader)); };
-		unsigned int		m_uiPosition;
 
 		sHeader				getHeader() { return m_sHeader; };
 };

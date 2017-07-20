@@ -16,9 +16,9 @@ netPeers::netPeers() :
 	m_pcsvRecv = new cCriticalSection();
 	pcsvQueue = new cCriticalSection();
 	pcsvSend = new cCriticalSection();
-	m_pNetMesg = new netMessage();
 }
 
+// this is the emplace_back constructor for incoming connections
 netPeers::netPeers(SOCKET *listenSocket, cSemaphore *semaphore)
 {
 	m_bConnected = false;
@@ -31,7 +31,6 @@ netPeers::netPeers(SOCKET *listenSocket, cSemaphore *semaphore)
 	m_pcsvRecv = new cCriticalSection();
 	pcsvQueue = new cCriticalSection();
 	pcsvSend = new cCriticalSection();
-	m_pNetMesg = new netMessage();
 
 	struct sockaddr_storage sockaddr;
 	socklen_t len = sizeof(sockaddr);
@@ -72,6 +71,9 @@ netPeers::netPeers(SOCKET *listenSocket, cSemaphore *semaphore)
 	}
 
 	LOG("connection accepted - " + csAddress.toString(), "NET-PEERS");
+
+	// everything went smoothly, flag as connected
+	m_bConnected = true;
 }
 
 netPeers::~netPeers()
@@ -79,6 +81,9 @@ netPeers::~netPeers()
 	semaphoreGrant.Release();
 
 	LOCK(pcshSocket);
+	LOCK(m_pcsvRecv);
+	LOCK(pcsvQueue);
+	LOCK(pcsvSend);
 	if (hSocket != INVALID_SOCKET)
 	{
 		LOG("disconnecting peer - " + toString(), "NET-PEERS");
@@ -87,11 +92,11 @@ netPeers::~netPeers()
 	else
 		LOG("removing peer - " + toString(), "NET-PEERS");
 
-	delete m_pcsvRecv;
+	// TODO: fix race condition that will not allow to delete our mutexes
+	/*delete m_pcsvRecv;
 	delete pcsvQueue;
 	delete pcshSocket;
-	delete pcsvSend;
-	delete m_pNetMesg;
+	delete pcsvSend;*/
 }
 
 bool netPeers::init(string strEntry)
@@ -250,7 +255,7 @@ bool netPeers::ReceiveMsgBytes(const char *pch, unsigned int nBytes, bool& compl
 		}
 
 		// read network data
-		int handled = m_pNetMesg->readData(pch, nBytes);
+		int handled = m_netMsg.readData(pch, nBytes);
 
 		if (handled < 0)
 			return false;
@@ -258,24 +263,31 @@ bool netPeers::ReceiveMsgBytes(const char *pch, unsigned int nBytes, bool& compl
 		pch += handled;
 		nBytes -= handled;
 
-		if (m_pNetMesg->complete())
+		if (m_netMsg.complete())
 		{
 			// update some time stats and set the message to be complete
-			m_pNetMesg->i64tTimeStart = nTimeMicros;
-			m_pNetMesg->i64tTimeDelta = GetTimeMicros() - nTimeMicros;
+			m_netMsg.i64tTimeStart = nTimeMicros;
+			m_netMsg.i64tTimeDelta = GetTimeMicros() - nTimeMicros;
 			complete = true;
 
 			// push the message into our queue
 			{
 				LOCK(pcsvQueue);
-				m_queueMessages.push(*m_pNetMesg);
+				m_queueMessages.push(m_netMsg);
 			}
 
 			// reset the pointer to a new Message
-			delete(m_pNetMesg);
-			m_pNetMesg = new netMessage();
+			m_netMsg = netMessage();
 		}
 	}
 
 	return true;
+}
+
+void netPeers::validConnection(bool bValid)
+{
+	m_bValidConnection = bValid;
+#ifdef _DEBUG
+	LOG_DEBUG("Connection Valid", "NET-PEERS");
+#endif 
 }

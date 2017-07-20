@@ -17,7 +17,7 @@ private:
 	cCriticalSection				*m_pcsvRecv;
 	cSemaphoreGrant					m_semGrant;
 
-	netMessage						*m_pNetMesg;
+	netMessage						m_netMsg;
 
 	int								m_iUsageCounter;
 	queue< netMessage >				m_queueMessages;
@@ -30,7 +30,7 @@ public:
 	bool							init(string strEntry);
 	string							toString() const;
 
-	void							validConnection(bool bValid) { m_bValidConnection = bValid; };
+	void							validConnection(bool bValid);
 	bool							validConnection() { return m_bValidConnection; };
 
 	bool							tryConnectOutbound();

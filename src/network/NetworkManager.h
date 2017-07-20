@@ -37,27 +37,31 @@ class NetworkManager
 		void								ThreadOpenConnections();
 		void								ThreadMessageHandler();
 
+		// message handling
+		inline void							handleMessage(ipContainer< netPeers> *peers, cCriticalSection *cs);
+		bool								ProcessMessage(netMessage msg, vector< netPeers >::iterator peer);
+
 		// functions to update the peers and ban lists
 		void								DumpData();
 
 		// functions and variables for our peers list and their management
-		ipContainer< netPeers >				*m_pvecPeerListOut;
+		ipContainer< netPeers >				m_vecPeerListOut;
 		mutable cCriticalSection			m_csPeerListOut;
 		cSemaphore							*m_pSemOutbound;
-		ipContainer< netPeers >				*m_pvecPeerListIn;
+		ipContainer< netPeers >				m_vecPeerListIn;
 		mutable cCriticalSection			m_csPeerListIn;
 		cSemaphore							*m_pSemInbound;
 		vector< netPeers >::iterator		getNextOutNode(bool bConnected = true, bool bCheckTimeDelta = true);
+		inline void							handlePeers(ipContainer< netPeers> *peers, cCriticalSection *cs);
 
 		// functions and variables for our banned list and their management
-		ipContainer< CNetAddr >				*m_pvecBanList;
+		ipContainer< CNetAddr >				m_vecBanList;
 		bool								isBanned(string strAddress);
 
 		// destructor functions
 		void								Interrupt();
 		void								Stop();
 
-		bool								ProcessMessage(netMessage msg, vector< netPeers >::iterator peer);
 
 	public:
 											NetworkManager(MetaChain *mc);

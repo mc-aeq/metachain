@@ -47,16 +47,16 @@ bool NetworkManager::initialize(CSimpleIniA* iniFile)
 
 	// initialize the ban list
 	LOG("initializing the Ban List", "NET");
-	m_pvecBanList = new ipContainer< CNetAddr >(iniFile->GetValue("network", "ban_file", "bans.dat"));
-	m_pvecBanList->readContents();
+	m_vecBanList = ipContainer< CNetAddr >(iniFile->GetValue("network", "ban_file", "bans.dat"));
+	m_vecBanList.readContents();
 
 	// initialize the outbound peer list
 	LOG("initializing the Peer List", "NET");
-	m_pvecPeerListOut = new ipContainer< netPeers >(iniFile->GetValue("network", "peer_file", "peers.dat"));
-	m_pvecPeerListOut->readContents();
+	m_vecPeerListOut = ipContainer< netPeers >(iniFile->GetValue("network", "peer_file", "peers.dat"));
+	m_vecPeerListOut.readContents();
 
 	// initialize the inbound peer list (which is ofc empty at start)
-	m_pvecPeerListIn = new ipContainer< netPeers >();
+	m_vecPeerListIn = ipContainer< netPeers >();
 
 	// creating a CService class for the listener and storing it for further purposes
 	try
@@ -201,72 +201,17 @@ void NetworkManager::ThreadSocketHandler()
 		fd_set fdsetRecv;
 		fd_set fdsetSend;
 		fd_set fdsetError;
-		bool have_fds = false;
 		FD_ZERO(&fdsetRecv);
 		FD_ZERO(&fdsetSend);
 		FD_ZERO(&fdsetError);
 		struct timeval timeout;
 		timeout.tv_sec = 0;
 		timeout.tv_usec = 50000; // frequency to poll
-
-		SOCKET hSocketMax = 0;
-
-		// first delete nodes that disconnected gracefully or on error
-		{
-			LOCK(m_csPeerListIn);
-			for (vector< netPeers >::iterator it = m_pvecPeerListIn->vecIP.begin(); it != m_pvecPeerListIn->vecIP.end(); )
-			{
-				if( it->toDestroy() && !it->inUse() )
-					it = m_pvecPeerListIn->vecIP.erase(it);
-				else
-					it++;
-			}
-		}
-		
-		// flag the listening socket to read from him		
+				
+		// flag the listening socket to read from him for new connections	
 		FD_SET(m_hListenSocket, &fdsetRecv);
-		hSocketMax = m_hListenSocket;
 
-		// prepare the inbound sockets for receiving and sending data (if necessary)
-		{
-			LOCK(m_csPeerListIn);
-			for (vector< netPeers >::iterator it = m_pvecPeerListIn->vecIP.begin(); it != m_pvecPeerListIn->vecIP.end(); it++)
-			{
-				it->mark();
-
-				// check if the peer has something to send
-				bool select_send;
-				{
-					// todo: lock vector of messages to send - query and set select_send to true if something is to send
-					select_send = false;
-				}
-
-				LOCK(it->pcshSocket);
-				if (it->hSocket == INVALID_SOCKET)
-				{
-					it->unmark();
-					continue;
-				}
-
-				FD_SET(it->hSocket, &fdsetError);
-				hSocketMax = (std::max)(hSocketMax, it->hSocket);
-
-				// when we have to send something, we dont receive this round
-				if( select_send )
-				{
-					FD_SET(it->hSocket, &fdsetSend);
-					it->unmark();
-					continue;
-				}
-
-				// we always try to receive data unless we send data
-				FD_SET(it->hSocket, &fdsetRecv);
-
-				it->unmark();
-			}
-		}
-
-		int nSelect = select(hSocketMax + 1, &fdsetRecv, &fdsetSend, &fdsetError, &timeout);
+		int nSelect = select(m_hListenSocket + 1, &fdsetRecv, &fdsetSend, &fdsetError, &timeout);
 		if (m_interruptNet)
 			return;
 
@@ -274,7 +219,7 @@ void NetworkManager::ThreadSocketHandler()
 		{
 			int nErr = WSAGetLastError();
 			LOG_ERROR("socket select error - " + NetworkErrorString(nErr), "NET");
-			for (unsigned int i = 0; i <= hSocketMax; i++)
+			for (unsigned int i = 0; i <= (m_hListenSocket+1); i++)
 				FD_SET(i, &fdsetRecv);
 
 			FD_ZERO(&fdsetSend);
@@ -287,9 +232,9 @@ void NetworkManager::ThreadSocketHandler()
 		if (m_hListenSocket != INVALID_SOCKET && FD_ISSET(m_hListenSocket, &fdsetRecv))
 		{
 			LOCK(m_csPeerListIn);
-			m_pvecPeerListIn->vecIP.emplace_back(&m_hListenSocket, m_pSemInbound);
+			m_vecPeerListIn.vecIP.emplace_back(&m_hListenSocket, m_pSemInbound);
 
-			netPeers *newElem = &m_pvecPeerListIn->vecIP.back();
+			netPeers *newElem = &m_vecPeerListIn.vecIP.back();
 			newElem->mark();
 			// todo: when c++17 is adopted into compilers, use the reference returned from emplace_back instead of using the back() function.			 
 			// check if the ip address isnt banned
@@ -305,27 +250,144 @@ void NetworkManager::ThreadSocketHandler()
 			newElem->unmark();
 		}
 
-		
-		// inbound socket handling
-		for (vector< netPeers >::iterator it = m_pvecPeerListIn->vecIP.begin(); it != m_pvecPeerListIn->vecIP.end(); it++)
-		{
-			if (m_interruptNet)
-				return;
+		// inbound and outbound socket handling
+		handlePeers(&m_vecPeerListIn, &m_csPeerListIn);
+		handlePeers(&m_vecPeerListOut, &m_csPeerListOut);
+	}
+}
 
+void NetworkManager::handlePeers(ipContainer< netPeers> *peers, cCriticalSection *cs)
+{
+	fd_set fdsetRecv;
+	fd_set fdsetSend;
+	fd_set fdsetError;
+	FD_ZERO(&fdsetRecv);
+	FD_ZERO(&fdsetSend);
+	FD_ZERO(&fdsetError);
+	struct timeval timeout;
+	timeout.tv_sec = 0;
+	timeout.tv_usec = 50000; // frequency to poll
+	SOCKET hSocketMax = 0;
+
+	// first delete nodes that disconnected gracefully or on error
+	{
+		LOCK(cs);
+		for (vector< netPeers >::iterator it = peers->vecIP.begin(); it != peers->vecIP.end(); )
+		{
+			if ((it->toDestroy() || ( (it->hSocket == INVALID_SOCKET) && it->isConnected())) && !it->inUse() )
+				it = peers->vecIP.erase(it);
+			else
+				it++;
+		}
+	}	
+
+	// prepare the sockets for receiving and sending data (if necessary)
+	{
+		LOCK(cs);
+		for (vector< netPeers >::iterator it = peers->vecIP.begin(); it != peers->vecIP.end(); it++)
+		{
 			it->mark();
 
-			// is this peer about to be destroyed? if so, dont work with it
-			// also when there are too many messages, skip the reading
-			if (it->toDestroy() || it->readStop())
+			// check whether the socket is connected
+			if (!it->isConnected())
 			{
 				it->unmark();
 				continue;
 			}
 
-			// Receive
-			bool recvSet = false;
-			bool sendSet = false;
-			bool errorSet = false;
+			// check if the peer has something to send
+			bool select_send;
+			{
+				LOCK(it->pcsvSend);
+				select_send = !it->listSend.empty();
+			}
+
+			LOCK(it->pcshSocket);
+			if (it->hSocket == INVALID_SOCKET)
+			{
+				it->unmark();
+				continue;
+			}
+
+			FD_SET(it->hSocket, &fdsetError);
+			hSocketMax = (std::max)(hSocketMax, it->hSocket);
+
+			// when we have to send something, we dont receive this round
+			if (select_send)
+			{
+				FD_SET(it->hSocket, &fdsetSend);
+				it->unmark();
+				continue;
+			}
+
+			// we always try to receive data unless we send data
+			FD_SET(it->hSocket, &fdsetRecv);
+
+			it->unmark();
+		}
+	}
+
+	// when we have no sockets to work with, or have only non connected sockets, we skip the rest of the function
+	if (hSocketMax == 0)
+		return;
+
+	int nSelect = select(hSocketMax + 1, &fdsetRecv, &fdsetSend, &fdsetError, &timeout);
+	if (m_interruptNet)
+		return;
+
+	if (nSelect == SOCKET_ERROR)
+	{
+		int nErr = WSAGetLastError();
+		LOG_ERROR("socket select error - " + NetworkErrorString(nErr), "NET");
+		for (unsigned int i = 0; i <= hSocketMax; i++)
+			FD_SET(i, &fdsetRecv);
+
+		FD_ZERO(&fdsetSend);
+		FD_ZERO(&fdsetError);
+		if (!m_interruptNet.sleep_for(std::chrono::milliseconds(timeout.tv_usec / 1000)))
+			return;
+	}
+
+	// socket handling (read, write, timeout)
+	LOCK(cs);
+	for (vector< netPeers >::iterator it = peers->vecIP.begin(); it != peers->vecIP.end(); it++)
+	{
+		if (m_interruptNet)
+			return;
+
+		it->mark();
+
+		// is this peer about to be destroyed? if so, dont work with it
+		// also when there are too many messages, skip the reading
+		if (it->toDestroy() || it->readStop() || !it->isConnected())
+		{
+			it->unmark();
+			continue;
+		}
+
+		// check for send and receive flags
+		bool recvSet = false;
+		bool sendSet = false;
+		bool errorSet = false;
+		{
+			LOCK(it->pcshSocket);
+			if (it->hSocket == INVALID_SOCKET)
+			{
+				it->markDestroy();
+				it->unmark();
+				continue;
+			}
+			recvSet = FD_ISSET(it->hSocket, &fdsetRecv);
+			sendSet = FD_ISSET(it->hSocket, &fdsetSend);
+			errorSet = FD_ISSET(it->hSocket, &fdsetError);
+		}
+
+		// Receive
+		if (recvSet || errorSet)
+		{
+			// typical socket buffer is 8K-64K
+			char pchBuf[0x10000];
+			int nBytes = 0;
 			{
 				LOCK(it->pcshSocket);
 				if (it->hSocket == INVALID_SOCKET)
@@ -334,145 +396,120 @@ void NetworkManager::ThreadSocketHandler()
 					it->unmark();
 					continue;
 				}
-				recvSet = FD_ISSET(it->hSocket, &fdsetRecv);
-				sendSet = FD_ISSET(it->hSocket, &fdsetSend);
-				errorSet = FD_ISSET(it->hSocket, &fdsetError);
+				nBytes = recv(it->hSocket, pchBuf, sizeof(pchBuf), MSG_DONTWAIT);
 			}
-			if (recvSet || errorSet)
+
+			if (nBytes > 0)
 			{
-				// typical socket buffer is 8K-64K
-				char pchBuf[0x10000];
+				bool bNotifyWake = false;
+				if (!it->ReceiveMsgBytes(pchBuf, nBytes, bNotifyWake))
+					it->markDestroy();
+
+				if (bNotifyWake)
+					WakeMessageHandler();
+			}
+			else if (nBytes == 0)
+			{
+				// socket closed gracefully
+				it->markDestroy();
+				LOG("socket closed", "NET");
+			}
+			else if (nBytes < 0)
+			{
+				// error
+				int nErr = WSAGetLastError();
+				if (nErr != WSAEWOULDBLOCK && nErr != WSAEMSGSIZE && nErr != WSAEINTR && nErr != WSAEINPROGRESS)
+				{
+					it->markDestroy();
+					LOG_ERROR("socket recv error - " + NetworkErrorString(nErr), "NET");
+				}
+			}
+
+		}
+
+		// Send
+		if (sendSet && (it->hSocket != INVALID_SOCKET))
+		{
+			LOCK(it->pcsvSend);
+
+			list< netMessage >::iterator msg = it->listSend.begin();
+			size_t nSentSize = 0;
+
+			while (msg != it->listSend.end())
+			{
 				int nBytes = 0;
 				{
 					LOCK(it->pcshSocket);
-					if (it->hSocket == INVALID_SOCKET)
-					{
-						it->markDestroy();
-						it->unmark();
-						continue;
-					}
-					nBytes = recv(it->hSocket, pchBuf, sizeof(pchBuf), MSG_DONTWAIT);
+					nBytes = send(it->hSocket, reinterpret_cast<const char*>(msg->getPackage()) + nSentSize, msg->getPackageSize() - nSentSize, MSG_NOSIGNAL | MSG_DONTWAIT);
 				}
-
 				if (nBytes > 0)
 				{
-					bool bNotifyWake = false;
-					if (!it->ReceiveMsgBytes(pchBuf, nBytes, bNotifyWake))
-						it->markDestroy();
-
-					if (bNotifyWake)
-						WakeMessageHandler();
-				}
-				else if (nBytes == 0)
-				{
-					// socket closed gracefully
-					it->markDestroy();
-					LOG("socket closed", "NET");
-				}
-				else if (nBytes < 0)
-				{
-					// error
-					int nErr = WSAGetLastError();
-					if (nErr != WSAEWOULDBLOCK && nErr != WSAEMSGSIZE && nErr != WSAEINTR && nErr != WSAEINPROGRESS)
+					nSentSize += nBytes;
+					if (nSentSize == msg->getPackageSize())
 					{
-						it->markDestroy();
-						LOG_ERROR("socket recv error - " + NetworkErrorString(nErr), "NET");
-					}
-				}
-
-				it->unmark();
-			}
-			
-			// Send
-			if (sendSet)
-			{
-				it->mark();
-				LOCK(it->pcsvSend);
-				
-				list< netMessage >::iterator msg = it->listSend.begin();
-				size_t nSentSize = 0;
-
-				while( msg != it->listSend.end() )
-				{
-					int nBytes = 0;
-					{
-						LOCK(it->pcshSocket);
-						if (it->hSocket == INVALID_SOCKET)
-						{
-							it->unmark();
-							break;
-						}
-						nBytes = send(it->hSocket, reinterpret_cast<const char*>(msg->getPackage()) + nSentSize, msg->getPackageSize() - nSentSize, MSG_NOSIGNAL | MSG_DONTWAIT);
-					}
-					if (nBytes > 0)
-					{
-						nSentSize += nBytes;
-						if (nSentSize == msg->getPackageSize())
-						{
-							// msg fully sent
-							nSentSize = 0;
-							msg++;
-						}
-						else
-							// msg not fully sent, next try!
-							break;
+						// msg fully sent
+						nSentSize = 0;
+						msg++;
 					}
 					else
-					{
-						if (nBytes < 0)
-						{
-							int nErr = WSAGetLastError();
-							if (nErr != WSAEWOULDBLOCK && nErr != WSAEMSGSIZE && nErr != WSAEINTR && nErr != WSAEINPROGRESS)
-							{
-								it->markDestroy();
-								LOG_ERROR("socket send error - " + NetworkErrorString(nErr), "NET");
-							}
-						}
-						// couldn't send anything at all
+						// msg not fully sent, next try!
 						break;
+				}
+				else
+				{
+					if (nBytes < 0)
+					{
+						int nErr = WSAGetLastError();
+						if (nErr != WSAEWOULDBLOCK && nErr != WSAEMSGSIZE && nErr != WSAEINTR && nErr != WSAEINPROGRESS)
+						{
+							it->markDestroy();
+							LOG_ERROR("socket send error - " + NetworkErrorString(nErr), "NET");
+						}
 					}
-				}				
-
-				// remove the sent messages
-				it->listSend.erase(it->listSend.begin(), msg);
-				it->unmark();
-			}
-
-			/*
-			//
-			// Inactivity checking
-			//
-			int64_t nTime = GetSystemTimeInSeconds();
-			if (nTime - pnode->nTimeConnected > 60)
-			{
-				if (pnode->nLastRecv == 0 || pnode->nLastSend == 0)
-				{
-					LogPrint(BCLog::NET, "socket no message in first 60 seconds, %d %d from %d\n", pnode->nLastRecv != 0, pnode->nLastSend != 0, pnode->GetId());
-					pnode->fDisconnect = true;
-				}
-				else if (nTime - pnode->nLastSend > TIMEOUT_INTERVAL)
-				{
-					LogPrintf("socket sending timeout: %is\n", nTime - pnode->nLastSend);
-					pnode->fDisconnect = true;
-				}
-				else if (nTime - pnode->nLastRecv > (pnode->nVersion > BIP0031_VERSION ? TIMEOUT_INTERVAL : 90 * 60))
-				{
-					LogPrintf("socket receive timeout: %is\n", nTime - pnode->nLastRecv);
-					pnode->fDisconnect = true;
-				}
-				else if (pnode->nPingNonceSent && pnode->nPingUsecStart + TIMEOUT_INTERVAL * 1000000 < GetTimeMicros())
-				{
-					LogPrintf("ping timeout: %fs\n", 0.000001 * (GetTimeMicros() - pnode->nPingUsecStart));
-					pnode->fDisconnect = true;
-				}
-				else if (!pnode->fSuccessfullyConnected)
-				{
-					LogPrintf("version handshake timeout from %d\n", pnode->GetId());
-					pnode->fDisconnect = true;
+					// couldn't send anything at all
+					break;
 				}
 			}
-		}*/
+
+			// remove the sent messages
+			it->listSend.erase(it->listSend.begin(), msg);
 		}
+		it->unmark();
+
+		/*
+		//
+		// Inactivity checking
+		//
+		int64_t nTime = GetSystemTimeInSeconds();
+		if (nTime - pnode->nTimeConnected > 60)
+		{
+		if (pnode->nLastRecv == 0 || pnode->nLastSend == 0)
+		{
+		LogPrint(BCLog::NET, "socket no message in first 60 seconds, %d %d from %d\n", pnode->nLastRecv != 0, pnode->nLastSend != 0, pnode->GetId());
+		pnode->fDisconnect = true;
+		}
+		else if (nTime - pnode->nLastSend > TIMEOUT_INTERVAL)
+		{
+		LogPrintf("socket sending timeout: %is\n", nTime - pnode->nLastSend);
+		pnode->fDisconnect = true;
+		}
+		else if (nTime - pnode->nLastRecv > (pnode->nVersion > BIP0031_VERSION ? TIMEOUT_INTERVAL : 90 * 60))
+		{
+		LogPrintf("socket receive timeout: %is\n", nTime - pnode->nLastRecv);
+		pnode->fDisconnect = true;
+		}
+		else if (pnode->nPingNonceSent && pnode->nPingUsecStart + TIMEOUT_INTERVAL * 1000000 < GetTimeMicros())
+		{
+		LogPrintf("ping timeout: %fs\n", 0.000001 * (GetTimeMicros() - pnode->nPingUsecStart));
+		pnode->fDisconnect = true;
+		}
+		else if (!pnode->fSuccessfullyConnected)
+		{
+		LogPrintf("version handshake timeout from %d\n", pnode->GetId());
+		pnode->fDisconnect = true;
+		}
+		}
+		}*/
 	}
 }
 
@@ -505,7 +542,7 @@ void NetworkManager::ThreadOpenConnections()
 		
 		// get the first one in the vector which is not connected
 		vector<netPeers>::iterator itPeer = getNextOutNode(false, true);
-		if (itPeer == m_pvecPeerListOut->vecIP.end())
+		if (itPeer == m_vecPeerListOut.vecIP.end())
 			continue;
 
 		// try to connect
@@ -523,7 +560,7 @@ void NetworkManager::ThreadOpenConnections()
 				LOG("removing node due to too many connection errors - " + itPeer->toString(), "NET");
 				{
 					LOCK(m_csPeerListOut);
-					m_pvecPeerListOut->vecIP.erase(itPeer);
+					m_vecPeerListOut.vecIP.erase(itPeer);
 				}
 			}
 		}
@@ -536,45 +573,53 @@ void NetworkManager::ThreadMessageHandler()
 	{
 		bool fMoreWork = false;
 
-		for (vector< netPeers >::iterator it = m_pvecPeerListIn->vecIP.begin(); it != m_pvecPeerListIn->vecIP.end(); it++)
-		{
-			it->mark();
-			if (it->toDestroy() || !it->hasMessage())
-			{
-				it->unmark();
-				continue;
-			}
-
-			// process received messages
-			while (it->hasMessage())
-			{
-				netMessage cpy;
-
-				// we make a temporary copy of the message so that we can release the lock faster in order to not block other threads
-				{
-					LOCK(it->pcsvQueue);
-					cpy = it->getMessage();
-					it->popMessage();
-				}
-				if (!ProcessMessage(cpy, it))
-				{
-					LOG_ERROR("Error processing message - disconnecting peer " + it->toString(), "NET");
-					it->markDestroy();
-					it->unmark();
-					break;
-				}
-			}
-			it->unmark();
-
-			if (m_abflagInterruptMsgProc)
-				return;
-		}	
+		// work those messages
+		handleMessage(&m_vecPeerListIn, &m_csPeerListIn);
+		handleMessage(&m_vecPeerListOut, &m_csPeerListOut);
 
 		unique_lock<mutex> lock(m_mutexMsgProc);
 		if (!fMoreWork)
 			m_condMsgProc.wait_until(lock, chrono::steady_clock::now() + chrono::milliseconds(100), [this] { return m_bfMsgProcWake; });
 
 		m_bfMsgProcWake = false;		
+	}
+}
+
+void NetworkManager::handleMessage(ipContainer< netPeers> *peers, cCriticalSection *cs)
+{
+	LOCK(cs);
+	for (vector< netPeers >::iterator it = peers->vecIP.begin(); it != peers->vecIP.end(); it++)
+	{
+		it->mark();
+		if (it->toDestroy() || !it->hasMessage())
+		{
+			it->unmark();
+			continue;
+		}
+
+		// process received messages
+		while (it->hasMessage())
+		{
+			netMessage cpy;
+
+			// we make a temporary copy of the message so that we can release the lock faster in order to not block other threads
+			{
+				LOCK(it->pcsvQueue);
+				cpy = it->getMessage();
+				it->popMessage();
+			}
+			if (!ProcessMessage(cpy, it))
+			{
+				LOG_ERROR("Error processing message - disconnecting peer " + it->toString(), "NET");
+				it->markDestroy();
+				it->unmark();
+				break;
+			}
+		}
+		it->unmark();
+
+		if (m_abflagInterruptMsgProc)
+			return;
 	}
 }
 
@@ -592,11 +637,13 @@ bool NetworkManager::ProcessMessage(netMessage msg, vector< netPeers >::iterator
 	switch (msg.getHeader().ui16tSubject)
 	{
 	case netMessage::SUBJECT::NET_VERSION:
+		uint32_t uint32tReceivedVersion;
+		memcpy(&uint32tReceivedVersion, msg.getData(), 4);
 #ifdef _DEBUG
-		LOG_DEBUG("Got Version Info from " + peer->toString() + " - Version: " + msg.getData(), "NET");
+		LOG_DEBUG("Got Version Info from " + peer->toString() + " - Version: " + to_string(uint32tReceivedVersion), "NET");
 #endif
 		// if the connected client has an older version than ours, we inform him about a new version and then destroy the connection
-		if (g_cuint32tVersion > (uint32_t)msg.getData())
+		if (g_cuint32tVersion > uint32tReceivedVersion)
 		{
 			LOCK(peer->pcsvSend);
 			peer->listSend.emplace_back(netMessage::SUBJECT::NET_VERSION_NEWER, (void *)&g_cuint32tVersion, sizeof(g_cuint32tVersion), true);
@@ -605,7 +652,7 @@ bool NetworkManager::ProcessMessage(netMessage msg, vector< netPeers >::iterator
 			return false;
 		}
 		// if the connected client is newer than ours, we increment a ticker in the metachain and also destroy this connection
-		else if (g_cuint32tVersion < (uint32_t)msg.getData())
+		else if (g_cuint32tVersion < uint32tReceivedVersion)
 		{
 			MetaChain::getInstance().incrementNewerVersionTicker();
 
@@ -627,7 +674,7 @@ bool NetworkManager::ProcessMessage(netMessage msg, vector< netPeers >::iterator
 vector< netPeers >::iterator NetworkManager::getNextOutNode(bool bConnected, bool bCheckTimeDelta)
 {
 	LOCK(m_csPeerListOut);
-	for (vector< netPeers >::iterator it = m_pvecPeerListOut->vecIP.begin(); it != m_pvecPeerListOut->vecIP.end(); it++ )
+	for (vector< netPeers >::iterator it = m_vecPeerListOut.vecIP.begin(); it != m_vecPeerListOut.vecIP.end(); it++ )
 	{
 		if (it->isConnected() != bConnected)
 			continue;
@@ -637,18 +684,18 @@ vector< netPeers >::iterator NetworkManager::getNextOutNode(bool bConnected, boo
 
 		return it;
 	}
-	return m_pvecPeerListOut->vecIP.end();
+	return m_vecPeerListOut.vecIP.end();
 }
 
 
 void NetworkManager::DumpData()
 {
 	// write the ban list
-	m_pvecBanList->writeContents();
+	m_vecBanList.writeContents();
 
 	// write the Peer List Out
 	LOCK(m_csPeerListOut);
-	m_pvecPeerListOut->writeContents();
+	m_vecPeerListOut.writeContents();
 }
 
 NetworkManager::~NetworkManager()
@@ -659,11 +706,6 @@ NetworkManager::~NetworkManager()
 
 	// dump the data one last time
 	DumpData();
-
-	// delete the ipContainers
-	delete m_pvecBanList;
-	delete m_pvecPeerListOut;
-	delete m_pvecPeerListIn;
 
 	// delete the semaphores
 	delete m_pSemInbound;
@@ -693,7 +735,7 @@ void NetworkManager::Stop()
 
 bool NetworkManager::isBanned(string strAddress)
 {
-	for (vector< CNetAddr >::iterator it = m_pvecBanList->vecIP.begin(); it != m_pvecBanList->vecIP.end(); it++)
+	for (vector< CNetAddr >::iterator it = m_vecBanList.vecIP.begin(); it != m_vecBanList.vecIP.end(); it++)
 	{
 		if (it->toString() == strAddress)
 			return true;

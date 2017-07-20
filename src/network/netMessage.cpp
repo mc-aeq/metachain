@@ -23,7 +23,8 @@ netMessage::netMessage(netMessage::SUBJECT subj, void *ptrData, uint32_t uiDataS
 	m_sHeader.ui32tPayloadSize = uiDataSize;
 
 	// allocate the buffer
-	prepareData();
+	m_pBuffer = new char[sizeof(sHeader) + m_sHeader.ui32tPayloadSize];
+	memset(m_pBuffer, '\0', sizeof(sHeader) + m_sHeader.ui32tPayloadSize);
 
 	// copy the data
 	memcpy((m_pBuffer + sizeof(sHeader)), ptrData, uiDataSize);
@@ -36,8 +37,13 @@ netMessage::netMessage(netMessage::SUBJECT subj, void *ptrData, uint32_t uiDataS
 	GetMessageHash();
 	memcpy(m_sHeader.ui8tChecksum, m_ui256DataHash.begin(), CHECKSUM_SIZE);
 
+	// copy the header information
+	memcpy(m_pBuffer, &m_sHeader, sizeof(sHeader));
+
 #ifdef _DEBUG
-	LOG_DEBUG("Writing Header - Header Subj: " + to_string(m_sHeader.ui16tSubject) + " - Header PayloadSize: " + to_string(m_sHeader.ui32tPayloadSize) + " - Header Hash: " + (char*)m_sHeader.ui8tChecksum, "NET-MSG");
+	uint256 tmpCmp;
+	memcpy(tmpCmp.begin(), m_sHeader.ui8tChecksum, CHECKSUM_SIZE);
+	LOG_DEBUG("Writing Header - Header Subj: " + to_string(m_sHeader.ui16tSubject) + " - Header PayloadSize: " + to_string(m_sHeader.ui32tPayloadSize) + " - Header Hash: " + tmpCmp.ToString(), "NET-MSG");
 #endif
 }
 
@@ -73,10 +79,16 @@ int netMessage::readData(const char *pch, unsigned int nBytes)
 			return -1;
 		}
 
+		// allocating the buffer for the data
+		m_pBuffer = new char[sizeof(sHeader) + m_sHeader.ui32tPayloadSize];
+
+		// copying the header into the buffer
+		memcpy(m_pBuffer, &m_sHeader, sizeof(sHeader));
+
 #ifdef _DEBUG
 		uint256 tmpCmp;
 		memcpy(tmpCmp.begin(), m_sHeader.ui8tChecksum, CHECKSUM_SIZE );
-		LOG_DEBUG("Header Completed - Payload Size: " + to_string(m_sHeader.ui32tPayloadSize) + ", Header Hash: " + tmpCmp.ToString(), "NET-MSG");
+		LOG_DEBUG("Header Completed - Subject: " + to_string(m_sHeader.ui16tSubject) + ", Payload Size: " + to_string(m_sHeader.ui32tPayloadSize) + ", Header Hash: " + tmpCmp.ToString(), "NET-MSG");
 #endif
 
 		// everything smooth, return the bytes read
@@ -87,12 +99,8 @@ int netMessage::readData(const char *pch, unsigned int nBytes)
 		// calculate the remaining bytes of the message as well as the number of bytes to read
 		unsigned int uiRemaining = m_sHeader.ui32tPayloadSize - m_uiPosition;
 		unsigned int uiBufSize = (std::min)(uiRemaining, nBytes);
-
-		// Allocate up to 256 KiB ahead, but never more than the total message size.
-		if (m_vRecv.size() < m_uiPosition + uiBufSize)
-			m_vRecv.resize((std::min)(m_sHeader.ui32tPayloadSize, m_uiPosition + uiBufSize + 256 * 1024));
-
-		memcpy(&m_vRecv[m_uiPosition], pch, uiBufSize);
+		
+		memcpy((m_pBuffer + sizeof(sHeader) + m_uiPosition), pch, uiBufSize);
 		m_uiPosition += uiBufSize;
 		m_Hasher256.Write((const unsigned char*)pch, uiBufSize);
 
@@ -106,9 +114,10 @@ int netMessage::readData(const char *pch, unsigned int nBytes)
 			m_bComplete = true;
 			GetMessageHash();
 #ifdef _DEBUG
-			uint256 tmpCmp;
-			memcpy(tmpCmp.begin(), m_sHeader.ui8tChecksum, CHECKSUM_SIZE );
-			LOG_DEBUG("Checking Hashsums - Header hash: " + tmpCmp.ToString() + ", calculated data hash: " + m_ui256DataHash.ToString(), "NET-MSG");
+			uint256 tmpHead, tmpCalc;
+			memcpy(tmpHead.begin(), m_sHeader.ui8tChecksum, CHECKSUM_SIZE );
+			memcpy(tmpCalc.begin(), m_ui256DataHash.begin(), CHECKSUM_SIZE);
+			LOG_DEBUG("Checking Hashsums - Header hash: " + tmpHead.ToString() + ", calculated data hash: " + tmpCalc.ToString(), "NET-MSG");
 #endif
 
 			if (memcmp(m_ui256DataHash.begin(), m_sHeader.ui8tChecksum, CHECKSUM_SIZE) != 0)
@@ -116,6 +125,10 @@ int netMessage::readData(const char *pch, unsigned int nBytes)
 				LOG_ERROR("Received package with invalid hash, disconnecting node", "NET-MSG");
 				return -1;
 			}
+#ifdef _DEBUG
+			else
+				LOG_DEBUG("Header checksum matches", "NET-MSG");
+#endif
 		}
 
 		return uiBufSize;
@@ -128,13 +141,4 @@ uint256& netMessage::GetMessageHash()
 	if (m_ui256DataHash.IsNull())
 		m_Hasher256.Finalize(m_ui256DataHash.begin());
 	return m_ui256DataHash;
-}
-
-void netMessage::prepareData()
-{
-	// in this function we allocate the buffer, sanitize it and fill it with the header information.
-	// all functions that call this function must take care of filling the buffer with the corresponding data afterwards
-	m_pBuffer = new char[sizeof(sHeader) + m_sHeader.ui32tPayloadSize];
-	memset(m_pBuffer, '\0', sizeof(sHeader) + m_sHeader.ui32tPayloadSize);
-	memcpy(m_pBuffer, &m_sHeader, sizeof(sHeader));
 }
