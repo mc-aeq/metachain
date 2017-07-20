@@ -21,21 +21,26 @@ netMessage::netMessage(netMessage::SUBJECT subj, void *ptrData, uint32_t uiDataS
 	// assemble the header
 	m_sHeader.ui16tSubject = subj;
 	m_sHeader.ui32tPayloadSize = uiDataSize;
+	memset( &m_sHeader.ui8tChecksum, 0, sizeof(uint8_t)*CHECKSUM_SIZE);
 
 	// allocate the buffer
 	m_pBuffer = new char[sizeof(sHeader) + m_sHeader.ui32tPayloadSize];
 	memset(m_pBuffer, '\0', sizeof(sHeader) + m_sHeader.ui32tPayloadSize);
 
 	// copy the data
-	memcpy((m_pBuffer + sizeof(sHeader)), ptrData, uiDataSize);
+	if( uiDataSize > 0 )
+		memcpy((m_pBuffer + sizeof(sHeader)), ptrData, uiDataSize);
 
 	// set the complete flag for further processing
 	m_bComplete = true;
 
 	// get the hash and store it in the header
-	m_Hasher256.Write((const unsigned char*)ptrData, uiDataSize);
-	GetMessageHash();
-	memcpy(m_sHeader.ui8tChecksum, m_ui256DataHash.begin(), CHECKSUM_SIZE);
+	if (uiDataSize > 0)
+	{
+		m_Hasher256.Write((const unsigned char*)ptrData, uiDataSize);
+		GetMessageHash();
+		memcpy(m_sHeader.ui8tChecksum, m_ui256DataHash.begin(), CHECKSUM_SIZE);
+	}
 
 	// copy the header information
 	memcpy(m_pBuffer, &m_sHeader, sizeof(sHeader));
@@ -90,6 +95,10 @@ int netMessage::readData(const char *pch, unsigned int nBytes)
 		memcpy(tmpCmp.begin(), m_sHeader.ui8tChecksum, CHECKSUM_SIZE );
 		LOG_DEBUG("Header Completed - Subject: " + to_string(m_sHeader.ui16tSubject) + ", Payload Size: " + to_string(m_sHeader.ui32tPayloadSize) + ", Header Hash: " + tmpCmp.ToString(), "NET-MSG");
 #endif
+
+		// when we don't have any payload after the header, the message is complete
+		if (m_sHeader.ui32tPayloadSize == 0)
+			m_bComplete = true;
 
 		// everything smooth, return the bytes read
 		return uiBufSize;

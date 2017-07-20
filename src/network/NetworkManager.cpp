@@ -612,7 +612,6 @@ void NetworkManager::handleMessage(ipContainer< netPeers> *peers, cCriticalSecti
 			{
 				LOG_ERROR("Error processing message - disconnecting peer " + it->toString(), "NET");
 				it->markDestroy();
-				it->unmark();
 				break;
 			}
 		}
@@ -637,6 +636,11 @@ bool NetworkManager::ProcessMessage(netMessage msg, vector< netPeers >::iterator
 	switch (msg.getHeader().ui16tSubject)
 	{
 	case netMessage::SUBJECT::NET_VERSION:
+
+		// if the connection is already valid, we don't care for the version number anymore
+		if (peer->validConnection())
+			break;
+
 		uint32_t uint32tReceivedVersion;
 		memcpy(&uint32tReceivedVersion, msg.getData(), 4);
 #ifdef _DEBUG
@@ -645,8 +649,10 @@ bool NetworkManager::ProcessMessage(netMessage msg, vector< netPeers >::iterator
 		// if the connected client has an older version than ours, we inform him about a new version and then destroy the connection
 		if (g_cuint32tVersion > uint32tReceivedVersion)
 		{
-			LOCK(peer->pcsvSend);
-			peer->listSend.emplace_back(netMessage::SUBJECT::NET_VERSION_NEWER, (void *)&g_cuint32tVersion, sizeof(g_cuint32tVersion), true);
+			{
+				LOCK(peer->pcsvSend);
+				peer->listSend.emplace_back(netMessage::SUBJECT::NET_VERSION_NEWER, (void *)&g_cuint32tVersion, sizeof(g_cuint32tVersion), true);
+			}
 
 			LOG("Connected client has a lower version than ours, inform and disconnect - " + peer->toString(), "NET");
 			return false;
@@ -659,10 +665,20 @@ bool NetworkManager::ProcessMessage(netMessage msg, vector< netPeers >::iterator
 			LOG("We have an older version than the connected client, increment the version ticker and disconnect - " + peer->toString(), "NET");
 			return false;
 		}
-		// wenn the version number is the same, we don't do anything except we set a flag that the initial communication was made and the peer is ready for full service
+		// wenn the version number is the same, we don't do anything except we set a flag that the initial communication was made and the peer is ready for full service, as well as we ask them to send us their peer list
 		else
+		{			
+			// the connection is now valid
 			peer->validConnection(true);
+
+			LOCK(peer->pcsvSend);
+			peer->listSend.emplace_back(netMessage::SUBJECT::NET_VERSION, (void *)&g_cuint32tVersion, sizeof(g_cuint32tVersion), true);
+			peer->listSend.emplace_back(netMessage::SUBJECT::NET_PEER_LIST_GET, (void*)NULL, 0, true);
+		}
 	break;
+
+	case netMessage::SUBJECT::NET_PEER_LIST_GET:
+		break;
 
 	default:
 		return false;

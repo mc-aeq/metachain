@@ -230,9 +230,8 @@ bool netPeers::tryConnectOutbound()
 		return false;
 	}
 
-#ifdef _DEBUG
-	LOG_DEBUG("Socket successfully connected - " + csAddress.toString(), "NET-PEERS");
-#endif
+
+	LOG("Outgoing connection success - " + csAddress.toString(), "NET-PEERS");
 
 	// everything is fine, yay!
 	m_bConnected = true;
@@ -287,7 +286,5 @@ bool netPeers::ReceiveMsgBytes(const char *pch, unsigned int nBytes, bool& compl
 void netPeers::validConnection(bool bValid)
 {
 	m_bValidConnection = bValid;
-#ifdef _DEBUG
-	LOG_DEBUG("Connection Valid", "NET-PEERS");
-#endif 
+	LOG("Connection Valid - " + toString() , "NET-PEERS");
 }
