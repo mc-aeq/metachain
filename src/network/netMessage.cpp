@@ -5,7 +5,8 @@ netMessage::netMessage():
 	m_bHeaderComplete(false),
 	m_uiPosition(0),
 	i64tTimeStart(0),
-	i64tTimeDelta(0)
+	i64tTimeDelta(0),
+	m_pBuffer(NULL)
 {
 }
 
@@ -50,6 +51,48 @@ netMessage::netMessage(netMessage::SUBJECT subj, void *ptrData, uint32_t uiDataS
 	memcpy(tmpCmp.begin(), m_sHeader.ui8tChecksum, CHECKSUM_SIZE);
 	LOG_DEBUG("Writing Header - Header Subj: " + to_string(m_sHeader.ui16tSubject) + " - Header PayloadSize: " + to_string(m_sHeader.ui32tPayloadSize) + " - Header Hash: " + tmpCmp.ToString(), "NET-MSG");
 #endif
+}
+
+netMessage::netMessage(const netMessage& obj)
+{
+	makeDeepCopy(obj);
+}
+
+netMessage::~netMessage()
+{	
+	if (m_pBuffer)
+	{
+		delete m_pBuffer;
+		m_pBuffer = NULL;
+	}
+}
+
+netMessage& netMessage::operator=(const netMessage& obj)
+{
+	makeDeepCopy(obj);
+	return *this;
+}
+
+void netMessage::makeDeepCopy(const netMessage & obj)
+{
+	m_bComplete = obj.m_bComplete;
+	m_bHeaderComplete = obj.m_bHeaderComplete;
+	m_sHeader = obj.m_sHeader;
+	m_vRecv = obj.m_vRecv;
+	m_Hasher256 = obj.m_Hasher256;
+	m_ui256DataHash = obj.m_ui256DataHash;
+	m_uiPosition = obj.m_uiPosition;
+	i64tTimeStart = obj.i64tTimeStart;
+	i64tTimeDelta = obj.i64tTimeDelta;
+
+	// copy the buffer content
+	if (obj.m_pBuffer)
+	{
+		m_pBuffer = new char[sizeof(sHeader) + m_sHeader.ui32tPayloadSize];
+		memcpy(m_pBuffer, obj.m_pBuffer, sizeof(sHeader) + m_sHeader.ui32tPayloadSize);
+	}
+	else
+		m_pBuffer = NULL;
 }
 
 int netMessage::readData(const char *pch, unsigned int nBytes)

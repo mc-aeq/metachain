@@ -13,15 +13,17 @@ struct sHeader {
 class netMessage
 {
 	private:
-		bool				m_bComplete;
-		bool				m_bHeaderComplete;
-		sHeader				m_sHeader;
-		cDataStream			m_vRecv;
-		cHash256			m_Hasher256;
-		uint256				m_ui256DataHash;
-		unsigned int		m_uiPosition;
+		bool							m_bComplete;
+		bool							m_bHeaderComplete;
+		sHeader							m_sHeader;
+		cDataStream						m_vRecv;
+		cHash256						m_Hasher256;
+		uint256							m_ui256DataHash;
+		unsigned int					m_uiPosition;
 
-		char				*m_pBuffer;
+		char							*m_pBuffer;
+
+		void							makeDeepCopy(const netMessage& obj);
 
 	public:
 		// these are the communication definers we use as ui16tSubject
@@ -53,6 +55,10 @@ class netMessage
 
 							netMessage();
 							netMessage(netMessage::SUBJECT subj, void *ptrData, uint32_t uiDataSize, bool bDirectSend);
+							netMessage(const netMessage& obj);
+							~netMessage();
+		netMessage&			operator=(const netMessage& obj);
+
 		bool				complete() { return m_bComplete; };
 		int					readData( const char *pch, unsigned int nBytes );
 		uint256&			GetMessageHash();

@@ -21,7 +21,7 @@ class ipContainer
 		void									writeContents();
 
 		// this vector holds all the IP information corresponding to the template class
-		vector< T >								vecIP;
+		list< T >								lstIP;
 };
 
 /*
@@ -76,7 +76,7 @@ void ipContainer<T>::readContents()
 		if (tmp.init(strLine))
 		{
 			// we check for doubletts, sice we dont want that
-			if (find(vecIP.begin(), vecIP.end(), tmp) != vecIP.end())
+			if (find(lstIP.begin(), lstIP.end(), tmp) != lstIP.end())
 #ifdef _DEBUG
 			{
 				LOG_DEBUG("removing doublett: " + strLine, "IPC");
@@ -85,7 +85,7 @@ void ipContainer<T>::readContents()
 #ifdef _DEBUG
 			}
 #endif
-			vecIP.push_back(tmp);
+			lstIP.push_back(tmp);
 		}
 		else
 		{
@@ -96,7 +96,7 @@ void ipContainer<T>::readContents()
 
 #ifdef _DEBUG
 	LOG_DEBUG("done reading contents of file: " + m_strFileName, "IPC");
-	LOG_DEBUG("elements in the vector: " + to_string(vecIP.size()), "IPC");
+	LOG_DEBUG("elements in the vector: " + to_string(lstIP.size()), "IPC");
 #endif
 }
 
@@ -120,7 +120,7 @@ void ipContainer<T>::writeContents()
 	streamOut << "# it will be automatically updated through the TCT blockchain" << endl;
 	streamOut << "# any manual changes will be overridden!" << endl << endl;
 
-	for (vector<T>::iterator it = vecIP.begin(); it != vecIP.end(); it++)
+	for (list<T>::iterator it = lstIP.begin(); it != lstIP.end(); it++)
 		streamOut << it->toString() << endl;
 
 	streamOut.close();

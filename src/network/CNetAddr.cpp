@@ -106,7 +106,7 @@ CNetAddr::CNetAddr(const struct in6_addr& ipv6Addr, const uint32_t scope)
 	scopeId = scope;
 }
 
-unsigned int CNetAddr::GetByte(int n) const
+unsigned char CNetAddr::GetByte(int n) const
 {
 	return ip[15 - n];
 }

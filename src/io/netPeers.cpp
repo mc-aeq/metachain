@@ -7,7 +7,7 @@ netPeers::netPeers() :
 	m_bConnected(false),
 	m_bValidConnection(false),
 	m_bToDestroy(false),
-	hSocket( INVALID_SOCKET ),
+	hSocket(0),
 	m_usConnectionTries(0),
 	m_timeLastTry(0),
 	m_iUsageCounter(0)
@@ -76,23 +76,61 @@ netPeers::netPeers(SOCKET *listenSocket, cSemaphore *semaphore)
 	m_bConnected = true;
 }
 
+
+netPeers::netPeers(const netPeers& obj)
+{
+	makeDeepCopy(obj);
+}
+
+netPeers& netPeers::operator=(const netPeers& obj)
+{
+	makeDeepCopy(obj);
+	return *this;
+}
+
+void netPeers::makeDeepCopy(const netPeers & obj)
+{
+	m_bConnected = obj.m_bConnected;
+	m_bValidConnection = obj.m_bValidConnection;
+	m_bToDestroy = obj.m_bToDestroy;
+	m_usConnectionTries = obj.m_usConnectionTries;
+	m_timeLastTry = obj.m_timeLastTry;
+	m_iUsageCounter = obj.m_iUsageCounter;
+	pcshSocket = obj.pcshSocket;
+	m_pcsvRecv = obj.m_pcsvRecv;
+	pcsvQueue = obj.pcsvQueue;
+	pcsvSend = obj.pcsvSend;
+	hSocket = obj.hSocket;
+	csAddress = obj.csAddress;
+	m_netMsg = obj.m_netMsg;
+	m_iUsageCounter = obj.m_iUsageCounter;
+	m_queueMessages = obj.m_queueMessages;
+	listSend = obj.listSend;
+
+	((cSemaphoreGrant)(obj.semaphoreGrant)).MoveTo(semaphoreGrant);
+}
+
 netPeers::~netPeers()
 {
-	semaphoreGrant.Release();
-
 	LOCK(pcshSocket);
 	LOCK(m_pcsvRecv);
 	LOCK(pcsvQueue);
 	LOCK(pcsvSend);
-	if (hSocket != INVALID_SOCKET)
-	{
-		LOG("disconnecting peer - " + toString(), "NET-PEERS");
-		CloseSocket(hSocket);
-	}
-	else
-		LOG("removing peer - " + toString(), "NET-PEERS");
 
-	// TODO: fix race condition that will not allow to delete our mutexes
+	// we ignore the socket when it's uninitialized
+	if (hSocket != 0)
+	{
+		if (hSocket != INVALID_SOCKET)
+		{
+			LOG("disconnecting peer - " + toString(), "NET-PEERS");
+			CloseSocket(hSocket);
+		}
+		else
+			LOG("removing peer - " + toString(), "NET-PEERS");
+	}
+
+	// TODO: delete them safely. when uncommenting other threads may wait on those locks and the mutex will throw an exception of abandoned lock
+	// idea: introduce a general lock for a peer before using those locks. use a try_lock to not wait on this lock within the NetworkManager and a lock in the destructor. so the destructor waits until the locks are released and the networkmanager will not wait for the try_lock
 	/*delete m_pcsvRecv;
 	delete pcsvQueue;
 	delete pcshSocket;
@@ -118,11 +156,6 @@ bool netPeers::init(string strEntry)
 	csAddress = CService(vecSplit[0].c_str(), boost::lexical_cast<unsigned short>(vecSplit[1]));
 
 	return true;
-}
-
-string netPeers::toString() const
-{
-	return csAddress.toString();
 }
 
 bool netPeers::tryConnectOutbound()

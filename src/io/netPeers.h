@@ -15,20 +15,23 @@ private:
 	unsigned short					m_usConnectionTries;
 
 	cCriticalSection				*m_pcsvRecv;
-	cSemaphoreGrant					m_semGrant;
-
 	netMessage						m_netMsg;
 
 	int								m_iUsageCounter;
 	queue< netMessage >				m_queueMessages;
 
+	void							makeDeepCopy(const netPeers & obj);
+
 public:
 									netPeers();
 									netPeers(SOCKET *listenSocket, cSemaphore *semaphore);		// constructor used for emplace_back
 									~netPeers();
+									netPeers(const netPeers& obj);
+	netPeers&						operator=(const netPeers& obj);
 
 	bool							init(string strEntry);
-	string							toString() const;
+	string							toString() const { return csAddress.toString(); };
+	unsigned short					getPort() { return csAddress.GetPort(); };
 
 	void							validConnection(bool bValid);
 	bool							validConnection() { return m_bValidConnection; };

@@ -47,16 +47,16 @@ bool NetworkManager::initialize(CSimpleIniA* iniFile)
 
 	// initialize the ban list
 	LOG("initializing the Ban List", "NET");
-	m_vecBanList = ipContainer< CNetAddr >(iniFile->GetValue("network", "ban_file", "bans.dat"));
-	m_vecBanList.readContents();
+	m_lstBanList = ipContainer< CNetAddr >(iniFile->GetValue("network", "ban_file", "bans.dat"));
+	m_lstBanList.readContents();
 
 	// initialize the outbound peer list
 	LOG("initializing the Peer List", "NET");
-	m_vecPeerListOut = ipContainer< netPeers >(iniFile->GetValue("network", "peer_file", "peers.dat"));
-	m_vecPeerListOut.readContents();
+	m_lstPeerListOut = ipContainer< netPeers >(iniFile->GetValue("network", "peer_file", "peers.dat"));
+	m_lstPeerListOut.readContents();
 
 	// initialize the inbound peer list (which is ofc empty at start)
-	m_vecPeerListIn = ipContainer< netPeers >();
+	m_lstPeerListIn = ipContainer< netPeers >();
 
 	// creating a CService class for the listener and storing it for further purposes
 	try
@@ -232,9 +232,9 @@ void NetworkManager::ThreadSocketHandler()
 		if (m_hListenSocket != INVALID_SOCKET && FD_ISSET(m_hListenSocket, &fdsetRecv))
 		{
 			LOCK(m_csPeerListIn);
-			m_vecPeerListIn.vecIP.emplace_back(&m_hListenSocket, m_pSemInbound);
+			m_lstPeerListIn.lstIP.emplace_back(&m_hListenSocket, m_pSemInbound);
 
-			netPeers *newElem = &m_vecPeerListIn.vecIP.back();
+			netPeers *newElem = &m_lstPeerListIn.lstIP.back();
 			newElem->mark();
 			// todo: when c++17 is adopted into compilers, use the reference returned from emplace_back instead of using the back() function.			 
 			// check if the ip address isnt banned
@@ -251,8 +251,8 @@ void NetworkManager::ThreadSocketHandler()
 		}
 
 		// inbound and outbound socket handling
-		handlePeers(&m_vecPeerListIn, &m_csPeerListIn);
-		handlePeers(&m_vecPeerListOut, &m_csPeerListOut);
+		handlePeers(&m_lstPeerListIn, &m_csPeerListIn);
+		handlePeers(&m_lstPeerListOut, &m_csPeerListOut);
 	}
 }
 
@@ -272,10 +272,10 @@ void NetworkManager::handlePeers(ipContainer< netPeers> *peers, cCriticalSection
 	// first delete nodes that disconnected gracefully or on error
 	{
 		LOCK(cs);
-		for (vector< netPeers >::iterator it = peers->vecIP.begin(); it != peers->vecIP.end(); )
+		for (list< netPeers >::iterator it = peers->lstIP.begin(); it != peers->lstIP.end(); )
 		{
 			if ((it->toDestroy() || ( (it->hSocket == INVALID_SOCKET) && it->isConnected())) && !it->inUse() )
-				it = peers->vecIP.erase(it);
+				it = peers->lstIP.erase(it);
 			else
 				it++;
 		}
@@ -284,7 +284,7 @@ void NetworkManager::handlePeers(ipContainer< netPeers> *peers, cCriticalSection
 	// prepare the sockets for receiving and sending data (if necessary)
 	{
 		LOCK(cs);
-		for (vector< netPeers >::iterator it = peers->vecIP.begin(); it != peers->vecIP.end(); it++)
+		for (list< netPeers >::iterator it = peers->lstIP.begin(); it != peers->lstIP.end(); it++)
 		{
 			it->mark();
 
@@ -350,7 +350,7 @@ void NetworkManager::handlePeers(ipContainer< netPeers> *peers, cCriticalSection
 
 	// socket handling (read, write, timeout)
 	LOCK(cs);
-	for (vector< netPeers >::iterator it = peers->vecIP.begin(); it != peers->vecIP.end(); it++)
+	for (list< netPeers >::iterator it = peers->lstIP.begin(); it != peers->lstIP.end(); it++)
 	{
 		if (m_interruptNet)
 			return;
@@ -540,9 +540,9 @@ void NetworkManager::ThreadOpenConnections()
 		if (m_interruptNet)
 			return;
 		
-		// get the first one in the vector which is not connected
-		vector<netPeers>::iterator itPeer = getNextOutNode(false, true);
-		if (itPeer == m_vecPeerListOut.vecIP.end())
+		// get the first one in the list which is not connected
+		list<netPeers>::iterator itPeer = getNextOutNode(false, true);
+		if (itPeer == m_lstPeerListOut.lstIP.end())
 			continue;
 
 		// try to connect
@@ -560,7 +560,7 @@ void NetworkManager::ThreadOpenConnections()
 				LOG("removing node due to too many connection errors - " + itPeer->toString(), "NET");
 				{
 					LOCK(m_csPeerListOut);
-					m_vecPeerListOut.vecIP.erase(itPeer);
+					m_lstPeerListOut.lstIP.erase(itPeer);
 				}
 			}
 		}
@@ -574,8 +574,8 @@ void NetworkManager::ThreadMessageHandler()
 		bool fMoreWork = false;
 
 		// work those messages
-		handleMessage(&m_vecPeerListIn, &m_csPeerListIn);
-		handleMessage(&m_vecPeerListOut, &m_csPeerListOut);
+		handleMessage(&m_lstPeerListIn, &m_csPeerListIn, true);
+		handleMessage(&m_lstPeerListOut, &m_csPeerListOut, false);
 
 		unique_lock<mutex> lock(m_mutexMsgProc);
 		if (!fMoreWork)
@@ -585,10 +585,10 @@ void NetworkManager::ThreadMessageHandler()
 	}
 }
 
-void NetworkManager::handleMessage(ipContainer< netPeers> *peers, cCriticalSection *cs)
+void NetworkManager::handleMessage(ipContainer< netPeers> *peers, cCriticalSection *cs, bool bInbound)
 {
 	LOCK(cs);
-	for (vector< netPeers >::iterator it = peers->vecIP.begin(); it != peers->vecIP.end(); it++)
+	for (list< netPeers >::iterator it = peers->lstIP.begin(); it != peers->lstIP.end(); it++)
 	{
 		it->mark();
 		if (it->toDestroy() || !it->hasMessage())
@@ -608,7 +608,7 @@ void NetworkManager::handleMessage(ipContainer< netPeers> *peers, cCriticalSecti
 				cpy = it->getMessage();
 				it->popMessage();
 			}
-			if (!ProcessMessage(cpy, it))
+			if (!ProcessMessage(cpy, it, bInbound))
 			{
 				LOG_ERROR("Error processing message - disconnecting peer " + it->toString(), "NET");
 				it->markDestroy();
@@ -622,7 +622,7 @@ void NetworkManager::handleMessage(ipContainer< netPeers> *peers, cCriticalSecti
 	}
 }
 
-bool NetworkManager::ProcessMessage(netMessage msg, vector< netPeers >::iterator peer)
+bool NetworkManager::ProcessMessage(netMessage msg, list< netPeers >::iterator peer, bool bInbound)
 {
 
 	// security check: when we receive a package that is not NET_VERSION in subject and validConnection() == false, it means we didnt receive the version string and the connection is possibly malicious. 
@@ -667,7 +667,7 @@ bool NetworkManager::ProcessMessage(netMessage msg, vector< netPeers >::iterator
 		}
 		// wenn the version number is the same, we don't do anything except we set a flag that the initial communication was made and the peer is ready for full service, as well as we ask them to send us their peer list
 		else
-		{			
+		{
 			// the connection is now valid
 			peer->validConnection(true);
 
@@ -675,11 +675,80 @@ bool NetworkManager::ProcessMessage(netMessage msg, vector< netPeers >::iterator
 			peer->listSend.emplace_back(netMessage::SUBJECT::NET_VERSION, (void *)&g_cuint32tVersion, sizeof(g_cuint32tVersion), true);
 			peer->listSend.emplace_back(netMessage::SUBJECT::NET_PEER_LIST_GET, (void*)NULL, 0, true);
 		}
-	break;
-
-	case netMessage::SUBJECT::NET_PEER_LIST_GET:
 		break;
 
+	case netMessage::SUBJECT::NET_VERSION_NEWER:
+		// it looks like we have an older version than the connected node. We increment our ticker for future checking of newer versions
+		MetaChain::getInstance().incrementNewerVersionTicker();
+		// we dont need to disconnect the node since after this Message the node will automatically disconnect
+		break;
+
+	case netMessage::SUBJECT::NET_PEER_LIST_GET:
+	{
+		// the connected node wants to know our peers for their reference. we build up some data, excluding the requesting peer itself and sending it over for them to process
+		int iNumOfPeers = m_lstPeerListOut.lstIP.size();
+
+		// we don't need to check if the connection is in our outbound list when we have an incoming connection. This is impossible
+		if(!bInbound)
+		{
+			// very simplistic count through the connected outbound nodes to get the size of our data buffer
+			LOCK(m_csPeerListOut);
+			for (list<netPeers>::iterator it = m_lstPeerListOut.lstIP.begin(); it != m_lstPeerListOut.lstIP.end(); it++)
+			{
+				if (it == peer)
+					iNumOfPeers--;
+			}
+		}
+
+		// if we don't have any number of peers, we simply quit this operation without sending anything
+		if (iNumOfPeers == 0)
+			break;
+
+		// make us a buffer array. we multiply the number of peers by 18: ipv4 needs *4, ipv6 needs *16. So we use *16 for the IP and then *2 for the port
+		static unsigned short susIpPortSize = 18;
+		uint8_t *puint8tBuffer = new uint8_t[iNumOfPeers * susIpPortSize];
+		memset(puint8tBuffer, '\0', iNumOfPeers * susIpPortSize);
+		
+		// now copy it into the buffer
+		{
+			unsigned int uiCount = 0;
+			LOCK(m_csPeerListOut);
+			for (list<netPeers>::iterator it = m_lstPeerListOut.lstIP.begin(); it != m_lstPeerListOut.lstIP.end(); it++ )
+			{
+				if (bInbound || it != peer)
+				{
+					// copy the ip adress
+					for (int i = 0; i < 16; i++)
+					{
+						uint8_t tmp = peer->csAddress.GetByte(i);
+						memcpy((puint8tBuffer + uiCount * sizeof(uint8_t) * susIpPortSize + i), &tmp, sizeof(uint8_t));
+					}
+
+					// copy the port
+					uint16_t port = peer->getPort();
+					memcpy((puint8tBuffer + uiCount * sizeof(uint8_t) * susIpPortSize + susIpPortSize - 2 * sizeof(uint8_t)), &port, sizeof(port));
+
+					uiCount++;
+				}
+			}
+		}
+
+		// and finally we sent our peer list on the way
+		LOCK(peer->pcsvSend);
+		peer->listSend.emplace_back(netMessage::SUBJECT::NET_PEER_LIST_SEND, (void *)puint8tBuffer, iNumOfPeers * susIpPortSize, true);
+
+		delete[] puint8tBuffer;
+	}
+	break;
+
+	case netMessage::SUBJECT::NET_PEER_LIST_SEND:
+		LOG_DEBUG("A", "TMP"); return false;
+		break;
+		
+
+	// the default statement as well as the ban list statements. We don't support sending ban lists, everyone has to build them theirselfs right now
+	case netMessage::SUBJECT::NET_BAN_LIST_GET:
+	case netMessage::SUBJECT::NET_BAN_LIST_SEND:
 	default:
 		return false;
 	}
@@ -687,10 +756,10 @@ bool NetworkManager::ProcessMessage(netMessage msg, vector< netPeers >::iterator
 	return true;
 }
 
-vector< netPeers >::iterator NetworkManager::getNextOutNode(bool bConnected, bool bCheckTimeDelta)
+list< netPeers >::iterator NetworkManager::getNextOutNode(bool bConnected, bool bCheckTimeDelta)
 {
 	LOCK(m_csPeerListOut);
-	for (vector< netPeers >::iterator it = m_vecPeerListOut.vecIP.begin(); it != m_vecPeerListOut.vecIP.end(); it++ )
+	for (list< netPeers >::iterator it = m_lstPeerListOut.lstIP.begin(); it != m_lstPeerListOut.lstIP.end(); it++ )
 	{
 		if (it->isConnected() != bConnected)
 			continue;
@@ -700,18 +769,18 @@ vector< netPeers >::iterator NetworkManager::getNextOutNode(bool bConnected, boo
 
 		return it;
 	}
-	return m_vecPeerListOut.vecIP.end();
+	return m_lstPeerListOut.lstIP.end();
 }
 
 
 void NetworkManager::DumpData()
 {
 	// write the ban list
-	m_vecBanList.writeContents();
+	m_lstBanList.writeContents();
 
 	// write the Peer List Out
 	LOCK(m_csPeerListOut);
-	m_vecPeerListOut.writeContents();
+	m_lstPeerListOut.writeContents();
 }
 
 NetworkManager::~NetworkManager()
@@ -751,7 +820,7 @@ void NetworkManager::Stop()
 
 bool NetworkManager::isBanned(string strAddress)
 {
-	for (vector< CNetAddr >::iterator it = m_vecBanList.vecIP.begin(); it != m_vecBanList.vecIP.end(); it++)
+	for (list< CNetAddr >::iterator it = m_lstBanList.lstIP.begin(); it != m_lstBanList.lstIP.end(); it++)
 	{
 		if (it->toString() == strAddress)
 			return true;
