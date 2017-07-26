@@ -19,7 +19,7 @@ class ipContainer
 		void									setFileName(string strFileName) { m_strFileName = strFileName; };
 		void									readContents();		
 		void									writeContents();
-		bool									entryExists(T obj);
+		bool									entryExists(T *obj);
 
 		// this vector holds all the IP information corresponding to the template class
 		list< T >								lstIP;
@@ -132,11 +132,11 @@ void ipContainer<T>::writeContents()
 }
 
 template <class T>
-bool ipContainer<T>::entryExists(T obj)
+bool ipContainer<T>::entryExists(T *obj)
 {
 	for (list<T>::iterator it = lstIP.begin(); it != lstIP.end(); it++)
 	{
-		if (*it == obj)
+		if (*it == *obj)
 			return true;
 	}
 	return false;

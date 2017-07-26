@@ -238,7 +238,7 @@ void NetworkManager::ThreadSocketHandler()
 			newElem->mark();
 			// todo: when c++17 is adopted into compilers, use the reference returned from emplace_back instead of using the back() function.			 
 			// check if the ip address isnt banned
-			if (!newElem->toDestroy() && m_lstBanList.entryExists((CNetAddr)newElem->csAddress) )
+			if (!newElem->toDestroy() && m_lstBanList.entryExists(&(CNetAddr)newElem->csAddress) )
 			{
 				LOG("connection dropped - banned - " + newElem->csAddress.toStringIP(), "NET");
 				newElem->markDestroy();
@@ -759,9 +759,9 @@ bool NetworkManager::ProcessMessage(netMessage msg, list< netPeers >::iterator p
 			// check if we have this node already in our list
 			{
 				LOCK(m_csPeerListOut);
-				if (m_lstBanList.entryExists((CNetAddr)tmp.csAddress))
+				if (m_lstBanList.entryExists(&(CNetAddr)tmp.csAddress))
 					LOG_ERROR("Not adding new outbound peer - peer is banned - " + tmp.toString(), "NET");
-				else if (!m_lstPeerListOut.entryExists(tmp) )
+				else if (!m_lstPeerListOut.entryExists(&tmp) )
 				{
 					m_lstPeerListOut.lstIP.push_back(tmp);
 					LOG("Adding new outbound peer - " + tmp.toString(), "NET");
