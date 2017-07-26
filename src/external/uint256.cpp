@@ -3,7 +3,12 @@
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
-#include "../../stdafx.h"
+#include "uint256.h"
+#include <string>
+#include <vector>
+#include <assert.h>
+
+#include "../external/utilstrencodings.h"
 
 template <unsigned int BITS>
 base_blob<BITS>::base_blob(const std::vector<unsigned char>& vch)

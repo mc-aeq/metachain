@@ -1,4 +1,19 @@
-#include "../stdafx.h"
+/*********************************************************************
+* Copyright (c) 2017 TCT DEVs	                                     *
+* Distributed under the GPLv3.0 software license					 *
+* contact us before using our code									 *
+**********************************************************************/
+
+#include "functions.h"
+#include <string>
+#include <atomic>
+#include <exception>
+#include <openssl/crypto.h>
+#include <boost/date_time/posix_time/posix_time.hpp>
+#include <boost/thread/thread.hpp>
+
+#include "defines.h"
+#include "external/tinyformat.h"
 
 // thread renaming
 void RenameThread(const char* name)
@@ -42,7 +57,7 @@ std::string FormatException(const std::exception* pex, const char* pszThread)
 }
 
 #ifdef _WINDOWS
-string NetworkErrorString(int err)
+std::string NetworkErrorString(int err)
 {
 	char buf[256];
 	buf[0] = 0;

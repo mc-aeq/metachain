@@ -1,5 +1,20 @@
 #pragma once
 
+/*********************************************************************
+* Copyright (c) 2017 TCT DEVs	                                     *
+* Distributed under the GPLv3.0 software license					 *
+* contact us before using our code									 *
+**********************************************************************/
+
+#ifndef __NETMESSAGE_H__
+#define __NETMESSAGE_H__ 1
+
+#include <stdint.h>
+
+#include "../external/uint256.h"
+#include "../defines.h"
+#include "../external/cDataStream.h"
+#include "../external/crypto/cHash256.h"
 
 // the struct of the header
 // only needed in this class, thus no single file
@@ -71,3 +86,5 @@ class netMessage
 
 		sHeader				getHeader() { return m_sHeader; };
 };
+
+#endif

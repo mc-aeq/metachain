@@ -3,6 +3,9 @@
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
+#ifndef __BYTESWAP_H__
+#define __BYTESWAP_H__ 1
+
 #if defined(HAVE_BYTESWAP_H)
 #include <byteswap.h>
 #endif
@@ -35,3 +38,5 @@ inline uint64_t bswap_64(uint64_t x)
 		| ((x & 0x00000000000000ffull) << 56));
 }
 #endif // HAVE_DECL_BSWAP64
+
+#endif

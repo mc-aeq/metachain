@@ -4,6 +4,9 @@
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
+#ifndef __HMAC_SHA512_H__
+#define __HMAC_SHA512_H__ 1
+
 #include "sha512.h"
 
 /** A hasher class for HMAC-SHA-512. */
@@ -24,3 +27,5 @@ public:
     }
     void Finalize(unsigned char hash[OUTPUT_SIZE]);
 };
+
+#endif

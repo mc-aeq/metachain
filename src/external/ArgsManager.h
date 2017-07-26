@@ -5,6 +5,13 @@
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
+#ifndef __ARGSMANAGER_H__
+#define __ARGSMANAGER_H__ 1
+
+#include <map>
+
+#include "cCriticalSection.h"
+
 class ArgsManager
 {
 protected:
@@ -115,3 +122,5 @@ static inline bool SoftSetBoolArg(const std::string& strArg, bool fValue)
 {
 	return gArgs.SoftSetBoolArg(strArg, fValue);
 }
+
+#endif

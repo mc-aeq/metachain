@@ -4,6 +4,8 @@
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
+#ifndef __PREVECTOR_H__
+#define __PREVECTOR_H__ 1
 
 #pragma pack(push, 1)
 /** Implements a drop-in replacement for std::vector<T> which stores up to N
@@ -505,3 +507,5 @@ public:
     }
 };
 #pragma pack(pop)
+
+#endif

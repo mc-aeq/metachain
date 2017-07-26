@@ -4,6 +4,11 @@
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
+#ifndef __CHACHA20_H__
+#define __CHACHA20_H__ 1
+
+#include <stdint.h>
+
 /** A PRNG class for ChaCha20. */
 class ChaCha20
 {
@@ -18,3 +23,5 @@ public:
     void Seek(uint64_t pos);
     void Output(unsigned char* output, size_t bytes);
 };
+
+#endif

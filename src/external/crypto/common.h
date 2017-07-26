@@ -4,6 +4,11 @@
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
+#ifndef __COMMON_H__
+#define __COMMON_H__ 1
+
+#include "../endian.h"
+
 uint16_t static inline ReadLE16(const unsigned char* ptr)
 {
     uint16_t x;
@@ -89,3 +94,5 @@ uint64_t static inline CountBits(uint64_t x)
     }
     return ret;
 }
+
+#endif

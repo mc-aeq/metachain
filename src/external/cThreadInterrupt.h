@@ -4,6 +4,12 @@
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
+#ifndef __CTHREADINTERRUPT_H__
+#define __CTHREADINTERRUPT_H__ 1
+
+#include <atomic>
+#include <chrono>
+#include <condition_variable>
 
 /*
 A helper class for interruptible sleeps. Calling operator() will interrupt
@@ -25,3 +31,5 @@ private:
 	std::mutex mut;
 	std::atomic<bool> flag;
 };
+
+#endif

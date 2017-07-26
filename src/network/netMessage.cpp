@@ -1,4 +1,16 @@
-#include "../../stdafx.h"
+/*********************************************************************
+* Copyright (c) 2017 TCT DEVs	                                     *
+* Distributed under the GPLv3.0 software license					 *
+* contact us before using our code									 *
+**********************************************************************/
+
+#include "netMessage.h"
+
+#include <stdint.h>
+
+#include "../defines.h"
+#include "../external/uint256.h"
+#include "../logger.h"
 
 netMessage::netMessage():
 	m_bComplete(false),
@@ -49,7 +61,7 @@ netMessage::netMessage(netMessage::SUBJECT subj, void *ptrData, uint32_t uiDataS
 #ifdef _DEBUG
 	uint256 tmpCmp;
 	memcpy(tmpCmp.begin(), m_sHeader.ui8tChecksum, CHECKSUM_SIZE);
-	LOG_DEBUG("Writing Header - Header Subj: " + to_string(m_sHeader.ui16tSubject) + " - Header PayloadSize: " + to_string(m_sHeader.ui32tPayloadSize) + " - Header Hash: " + tmpCmp.ToString(), "NET-MSG");
+	LOG_DEBUG("Writing Header - Header Subj: " + std::to_string(m_sHeader.ui16tSubject) + " - Header PayloadSize: " + std::to_string(m_sHeader.ui32tPayloadSize) + " - Header Hash: " + tmpCmp.ToString(), "NET-MSG");
 #endif
 }
 
@@ -109,7 +121,7 @@ int netMessage::readData(const char *pch, unsigned int nBytes)
 		m_uiPosition += uiBufSize;
 
 #ifdef _DEBUG
-		LOG_DEBUG("Reading Header - Header Position: " + to_string(m_uiPosition) + ", Bytes read: " + to_string(uiBufSize), "NET-MSG");
+		LOG_DEBUG("Reading Header - Header Position: " + std::to_string(m_uiPosition) + ", Bytes read: " + std::to_string(uiBufSize), "NET-MSG");
 #endif
 
 		// if the header is not fully read, we return the number of bytes read
@@ -136,7 +148,7 @@ int netMessage::readData(const char *pch, unsigned int nBytes)
 #ifdef _DEBUG
 		uint256 tmpCmp;
 		memcpy(tmpCmp.begin(), m_sHeader.ui8tChecksum, CHECKSUM_SIZE );
-		LOG_DEBUG("Header Completed - Subject: " + to_string(m_sHeader.ui16tSubject) + ", Payload Size: " + to_string(m_sHeader.ui32tPayloadSize) + ", Header Hash: " + tmpCmp.ToString(), "NET-MSG");
+		LOG_DEBUG("Header Completed - Subject: " + std::to_string(m_sHeader.ui16tSubject) + ", Payload Size: " + std::to_string(m_sHeader.ui32tPayloadSize) + ", Header Hash: " + tmpCmp.ToString(), "NET-MSG");
 #endif
 
 		// when we don't have any payload after the header, the message is complete
@@ -157,7 +169,7 @@ int netMessage::readData(const char *pch, unsigned int nBytes)
 		m_Hasher256.Write((const unsigned char*)pch, uiBufSize);
 
 #ifdef _DEBUG
-		LOG_DEBUG("Reading Data - Data Position: " + to_string(m_uiPosition) + ", Bytes read: " + to_string(uiBufSize), "NET-MSG");
+		LOG_DEBUG("Reading Data - Data Position: " + std::to_string(m_uiPosition) + ", Bytes read: " + std::to_string(uiBufSize), "NET-MSG");
 #endif
 
 		// check wether we completed the data part

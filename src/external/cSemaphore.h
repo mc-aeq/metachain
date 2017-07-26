@@ -5,6 +5,9 @@
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
+#ifndef __CSEMAPHORE_H__
+#define __CSEMAPHORE_H__ 1
+
 #include <boost/thread/condition_variable.hpp>
 #include <boost/thread/mutex.hpp>
 #include <boost/thread/recursive_mutex.hpp>
@@ -106,3 +109,5 @@ public:
 		return fHaveGrant;
 	}
 };
+
+#endif

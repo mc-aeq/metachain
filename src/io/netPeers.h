@@ -1,5 +1,24 @@
 #pragma once
 
+/*********************************************************************
+* Copyright (c) 2017 TCT DEVs	                                     *
+* Distributed under the GPLv3.0 software license					 *
+* contact us before using our code									 *
+**********************************************************************/
+
+#ifndef __NETPEERS_H__
+#define __NETPEERS_H__ 1
+
+#include <queue>
+#include <string>
+#include <list>
+
+#include "../defines.h"
+#include "../external/cCriticalSection.h"
+#include "../external/cSemaphore.h"
+#include "../network/netMessage.h"
+#include "../network/CService.h"
+
 /*
 this class is used as template type for ipContainer. Especially to store and retrieve all relevant information about peers
 */
@@ -18,7 +37,7 @@ private:
 	netMessage						m_netMsg;
 
 	int								m_iUsageCounter;
-	queue< netMessage >				m_queueMessages;
+	std::queue< netMessage >		m_queueMessages;
 
 	void							makeDeepCopy(const netPeers & obj);
 
@@ -29,8 +48,8 @@ public:
 									netPeers(const netPeers& obj);
 	netPeers&						operator=(const netPeers& obj);
 
-	bool							init(string strEntry);
-	string							toString() const { return csAddress.toString(); };
+	bool							init(std::string strEntry);
+	std::string						toString() const { return csAddress.toString(); };
 	unsigned short					getPort() { return csAddress.GetPort(); };
 
 	void							validConnection(bool bValid);
@@ -59,9 +78,11 @@ public:
 	void							popMessage() { m_queueMessages.pop(); };
 
 	cCriticalSection				*pcsvSend;
-	list< netMessage >				listSend;
+	std::list< netMessage >			listSend;
 
 	void							mark() { m_iUsageCounter++; };					// mark this peer as currently used by a process.
 	void							unmark() { m_iUsageCounter--; };				// remove the marking or atleast decrement the number of processes using this peer
 	bool							inUse() { return (m_iUsageCounter != 0); };		// check whether a process is using this peer right now
 };
+
+#endif

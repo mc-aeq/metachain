@@ -1,9 +1,12 @@
-#include "../../../stdafx.h"
-
 // Copyright (c) 2014 The Bitcoin Core developers
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
+#include "sha256.h"
+
+#include <stdint.h>
+#include <string>
+#include "common.h"
 
 // Internal implementation code.
 namespace

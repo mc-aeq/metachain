@@ -1,4 +1,19 @@
-#include "stdafx.h"
+/*********************************************************************
+* Copyright (c) 2017 TCT DEVs	                                     *
+* Distributed under the GPLv3.0 software license					 *
+* contact us before using our code									 *
+**********************************************************************/
+
+#include <atomic>
+#include <string>
+#include <boost/thread/thread.hpp>
+
+#include "src/defines.h"
+#include "src/external/ArgsManager.h"
+#include "src/functions.h"
+#include "src/logger.h"
+#include "src/MetaChain.h"
+
 /*
 	start point for the metachain
 */
@@ -35,7 +50,7 @@ int main( int argc, char* argv[] )
 	// Process help and version
 	if (IsArgSet("-?") || IsArgSet("-h") || IsArgSet("--help") || IsArgSet("-v") || IsArgSet("--version"))
 	{
-		LOG("TCT node - version " + to_string(g_cuint32tVersion), "TCT");
+		LOG("TCT node - version " + std::to_string(g_cuint32tVersion), "TCT");
 		MetaChain::getInstance().LicenseInfo();
 
 		if (IsArgSet("-?") || IsArgSet("-h") || IsArgSet("--help"))
@@ -49,7 +64,7 @@ int main( int argc, char* argv[] )
 	}
 
 	// load our ini file and create our iniFile object
-	string strIni;
+	std::string strIni;
 	if (IsArgSet("-c"))
 		strIni = GetArg("-c", "node.ini");
 	else if (IsArgSet("--conf"))

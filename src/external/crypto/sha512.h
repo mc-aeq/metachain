@@ -4,6 +4,11 @@
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
+#ifndef __SHA512_H__
+#define __SHA512_H__ 1
+
+#include <stdint.h>
+
 /** A hasher class for SHA-512. */
 class CSHA512
 {
@@ -20,3 +25,5 @@ public:
     void Finalize(unsigned char hash[OUTPUT_SIZE]);
     CSHA512& Reset();
 };
+
+#endif

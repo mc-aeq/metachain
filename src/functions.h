@@ -1,5 +1,18 @@
 #pragma once
 
+/*********************************************************************
+* Copyright (c) 2017 TCT DEVs	                                     *
+* Distributed under the GPLv3.0 software license					 *
+* contact us before using our code									 *
+**********************************************************************/
+
+#ifndef __FUNCTIONS_H__
+#define __FUNCTIONS_H__ 1
+
+#include <string>
+#include <stdint.h>
+
+#include "defines.h"
 #include "logger.h"
 
 // thread renaming
@@ -36,7 +49,7 @@ void MilliSleep(int64_t n);
 // thread tracing
 template <typename Callable> void TraceThread(const char* name, Callable func)
 {
-	string s = "TCT-" + string(name);
+	std::string s = "TCT-" + std::string(name);
 	RenameThread(s.c_str());
 	try
 	{
@@ -73,3 +86,5 @@ bool static inline IsSelectableSocket(SOCKET s) {
 	return (s < FD_SETSIZE);
 #endif
 }
+
+#endif

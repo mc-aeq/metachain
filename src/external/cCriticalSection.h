@@ -5,6 +5,9 @@
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
+#ifndef __CCRITICALSECTION_H__
+#define __CCRITICALSECTION_H__ 1
+
 #include <boost/thread/condition_variable.hpp>
 #include <boost/thread/mutex.hpp>
 #include <boost/thread/recursive_mutex.hpp>
@@ -171,3 +174,5 @@ typedef cMutexLock<cCriticalSection> cCriticalBlock;
 #define LOCK(cs) cCriticalBlock PASTE2(criticalblock, __COUNTER__)(cs, #cs, __FILE__, __LINE__)
 #define LOCK2(cs1, cs2) cCriticalBlock criticalblock1(cs1, #cs1, __FILE__, __LINE__), criticalblock2(cs2, #cs2, __FILE__, __LINE__)
 #define TRY_LOCK(cs, name) cCriticalBlock name(cs, #cs, __FILE__, __LINE__, true)
+
+#endif

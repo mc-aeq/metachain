@@ -9,6 +9,13 @@
 * Utilities for converting data from/to strings.
 */
 
+#ifndef __UTIL_STR_ENCODINGS_H__
+#define __UTIL_STR_ENCODINGS_H__ 1
+
+#include <string>
+#include <vector>
+#include <stdint.h>
+
 #define BEGIN(a)            ((char*)&(a))
 #define END(a)              ((char*)&((&(a))[1]))
 #define UBEGIN(a)           ((unsigned char*)&(a))
@@ -137,3 +144,5 @@ bool TimingResistantEqual(const T& a, const T& b)
 * @note The result must be in the range (-10^18,10^18), otherwise an overflow error will trigger.
 */
 bool ParseFixedPoint(const std::string &val, int decimals, int64_t *amount_out);
+
+#endif

@@ -4,6 +4,9 @@
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
+#ifndef __REVERSELOCK_H__
+#define __REVERSELOCK_H__ 1
+
 /**
  * An RAII-style reverse lock. Unlocks on construction and locks on destruction.
  */
@@ -29,3 +32,5 @@ private:
     Lock& lock;
     Lock templock;
 };
+
+#endif

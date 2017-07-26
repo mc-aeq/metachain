@@ -1,13 +1,20 @@
-#include "../../stdafx.h"
+// Copyright (c) 2009-2010 Satoshi Nakamoto
+// Copyright (c) 2009-2016 The Bitcoin Core developers
+// Distributed under the MIT software license, see the accompanying
+// file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
+#include "ArgsManager.h"
 
+#include <string>
+#include <boost/algorithm/string.hpp>
+#include "utilstrencodings.h"
 
 /** Interpret string as boolean, for argument parsing */
 static bool InterpretBool(const std::string& strValue)
 {
 	if (strValue.empty())
 		return true;
-	return (atoi(strValue) != 0);
+	return (atoi(strValue.c_str()) != 0);
 }
 
 /** Turn -noX into -X=0 */

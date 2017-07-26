@@ -1,4 +1,13 @@
-#include "../stdafx.h"
+/*********************************************************************
+* Copyright (c) 2017 TCT DEVs	                                     *
+* Distributed under the GPLv3.0 software license					 *
+* contact us before using our code									 *
+**********************************************************************/
+
+#include "logger.h"
+
+#include <time.h>
+#include <iostream>
 
 Logger::Logger() :
 	m_bLogToStdout(true),
@@ -19,7 +28,7 @@ Logger::~Logger()
 		m_streamLogFile.close();
 }
 
-void Logger::log( string strLogLine, facility logFacility, string strModule)
+void Logger::log( std::string strLogLine, facility logFacility, std::string strModule)
 {
 	// since we're using multiple threads we're using a mutex to ensure proper output
 	std::lock_guard<std::mutex> lock(m_mutexOutput);
@@ -59,11 +68,11 @@ void Logger::log( string strLogLine, facility logFacility, string strModule)
 	
 	// output to stdout if configured
 	if (this->m_bLogToStdout)
-		cout << this->m_caTimeBuf << m_strFacility << strModule << strLogLine << endl;
+		std::cout << this->m_caTimeBuf << m_strFacility << strModule << strLogLine << std::endl;
 
 	// output to file if configured
 	if (this->m_bLogToFile)
-		m_streamLogFile << this->m_caTimeBuf << m_strFacility << strModule << strLogLine << endl;
+		m_streamLogFile << this->m_caTimeBuf << m_strFacility << strModule << strLogLine << std::endl;
 }
 
 void Logger::initialize(CSimpleIniA* iniFile)
@@ -71,20 +80,20 @@ void Logger::initialize(CSimpleIniA* iniFile)
 	// check if logging to the cmd line is enabled / disabled
 	this->m_bLogToStdout = iniFile->GetBoolValue("logging", "log_to_stdout", true);
 	#ifdef _DEBUG
-		LOG_DEBUG("Log to stdout: " + (string)(this->m_bLogToStdout ? "true" : "false"), "LOGGER");
+		LOG_DEBUG("Log to stdout: " + (std::string)(this->m_bLogToStdout ? "true" : "false"), "LOGGER");
 	#endif
 
 	// check if logging to file is enabled / disabled - if enabled, open the file and prepare the file pointer
 	this->m_bLogToFile = iniFile->GetBoolValue("logging", "log_to_file", true);
 	#ifdef _DEBUG
-		LOG_DEBUG("Log to file: " + (string)(this->m_bLogToFile ? "true" : "false"), "LOGGER");
+		LOG_DEBUG("Log to file: " + (std::string)(this->m_bLogToFile ? "true" : "false"), "LOGGER");
 	#endif
 	if (this->m_bLogToFile)
 	{
 		m_strFileName = iniFile->GetValue("logging", "log_file", "output.log");
-		m_streamLogFile.open(m_strFileName, ios_base::out | ios_base::app | ios_base::ate);
+		m_streamLogFile.open(m_strFileName, std::ios_base::out | std::ios_base::app | std::ios_base::ate);
 		#ifdef _DEBUG
-				LOG_DEBUG("Logfile name: " + (string)(m_strFileName), "LOGGER");
+				LOG_DEBUG("Logfile name: " + (std::string)(m_strFileName), "LOGGER");
 		#endif
 	}
 }

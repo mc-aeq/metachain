@@ -3,6 +3,9 @@
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
+#ifndef __SCHEDULER_H__
+#define __SCHEDULER_H__ 1
+
 //
 // NOTE:
 // boost::thread / boost::chrono should be ported to std::thread / std::chrono
@@ -75,3 +78,5 @@ private:
 	bool stopWhenEmpty;
 	bool shouldStop() { return stopRequested || (stopWhenEmpty && taskQueue.empty()); }
 };
+
+#endif

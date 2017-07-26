@@ -1,5 +1,11 @@
-#include "../../stdafx.h"
 
+#include "CSubNet.h"
+
+#include <stdint.h>
+#include <string>
+
+#include "CNetAddr.h"
+#include "../external/tinyformat.h"
 
 CSubNet::CSubNet() :
 	valid(false)

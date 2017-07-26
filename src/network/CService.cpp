@@ -1,4 +1,9 @@
-#include "../../stdafx.h"
+#include "CService.h"
+
+#include <assert.h>
+
+#include "CNetAddr.h"
+#include "../external/tinyformat.h"
 
 void CService::Init()
 {

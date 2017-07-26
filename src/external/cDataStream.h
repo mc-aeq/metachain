@@ -5,6 +5,13 @@
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
+#ifndef __CDATASTREAM_H__
+#define __CDATASTREAM_H__ 1
+
+#include <assert.h>
+#include <ios>
+
+#include "zeroAfterFree.h"
 
 /** Double ended buffer combining vector and stream-like interfaces.
 *
@@ -283,3 +290,5 @@ public:
 		}
 	}
 };
+
+#endif

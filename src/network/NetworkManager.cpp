@@ -1,4 +1,28 @@
-#include "../../stdafx.h"
+/*********************************************************************
+* Copyright (c) 2017 TCT DEVs	                                     *
+* Distributed under the GPLv3.0 software license					 *
+* contact us before using our code									 *
+**********************************************************************/
+
+#include "NetworkManager.h"
+
+#include <exception>
+#include <mutex>
+#include <thread>
+#include <list>
+
+#include "../MetaChain.h"
+#include "../defines.h"
+#include "../logger.h"
+#include "../external/cSemaphore.h"
+#include "../io/ipContainer.h"
+#include "../io/netPeers.h"
+#include "../functions.h"
+#include "CNetAddr.h"
+#include "CService.h"
+#include "../external/tinyformat.h"
+#include "netMessage.h"
+#include "../external/cCriticalSection.h"
 
 NetworkManager::NetworkManager(MetaChain *mc) :
 	m_pMC(mc),
@@ -63,7 +87,7 @@ bool NetworkManager::initialize(CSimpleIniA* iniFile)
 	{
 		m_pServiceLocal = new CService(iniFile->GetValue("network", "listening_ip", NET_STANDARD_CATCHALL_LISTENING), (unsigned short)iniFile->GetLongValue("network", "listening_port", NET_STANDARD_PORT_LISTENING));
 	}
-	catch (exception e)
+	catch (std::exception e)
 	{
 		LOG_ERROR("That wasn't good. An error occured creating the local service listener. Please check your configuration file.", "NET");
 		return false;
@@ -177,12 +201,12 @@ void NetworkManager::startThreads()
 	m_abflagInterruptMsgProc = false;
 
 	{
-		std::unique_lock<std::mutex> lock(m_mutexMsgProc);
+		boost::unique_lock<boost::mutex> lock(m_mutexMsgProc);
 		m_bfMsgProcWake = false;
 	}
 
 	// Send and receive from sockets, accept connections
-	threadSocketHandler = thread(&TraceThread<function<void()> >, "net", function<void()>(bind(&NetworkManager::ThreadSocketHandler, this)));
+	threadSocketHandler = std::thread(&TraceThread<std::function<void()> >, "net", std::function<void()>(std::bind(&NetworkManager::ThreadSocketHandler, this)));
 	
 	// Initiate outbound connections
 	threadOpenConnections = std::thread(&TraceThread<std::function<void()> >, "opencon", std::function<void()>(std::bind(&NetworkManager::ThreadOpenConnections, this)));
@@ -272,7 +296,7 @@ void NetworkManager::handlePeers(ipContainer< netPeers> *peers, cCriticalSection
 	// first delete nodes that disconnected gracefully or on error
 	{
 		LOCK(cs);
-		for (list< netPeers >::iterator it = peers->lstIP.begin(); it != peers->lstIP.end(); )
+		for (std::list< netPeers >::iterator it = peers->lstIP.begin(); it != peers->lstIP.end(); )
 		{
 			if ((it->toDestroy() || ( (it->hSocket == INVALID_SOCKET) && it->isConnected())) && !it->inUse() )
 				it = peers->lstIP.erase(it);
@@ -284,7 +308,7 @@ void NetworkManager::handlePeers(ipContainer< netPeers> *peers, cCriticalSection
 	// prepare the sockets for receiving and sending data (if necessary)
 	{
 		LOCK(cs);
-		for (list< netPeers >::iterator it = peers->lstIP.begin(); it != peers->lstIP.end(); it++)
+		for (std::list< netPeers >::iterator it = peers->lstIP.begin(); it != peers->lstIP.end(); it++)
 		{
 			it->mark();
 
@@ -350,7 +374,7 @@ void NetworkManager::handlePeers(ipContainer< netPeers> *peers, cCriticalSection
 
 	// socket handling (read, write, timeout)
 	LOCK(cs);
-	for (list< netPeers >::iterator it = peers->lstIP.begin(); it != peers->lstIP.end(); it++)
+	for (std::list< netPeers >::iterator it = peers->lstIP.begin(); it != peers->lstIP.end(); it++)
 	{
 		if (m_interruptNet)
 			return;
@@ -432,7 +456,7 @@ void NetworkManager::handlePeers(ipContainer< netPeers> *peers, cCriticalSection
 		{
 			LOCK(it->pcsvSend);
 
-			list< netMessage >::iterator msg = it->listSend.begin();
+			std::list< netMessage >::iterator msg = it->listSend.begin();
 			size_t nSentSize = 0;
 
 			while (msg != it->listSend.end())
@@ -516,7 +540,7 @@ void NetworkManager::handlePeers(ipContainer< netPeers> *peers, cCriticalSection
 void NetworkManager::WakeMessageHandler()
 {
 	{
-		lock_guard<mutex> lock(m_mutexMsgProc);
+		boost::lock_guard<boost::mutex> lock(m_mutexMsgProc);
 		m_bfMsgProcWake = true;
 	}
 	m_condMsgProc.notify_one();
@@ -541,7 +565,7 @@ void NetworkManager::ThreadOpenConnections()
 			return;
 		
 		// get the first one in the list which is not connected
-		list<netPeers>::iterator itPeer = getNextOutNode(false, true);
+		std::list<netPeers>::iterator itPeer = getNextOutNode(false, true);
 		if (itPeer == m_lstPeerListOut.lstIP.end())
 			continue;
 
@@ -577,9 +601,9 @@ void NetworkManager::ThreadMessageHandler()
 		handleMessage(&m_lstPeerListIn, &m_csPeerListIn, true);
 		handleMessage(&m_lstPeerListOut, &m_csPeerListOut, false);
 
-		unique_lock<mutex> lock(m_mutexMsgProc);
+		boost::unique_lock<boost::mutex> lock(m_mutexMsgProc);
 		if (!fMoreWork)
-			m_condMsgProc.wait_until(lock, chrono::steady_clock::now() + chrono::milliseconds(100), [this] { return m_bfMsgProcWake; });
+			m_condMsgProc.wait_until(lock, boost::chrono::steady_clock::now() + boost::chrono::milliseconds(100), [this] { return m_bfMsgProcWake; });
 
 		m_bfMsgProcWake = false;		
 	}
@@ -588,7 +612,7 @@ void NetworkManager::ThreadMessageHandler()
 void NetworkManager::handleMessage(ipContainer< netPeers> *peers, cCriticalSection *cs, bool bInbound)
 {
 	LOCK(cs);
-	for (list< netPeers >::iterator it = peers->lstIP.begin(); it != peers->lstIP.end(); it++)
+	for (std::list< netPeers >::iterator it = peers->lstIP.begin(); it != peers->lstIP.end(); it++)
 	{
 		it->mark();
 		if (it->toDestroy() || !it->hasMessage())
@@ -622,7 +646,7 @@ void NetworkManager::handleMessage(ipContainer< netPeers> *peers, cCriticalSecti
 	}
 }
 
-bool NetworkManager::ProcessMessage(netMessage msg, list< netPeers >::iterator peer, bool bInbound)
+bool NetworkManager::ProcessMessage(netMessage msg, std::list< netPeers >::iterator peer, bool bInbound)
 {
 
 	// security check: when we receive a package that is not NET_VERSION in subject and validConnection() == false, it means we didnt receive the version string and the connection is possibly malicious. 
@@ -644,7 +668,7 @@ bool NetworkManager::ProcessMessage(netMessage msg, list< netPeers >::iterator p
 		uint32_t uint32tReceivedVersion;
 		memcpy(&uint32tReceivedVersion, msg.getData(), 4);
 #ifdef _DEBUG
-		LOG_DEBUG("Got Version Info from " + peer->toString() + " - Version: " + to_string(uint32tReceivedVersion), "NET");
+		LOG_DEBUG("Got Version Info from " + peer->toString() + " - Version: " + std::to_string(uint32tReceivedVersion), "NET");
 #endif
 		// if the connected client has an older version than ours, we inform him about a new version and then destroy the connection
 		if (g_cuint32tVersion > uint32tReceivedVersion)
@@ -693,7 +717,7 @@ bool NetworkManager::ProcessMessage(netMessage msg, list< netPeers >::iterator p
 		{
 			// very simplistic count through the connected outbound nodes to get the size of our data buffer
 			LOCK(m_csPeerListOut);
-			for (list<netPeers>::iterator it = m_lstPeerListOut.lstIP.begin(); it != m_lstPeerListOut.lstIP.end(); it++)
+			for (std::list<netPeers>::iterator it = m_lstPeerListOut.lstIP.begin(); it != m_lstPeerListOut.lstIP.end(); it++)
 			{
 				if (it == peer)
 					iNumOfPeers--;
@@ -713,7 +737,7 @@ bool NetworkManager::ProcessMessage(netMessage msg, list< netPeers >::iterator p
 		{
 			unsigned int uiCount = 0;
 			LOCK(m_csPeerListOut);
-			for (list<netPeers>::iterator it = m_lstPeerListOut.lstIP.begin(); it != m_lstPeerListOut.lstIP.end(); it++ )
+			for (std::list<netPeers>::iterator it = m_lstPeerListOut.lstIP.begin(); it != m_lstPeerListOut.lstIP.end(); it++ )
 			{
 				if (bInbound || it != peer)
 				{
@@ -787,10 +811,10 @@ bool NetworkManager::ProcessMessage(netMessage msg, list< netPeers >::iterator p
 	return true;
 }
 
-list< netPeers >::iterator NetworkManager::getNextOutNode(bool bConnected, bool bCheckTimeDelta)
+std::list< netPeers >::iterator NetworkManager::getNextOutNode(bool bConnected, bool bCheckTimeDelta)
 {
 	LOCK(m_csPeerListOut);
-	for (list< netPeers >::iterator it = m_lstPeerListOut.lstIP.begin(); it != m_lstPeerListOut.lstIP.end(); it++ )
+	for (std::list< netPeers >::iterator it = m_lstPeerListOut.lstIP.begin(); it != m_lstPeerListOut.lstIP.end(); it++ )
 	{
 		if (it->isConnected() != bConnected)
 			continue;
@@ -831,7 +855,7 @@ NetworkManager::~NetworkManager()
 void NetworkManager::Interrupt()
 {
 	{
-		std::lock_guard<std::mutex> lock(m_mutexMsgProc);
+		boost::lock_guard<boost::mutex> lock(m_mutexMsgProc);
 		m_abflagInterruptMsgProc = true;
 	}
 	m_condMsgProc.notify_all();

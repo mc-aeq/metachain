@@ -6,6 +6,9 @@
 //
 // C++ wrapper around ctaes, a constant-time AES implementation
 
+#ifndef __AES_H__
+#define __AES_H__ 1
+
 extern "C" {
 #include "ctaes/ctaes.h"
 }
@@ -113,3 +116,5 @@ private:
     const bool pad;
     unsigned char iv[AES_BLOCKSIZE];
 };
+
+#endif

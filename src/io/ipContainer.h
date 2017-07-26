@@ -1,5 +1,23 @@
 #pragma once
 
+/*********************************************************************
+* Copyright (c) 2017 TCT DEVs	                                     *
+* Distributed under the GPLv3.0 software license					 *
+* contact us before using our code									 *
+**********************************************************************/
+
+#ifndef __IPCONTAINER_H__
+#define __IPCONTAINER_H__ 1
+
+#include <string>
+#include <list>
+#include <fstream>
+#include <iostream>
+#include <boost/algorithm/string.hpp>
+#include <boost/date_time/posix_time/posix_time.hpp>
+
+#include "../logger.h"
+
 /*
 this is the class to handle IP IOs
 it's developed as template for better reusability. the template classes used need to have certain functions implemented for correct reading and writing of the contents
@@ -9,27 +27,25 @@ template <class T>
 class ipContainer
 {
 	private:
-		string									m_strFileName;
+		std::string								m_strFileName;
 
 	public:
 												ipContainer();
-												ipContainer(string strFileName);
+												ipContainer(std::string strFileName);
 												~ipContainer();
 
-		void									setFileName(string strFileName) { m_strFileName = strFileName; };
+		void									setFileName(std::string strFileName) { m_strFileName = strFileName; };
 		void									readContents();		
 		void									writeContents();
 		bool									entryExists(T *obj);
 
 		// this vector holds all the IP information corresponding to the template class
-		list< T >								lstIP;
+		std::list< T >							lstIP;
 };
 
 /*
 Template class implementation
 */
-#include <boost/algorithm/string.hpp>
-#include <boost/date_time/posix_time/posix_time.hpp>
 
 template <class T>
 ipContainer<T>::ipContainer()
@@ -37,7 +53,7 @@ ipContainer<T>::ipContainer()
 }
 
 template <class T>
-ipContainer<T>::ipContainer(string strFileName) :
+ipContainer<T>::ipContainer(std::string strFileName) :
 	m_strFileName(strFileName)
 {
 }
@@ -51,12 +67,12 @@ ipContainer<T>::~ipContainer()
 template <class T>
 void ipContainer<T>::readContents()
 {
-	ifstream streamFile(m_strFileName);
+	std::ifstream streamFile(m_strFileName);
 #ifdef _DEBUG
 	LOG_DEBUG("reading contents of file: " + m_strFileName, "IPC");
 #endif
 
-	for (string strLine; getline(streamFile, strLine); )
+	for (std::string strLine; getline(streamFile, strLine); )
 	{
 		// renmove unwanted spaces from beginning and end
 		boost::trim(strLine);
@@ -97,7 +113,7 @@ void ipContainer<T>::readContents()
 
 #ifdef _DEBUG
 	LOG_DEBUG("done reading contents of file: " + m_strFileName, "IPC");
-	LOG_DEBUG("elements in the vector: " + to_string(lstIP.size()), "IPC");
+	LOG_DEBUG("elements in the vector: " + std::to_string(lstIP.size()), "IPC");
 #endif
 }
 
@@ -108,21 +124,21 @@ void ipContainer<T>::writeContents()
 	LOG_DEBUG("writing contents to file: " + m_strFileName, "IPC");
 #endif
 
-	ofstream streamOut;
-	streamOut.open(m_strFileName, ios_base::out | ios_base::trunc);
+	std::ofstream streamOut;
+	streamOut.open(m_strFileName, std::ios_base::out | std::ios_base::trunc);
 
 	// create a date/time string
-	basic_stringstream<char> wss;
-	wss.imbue(locale(wcout.getloc(), new boost::posix_time::wtime_facet(L"%Y.%m.%d %H:%M:%S")));
+	std::basic_stringstream<char> wss;
+	wss.imbue(std::locale(std::wcout.getloc(), new boost::posix_time::wtime_facet(L"%Y.%m.%d %H:%M:%S")));
 	wss << boost::posix_time::second_clock::universal_time();
 
 	// write standard header
-	streamOut << "# generation of the file: " << wss.str() << endl;
-	streamOut << "# it will be automatically updated through the TCT blockchain" << endl;
-	streamOut << "# any manual changes will be overridden!" << endl << endl;
+	streamOut << "# generation of the file: " << wss.str() << std::endl;
+	streamOut << "# it will be automatically updated through the TCT blockchain" << std::endl;
+	streamOut << "# any manual changes will be overridden!" << std::endl << std::endl;
 
-	for (list<T>::iterator it = lstIP.begin(); it != lstIP.end(); it++)
-		streamOut << it->toString() << endl;
+	for (std::list<T>::iterator it = lstIP.begin(); it != lstIP.end(); it++)
+		streamOut << it->toString() << std::endl;
 
 	streamOut.close();
 
@@ -134,10 +150,12 @@ void ipContainer<T>::writeContents()
 template <class T>
 bool ipContainer<T>::entryExists(T *obj)
 {
-	for (list<T>::iterator it = lstIP.begin(); it != lstIP.end(); it++)
+	for (std::list<T>::iterator it = lstIP.begin(); it != lstIP.end(); it++)
 	{
 		if (*it == *obj)
 			return true;
 	}
 	return false;
 }
+
+#endif

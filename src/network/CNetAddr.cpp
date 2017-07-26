@@ -1,4 +1,13 @@
-#include "../../stdafx.h"
+#include "CNetAddr.h"
+
+#include <string>
+#include <assert.h>
+
+#include "CService.h"
+#include "../external/tinyformat.h"
+#include "../external/uint256.h"
+#include "../external/hash.h"
+#include "../logger.h"
 
 static const unsigned char pchIPv4[12] = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0xff, 0xff };
 
@@ -11,7 +20,7 @@ bool CNetAddr::init()
 }
 
 // constructor to parse a single string line with an IP and transform it into a CNetAddr obj
-bool CNetAddr::init(string strEntry)
+bool CNetAddr::init(std::string strEntry)
 {
 	// lets check if it's a *, then it's quite easy
 	if (strEntry == "*")
@@ -39,7 +48,7 @@ bool CNetAddr::init(string strEntry)
 		int nErr = getaddrinfo(strEntry.c_str(), NULL, &aiHint, &aiRes);
 		if (nErr)
 		{
-			LOG_ERROR("Error resolving hostname: " + strEntry + " - Error No: " + to_string(nErr), "NET-ADDR");
+			LOG_ERROR("Error resolving hostname: " + strEntry + " - Error No: " + std::to_string(nErr), "NET-ADDR");
 			return false;
 		}
 

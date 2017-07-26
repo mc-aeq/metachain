@@ -4,6 +4,14 @@ Copyright (c) 2009-2016 The Bitcoin Core developers
 based on a version of 07/2017, heavily modified through the TCT developers
 */
 
+#ifndef __CSERVICE_H__
+#define __CSERVICE_H__ 1
+
+#include <vector>
+#include <string>
+
+#include "../defines.h"
+#include "CNetAddr.h"
 
 /*
 A combination of a network address (CNetAddr) and a (TCP) port
@@ -37,3 +45,5 @@ class CService : public CNetAddr
 		std::string						toStringPort() const;
 		std::string						toStringIPPort() const;
 };
+
+#endif

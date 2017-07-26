@@ -5,7 +5,12 @@
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
+#ifndef __UINT256_H__
+#define __UINT256_H__ 1
 
+#include <vector>
+
+#include "crypto/common.h"
 
 /** Template base class for fixed-sized opaque blobs. */
 template<unsigned int BITS>
@@ -150,3 +155,5 @@ inline uint256 uint256S(const std::string& str)
 	rv.SetHex(str);
 	return rv;
 }
+
+#endif

@@ -4,6 +4,11 @@ Copyright (c) 2009-2016 The Bitcoin Core developers
 based on a version of 07/2017, heavily modified through the TCT developers
 */
 
+#ifndef __CSUBNET_H__
+#define __CSUBNET_H__ 1
+
+#include "CNetAddr.h"
+
 /*
 Subnet class
 */
@@ -30,3 +35,5 @@ class CSubNet
 		friend bool				operator!=(const CSubNet& a, const CSubNet& b);
 		friend bool				operator<(const CSubNet& a, const CSubNet& b);
 };
+
+#endif

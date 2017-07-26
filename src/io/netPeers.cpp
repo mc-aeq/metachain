@@ -1,7 +1,16 @@
-#include "../../stdafx.h"
+/*********************************************************************
+* Copyright (c) 2017 TCT DEVs	                                     *
+* Distributed under the GPLv3.0 software license					 *
+* contact us before using our code									 *
+**********************************************************************/
 
+#include "netPeers.h"
 #include <boost/algorithm/string.hpp>
 #include <boost/lexical_cast.hpp>
+
+#include "../logger.h"
+#include "../functions.h"
+#include "../MetaChain.h"
 
 netPeers::netPeers() :
 	m_bConnected(false),
@@ -137,10 +146,10 @@ netPeers::~netPeers()
 	delete pcsvSend;*/
 }
 
-bool netPeers::init(string strEntry)
+bool netPeers::init(std::string strEntry)
 {
 	// the format is <ip>:<port>\n
-	vector< string > vecSplit;
+	std::vector< std::string > vecSplit;
 
 	// split IP and Port
 	boost::split(vecSplit, strEntry, boost::is_any_of(":"));

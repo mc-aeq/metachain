@@ -5,6 +5,10 @@
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
+#ifndef __ZERO_AFTER_FREE_H__
+#define __ZERO_AFTER_FREE_H__ 1
+
+#include "../functions.h"
 
 template <typename T>
 struct zero_after_free_allocator : public std::allocator<T> {
@@ -39,3 +43,5 @@ struct zero_after_free_allocator : public std::allocator<T> {
 
 // Byte-vector that clears its contents before deletion.
 typedef std::vector<char, zero_after_free_allocator<char> > CSerializeData;
+
+#endif

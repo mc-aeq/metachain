@@ -1,4 +1,18 @@
-#include "../stdafx.h"
+/*********************************************************************
+* Copyright (c) 2017 TCT DEVs	                                     *
+* Distributed under the GPLv3.0 software license					 *
+* contact us before using our code									 *
+**********************************************************************/
+
+#include "MetaChain.h"
+
+#include <atomic>
+
+#include "external/SimpleIni.h"
+#include "external/scheduler.h"
+#include "functions.h"
+#include "network/NetworkManager.h"
+#include "logger.h"
 
 extern std::atomic<bool> sabShutdown;
 

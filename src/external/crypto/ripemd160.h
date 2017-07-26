@@ -4,6 +4,11 @@
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
+#ifndef __RIPEMD160_H__
+#define __RIPEMD160_H__ 1
+
+#include <stdint.h>
+
 /** A hasher class for RIPEMD-160. */
 class CRIPEMD160
 {
@@ -20,3 +25,5 @@ public:
     void Finalize(unsigned char hash[OUTPUT_SIZE]);
     CRIPEMD160& Reset();
 };
+
+#endif

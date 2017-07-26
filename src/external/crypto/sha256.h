@@ -4,6 +4,11 @@
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
+#ifndef __SHA256_H__
+#define __SHA256_H__ 1
+
+#include <stdint.h>
+
 /** A hasher class for SHA-256. */
 class CSHA256
 {
@@ -20,3 +25,5 @@ public:
     void Finalize(unsigned char hash[OUTPUT_SIZE]);
     CSHA256& Reset();
 };
+
+#endif

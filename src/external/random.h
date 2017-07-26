@@ -5,6 +5,15 @@
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
+#ifndef __RANDOM_H__
+#define __RANDOM_H__ 1
+
+#include <stdint.h>
+
+#include "../defines.h"
+#include "uint256.h"
+#include "crypto/chacha20.h"
+
 /* Seed OpenSSL PRNG with additional entropy data */
 void RandAddSeed();
 
@@ -135,3 +144,5 @@ bool Random_SanityCheck();
 
 /** Initialize the RNG. */
 void RandomInit();
+
+#endif

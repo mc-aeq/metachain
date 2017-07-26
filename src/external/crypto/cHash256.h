@@ -5,7 +5,10 @@
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
+#ifndef __CHASH256_H__
+#define __CHASH256_H__ 1
 
+#include "sha256.h"
 
 /** A hasher class for Bitcoin's 256-bit hash (double SHA-256). */
 class cHash256 {
@@ -30,3 +33,5 @@ public:
 		return *this;
 	}
 };
+
+#endif

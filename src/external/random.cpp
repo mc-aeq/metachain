@@ -1,9 +1,9 @@
-#include "../../stdafx.h"
-
 // Copyright (c) 2009-2010 Satoshi Nakamoto
 // Copyright (c) 2009-2016 The Bitcoin Core developers
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
+
+#include "random.h"
 
 #ifdef _WINDOWS
 #include <wincrypt.h>
@@ -26,6 +26,12 @@
 
 #include <openssl/err.h>
 #include <openssl/rand.h>
+
+#include "../logger.h"
+#include "../functions.h"
+#include "tinyformat.h"
+#include "crypto/sha256.h"
+#include "crypto/sha512.h"
 
 static void RandFailure()
 {

@@ -1,5 +1,18 @@
 #pragma once
 
+/*********************************************************************
+* Copyright (c) 2017 TCT DEVs	                                     *
+* Distributed under the GPLv3.0 software license					 *
+* contact us before using our code									 *
+**********************************************************************/
+
+#ifndef __LOGGER_H__
+#define __LOGGER_H__ 1
+
+#include <string>
+#include <fstream>
+#include <mutex>
+
 #include "external/SimpleIni.h"
 
 /*
@@ -15,16 +28,16 @@ class Logger
 		char						m_caTimeBuf[80];
 
 		// variables for faster facility processing
-		string						m_strFacility;
+		std::string					m_strFacility;
 
 		// configuration variables
 		bool						m_bLogToStdout;
 		bool						m_bLogToFile;
-		string						m_strFileName;
-		ofstream					m_streamLogFile;
+		std::string					m_strFileName;
+		std::ofstream				m_streamLogFile;
 
 		// mutex to secure thread safe output
-		mutex						m_mutexOutput;
+		std::mutex					m_mutexOutput;
 
 		// constructor and operator
 									Logger();
@@ -41,7 +54,7 @@ class Logger
 
 		static						Logger& getInstance();
 									~Logger();
-		void						log(string strLogLine, facility logFacility = facility::info, string strModule = "");
+		void						log(std::string strLogLine, facility logFacility = facility::info, std::string strModule = "");
 		void						initialize(CSimpleIniA* iniFile);
 };
 
@@ -50,3 +63,5 @@ class Logger
 #define LOG_WARNING(logline, module) Logger::getInstance().log(logline, Logger::facility::warning, module)
 #define LOG_DEBUG(logline, module) Logger::getInstance().log(logline, Logger::facility::debug, module)
 #define LOG_ERROR(logline, module) Logger::getInstance().log(logline, Logger::facility::error, module)
+
+#endif

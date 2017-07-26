@@ -1,6 +1,19 @@
 #pragma once
 
-using namespace std;
+/*********************************************************************
+* Copyright (c) 2017 TCT DEVs	                                     *
+* Distributed under the GPLv3.0 software license					 *
+* contact us before using our code									 *
+**********************************************************************/
+
+#ifndef __METACHAIN_H__
+#define __METACHAIN_H__ 1
+
+#include <boost/thread/thread.hpp>
+
+#include "network/NetworkManager.h"
+#include "external/scheduler.h"
+
 class NetworkManager;
 
 /*
@@ -36,3 +49,5 @@ public:
 	boost::thread_group*		getThreadGroup() { return &m_threadGroup; };
 	NetworkManager*				getNetworkManager() { return m_pNetworkManager; };
 };	
+
+#endif

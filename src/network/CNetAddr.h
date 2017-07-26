@@ -4,6 +4,12 @@ Copyright (c) 2009-2016 The Bitcoin Core developers
 based on a version of 07/2017, heavily modified through the TCT developers
 */
 
+#ifndef __CNETADDR_H__
+#define __CNETADDR_H__ 1
+
+#include <stdint.h>
+#include <string>
+
 enum Network
 {
 	NET_UNROUTABLE = 0,
@@ -27,7 +33,7 @@ class CNetAddr
 										CNetAddr(const struct in_addr& ipv4Addr);
 										CNetAddr(const struct in6_addr& pipv6Addr, const uint32_t scope = 0);
 		bool							init();
-		bool							init(string strEntry);
+		bool							init(std::string strEntry);
 		void							SetIP(const CNetAddr& ip);
 
 		/**
@@ -71,3 +77,5 @@ class CNetAddr
 
 		friend class CSubNet;
 };
+
+#endif
