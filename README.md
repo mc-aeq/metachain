@@ -35,6 +35,39 @@ $ cd metachain
 $ ./configure
 $ ./make
 ```
+# Configuration
+#### Command line arguments
+-v, --version: print version info
+-?, -h, --help: print all command line arguments
+-c, --conf=<file>: use this ini file for configuration (default: node.ini)
+#### node.ini
+```
+; general configuration
+[general]
+daemonize = true    ; use daemonize if OS supports it
+
+; logging configuration
+[logging]
+log_to_stdout = true    ; log everything to stdout
+log_to_file = true      ; log to a logfile
+log_file = output.log   ; name of the logfile
+
+; network configuration
+[network]
+listening_ip = 127.0.0.1                    ; ip to bind listening socket to
+listening_port = 5634                       ; port to bind listening socket to
+peer_file = peers.dat                       ; file that stores the known peers which is automatically updated
+ban_file = bans.dat                         ; file that stores banned peers which is automatically updated
+connect_timeout = 5000                      ; connection timeout for a new node in ms
+max_outgoing_connections = 1000             ; number of maximum outgoing connections
+max_incoming_connections = 1000             ; number of maximum incoming connections
+time_between_unsuccessfull_connects = 30    ; delay between two connects to the same node
+
+; autoupdate configuration
+[autoupdate]
+ticks_until_update_triggered = 10           ; how many nodes need to have a newer version to trigger update
+do_autoupdate = true                        ; autoupdate? if false, node exits automatically
+```
 
 # External resources used in the source code
 - [brofield/simpleini] - for parsing ini files
