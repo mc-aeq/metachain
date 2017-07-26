@@ -90,6 +90,11 @@ void CNetAddr::SetRaw(Network network, const uint8_t *ip_in)
 	}
 }
 
+void CNetAddr::SetRaw(const uint8_t *ip_in)
+{
+	memcpy(ip, ip_in, 16);
+}
+
 CNetAddr::CNetAddr()
 {
 	init();

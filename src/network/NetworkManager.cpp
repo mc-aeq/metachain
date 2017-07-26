@@ -238,7 +238,7 @@ void NetworkManager::ThreadSocketHandler()
 			newElem->mark();
 			// todo: when c++17 is adopted into compilers, use the reference returned from emplace_back instead of using the back() function.			 
 			// check if the ip address isnt banned
-			if (!newElem->toDestroy() && isBanned(newElem->csAddress.toStringIP()))
+			if (!newElem->toDestroy() && m_lstBanList.entryExists((CNetAddr)newElem->csAddress) )
 			{
 				LOG("connection dropped - banned - " + newElem->csAddress.toStringIP(), "NET");
 				newElem->markDestroy();
@@ -673,7 +673,7 @@ bool NetworkManager::ProcessMessage(netMessage msg, list< netPeers >::iterator p
 
 			LOCK(peer->pcsvSend);
 			peer->listSend.emplace_back(netMessage::SUBJECT::NET_VERSION, (void *)&g_cuint32tVersion, sizeof(g_cuint32tVersion), true);
-			peer->listSend.emplace_back(netMessage::SUBJECT::NET_PEER_LIST_GET, (void*)NULL, 0, true);
+			peer->listSend.emplace_back(netMessage::SUBJECT::NET_PEER_LIST_SEND, (void*)NULL, 0, true);
 		}
 		break;
 
@@ -683,7 +683,7 @@ bool NetworkManager::ProcessMessage(netMessage msg, list< netPeers >::iterator p
 		// we dont need to disconnect the node since after this Message the node will automatically disconnect
 		break;
 
-	case netMessage::SUBJECT::NET_PEER_LIST_GET:
+	case netMessage::SUBJECT::NET_PEER_LIST_SEND:
 	{
 		// the connected node wants to know our peers for their reference. we build up some data, excluding the requesting peer itself and sending it over for them to process
 		int iNumOfPeers = m_lstPeerListOut.lstIP.size();
@@ -717,15 +717,11 @@ bool NetworkManager::ProcessMessage(netMessage msg, list< netPeers >::iterator p
 			{
 				if (bInbound || it != peer)
 				{
-					// copy the ip adress
-					for (int i = 0; i < 16; i++)
-					{
-						uint8_t tmp = peer->csAddress.GetByte(i);
-						memcpy((puint8tBuffer + uiCount * sizeof(uint8_t) * susIpPortSize + i), &tmp, sizeof(uint8_t));
-					}
+					// copy the ip adress					
+					memcpy((puint8tBuffer + uiCount * sizeof(uint8_t) * susIpPortSize), it->csAddress.GetBytes(), sizeof(uint8_t)*16);
 
 					// copy the port
-					uint16_t port = peer->getPort();
+					uint16_t port = it->getPort();
 					memcpy((puint8tBuffer + uiCount * sizeof(uint8_t) * susIpPortSize + susIpPortSize - 2 * sizeof(uint8_t)), &port, sizeof(port));
 
 					uiCount++;
@@ -735,16 +731,51 @@ bool NetworkManager::ProcessMessage(netMessage msg, list< netPeers >::iterator p
 
 		// and finally we sent our peer list on the way
 		LOCK(peer->pcsvSend);
-		peer->listSend.emplace_back(netMessage::SUBJECT::NET_PEER_LIST_SEND, (void *)puint8tBuffer, iNumOfPeers * susIpPortSize, true);
+		peer->listSend.emplace_back(netMessage::SUBJECT::NET_PEER_LIST_GET, (void *)puint8tBuffer, iNumOfPeers * susIpPortSize, true);
 
 		delete[] puint8tBuffer;
 	}
 	break;
 
-	case netMessage::SUBJECT::NET_PEER_LIST_SEND:
-		LOG_DEBUG("A", "TMP"); return false;
+	case netMessage::SUBJECT::NET_PEER_LIST_GET:
+	{
+		// make us a buffer array. the size of the buffer is defined by the payload and we can calculate backwards to the number of peers
+		static unsigned short susIpPortSize = 18;
+		int iNumOfPeers = msg.getHeader().ui32tPayloadSize / susIpPortSize;
+
+		// get the individual peers, create the adress and add it to our outgoing list
+		for (int i = 0; i < iNumOfPeers; i++)
+		{
+			uint16_t port = 0;
+			uint8_t *puint8tBuffer = new uint8_t[susIpPortSize];
+
+			memcpy(puint8tBuffer, msg.getData() + i*susIpPortSize, susIpPortSize);
+			memcpy(&port, puint8tBuffer + (susIpPortSize - sizeof(uint16_t)), sizeof(uint16_t));
+
+			netPeers tmp;
+			tmp.csAddress.SetRaw(puint8tBuffer);
+			tmp.csAddress.SetPort(port);
+
+			// check if we have this node already in our list
+			{
+				LOCK(m_csPeerListOut);
+				if (m_lstBanList.entryExists((CNetAddr)tmp.csAddress))
+					LOG_ERROR("Not adding new outbound peer - peer is banned - " + tmp.toString(), "NET");
+				else if (!m_lstPeerListOut.entryExists(tmp) )
+				{
+					m_lstPeerListOut.lstIP.push_back(tmp);
+					LOG("Adding new outbound peer - " + tmp.toString(), "NET");
+				}
+#ifdef _DEBUG
+				else
+					LOG_DEBUG("Not adding new Peer since it's already known - " + tmp.toString(), "NET");
+#endif
+			}
+
+			delete[] puint8tBuffer;
+		}	
 		break;
-		
+	}
 
 	// the default statement as well as the ban list statements. We don't support sending ban lists, everyone has to build them theirselfs right now
 	case netMessage::SUBJECT::NET_BAN_LIST_GET:
@@ -816,14 +847,4 @@ void NetworkManager::Stop()
 		threadOpenConnections.join();
 	if (threadSocketHandler.joinable())
 		threadSocketHandler.join();
-}
-
-bool NetworkManager::isBanned(string strAddress)
-{
-	for (list< CNetAddr >::iterator it = m_lstBanList.lstIP.begin(); it != m_lstBanList.lstIP.end(); it++)
-	{
-		if (it->toString() == strAddress)
-			return true;
-	}
-	return false;
 }

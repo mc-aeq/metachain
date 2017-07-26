@@ -56,7 +56,6 @@ class NetworkManager
 
 		// functions and variables for our banned list and their management
 		ipContainer< CNetAddr >				m_lstBanList;
-		bool								isBanned(string strAddress);
 
 		// destructor functions
 		void								Interrupt();

@@ -41,7 +41,7 @@ public:
 	bool							tooManyTriesOutbound() { return (m_usConnectionTries >= NET_DEFAULT_CONNECT_TRIES ? true : false); };
 	int64_t							getTimeLastTry() { return m_timeLastTry; };
 
-	bool							operator==(const netPeers& b) const { return this->toString() == b.toString(); };
+	bool							operator==(const netPeers& b) const { return this->csAddress == b.csAddress; };
 
 	SOCKET							hSocket;
 	cCriticalSection				*pcshSocket;

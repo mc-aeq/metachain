@@ -35,6 +35,7 @@ class CNetAddr
 		* @note Only NET_IPV4 and NET_IPV6 are allowed for network.
 		*/
 		void							SetRaw(Network network, const uint8_t *data);
+		void							SetRaw(const uint8_t *data);
 
 		bool							IsIPv4() const;    // IPv4 mapped address (::FFFF:0:0/96, 0.0.0.0/0)
 		bool							IsIPv6() const;    // IPv6 address (not mapped IPv4, not Tor)
@@ -58,6 +59,7 @@ class CNetAddr
 		std::string						toString() const;
 		std::string						toStringIP() const;
 		unsigned char					GetByte(int n) const;
+		unsigned char*					GetBytes() { return ip; };
 		uint64_t						GetHash() const;
 		bool							GetInAddr(struct in_addr* pipv4Addr) const;
 		int								GetReachabilityFrom(const CNetAddr *paddrPartner = NULL) const;		
