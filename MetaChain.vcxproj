@@ -142,6 +142,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="src\defines.h" />
+    <ClInclude Include="src\external\ArgsManager.h" />
     <ClInclude Include="src\external\byteswap.h" />
     <ClInclude Include="src\external\cCriticalSection.h" />
     <ClInclude Include="src\external\cDataStream.h" />
@@ -184,6 +185,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="node.cpp" />
+    <ClCompile Include="src\external\ArgsManager.cpp" />
     <ClCompile Include="src\external\crypto\aes.cpp" />
     <ClCompile Include="src\external\crypto\chacha20.cpp" />
     <ClCompile Include="src\external\crypto\ctaes\ctaes.c" />

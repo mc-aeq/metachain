@@ -72,6 +72,7 @@
 #include "src/external/cCriticalSection.h"
 #include "src/external/zeroAfterFree.h"
 #include "src/external/cDataStream.h"
+#include "src/external/ArgsManager.h"
 
 // includes of our own sources
 #include "src/logger.h"

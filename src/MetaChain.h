@@ -18,7 +18,6 @@ private:
 	bool						m_bAutoUpdate;
 	unsigned short				m_usNewerVersionTicker;
 
-	void						LicenseInfo();
 
 	// constructor and operator
 								MetaChain();
@@ -28,6 +27,7 @@ private:
 public:
 	static						MetaChain& getInstance();
 	bool						initialize(CSimpleIniA* iniFile);
+	void						LicenseInfo();
 
 	void						incrementNewerVersionTicker();
 

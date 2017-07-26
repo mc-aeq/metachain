@@ -171,6 +171,9 @@
     <ClInclude Include="src\external\crypto\cHash256.h">
       <Filter>Headerdateien\crypto</Filter>
     </ClInclude>
+    <ClInclude Include="src\external\ArgsManager.h">
+      <Filter>Headerdateien</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -250,6 +253,9 @@
     </ClCompile>
     <ClCompile Include="src\network\netMessage.cpp">
       <Filter>Quelldateien\MetaChain\Network</Filter>
+    </ClCompile>
+    <ClCompile Include="src\external\ArgsManager.cpp">
+      <Filter>Quelldateien</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
