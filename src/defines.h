@@ -3,12 +3,6 @@
 // version define, only changes when a new release is put out
 const uint32_t g_cuint32tVersion = 1;
 
-// logging macros for faster development, interchangeability and readability
-#define LOG(logline, module) Logger::getInstance().log(##logline, Logger::facility::info, ##module)
-#define LOG_WARNING(logline, module) Logger::getInstance().log(##logline, Logger::facility::warning, ##module)
-#define LOG_DEBUG(logline, module) Logger::getInstance().log(##logline, Logger::facility::debug, ##module)
-#define LOG_ERROR(logline, module) Logger::getInstance().log(##logline, Logger::facility::error, ##module)
-
 // network define standard values
 #define NET_STANDARD_PORT_LISTENING 5634
 #define NET_STANDARD_CATCHALL_LISTENING "*"
@@ -23,11 +17,11 @@ const uint32_t g_cuint32tVersion = 1;
 #define MAX_MSG_QUEUE 10
 
 // HAVE_MSG_NOSIGNAL may not be available on all platforms
-#if !defined(HAVE_MSG_NOSIGNAL)
+#if !defined(MSG_NOSIGNAL)
 #define MSG_NOSIGNAL 0
 #endif
 
 // MSG_DONTWAIT is not available on some platforms, if it doesn't exist define it as 0
-#if !defined(HAVE_MSG_DONTWAIT)
+#if !defined(MSG_DONTWAIT)
 #define MSG_DONTWAIT 0
 #endif

@@ -1,6 +1,6 @@
 #pragma once
 
-using namespace std;
+#include "external/SimpleIni.h"
 
 /*
 	This is the logging class, it'll use file logging if wanted and also print out to the cmdline.
@@ -44,3 +44,9 @@ class Logger
 		void						log(string strLogLine, facility logFacility = facility::info, string strModule = "");
 		void						initialize(CSimpleIniA* iniFile);
 };
+
+// logging macros for faster development, interchangeability and readability
+#define LOG(logline, module) Logger::getInstance().log(logline, Logger::facility::info, module)
+#define LOG_WARNING(logline, module) Logger::getInstance().log(logline, Logger::facility::warning, module)
+#define LOG_DEBUG(logline, module) Logger::getInstance().log(logline, Logger::facility::debug, module)
+#define LOG_ERROR(logline, module) Logger::getInstance().log(logline, Logger::facility::error, module)

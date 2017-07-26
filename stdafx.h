@@ -1,5 +1,8 @@
 #pragma once
 
+// using std namespace
+using namespace std;
+
 // windows special includes
 #ifdef _WINDOWS
 	#include "targetver.h"
@@ -15,12 +18,12 @@
 	typedef SSIZE_T ssize_t;
 #endif
 
-// linux special includes
+// linux special includes and typedefs
 #ifdef _LINUX
 	#include <sys/socket.h>
 	#include <netinet/in.h>
+	typedef unsigned int SOCKET;
 #endif
-
 
 // standard includes from standard libraries
 #include <iostream>

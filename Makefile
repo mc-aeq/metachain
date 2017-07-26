@@ -76,13 +76,24 @@ POST_INSTALL = :
 NORMAL_UNINSTALL = :
 PRE_UNINSTALL = :
 POST_UNINSTALL = :
-bin_PROGRAMS = metachain$(EXEEXT)
+build_triplet = x86_64-pc-linux-gnu
+host_triplet = x86_64-pc-linux-gnu
+bin_PROGRAMS = node$(EXEEXT)
 subdir = .
 DIST_COMMON = $(srcdir)/Makefile.in $(srcdir)/Makefile.am \
 	$(top_srcdir)/configure $(am__configure_deps) depcomp \
-	install-sh missing
+	config.guess config.sub install-sh missing
 ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
-am__aclocal_m4_deps = $(top_srcdir)/configure.ac
+am__aclocal_m4_deps = $(top_srcdir)/m4/ax_boost_base.m4 \
+	$(top_srcdir)/m4/ax_boost_chrono.m4 \
+	$(top_srcdir)/m4/ax_boost_date_time.m4 \
+	$(top_srcdir)/m4/ax_boost_filesystem.m4 \
+	$(top_srcdir)/m4/ax_boost_iostreams.m4 \
+	$(top_srcdir)/m4/ax_boost_locale.m4 \
+	$(top_srcdir)/m4/ax_boost_regex.m4 \
+	$(top_srcdir)/m4/ax_boost_signals.m4 \
+	$(top_srcdir)/m4/ax_boost_system.m4 \
+	$(top_srcdir)/m4/ax_boost_thread.m4 $(top_srcdir)/configure.ac
 am__configure_deps = $(am__aclocal_m4_deps) $(CONFIGURE_DEPENDENCIES) \
 	$(ACLOCAL_M4)
 am__CONFIG_DISTCLEAN_FILES = config.status config.cache config.log \
@@ -92,9 +103,9 @@ CONFIG_CLEAN_FILES =
 CONFIG_CLEAN_VPATH_FILES =
 am__installdirs = "$(DESTDIR)$(bindir)"
 PROGRAMS = $(bin_PROGRAMS)
-am_metachain_OBJECTS = MetaChain.$(OBJEXT)
-metachain_OBJECTS = $(am_metachain_OBJECTS)
-metachain_LDADD = $(LDADD)
+am_node_OBJECTS = node.$(OBJEXT)
+node_OBJECTS = $(am_node_OBJECTS)
+node_LDADD = $(LDADD)
 AM_V_P = $(am__v_P_$(V))
 am__v_P_ = $(am__v_P_$(AM_DEFAULT_VERBOSITY))
 am__v_P_0 = false
@@ -124,8 +135,8 @@ AM_V_CXXLD = $(am__v_CXXLD_$(V))
 am__v_CXXLD_ = $(am__v_CXXLD_$(AM_DEFAULT_VERBOSITY))
 am__v_CXXLD_0 = @echo "  CXXLD   " $@;
 am__v_CXXLD_1 = 
-SOURCES = $(metachain_SOURCES)
-DIST_SOURCES = $(metachain_SOURCES)
+SOURCES = $(node_SOURCES)
+DIST_SOURCES = $(node_SOURCES)
 am__can_run_installinfo = \
   case $$AM_UPDATE_INFO_DIR in \
     n|no|NO) false;; \
@@ -169,20 +180,34 @@ distuninstallcheck_listfiles = find . -type f -print
 am__distuninstallcheck_listfiles = $(distuninstallcheck_listfiles) \
   | sed 's|^\./|$(prefix)/|' | grep -v '$(infodir)/dir$$'
 distcleancheck_listfiles = find . -type f -print
-ACLOCAL = ${SHELL} /data/metachain/missing aclocal-1.13
+ACLOCAL = ${SHELL} /data/node/metachain/missing aclocal-1.13
 AMTAR = $${TAR-tar}
 AM_DEFAULT_VERBOSITY = 1
-AUTOCONF = ${SHELL} /data/metachain/missing autoconf
-AUTOHEADER = ${SHELL} /data/metachain/missing autoheader
-AUTOMAKE = ${SHELL} /data/metachain/missing automake-1.13
+AUTOCONF = ${SHELL} /data/node/metachain/missing autoconf
+AUTOHEADER = ${SHELL} /data/node/metachain/missing autoheader
+AUTOMAKE = ${SHELL} /data/node/metachain/missing automake-1.13
 AWK = gawk
+BOOST_CHRONO_LIB = -lboost_chrono-mt
+BOOST_CPPFLAGS = -pthread -I/usr/include
+BOOST_DATE_TIME_LIB = -lboost_date_time-mt
+BOOST_FILESYSTEM_LIB = -lboost_filesystem
+BOOST_IOSTREAMS_LIB = -lboost_iostreams-mt
+BOOST_LDFLAGS = -L/usr/lib64
+BOOST_LOCALE_LIB = -lboost_locale-mt
+BOOST_REGEX_LIB = -lboost_regex-mt
+BOOST_SIGNALS_LIB = -lboost_signals-mt
+BOOST_SYSTEM_LIB = -lboost_system
+BOOST_THREAD_LIB = -lboost_thread -lpthread
+CC = gcc
+CCDEPMODE = depmode=gcc3
+CFLAGS = -g -O2
 CPPFLAGS = 
 CXX = g++
 CXXCPP = g++ -E
 CXXDEPMODE = depmode=gcc3
 CXXFLAGS = -g -O2
 CYGPATH_W = echo
-DEFS = -DPACKAGE_NAME=\"metachain\" -DPACKAGE_TARNAME=\"metachain\" -DPACKAGE_VERSION=\"0.1\" -DPACKAGE_STRING=\"metachain\ 0.1\" -DPACKAGE_BUGREPORT=\"office@trustchaintechnologies.io\" -DPACKAGE_URL=\"\" -DPACKAGE=\"metachain\" -DVERSION=\"0.1\" -DSTDC_HEADERS=1 -DHAVE_SYS_TYPES_H=1 -DHAVE_SYS_STAT_H=1 -DHAVE_STDLIB_H=1 -DHAVE_STRING_H=1 -DHAVE_MEMORY_H=1 -DHAVE_STRINGS_H=1 -DHAVE_INTTYPES_H=1 -DHAVE_STDINT_H=1 -DHAVE_UNISTD_H=1 -DHAVE_STRING=1 -DHAVE_IOSTREAM=1
+DEFS = -DPACKAGE_NAME=\"metachain\" -DPACKAGE_TARNAME=\"metachain\" -DPACKAGE_VERSION=\"1\" -DPACKAGE_STRING=\"metachain\ 1\" -DPACKAGE_BUGREPORT=\"office@trustchaintechnologies.io\" -DPACKAGE_URL=\"\" -DPACKAGE=\"metachain\" -DVERSION=\"1\" -DSTDC_HEADERS=1 -DHAVE_SYS_TYPES_H=1 -DHAVE_SYS_STAT_H=1 -DHAVE_STDLIB_H=1 -DHAVE_STRING_H=1 -DHAVE_MEMORY_H=1 -DHAVE_STRINGS_H=1 -DHAVE_INTTYPES_H=1 -DHAVE_STDINT_H=1 -DHAVE_UNISTD_H=1 -DHAVE_SYS_SOCKET_H=1 -DHAVE_NETINET_IN_H=1 -DHAVE_STRING=1 -DHAVE_IOSTREAM=1 -DHAVE_TIME_H=1 -DHAVE_FSTREAM=1 -DHAVE_VECTOR=1 -DHAVE_MAP=1 -DHAVE_STDINT_H=1 -DHAVE_LIMITS=1 -DHAVE_ERRNO_H=1 -DHAVE_ATOMIC=1 -DHAVE_CHRONO=1 -DHAVE_MUTEX=1 -DHAVE_THREAD=1 -DHAVE_QUEUE=1 -DHAVE_BOOST=/\*\*/ -DHAVE_BOOST_CHRONO=/\*\*/ -DHAVE_BOOST_DATE_TIME=/\*\*/ -DHAVE_BOOST_IOSTREAMS=/\*\*/ -DHAVE_BOOST_LOCALE=/\*\*/ -DHAVE_BOOST_REGEX=/\*\*/ -DHAVE_BOOST_SIGNALS=/\*\*/ -DHAVE_BOOST_THREAD=/\*\*/ -DHAVE_BOOST_SYSTEM=/\*\*/ -DHAVE_BOOST_FILESYSTEM=/\*\*/ -D_LINUX=1 -DHAVE_DAEMON=1 -D_DEBUG=1 -DHAVE_WORKING_BOOST_SLEEP_FOR=1
 DEPDIR = .deps
 ECHO_C = 
 ECHO_N = -n
@@ -199,25 +224,26 @@ LDFLAGS =
 LIBOBJS = 
 LIBS = 
 LTLIBOBJS = 
-MAKEINFO = ${SHELL} /data/metachain/missing makeinfo
+MAKEINFO = ${SHELL} /data/node/metachain/missing makeinfo
 MKDIR_P = /usr/bin/mkdir -p
 OBJEXT = o
 PACKAGE = metachain
 PACKAGE_BUGREPORT = office@trustchaintechnologies.io
 PACKAGE_NAME = metachain
-PACKAGE_STRING = metachain 0.1
+PACKAGE_STRING = metachain 1
 PACKAGE_TARNAME = metachain
 PACKAGE_URL = 
-PACKAGE_VERSION = 0.1
+PACKAGE_VERSION = 1
 PATH_SEPARATOR = :
 SET_MAKE = 
 SHELL = /bin/sh
 STRIP = 
-VERSION = 0.1
-abs_builddir = /data/metachain
-abs_srcdir = /data/metachain
-abs_top_builddir = /data/metachain
-abs_top_srcdir = /data/metachain
+VERSION = 1
+abs_builddir = /data/node/metachain
+abs_srcdir = /data/node/metachain
+abs_top_builddir = /data/node/metachain
+abs_top_srcdir = /data/node/metachain
+ac_ct_CC = gcc
 ac_ct_CXX = g++
 am__include = include
 am__leading_dot = .
@@ -225,18 +251,26 @@ am__quote =
 am__tar = $${TAR-tar} chof - "$$tardir"
 am__untar = $${TAR-tar} xf -
 bindir = ${exec_prefix}/bin
+build = x86_64-pc-linux-gnu
 build_alias = 
+build_cpu = x86_64
+build_os = linux-gnu
+build_vendor = pc
 builddir = .
 datadir = ${datarootdir}
 datarootdir = ${prefix}/share
 docdir = ${datarootdir}/doc/${PACKAGE_TARNAME}
 dvidir = ${docdir}
 exec_prefix = ${prefix}
+host = x86_64-pc-linux-gnu
 host_alias = 
+host_cpu = x86_64
+host_os = linux-gnu
+host_vendor = pc
 htmldir = ${docdir}
 includedir = ${prefix}/include
 infodir = ${datarootdir}/info
-install_sh = ${SHELL} /data/metachain/install-sh
+install_sh = ${SHELL} /data/node/metachain/install-sh
 libdir = ${exec_prefix}/lib
 libexecdir = ${exec_prefix}/libexec
 localedir = ${datarootdir}/locale
@@ -257,7 +291,9 @@ top_build_prefix =
 top_builddir = .
 top_srcdir = .
 AUTOMAKE_OPTIONS = foreign
-metachain_SOURCES = MetaChain.cpp
+ACLOCAL_AMFLAGS = -I m4
+EXTRA_DIST = bootstrap
+node_SOURCES = node.cpp
 all: all-am
 
 .SUFFIXES:
@@ -339,9 +375,9 @@ uninstall-binPROGRAMS:
 clean-binPROGRAMS:
 	-test -z "$(bin_PROGRAMS)" || rm -f $(bin_PROGRAMS)
 
-metachain$(EXEEXT): $(metachain_OBJECTS) $(metachain_DEPENDENCIES) $(EXTRA_metachain_DEPENDENCIES) 
-	@rm -f metachain$(EXEEXT)
-	$(AM_V_CXXLD)$(CXXLINK) $(metachain_OBJECTS) $(metachain_LDADD) $(LIBS)
+node$(EXEEXT): $(node_OBJECTS) $(node_DEPENDENCIES) $(EXTRA_node_DEPENDENCIES) 
+	@rm -f node$(EXEEXT)
+	$(AM_V_CXXLD)$(CXXLINK) $(node_OBJECTS) $(node_LDADD) $(LIBS)
 
 mostlyclean-compile:
 	-rm -f *.$(OBJEXT)
@@ -349,7 +385,7 @@ mostlyclean-compile:
 distclean-compile:
 	-rm -f *.tab.c
 
-include ./$(DEPDIR)/MetaChain.Po
+include ./$(DEPDIR)/node.Po
 
 .cpp.o:
 	$(AM_V_CXX)$(CXXCOMPILE) -MT $@ -MD -MP -MF $(DEPDIR)/$*.Tpo -c -o $@ $<

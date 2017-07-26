@@ -3,7 +3,6 @@
 	start point for the metachain
 */
 
-using namespace std;
 std::atomic<bool> sabShutdown(false);
 
 // argument manager

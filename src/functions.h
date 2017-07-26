@@ -1,5 +1,7 @@
 #pragma once
 
+#include "logger.h"
+
 // thread renaming
 void RenameThread(const char* name);
 

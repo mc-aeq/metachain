@@ -76,13 +76,24 @@ POST_INSTALL = :
 NORMAL_UNINSTALL = :
 PRE_UNINSTALL = :
 POST_UNINSTALL = :
-bin_PROGRAMS = metachain$(EXEEXT)
+build_triplet = @build@
+host_triplet = @host@
+bin_PROGRAMS = node$(EXEEXT)
 subdir = .
 DIST_COMMON = $(srcdir)/Makefile.in $(srcdir)/Makefile.am \
 	$(top_srcdir)/configure $(am__configure_deps) depcomp \
-	install-sh missing
+	config.guess config.sub install-sh missing
 ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
-am__aclocal_m4_deps = $(top_srcdir)/configure.ac
+am__aclocal_m4_deps = $(top_srcdir)/m4/ax_boost_base.m4 \
+	$(top_srcdir)/m4/ax_boost_chrono.m4 \
+	$(top_srcdir)/m4/ax_boost_date_time.m4 \
+	$(top_srcdir)/m4/ax_boost_filesystem.m4 \
+	$(top_srcdir)/m4/ax_boost_iostreams.m4 \
+	$(top_srcdir)/m4/ax_boost_locale.m4 \
+	$(top_srcdir)/m4/ax_boost_regex.m4 \
+	$(top_srcdir)/m4/ax_boost_signals.m4 \
+	$(top_srcdir)/m4/ax_boost_system.m4 \
+	$(top_srcdir)/m4/ax_boost_thread.m4 $(top_srcdir)/configure.ac
 am__configure_deps = $(am__aclocal_m4_deps) $(CONFIGURE_DEPENDENCIES) \
 	$(ACLOCAL_M4)
 am__CONFIG_DISTCLEAN_FILES = config.status config.cache config.log \
@@ -92,9 +103,9 @@ CONFIG_CLEAN_FILES =
 CONFIG_CLEAN_VPATH_FILES =
 am__installdirs = "$(DESTDIR)$(bindir)"
 PROGRAMS = $(bin_PROGRAMS)
-am_metachain_OBJECTS = MetaChain.$(OBJEXT)
-metachain_OBJECTS = $(am_metachain_OBJECTS)
-metachain_LDADD = $(LDADD)
+am_node_OBJECTS = node.$(OBJEXT)
+node_OBJECTS = $(am_node_OBJECTS)
+node_LDADD = $(LDADD)
 AM_V_P = $(am__v_P_@AM_V@)
 am__v_P_ = $(am__v_P_@AM_DEFAULT_V@)
 am__v_P_0 = false
@@ -124,8 +135,8 @@ AM_V_CXXLD = $(am__v_CXXLD_@AM_V@)
 am__v_CXXLD_ = $(am__v_CXXLD_@AM_DEFAULT_V@)
 am__v_CXXLD_0 = @echo "  CXXLD   " $@;
 am__v_CXXLD_1 = 
-SOURCES = $(metachain_SOURCES)
-DIST_SOURCES = $(metachain_SOURCES)
+SOURCES = $(node_SOURCES)
+DIST_SOURCES = $(node_SOURCES)
 am__can_run_installinfo = \
   case $$AM_UPDATE_INFO_DIR in \
     n|no|NO) false;; \
@@ -176,6 +187,20 @@ AUTOCONF = @AUTOCONF@
 AUTOHEADER = @AUTOHEADER@
 AUTOMAKE = @AUTOMAKE@
 AWK = @AWK@
+BOOST_CHRONO_LIB = @BOOST_CHRONO_LIB@
+BOOST_CPPFLAGS = @BOOST_CPPFLAGS@
+BOOST_DATE_TIME_LIB = @BOOST_DATE_TIME_LIB@
+BOOST_FILESYSTEM_LIB = @BOOST_FILESYSTEM_LIB@
+BOOST_IOSTREAMS_LIB = @BOOST_IOSTREAMS_LIB@
+BOOST_LDFLAGS = @BOOST_LDFLAGS@
+BOOST_LOCALE_LIB = @BOOST_LOCALE_LIB@
+BOOST_REGEX_LIB = @BOOST_REGEX_LIB@
+BOOST_SIGNALS_LIB = @BOOST_SIGNALS_LIB@
+BOOST_SYSTEM_LIB = @BOOST_SYSTEM_LIB@
+BOOST_THREAD_LIB = @BOOST_THREAD_LIB@
+CC = @CC@
+CCDEPMODE = @CCDEPMODE@
+CFLAGS = @CFLAGS@
 CPPFLAGS = @CPPFLAGS@
 CXX = @CXX@
 CXXCPP = @CXXCPP@
@@ -218,6 +243,7 @@ abs_builddir = @abs_builddir@
 abs_srcdir = @abs_srcdir@
 abs_top_builddir = @abs_top_builddir@
 abs_top_srcdir = @abs_top_srcdir@
+ac_ct_CC = @ac_ct_CC@
 ac_ct_CXX = @ac_ct_CXX@
 am__include = @am__include@
 am__leading_dot = @am__leading_dot@
@@ -225,14 +251,22 @@ am__quote = @am__quote@
 am__tar = @am__tar@
 am__untar = @am__untar@
 bindir = @bindir@
+build = @build@
 build_alias = @build_alias@
+build_cpu = @build_cpu@
+build_os = @build_os@
+build_vendor = @build_vendor@
 builddir = @builddir@
 datadir = @datadir@
 datarootdir = @datarootdir@
 docdir = @docdir@
 dvidir = @dvidir@
 exec_prefix = @exec_prefix@
+host = @host@
 host_alias = @host_alias@
+host_cpu = @host_cpu@
+host_os = @host_os@
+host_vendor = @host_vendor@
 htmldir = @htmldir@
 includedir = @includedir@
 infodir = @infodir@
@@ -257,7 +291,9 @@ top_build_prefix = @top_build_prefix@
 top_builddir = @top_builddir@
 top_srcdir = @top_srcdir@
 AUTOMAKE_OPTIONS = foreign
-metachain_SOURCES = MetaChain.cpp
+ACLOCAL_AMFLAGS = -I m4
+EXTRA_DIST = bootstrap
+node_SOURCES = node.cpp
 all: all-am
 
 .SUFFIXES:
@@ -339,9 +375,9 @@ uninstall-binPROGRAMS:
 clean-binPROGRAMS:
 	-test -z "$(bin_PROGRAMS)" || rm -f $(bin_PROGRAMS)
 
-metachain$(EXEEXT): $(metachain_OBJECTS) $(metachain_DEPENDENCIES) $(EXTRA_metachain_DEPENDENCIES) 
-	@rm -f metachain$(EXEEXT)
-	$(AM_V_CXXLD)$(CXXLINK) $(metachain_OBJECTS) $(metachain_LDADD) $(LIBS)
+node$(EXEEXT): $(node_OBJECTS) $(node_DEPENDENCIES) $(EXTRA_node_DEPENDENCIES) 
+	@rm -f node$(EXEEXT)
+	$(AM_V_CXXLD)$(CXXLINK) $(node_OBJECTS) $(node_LDADD) $(LIBS)
 
 mostlyclean-compile:
 	-rm -f *.$(OBJEXT)
@@ -349,7 +385,7 @@ mostlyclean-compile:
 distclean-compile:
 	-rm -f *.tab.c
 
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/MetaChain.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/node.Po@am__quote@
 
 .cpp.o:
 @am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXXCOMPILE) -MT $@ -MD -MP -MF $(DEPDIR)/$*.Tpo -c -o $@ $<
