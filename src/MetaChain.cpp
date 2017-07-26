@@ -1,7 +1,11 @@
 #include "../stdafx.h"
 
+extern std::atomic<bool> sabShutdown;
+
 MetaChain::MetaChain() :
-	m_pNetworkManager( NULL )
+	m_pNetworkManager( NULL ),
+	m_iVersionTicksTillUpdate(0),
+	m_bAutoUpdate(true)
 {
 }
 
@@ -16,6 +20,10 @@ bool MetaChain::initialize(CSimpleIniA* iniFile)
 	// start the lightweight scheduling thread
 	CScheduler::Function serviceLoop = boost::bind(&CScheduler::serviceQueue, &m_scheduler);
 	m_threadGroup.create_thread(boost::bind(&TraceThread<CScheduler::Function>, "scheduler", serviceLoop));
+
+	// read some ini settings
+	m_iVersionTicksTillUpdate = iniFile->GetLongValue("autoupdate", "ticks_until_update_triggered", 10);
+	m_bAutoUpdate = iniFile->GetBoolValue("autoupdate", "do_autoupdate", true);
 
 	// create a new network manager
 	m_pNetworkManager = new NetworkManager(this);
@@ -45,6 +53,18 @@ void MetaChain::incrementNewerVersionTicker()
 {
 	m_usNewerVersionTicker++;
 
-	// todo: auto update
 	// after X ticks, we read the ini value if we auto update. if not, we close the node. if we have autoupdate configured, we connect to a CDN and download the latest binary and try to restart the node smoothly
+	if (m_usNewerVersionTicker >= m_iVersionTicksTillUpdate)
+	{
+		if (!m_bAutoUpdate)
+		{
+			// if we don't want to auto update, we close the node due to incompability
+			sabShutdown = true;
+		}
+		else
+		{
+			// todo: auto update
+		}
+	}
+	
 }

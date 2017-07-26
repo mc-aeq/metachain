@@ -14,6 +14,8 @@ private:
 	boost::thread_group			m_threadGroup;
 	CScheduler					m_scheduler;
 
+	int							m_iVersionTicksTillUpdate;
+	bool						m_bAutoUpdate;
 	unsigned short				m_usNewerVersionTicker;
 
 	void						LicenseInfo();

@@ -4,6 +4,22 @@
 */
 
 using namespace std;
+std::atomic<bool> sabShutdown(false);
+
+// our loop for the main thread
+void WaitForShutdown(boost::thread_group* threadGroup)
+{
+	// Tell the main threads to shutdown.
+	while (!sabShutdown)
+	{
+		MilliSleep(200);
+	}
+	if (threadGroup)
+	{
+		threadGroup->interrupt_all();
+		threadGroup->join_all();
+	}
+}
 
 // main entry point
 int main( int argc, char* argv[] )
@@ -34,7 +50,9 @@ int main( int argc, char* argv[] )
 			return 1;
 		}
 
-		cin.get();
+		// go into our execution loop and wait for shutdown
+		WaitForShutdown(MetaChain::getInstance().getThreadGroup());
+
 		// end metachain 
 		return 0;
 	}
@@ -46,7 +64,5 @@ int main( int argc, char* argv[] )
 	else if(eErr == SI_FILE)
 		LOG_ERROR("File error", "INI");
 
-	cin.get();
 	return 1;
 }
-
