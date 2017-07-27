@@ -6,7 +6,14 @@
 #ifndef __ENDIAN_H__
 #define __ENDIAN_H__ 1
 
+#include <stdint.h>
 #include "byteswap.h"
+
+#if defined(HAVE_ENDIAN_H)
+#include <endian.h>
+#elif defined(HAVE_SYS_ENDIAN_H)
+#include <sys/endian.h>
+#endif
 
 #if defined(WORDS_BIGENDIAN)
 

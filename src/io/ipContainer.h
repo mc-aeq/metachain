@@ -72,7 +72,7 @@ void ipContainer<T>::readContents()
 	LOG_DEBUG("reading contents of file: " + m_strFileName, "IPC");
 #endif
 
-	for (std::string strLine; getline(streamFile, strLine); )
+	for (typename std::string strLine; getline(streamFile, strLine); )
 	{
 		// renmove unwanted spaces from beginning and end
 		boost::trim(strLine);
@@ -137,7 +137,7 @@ void ipContainer<T>::writeContents()
 	streamOut << "# it will be automatically updated through the TCT blockchain" << std::endl;
 	streamOut << "# any manual changes will be overridden!" << std::endl << std::endl;
 
-	for (std::list<T>::iterator it = lstIP.begin(); it != lstIP.end(); it++)
+	for (typename std::list<T>::iterator it = lstIP.begin(); it != lstIP.end(); it++)
 		streamOut << it->toString() << std::endl;
 
 	streamOut.close();
@@ -150,7 +150,7 @@ void ipContainer<T>::writeContents()
 template <class T>
 bool ipContainer<T>::entryExists(T *obj)
 {
-	for (std::list<T>::iterator it = lstIP.begin(); it != lstIP.end(); it++)
+	for (typename std::list<T>::iterator it = lstIP.begin(); it != lstIP.end(); it++)
 	{
 		if (*it == *obj)
 			return true;

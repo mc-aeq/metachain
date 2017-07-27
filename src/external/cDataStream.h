@@ -60,13 +60,6 @@ public:
 	{
 	}
 
-	template <typename... Args>
-	cDataStream(int nTypeIn, int nVersionIn, Args&&... args)
-	{
-		Init(nTypeIn, nVersionIn);
-		::SerializeMany(*this, std::forward<Args>(args)...);
-	}
-
 	cDataStream& operator+=(const cDataStream& b)
 	{
 		vch.insert(vch.end(), b.begin(), b.end());
@@ -236,30 +229,6 @@ public:
 	{
 		// Write to the end of the buffer
 		vch.insert(vch.end(), pch, pch + nSize);
-	}
-
-	template<typename Stream>
-	void Serialize(Stream& s) const
-	{
-		// Special case: stream << stream concatenates like stream += stream
-		if (!vch.empty())
-			s.write((char*)&vch[0], vch.size() * sizeof(vch[0]));
-	}
-
-	template<typename T>
-	cDataStream& operator<<(const T& obj)
-	{
-		// Serialize to this stream
-		::Serialize(*this, obj);
-		return (*this);
-	}
-
-	template<typename T>
-	cDataStream& operator>>(T& obj)
-	{
-		// Unserialize from this stream
-		::Unserialize(*this, obj);
-		return (*this);
 	}
 
 	void GetAndClear(CSerializeData &d) {
