@@ -84,23 +84,23 @@ int main( int argc, char* argv[] )
 		Logger::getInstance().initialize(iniFile);
 		LOG("successfully initialized", "LOGGER");
 
-               // daemonize if wanted
-                if( iniFile->GetBoolValue("general", "daemonize", false) )
-                {
+        // daemonize if wanted
+        if( iniFile->GetBoolValue("general", "daemonize", false) )
+        {
 #if HAVE_DAEMON
-                        LOG("daemonizing process", "MC");
+            LOG("daemonizing process", "MC");
 
-                        // Daemonize
-                        if( daemon(1, 0) )
-                        {
-                                std::string strError = strerror(errno);
-                                LOG_ERROR("daemon() failed - " + strError, "MC");
-                                sabShutdown = true;
-                        }
+            // Daemonize
+            if( daemon(1, 0) )
+            {
+                    std::string strError = strerror(errno);
+                    LOG_ERROR("daemon() failed - " + strError, "MC");
+					return 1;
+            }
 #else
-                        LOG("daemonizing is not supported on this operating system, continuing attached mode", "MC");
+            LOG("daemonizing is not supported on this operating system, continuing attached mode", "MC");
 #endif
-                }
+		}
 		else
 			LOG("not daemonizing process, running in foreground", "MC");
 

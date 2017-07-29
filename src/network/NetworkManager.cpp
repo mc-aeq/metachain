@@ -783,6 +783,12 @@ bool NetworkManager::ProcessMessage(netMessage msg, std::list< netPeers >::itera
 
 			CNetAddr addr = tmp.csAddress;
 
+#ifndef _DEBUG
+			// when we're in production mode we don't accept new nodes that are on a local interface. it makes no sense to run multiple nodes on a single system
+			if (addr.IsLocal())
+				continue;
+#endif 
+
 			// check if we have this node already in our list
 			{
 				LOCK(m_csPeerListOut);
