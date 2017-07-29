@@ -27,12 +27,12 @@ currently not supported
 - open the MetaChain.sln in Microsoft Visual Studio
 - build for Debug or Release
 #### Building for source on linux
-g++, automake and autoconf as well as regular dev tools are required!
+g++ (Version > 6.2), openssl-devel, openssl libs, boost-devel, boost-libs, pkg-config, automake and autoconf as well as regular dev tools are required!
 Clone the github repository:
 ```sh
 $ git clone https://github.com/TrustChainTechnologies/metachain.git
 $ cd metachain
-$ ./configure
+$ ./configure ## --enable-debug for debug-build
 $ ./make
 ```
 # Configuration
