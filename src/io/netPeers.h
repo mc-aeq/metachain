@@ -25,20 +25,19 @@ this class is used as template type for ipContainer. Especially to store and ret
 class netPeers
 {
 private:
-	bool							m_bConnected;		// this value shows whether the socket is connected or not.
-	bool							m_bValidConnection;	// true when the initial communication with the version number worked and checked out
-	bool							m_bToDestroy;		// this marks whether this peer has to be destroyed. this will result in a delete of this instance
-	int64_t							m_timeLastTry;
+	bool							m_bConnected;				// this value shows whether the socket is connected or not.
+	bool							m_bValidConnection;			// true when the initial communication with the version number worked and checked out
+	bool							m_bToDestroy;				// this marks whether this peer has to be destroyed. this will result in a delete of this instance
+	int64_t							m_timeLastTry;				// timestamp of the last connection try	
+	unsigned short					m_usConnectionTries;		// variable that counts connection tries. over a certain limit we throw this peer away as unusable
+	int								m_iUsageCounter;			// counter that shows if this peer is still used. needed for safe destruction
 
-	// variable that counts connection tries. over a certain limit we throw this peer away as unusable
-	unsigned short					m_usConnectionTries;
-
+	// variables used for receiving messages and storing them
 	cCriticalSection				*m_pcsvRecv;
 	netMessage						m_netMsg;
-
-	int								m_iUsageCounter;
 	std::queue< netMessage >		m_queueMessages;
 
+	// CC function
 	void							makeDeepCopy(const netPeers & obj);
 
 public:
@@ -47,39 +46,40 @@ public:
 									~netPeers();
 									netPeers(const netPeers& obj);
 	netPeers&						operator=(const netPeers& obj);
+	bool							operator==(const netPeers& b) const { return this->csAddress == b.csAddress; };
 
+	// initialization functions, getter and setter
 	bool							init(std::string strEntry);
 	std::string						toString() const { return csAddress.toString(); };
 	unsigned short					getPort() { return csAddress.GetPort(); };
 
+	// connection functions and variables
+	SOCKET							hSocket;
+	cCriticalSection				*pcshSocket;
+	CService						csAddress;
+	cSemaphoreGrant					semaphoreGrant;
 	void							validConnection(bool bValid);
 	bool							validConnection() { return m_bValidConnection; };
-
 	bool							tryConnectOutbound();
 	bool							isConnected() { return m_bConnected; };
 	bool							tooManyTriesOutbound() { return (m_usConnectionTries >= NET_DEFAULT_CONNECT_TRIES ? true : false); };
 	int64_t							getTimeLastTry() { return m_timeLastTry; };
 
-	bool							operator==(const netPeers& b) const { return this->csAddress == b.csAddress; };
-
-	SOCKET							hSocket;
-	cCriticalSection				*pcshSocket;
-	CService						csAddress;
-	cSemaphoreGrant					semaphoreGrant;
-
-	bool							ReceiveMsgBytes(const char *pch, unsigned int nBytes, bool& complete);
-	void							markDestroy() { m_bToDestroy = true; };
-	bool							toDestroy() { return m_bToDestroy; };
-	
+	// data functions and variables
+	bool							ReceiveMsgBytes(const char *pch, unsigned int nBytes, bool& complete);	
 	cCriticalSection				*pcsvQueue;
 	bool							readStop() { return (m_queueMessages.size() >= MAX_MSG_QUEUE); };
 	bool							hasMessage() { return !m_queueMessages.empty(); };
 	netMessage						getMessage() { return m_queueMessages.front(); };
 	void							popMessage() { m_queueMessages.pop(); };
 
+	// list of sending cmds by this peer
 	cCriticalSection				*pcsvSend;
 	std::list< netMessage >			listSend;
 
+	// flagging functions
+	void							markDestroy() { m_bToDestroy = true; };
+	bool							toDestroy() { return m_bToDestroy; };
 	void							mark() { m_iUsageCounter++; };					// mark this peer as currently used by a process.
 	void							unmark() { m_iUsageCounter--; };				// remove the marking or atleast decrement the number of processes using this peer
 	bool							inUse() { return (m_iUsageCounter != 0); };		// check whether a process is using this peer right now

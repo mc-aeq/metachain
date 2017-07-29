@@ -38,6 +38,7 @@ class netMessage
 
 		char							*m_pBuffer;
 
+		// CC function
 		void							makeDeepCopy(const netMessage& obj);
 
 	public:
@@ -74,16 +75,19 @@ class netMessage
 							~netMessage();
 		netMessage&			operator=(const netMessage& obj);
 
-		bool				complete() { return m_bComplete; };
-		int					readData( const char *pch, unsigned int nBytes );
-		uint256&			GetMessageHash();
+		// time information about this package
 		int64_t				i64tTimeStart;
 		int64_t				i64tTimeDelta;
 
+		// data functions
+		bool				complete() { return m_bComplete; };
+		int					readData(const char *pch, unsigned int nBytes);
+		uint256&			GetMessageHash();
 		unsigned int		getPackageSize() { return sizeof(sHeader) + m_sHeader.ui32tPayloadSize; };
 		void*				getPackage() { return m_pBuffer; };
 		char*				getData() { return (m_pBuffer+sizeof(sHeader)); };
 
+		// header functions
 		sHeader				getHeader() { return m_sHeader; };
 };
 
