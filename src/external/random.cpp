@@ -11,6 +11,8 @@
 
 #ifndef _WINDOWS
 #include <sys/time.h>
+#include <fcntl.h>
+#include <unistd.h>
 #endif
 
 #ifdef HAVE_SYS_GETRANDOM
@@ -26,6 +28,8 @@
 
 #include <openssl/err.h>
 #include <openssl/rand.h>
+#include <atomic>
+#include <thread>
 
 #include "../logger.h"
 #include "../functions.h"
@@ -77,7 +81,7 @@ static void RDRandInit()
 #endif
     //! When calling cpuid function #1, ecx register will have this set if RDRAND is available.
     if (ecx & CPUID_F1_ECX_RDRAND) {
-        LogPrintf("Using RdRand as entropy source\n");
+        LOG( "Using RdRand as entropy source", "RAND" );
         rdrand_supported = true;
     }
     hwrand_initialized.store(true);

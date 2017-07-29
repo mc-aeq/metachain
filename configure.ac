@@ -34,7 +34,7 @@ case $host in
      ;;
    *linux*)
      	TARGET_OS=linux
-	 CPPFLAGS="$CPPFLAGS -D_LINUX"
+	 CPPFLAGS="$CPPFLAGS -D_LINUX -DHAVE_DAEMON"
      ;;
    *freebsd*)
     AC_MSG_ERROR([Not supporting build for freebsd yet]) 
@@ -96,6 +96,10 @@ AC_CHECK_HEADERS([mutex])
 AC_CHECK_HEADERS([thread])
 AC_CHECK_HEADERS([queue])
 AC_CHECK_HEADERS([endian.h sys/endian.h byteswap.h stdio.h stdlib.h unistd.h strings.h sys/types.h sys/stat.h sys/select.h sys/prctl.h])
+AC_CHECK_HEADER([openssl/crypto.h],,AC_MSG_ERROR(libcrypto headers missing))
+AC_CHECK_LIB([crypto],      [main],CRYPTO_LIBS=-lcrypto, AC_MSG_ERROR(libcrypto missing))
+AC_CHECK_HEADER([openssl/ssl.h],, AC_MSG_ERROR(libssl headers missing),)
+AC_CHECK_LIB([ssl],         [main],SSL_LIBS=-lssl, AC_MSG_ERROR(libssl missing))
 
 # checks for typedefs, structures and compiler charactaristics
 AC_TYPE_SIZE_T
@@ -171,11 +175,16 @@ AX_BOOST_THREAD
 AX_BOOST_SYSTEM
 AX_BOOST_FILESYSTEM
 
+BOOST_LIBS="$BOOST_LDFLAGS $BOOST_SYSTEM_LIB $BOOST_FILESYSTEM_LIB $BOOST_PROGRAM_OPTIONS_LIB $BOOST_THREAD_LIB $BOOST_CHRONO_LIB"
+
 # Boost >= 1.50 uses sleep_for rather than the now-deprecated sleep, however
 # it was broken from 1.50 to 1.52 when backed by nanosleep. Use sleep_for if
 # a working version is available, else fall back to sleep. sleep was removed
 # after 1.56.
 # If neither is available, abort.
+m4_pattern_allow(DBOOST_AC_USE_STD_ATOMIC) # otherwise it's treated like a macro
+BOOST_CPPFLAGS="-DBOOST_SP_USE_STD_ATOMIC -DBOOST_AC_USE_STD_ATOMIC $BOOST_CPPFLAGS"
+
 TEMP_LIBS="$LIBS"
 LIBS="$BOOST_LIBS $LIBS"
 TEMP_CPPFLAGS="$CPPFLAGS"
@@ -196,6 +205,45 @@ AC_LINK_IFELSE([AC_LANG_PROGRAM([[
 LIBS="$TEMP_LIBS"
 CPPFLAGS="$TEMP_CPPFLAGS"
 
+if test x$boost_sleep != xyes; then
+TEMP_LIBS="$LIBS"
+LIBS="$BOOST_LIBS $LIBS"
+TEMP_CPPFLAGS="$CPPFLAGS"
+CPPFLAGS="$CPPFLAGS $BOOST_CPPFLAGS"
+AC_LINK_IFELSE([AC_LANG_PROGRAM([[
+  #include <boost/version.hpp>
+  #include <boost/thread.hpp>
+  #include <boost/date_time/posix_time/posix_time_types.hpp>
+  ]],[[
+  #if BOOST_VERSION <= 105600
+      boost::this_thread::sleep(boost::posix_time::milliseconds(0));
+  #else
+   choke me
+  #endif
+  ]])],
+  [boost_sleep=yes; AC_DEFINE(HAVE_WORKING_BOOST_SLEEP, 1, [Define this symbol if boost sleep works])],
+  [boost_sleep=no])
+LIBS="$TEMP_LIBS"
+CPPFLAGS="$TEMP_CPPFLAGS"
+fi
+
+if test x$boost_sleep != xyes; then
+  AC_MSG_ERROR(No working boost sleep implementation found.)
+fi
+
+save_CXXFLAGS="${CXXFLAGS}"
+CXXFLAGS="${CXXFLAGS} ${CRYPTO_CFLAGS} ${SSL_CFLAGS}"
+AC_CHECK_DECLS([EVP_MD_CTX_new],,,[AC_INCLUDES_DEFAULT
+#include <openssl/x509_vfy.h>
+])
+CXXFLAGS="${save_CXXFLAGS}"
+
+AC_SUBST(LIBTOOL_APP_LDFLAGS)
+AC_SUBST(BOOST_LIBS)
+AC_SUBST(CRYPTO_LIBS)
+AC_SUBST(SSL_LIBS)
+AC_SUBST(EVENT_LIBS)
+
 # end
 AC_OUTPUT
 
@@ -212,4 +260,6 @@ echo "  CXX           = $CXX"
 echo "  CXXFLAGS      = $CXXFLAGS"
 echo "  LDFLAGS       = $LDFLAGS"
 echo 
-
+echo "Experiencing problems in config or build? Please report them in the forums <https://forum.trustchaintechnologies.io> or to our support team <https://support.trustchaintechnologies.io>"
+echo "As with all bug reports or build problems, please include your OS type and version, g++ version, output of ./configure and all other logs that may be usefull"
+echo

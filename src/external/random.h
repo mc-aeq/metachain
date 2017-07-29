@@ -9,6 +9,7 @@
 #define __RANDOM_H__ 1
 
 #include <stdint.h>
+#include <string>
 
 #include "../defines.h"
 #include "uint256.h"

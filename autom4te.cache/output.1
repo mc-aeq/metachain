@@ -626,6 +626,11 @@ ac_subst_vars='am__EXEEXT_FALSE
 am__EXEEXT_TRUE
 LTLIBOBJS
 LIB@&t@OBJS
+EVENT_LIBS
+SSL_LIBS
+CRYPTO_LIBS
+BOOST_LIBS
+LIBTOOL_APP_LDFLAGS
 BOOST_FILESYSTEM_LIB
 BOOST_SYSTEM_LIB
 BOOST_THREAD_LIB
@@ -1794,6 +1799,52 @@ $as_echo "$ac_res" >&6; }
 
 } @%:@ ac_fn_cxx_check_header_compile
 
+@%:@ ac_fn_cxx_try_link LINENO
+@%:@ -------------------------
+@%:@ Try to link conftest.@S|@ac_ext, and return whether this succeeded.
+ac_fn_cxx_try_link ()
+{
+  as_lineno=${as_lineno-"$1"} as_lineno_stack=as_lineno_stack=$as_lineno_stack
+  rm -f conftest.$ac_objext conftest$ac_exeext
+  if { { ac_try="$ac_link"
+case "(($ac_try" in
+  *\"* | *\`* | *\\*) ac_try_echo=\$ac_try;;
+  *) ac_try_echo=$ac_try;;
+esac
+eval ac_try_echo="\"\$as_me:${as_lineno-$LINENO}: $ac_try_echo\""
+$as_echo "$ac_try_echo"; } >&5
+  (eval "$ac_link") 2>conftest.err
+  ac_status=$?
+  if test -s conftest.err; then
+    grep -v '^ *+' conftest.err >conftest.er1
+    cat conftest.er1 >&5
+    mv -f conftest.er1 conftest.err
+  fi
+  $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
+  test $ac_status = 0; } && {
+	 test -z "$ac_cxx_werror_flag" ||
+	 test ! -s conftest.err
+       } && test -s conftest$ac_exeext && {
+	 test "$cross_compiling" = yes ||
+	 test -x conftest$ac_exeext
+       }; then :
+  ac_retval=0
+else
+  $as_echo "$as_me: failed program was:" >&5
+sed 's/^/| /' conftest.$ac_ext >&5
+
+	ac_retval=1
+fi
+  # Delete the IPA/IPO (Inter Procedural Analysis/Optimization) information
+  # created by the PGI compiler (conftest_ipa8_conftest.oo), as it would
+  # interfere with the next link command; also delete a directory that is
+  # left behind by Apple's compiler.  We do this before executing the actions.
+  rm -rf conftest.dSYM conftest_ipa8_conftest.oo
+  eval $as_lineno_stack; ${as_lineno_stack:+:} unset as_lineno
+  as_fn_set_status $ac_retval
+
+} @%:@ ac_fn_cxx_try_link
+
 @%:@ ac_fn_cxx_check_type LINENO TYPE VAR INCLUDES
 @%:@ ---------------------------------------------
 @%:@ Tests whether TYPE exists after having included INCLUDES, setting cache
@@ -2014,52 +2065,6 @@ $as_echo "$ac_res" >&6; }
   eval $as_lineno_stack; ${as_lineno_stack:+:} unset as_lineno
 
 } @%:@ ac_fn_cxx_check_decl
-
-@%:@ ac_fn_cxx_try_link LINENO
-@%:@ -------------------------
-@%:@ Try to link conftest.@S|@ac_ext, and return whether this succeeded.
-ac_fn_cxx_try_link ()
-{
-  as_lineno=${as_lineno-"$1"} as_lineno_stack=as_lineno_stack=$as_lineno_stack
-  rm -f conftest.$ac_objext conftest$ac_exeext
-  if { { ac_try="$ac_link"
-case "(($ac_try" in
-  *\"* | *\`* | *\\*) ac_try_echo=\$ac_try;;
-  *) ac_try_echo=$ac_try;;
-esac
-eval ac_try_echo="\"\$as_me:${as_lineno-$LINENO}: $ac_try_echo\""
-$as_echo "$ac_try_echo"; } >&5
-  (eval "$ac_link") 2>conftest.err
-  ac_status=$?
-  if test -s conftest.err; then
-    grep -v '^ *+' conftest.err >conftest.er1
-    cat conftest.er1 >&5
-    mv -f conftest.er1 conftest.err
-  fi
-  $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
-  test $ac_status = 0; } && {
-	 test -z "$ac_cxx_werror_flag" ||
-	 test ! -s conftest.err
-       } && test -s conftest$ac_exeext && {
-	 test "$cross_compiling" = yes ||
-	 test -x conftest$ac_exeext
-       }; then :
-  ac_retval=0
-else
-  $as_echo "$as_me: failed program was:" >&5
-sed 's/^/| /' conftest.$ac_ext >&5
-
-	ac_retval=1
-fi
-  # Delete the IPA/IPO (Inter Procedural Analysis/Optimization) information
-  # created by the PGI compiler (conftest_ipa8_conftest.oo), as it would
-  # interfere with the next link command; also delete a directory that is
-  # left behind by Apple's compiler.  We do this before executing the actions.
-  rm -rf conftest.dSYM conftest_ipa8_conftest.oo
-  eval $as_lineno_stack; ${as_lineno_stack:+:} unset as_lineno
-  as_fn_set_status $ac_retval
-
-} @%:@ ac_fn_cxx_try_link
 cat >config.log <<_ACEOF
 This file contains any messages produced by compilers while
 running configure, to aid debugging if configure makes a mistake.
@@ -4965,7 +4970,7 @@ case $host in
      ;;
    *linux*)
      	TARGET_OS=linux
-	 CPPFLAGS="$CPPFLAGS -D_LINUX"
+	 CPPFLAGS="$CPPFLAGS -D_LINUX -DHAVE_DAEMON"
      ;;
    *freebsd*)
     as_fn_error $? "Not supporting build for freebsd yet" "$LINENO" 5 
@@ -5595,6 +5600,94 @@ _ACEOF
 fi
 
 done
+
+ac_fn_cxx_check_header_mongrel "$LINENO" "openssl/crypto.h" "ac_cv_header_openssl_crypto_h" "$ac_includes_default"
+if test "x$ac_cv_header_openssl_crypto_h" = xyes; then :
+  
+else
+  as_fn_error $? "libcrypto headers missing" "$LINENO" 5
+fi
+
+
+{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for main in -lcrypto" >&5
+$as_echo_n "checking for main in -lcrypto... " >&6; }
+if ${ac_cv_lib_crypto_main+:} false; then :
+  $as_echo_n "(cached) " >&6
+else
+  ac_check_lib_save_LIBS=$LIBS
+LIBS="-lcrypto  $LIBS"
+cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+
+
+int
+main ()
+{
+return main ();
+  ;
+  return 0;
+}
+_ACEOF
+if ac_fn_cxx_try_link "$LINENO"; then :
+  ac_cv_lib_crypto_main=yes
+else
+  ac_cv_lib_crypto_main=no
+fi
+rm -f core conftest.err conftest.$ac_objext \
+    conftest$ac_exeext conftest.$ac_ext
+LIBS=$ac_check_lib_save_LIBS
+fi
+{ $as_echo "$as_me:${as_lineno-$LINENO}: result: $ac_cv_lib_crypto_main" >&5
+$as_echo "$ac_cv_lib_crypto_main" >&6; }
+if test "x$ac_cv_lib_crypto_main" = xyes; then :
+  CRYPTO_LIBS=-lcrypto
+else
+  as_fn_error $? "libcrypto missing" "$LINENO" 5
+fi
+
+ac_fn_cxx_check_header_mongrel "$LINENO" "openssl/ssl.h" "ac_cv_header_openssl_ssl_h" "$ac_includes_default"
+if test "x$ac_cv_header_openssl_ssl_h" = xyes; then :
+  
+else
+  as_fn_error $? "libssl headers missing" "$LINENO" 5
+fi
+
+
+{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for main in -lssl" >&5
+$as_echo_n "checking for main in -lssl... " >&6; }
+if ${ac_cv_lib_ssl_main+:} false; then :
+  $as_echo_n "(cached) " >&6
+else
+  ac_check_lib_save_LIBS=$LIBS
+LIBS="-lssl  $LIBS"
+cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+
+
+int
+main ()
+{
+return main ();
+  ;
+  return 0;
+}
+_ACEOF
+if ac_fn_cxx_try_link "$LINENO"; then :
+  ac_cv_lib_ssl_main=yes
+else
+  ac_cv_lib_ssl_main=no
+fi
+rm -f core conftest.err conftest.$ac_objext \
+    conftest$ac_exeext conftest.$ac_ext
+LIBS=$ac_check_lib_save_LIBS
+fi
+{ $as_echo "$as_me:${as_lineno-$LINENO}: result: $ac_cv_lib_ssl_main" >&5
+$as_echo "$ac_cv_lib_ssl_main" >&6; }
+if test "x$ac_cv_lib_ssl_main" = xyes; then :
+  SSL_LIBS=-lssl
+else
+  as_fn_error $? "libssl missing" "$LINENO" 5
+fi
 
 
 # checks for typedefs, structures and compiler charactaristics
@@ -10158,11 +10251,16 @@ fi
 	fi
 
 
+BOOST_LIBS="$BOOST_LDFLAGS $BOOST_SYSTEM_LIB $BOOST_FILESYSTEM_LIB $BOOST_PROGRAM_OPTIONS_LIB $BOOST_THREAD_LIB $BOOST_CHRONO_LIB"
+
 # Boost >= 1.50 uses sleep_for rather than the now-deprecated sleep, however
 # it was broken from 1.50 to 1.52 when backed by nanosleep. Use sleep_for if
 # a working version is available, else fall back to sleep. sleep was removed
 # after 1.56.
 # If neither is available, abort.
+ # otherwise it's treated like a macro
+BOOST_CPPFLAGS="-DBOOST_SP_USE_STD_ATOMIC -DBOOST_AC_USE_STD_ATOMIC $BOOST_CPPFLAGS"
+
 TEMP_LIBS="$LIBS"
 LIBS="$BOOST_LIBS $LIBS"
 TEMP_CPPFLAGS="$CPPFLAGS"
@@ -10199,6 +10297,73 @@ rm -f core conftest.err conftest.$ac_objext \
     conftest$ac_exeext conftest.$ac_ext
 LIBS="$TEMP_LIBS"
 CPPFLAGS="$TEMP_CPPFLAGS"
+
+if test x$boost_sleep != xyes; then
+TEMP_LIBS="$LIBS"
+LIBS="$BOOST_LIBS $LIBS"
+TEMP_CPPFLAGS="$CPPFLAGS"
+CPPFLAGS="$CPPFLAGS $BOOST_CPPFLAGS"
+cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+
+  #include <boost/version.hpp>
+  #include <boost/thread.hpp>
+  #include <boost/date_time/posix_time/posix_time_types.hpp>
+  
+int
+main ()
+{
+
+  #if BOOST_VERSION <= 105600
+      boost::this_thread::sleep(boost::posix_time::milliseconds(0));
+  #else
+   choke me
+  #endif
+  
+  ;
+  return 0;
+}
+_ACEOF
+if ac_fn_cxx_try_link "$LINENO"; then :
+  boost_sleep=yes; 
+$as_echo "@%:@define HAVE_WORKING_BOOST_SLEEP 1" >>confdefs.h
+
+else
+  boost_sleep=no
+fi
+rm -f core conftest.err conftest.$ac_objext \
+    conftest$ac_exeext conftest.$ac_ext
+LIBS="$TEMP_LIBS"
+CPPFLAGS="$TEMP_CPPFLAGS"
+fi
+
+if test x$boost_sleep != xyes; then
+  as_fn_error $? "No working boost sleep implementation found." "$LINENO" 5
+fi
+
+save_CXXFLAGS="${CXXFLAGS}"
+CXXFLAGS="${CXXFLAGS} ${CRYPTO_CFLAGS} ${SSL_CFLAGS}"
+ac_fn_cxx_check_decl "$LINENO" "EVP_MD_CTX_new" "ac_cv_have_decl_EVP_MD_CTX_new" "$ac_includes_default
+#include <openssl/x509_vfy.h>
+
+"
+if test "x$ac_cv_have_decl_EVP_MD_CTX_new" = xyes; then :
+  ac_have_decl=1
+else
+  ac_have_decl=0
+fi
+
+cat >>confdefs.h <<_ACEOF
+@%:@define HAVE_DECL_EVP_MD_CTX_NEW $ac_have_decl
+_ACEOF
+
+CXXFLAGS="${save_CXXFLAGS}"
+
+
+
+
+
+
 
 # end
 cat >confcache <<\_ACEOF
@@ -11527,4 +11692,6 @@ echo "  CXX           = $CXX"
 echo "  CXXFLAGS      = $CXXFLAGS"
 echo "  LDFLAGS       = $LDFLAGS"
 echo 
-
+echo "Experiencing problems in config or build? Please report them in the forums <https://forum.trustchaintechnologies.io> or to our support team <https://support.trustchaintechnologies.io>"
+echo "As with all bug reports or build problems, please include your OS type and version, g++ version, output of ./configure and all other logs that may be usefull"
+echo

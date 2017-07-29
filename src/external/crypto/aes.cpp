@@ -7,6 +7,7 @@
 #include <stdint.h>
 #include <string>
 #include "common.h"
+#include <cstring>
 
 AES128Encrypt::AES128Encrypt(const unsigned char key[16])
 {

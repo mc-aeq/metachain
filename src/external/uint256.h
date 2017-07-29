@@ -9,6 +9,7 @@
 #define __UINT256_H__ 1
 
 #include <vector>
+#include <string>
 
 #include "crypto/common.h"
 

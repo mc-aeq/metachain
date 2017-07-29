@@ -9,6 +9,7 @@ based on a version of 07/2017, heavily modified through the TCT developers
 
 #include <stdint.h>
 #include <string>
+#include <cstring>
 
 enum Network
 {

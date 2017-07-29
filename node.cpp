@@ -84,6 +84,26 @@ int main( int argc, char* argv[] )
 		Logger::getInstance().initialize(iniFile);
 		LOG("successfully initialized", "LOGGER");
 
+               // daemonize if wanted
+                if( iniFile->GetBoolValue("general", "daemonize", false) )
+                {
+#if HAVE_DAEMON
+                        LOG("daemonizing process", "MC");
+
+                        // Daemonize
+                        if( daemon(1, 0) )
+                        {
+                                std::string strError = strerror(errno);
+                                LOG_ERROR("daemon() failed - " + strError, "MC");
+                                sabShutdown = true;
+                        }
+#else
+                        LOG("daemonizing is not supported on this operating system, continuing attached mode", "MC");
+#endif
+                }
+		else
+			LOG("not daemonizing process, running in foreground", "MC");
+
 		LOG("creating MetaChain", "MC");
 		MetaChain::getInstance();
 
@@ -92,23 +112,6 @@ int main( int argc, char* argv[] )
 		{
 			LOG_ERROR("Something terrible happened, we're terminating for security reasons.", "MC");
 			return 1;
-		}
-
-		// daemonize if wanted
-		if( iniFile->GetBoolValue("general", "daemonize", false) )
-		{
-#if HAVE_DAEMON
-			LOG("daemonizing process", "MC");
-
-			// Daemonize
-			if( daemon(1, 0) )
-			{
-				LOG_ERROR("daemon() failed - " + strerror(errno), "MC");
-				sabShutdown = true;
-			}
-#else
-			LOG("daemonizing is not supported on this operating system, continuing attached mode", "MC");
-#endif
 		}
 
 		// go into our execution loop and wait for shutdown

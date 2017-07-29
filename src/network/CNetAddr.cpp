@@ -1,9 +1,15 @@
 #include "CNetAddr.h"
 
+#include "CService.h"
+
 #include <string>
 #include <assert.h>
 
-#include "CService.h"
+#ifndef _WINDOWS
+	#include <fcntl.h>
+#endif
+
+
 #include "../external/tinyformat.h"
 #include "../external/uint256.h"
 #include "../external/hash.h"

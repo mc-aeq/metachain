@@ -8,6 +8,7 @@
 #define __SHA256_H__ 1
 
 #include <stdint.h>
+#include <stddef.h>
 
 /** A hasher class for SHA-256. */
 class CSHA256

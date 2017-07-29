@@ -8,6 +8,7 @@
 #define __SHA512_H__ 1
 
 #include <stdint.h>
+#include <stddef.h>
 
 /** A hasher class for SHA-512. */
 class CSHA512

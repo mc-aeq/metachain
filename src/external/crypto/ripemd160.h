@@ -8,6 +8,7 @@
 #define __RIPEMD160_H__ 1
 
 #include <stdint.h>
+#include <stddef.h>
 
 /** A hasher class for RIPEMD-160. */
 class CRIPEMD160

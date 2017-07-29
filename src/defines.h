@@ -15,23 +15,45 @@ const uint32_t g_cuint32tVersion = 1;
 // windows special includes
 #ifdef _WINDOWS
 	#include "../targetver.h"
-	#include <stdio.h>
 	#include <tchar.h>
 	#include <WinSock2.h>
 	#include <WS2tcpip.h>
-#endif
+	#include <mswsock.h>
+	#include <windows.h>
 
-// special include if it's a microsoft visual studio dev IDE
-#ifdef _MSC_VER
-	#include <basetsd.h>
-	typedef SSIZE_T ssize_t;
-#endif
+	// special include if it's a microsoft visual studio dev IDE
+	#ifdef _MSC_VER
+        	#include <basetsd.h>
+	        typedef SSIZE_T ssize_t;
+	#endif
+#else
+        #include <sys/socket.h>
+        #include <netinet/in.h>
+	#include <sys/fcntl.h>
+	#include <sys/mman.h>
+	#include <sys/select.h>
+	#include <sys/types.h>
+	#include <net/if.h>
+	#include <netinet/tcp.h>
+	#include <arpa/inet.h>
+	#include <ifaddrs.h>
+	#include <limits.h>
+	#include <netdb.h>
+	#include <unistd.h>
 
-// linux special includes and typedefs
-#ifdef _LINUX
-	#include <sys/socket.h>
-	#include <netinet/in.h>
-	typedef unsigned int SOCKET;
+        typedef unsigned int SOCKET;
+
+        #define WSAGetLastError()   errno
+        #define WSAEINVAL           EINVAL
+        #define WSAEALREADY         EALREADY
+        #define WSAEWOULDBLOCK      EWOULDBLOCK
+        #define WSAEMSGSIZE         EMSGSIZE
+        #define WSAEINTR            EINTR
+        #define WSAEINPROGRESS      EINPROGRESS
+        #define WSAEADDRINUSE       EADDRINUSE
+        #define WSAENOTSOCK         EBADF
+        #define INVALID_SOCKET      (SOCKET)(~0)
+        #define SOCKET_ERROR        -1
 #endif
 
 // network define standard values

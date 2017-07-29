@@ -11,6 +11,7 @@
 
 #include <string>
 #include <stdint.h>
+#include <boost/thread/thread.hpp>
 
 #include "defines.h"
 #include "logger.h"

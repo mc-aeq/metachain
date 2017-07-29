@@ -8,6 +8,7 @@
 #define __COMMON_H__ 1
 
 #include "../endian.h"
+#include <cstring>
 
 uint16_t static inline ReadLE16(const unsigned char* ptr)
 {

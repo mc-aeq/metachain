@@ -6,6 +6,7 @@
 
 #include "logger.h"
 
+#define __STDC_WANT_LIB_EXT1__ 1
 #include <time.h>
 #include <iostream>
 
@@ -43,7 +44,11 @@ void Logger::log( std::string strLogLine, facility logFacility, std::string strM
 		memset(this->m_caTimeBuf, '\0', sizeof(this->m_caTimeBuf));
 
 		// get the structure
-		localtime_s(&this->m_timeStruct, &this->m_timeCur);
+		#ifdef _WINDOWS
+			localtime_s(&this->m_timeStruct, &this->m_timeCur);
+		#else
+			localtime_r(&this->m_timeCur, &this->m_timeStruct);
+		#endif
 
 		// format the time
 		strftime(this->m_caTimeBuf, sizeof(this->m_caTimeBuf), "%Y-%m-%d %X:", &this->m_timeStruct);

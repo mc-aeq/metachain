@@ -8,6 +8,7 @@
 #define __CHACHA20_H__ 1
 
 #include <stdint.h>
+#include <stddef.h>
 
 /** A PRNG class for ChaCha20. */
 class ChaCha20

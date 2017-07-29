@@ -73,7 +73,7 @@ std::string NetworkErrorString(int err)
 	}
 }
 #else
-string NetworkErrorString(int err)
+std::string NetworkErrorString(int err)
 {
 	char buf[256];
 	buf[0] = 0;
