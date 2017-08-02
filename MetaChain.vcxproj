@@ -101,13 +101,13 @@
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;_WINDOWS;HAVE_WORKING_BOOST_SLEEP_FOR;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
-      <AdditionalIncludeDirectories>C:\Office\metachain\dependencies\boost_1_64_0;C:\Office\metachain\dependencies\openssl-x64\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>dependencies\boost_1_64_0;dependencies\openssl-x64\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <MinimalRebuild>false</MinimalRebuild>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <AdditionalDependencies>ws2_32.lib;libssl.lib;libcrypto.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>C:\Office\metachain\dependencies\boost_1_64_0\bin.v2\libs\chrono\build\msvc-14.1\debug\address-model-64\link-static\threading-multi;C:\Office\metachain\dependencies\boost_1_64_0\bin.v2\libs\system\build\msvc-14.1\debug\address-model-64\link-static\threading-multi;C:\Office\metachain\dependencies\boost_1_64_0\bin.v2\libs\date_time\build\msvc-14.1\debug\address-model-64\link-static\threading-multi;C:\Office\metachain\dependencies\boost_1_64_0\bin.v2\libs\thread\build\msvc-14.1\debug\address-model-64\link-static\threading-multi;C:\Office\metachain\dependencies\openssl-x64\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>dependencies\boost_1_64_0\stage\lib;dependencies\openssl-x64\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
