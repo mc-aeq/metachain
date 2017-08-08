@@ -20,6 +20,7 @@
 // only needed in this class, thus no single file
 struct sHeader {
 	uint32_t		ui32tPayloadSize;
+	uint32_t		ui32tChainIdentifier;
 	uint16_t		ui16tSubject;
 	uint8_t			ui8tChecksum[CHECKSUM_SIZE];
 };

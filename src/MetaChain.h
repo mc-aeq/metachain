@@ -12,9 +12,11 @@
 #include <boost/thread/thread.hpp>
 
 #include "network/NetworkManager.h"
+#include "io/StorageManager.h"
 #include "external/scheduler.h"
 
 class NetworkManager;
+class StorageManager;
 
 /*
 This is the main class that'll hold all information about the chain and handle all it's core parts.
@@ -24,6 +26,7 @@ class MetaChain
 {
 private:
 	NetworkManager				*m_pNetworkManager;
+	StorageManager				*m_pStorageManager;
 	boost::thread_group			m_threadGroup;
 	CScheduler					m_scheduler;
 

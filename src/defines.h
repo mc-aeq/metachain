@@ -65,9 +65,11 @@ const uint32_t g_cuint32tVersion = 1;
 #define NET_DEFAULT_MAX_OUTGOING_CONNECTIONS 100
 #define NET_DEFAULT_MAX_INCOMING_CONNECTIONS 200
 #define NET_DEFAULT_TIME_BETWEEN_UNSUCCESSFUL 300
-#define MAX_PAYLOAD_SIZE 33554432 // 32M in bytes
+#define MAX_PAYLOAD_SIZE 33554432 // 2M in bytes
+#define MAX_BLOCK_SIZE 4124672 // 8M in bytes
 #define	CHECKSUM_SIZE 4 // 4 bytes per network message as checksum
 #define MAX_MSG_QUEUE 10
+#define LOCK_FILE ".lock"
 
 // HAVE_MSG_NOSIGNAL may not be available on all platforms
 #if !defined(MSG_NOSIGNAL)

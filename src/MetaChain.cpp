@@ -39,6 +39,11 @@ bool MetaChain::initialize(CSimpleIniA* iniFile)
 	m_iVersionTicksTillUpdate = iniFile->GetLongValue("autoupdate", "ticks_until_update_triggered", 10);
 	m_bAutoUpdate = iniFile->GetBoolValue("autoupdate", "do_autoupdate", true);
 
+	// create the block storage backends, check their integrity and check if no other instance is running
+	m_pStorageManager = new StorageManager(this);
+	if (!m_pStorageManager->initialize(iniFile))
+		return false;
+
 	// create a new network manager
 	m_pNetworkManager = new NetworkManager(this);
 

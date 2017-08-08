@@ -33,6 +33,7 @@ netMessage::netMessage(netMessage::SUBJECT subj, void *ptrData, uint32_t uiDataS
 {
 	// assemble the header
 	m_sHeader.ui16tSubject = subj;
+	m_sHeader.ui32tChainIdentifier = 0; //we null this variable to identify basic communication commands. coins need to set this to their identifier that they were given in the setup process
 	m_sHeader.ui32tPayloadSize = uiDataSize;
 	memset( &m_sHeader.ui8tChecksum, 0, sizeof(uint8_t)*CHECKSUM_SIZE);
 

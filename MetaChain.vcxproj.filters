@@ -49,6 +49,12 @@
     <Filter Include="Quelldateien\IO">
       <UniqueIdentifier>{b25a3d66-d4ff-4216-ba70-b6e082b11b61}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Headerdateien\IO\db">
+      <UniqueIdentifier>{611bc441-6468-4e5a-864f-00180ad26694}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Quelldateien\IO\db">
+      <UniqueIdentifier>{9f4a48b8-1e4b-4b87-95f5-97734c379fe8}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="targetver.h">
@@ -171,6 +177,18 @@
     <ClInclude Include="src\external\ArgsManager.h">
       <Filter>Headerdateien</Filter>
     </ClInclude>
+    <ClInclude Include="src\io\StorageManager.h">
+      <Filter>Headerdateien\IO</Filter>
+    </ClInclude>
+    <ClInclude Include="src\io\db\dbEngine.h">
+      <Filter>Headerdateien\IO\db</Filter>
+    </ClInclude>
+    <ClInclude Include="src\io\db\mysql.h">
+      <Filter>Headerdateien\IO\db</Filter>
+    </ClInclude>
+    <ClInclude Include="src\io\db\bdb.h">
+      <Filter>Headerdateien\IO\db</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="node.cpp">
@@ -250,6 +268,15 @@
     </ClCompile>
     <ClCompile Include="src\external\ArgsManager.cpp">
       <Filter>Quelldateien</Filter>
+    </ClCompile>
+    <ClCompile Include="src\io\StorageManager.cpp">
+      <Filter>Quelldateien\IO</Filter>
+    </ClCompile>
+    <ClCompile Include="src\io\db\bdb.cpp">
+      <Filter>Quelldateien\IO\db</Filter>
+    </ClCompile>
+    <ClCompile Include="src\io\db\mysql.cpp">
+      <Filter>Quelldateien\IO\db</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
