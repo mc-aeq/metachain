@@ -4,6 +4,8 @@
 * contact us before using our code									 *
 **********************************************************************/
 
+#ifdef DB_ENGINE_MYSQL
+
 #include "mysql.h"
 #include "../../logger.h"
 
@@ -22,3 +24,5 @@ bool dbEngineMYSQL::initialize(CSimpleIniA* iniFile, bool *bNew)
 	LOG("Initializing MySQL Storage Engine", "SE-MYSQL");
 	return true;
 }
+
+#endif

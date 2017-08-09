@@ -1,5 +1,7 @@
 #pragma once
 
+#ifdef DB_ENGINE_MYSQL
+
 /*********************************************************************
 * Copyright (c) 2017 TCT DEVs	                                     *
 * Distributed under the GPLv3.0 software license					 *
@@ -23,5 +25,7 @@ public:
 													~dbEngineMYSQL();
 	virtual bool									initialize(CSimpleIniA* iniFile, bool *bNew);
 };
+
+#endif
 
 #endif

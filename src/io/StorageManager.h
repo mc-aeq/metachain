@@ -10,6 +10,7 @@
 #define __STORAGEMANAGER_H__ 1
 
 #include <string>
+#include "rocksdb/db.h"
 #include <boost/filesystem/path.hpp>
 #include "../MetaChain.h"
 #include "../external/SimpleIni.h"
@@ -26,7 +27,12 @@ class StorageManager
 {
 	private:
 		MetaChain							*m_pMC;
+		// the dbEngine defines where block informations will be stored.
+		// this won't store the full blocks, they are in raw format stored somewhere else.
+		// the type of dbEngine can be chosen in the ini
 		dbEngine							*m_pDB;
+		// the rdb specified here stores meta information
+		rocksdb::DB							*m_pMetaDB;
 
 		bool								m_bModeFN;
 		std::string							m_strDataDirectory;

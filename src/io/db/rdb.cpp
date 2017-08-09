@@ -4,21 +4,21 @@
 * contact us before using our code									 *
 **********************************************************************/
 
-#include "bdb.h"
+#include "rdb.h"
 #include "../../logger.h"
 
-dbEngineBDB::dbEngineBDB()
+dbEngineRDB::dbEngineRDB()
 {
 
 }
 
-dbEngineBDB::~dbEngineBDB()
+dbEngineRDB::~dbEngineRDB()
 {
 
 }
 
-bool dbEngineBDB::initialize(CSimpleIniA* iniFile, bool *bNew)
+bool dbEngineRDB::initialize(CSimpleIniA* iniFile, bool *bNew)
 {
-	LOG("Initializing BDB Storage Engine", "SE-BDB");
+	LOG("Initializing RDB Storage Engine", "SE-RDB");
 	return true;
 }

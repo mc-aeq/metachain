@@ -101,13 +101,13 @@
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;_WINDOWS;HAVE_WORKING_BOOST_SLEEP_FOR;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
-      <AdditionalIncludeDirectories>dependencies\boost_1_64_0;dependencies\openssl-x64\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>dependencies\boost_1_64_0;dependencies\openssl-x64\include;dependencies\rocksdb\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <MinimalRebuild>false</MinimalRebuild>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
-      <AdditionalDependencies>ws2_32.lib;libssl.lib;libcrypto.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>dependencies\boost_1_64_0\stage\lib;dependencies\openssl-x64\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>ws2_32.lib;Advapi32.lib;Rpcrt4.lib;libssl.lib;libcrypto.lib;rocksdb.lib</AdditionalDependencies>
+      <AdditionalLibraryDirectories>dependencies\boost_1_64_0\stage\lib;dependencies\openssl-x64\lib;dependencies\rocksdb\build\Debug;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -171,7 +171,7 @@
     <ClInclude Include="src\external\utilstrencodings.h" />
     <ClInclude Include="src\external\zeroAfterFree.h" />
     <ClInclude Include="src\functions.h" />
-    <ClInclude Include="src\io\db\bdb.h" />
+    <ClInclude Include="src\io\db\rdb.h" />
     <ClInclude Include="src\io\db\dbEngine.h" />
     <ClInclude Include="src\io\db\mysql.h" />
     <ClInclude Include="src\io\ipContainer.h" />
@@ -205,7 +205,7 @@
     <ClCompile Include="src\external\uint256.cpp" />
     <ClCompile Include="src\external\utilstrencodings.cpp" />
     <ClCompile Include="src\functions.cpp" />
-    <ClCompile Include="src\io\db\bdb.cpp" />
+    <ClCompile Include="src\io\db\rdb.cpp" />
     <ClCompile Include="src\io\db\mysql.cpp" />
     <ClCompile Include="src\io\netPeers.cpp" />
     <ClCompile Include="src\io\StorageManager.cpp" />

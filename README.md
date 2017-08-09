@@ -6,7 +6,8 @@ These are the MetaChain sources of the TCT blockchain technology. It features bl
 
 ### Important links
  - The [roadmap] can be found in our forums and will be updated frequently.
- - More technical info in the [whitepaper].
+ - More info in the [whitepaper].
+ - Technical info in the [techpaper].
 
 ### Development
 
@@ -21,9 +22,11 @@ currently not supported
 #### Dependencies
 - for compiling from source you'll need a working [boost] installation with all libraries built.
 - [openssl] is widely used in this project. you'll need a working installation with all libraries.
+- [rocksdb] is our default meta info backend, even when you use mysql or other db engines, we still rely on [rocksdb]. A working install must be present!
 - C++ compiler needs to have C++11 compability. As soon as C++17.2 is available, changes will be made to use the C++17.2 standard as dependency!
 #### Building for source on windows
 - clone the git repository using github for Desktop
+- place all dependencies in a folder named "dependencies" in the project root. clone the corresponding git repositories of the dependencies into this folder
 - open the MetaChain.sln in Microsoft Visual Studio
 - build for Debug or Release
 #### Building for source on linux
@@ -45,6 +48,7 @@ $ ./make
 ; general configuration
 [general]
 daemonize = true    ; use daemonize if OS supports it
+mode = fn			; defines the running mode (FN = Full Node, CL = Client) 
 
 ; logging configuration
 [logging]
@@ -67,6 +71,28 @@ time_between_unsuccessfull_connects = 30    ; delay between two connects to the 
 [autoupdate]
 ticks_until_update_triggered = 10           ; how many nodes need to have a newer version to trigger update
 do_autoupdate = true                        ; autoupdate? if false, node exits automatically
+
+; data configuration
+[data]
+data_dir = data				; directory where the data is stored
+raw_dir = raw				; directory for raw metachain data in [general].[mode] = fn
+storage_engine = rdb		; db engine used for processed data. rdb = rocks db, mysql = mysql db
+
+; the following is only needed for [data].[storage_engine] = rdb
+[bdb]
+dir = rdb					; directory where to store the processed db
+
+; the following is only needed for [data].[storage_engine] = mysql
+; the database needs to be initialized with the mysql data structure provided
+; the user needs to be setup and have the full rights for this database
+[mysql]
+connection_type = socket				; "socket" for socket connection, "tcp" for [host]:[port] tcp/ip connection
+socket = /var/lib/mysql/mysql.sock
+host = localhost
+port = 3306
+username = tct
+password = supersecretpw
+database = trustchain
 ```
 
 # External resources used in the source code
@@ -74,6 +100,7 @@ do_autoupdate = true                        ; autoupdate? if false, node exits a
 - [bitcoin/bitcoin] - parts of the network communication, parts of the crypto sources (e.g. sha256 etc). Everything heavily modified, changed for our demands and integrated into our structure
 - [boost] - used for special timings, threads and scheduling
 - [openssl] - used for securing communications as well as some crypto functionalities.
+- [facebook/rocksdb] - meta information backend db
 
 License
 ----
@@ -88,8 +115,10 @@ GPL
 
    [roadmap]: <https://forum.trustchaintechnologies.io/showthread.php?tid=13&pid=21#pid21>
    [whitepaper]: <https://backoffice.trustchaintechnologies.io/downloads/whitepaper.pdf>
+   [techpaper]: <https://backoffice.trustchaintechnologies.io/downloads/techpaper.pdf>
    [forum]: <https://forum.trustchaintechnologies.io>
    [brofield/simpleini]: <https://github.com/brofield/simpleini>
    [bitcoin/bitcoin]: <https://github.com/bitcoin/bitcoin>
    [boost]: <http://www.boost.org/>
    [openssl]: <https://github.com/openssl/openssl>
+   [rocksdb]: <https://github.com/facebook/rocksdb/>

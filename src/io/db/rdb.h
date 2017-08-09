@@ -6,21 +6,21 @@
 * contact us before using our code									 *
 **********************************************************************/
 
-#ifndef __DB_ENGINE_BDB_H__
-#define __DB_ENGINE_BDB_H__ 1
+#ifndef __DB_ENGINE_RDB_H__
+#define __DB_ENGINE_RDB_H__ 1
 
 #include "dbEngine.h"
 #include "../../external/SimpleIni.h"
 
 /*
-storage class for bdb
+storage class for rocks db
 */
 
-class dbEngineBDB : public dbEngine
+class dbEngineRDB : public dbEngine
 {
 public:
-													dbEngineBDB();
-													~dbEngineBDB();
+													dbEngineRDB();
+													~dbEngineRDB();
 	virtual bool									initialize(CSimpleIniA* iniFile, bool *bNew);
 };
 

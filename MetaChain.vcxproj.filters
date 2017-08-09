@@ -186,7 +186,7 @@
     <ClInclude Include="src\io\db\mysql.h">
       <Filter>Headerdateien\IO\db</Filter>
     </ClInclude>
-    <ClInclude Include="src\io\db\bdb.h">
+    <ClInclude Include="src\io\db\rdb.h">
       <Filter>Headerdateien\IO\db</Filter>
     </ClInclude>
   </ItemGroup>
@@ -272,10 +272,10 @@
     <ClCompile Include="src\io\StorageManager.cpp">
       <Filter>Quelldateien\IO</Filter>
     </ClCompile>
-    <ClCompile Include="src\io\db\bdb.cpp">
+    <ClCompile Include="src\io\db\mysql.cpp">
       <Filter>Quelldateien\IO\db</Filter>
     </ClCompile>
-    <ClCompile Include="src\io\db\mysql.cpp">
+    <ClCompile Include="src\io\db\rdb.cpp">
       <Filter>Quelldateien\IO\db</Filter>
     </ClCompile>
   </ItemGroup>

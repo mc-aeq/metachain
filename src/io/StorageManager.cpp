@@ -8,7 +8,8 @@
 
 #include <boost/algorithm/string.hpp>
 #include <boost/filesystem/operations.hpp>
-#include "db/bdb.h"
+#include "rocksdb/db.h"
+#include "db/rdb.h"
 #include "db/mysql.h"
 
 StorageManager::StorageManager(MetaChain *mc)
@@ -20,6 +21,9 @@ StorageManager::~StorageManager()
 {
 	// remove the lock file in the data directory
 	remove(std::string(m_pathDataDirectory.string() + LOCK_FILE).c_str());
+
+	// close the meta info db
+	delete m_pMetaDB;
 }
 
 bool StorageManager::initialize(CSimpleIniA* iniFile)
@@ -33,7 +37,7 @@ bool StorageManager::initialize(CSimpleIniA* iniFile)
 	boost::trim_right_if(m_strDataDirectory, boost::is_any_of("/"));
 	m_pathDataDirectory = boost::filesystem::current_path();
 	m_pathRawDirectory = m_pathDataDirectory /= m_strDataDirectory;
-	
+
 	// security check if data directory exists, if it doesnt, create one
 	if (!boost::filesystem::exists(m_pathDataDirectory) || !boost::filesystem::is_directory(m_pathDataDirectory))
 	{
@@ -48,14 +52,62 @@ bool StorageManager::initialize(CSimpleIniA* iniFile)
 		LOG_ERROR((std::string)LOCK_FILE + " file exists within the data directory. Instance crashed or started twice?", "SM");
 		return false;
 	}
+	else
+	{
+		// create the lock file with the current timestamp info
+#ifdef _DEBUG
+		LOG_DEBUG("writing lock file: " + (std::string)LOCK_FILE, "SM");
+#endif
+
+		std::ofstream streamOut;
+		streamOut.open(m_pathDataDirectory.string() + LOCK_FILE, std::ios_base::out | std::ios_base::trunc);
+
+		// create a date/time string
+		std::basic_stringstream<char> wss;
+		wss.imbue(std::locale(std::wcout.getloc(), new boost::posix_time::wtime_facet(L"%Y.%m.%d %H:%M:%S")));
+		wss << boost::posix_time::second_clock::universal_time();
+
+		// write the timestamp
+		streamOut << "# generation of the file: " << wss.str() << std::endl;
+		streamOut.close();
+
+#ifdef _DEBUG
+		LOG_DEBUG("done writing lock file: " + (std::string)LOCK_FILE, "SM");
+#endif
+	}
+
+	// fireing up the meta db
+	rocksdb::Options dbOptions;
+	dbOptions.create_if_missing = true;
+	rocksdb::Status dbStatus = rocksdb::DB::Open(dbOptions, m_pathDataDirectory.string() + "meta", &m_pMetaDB);
+	if (!dbStatus.ok())
+	{
+		LOG_ERROR("Can't open the meta information database: " + dbStatus.ToString(), "SM");
+		return false;
+	}
+
+	// checking the status of the meta info db, is it new?
+	std::string strInitialized = "0";
+	dbStatus = m_pMetaDB->Get(rocksdb::ReadOptions(), "initialized", &strInitialized);
+	bool bNewNode = !boost::lexical_cast<bool>(strInitialized);
+
+	// if it's a new meta info db, we set the initialized flag and add some basic stuff
+	if (bNewNode)
+	{
+		rocksdb::WriteBatch batch;
+		batch.Put("initialized", "1");
+		batch.Put("mc.height", "0");
+		m_pMetaDB->Write(rocksdb::WriteOptions(), &batch);
+	}
 
 	// creating the dbEngine instance
-	bool bNewNode = true;
-	std::string strDBEngine = iniFile->GetValue("data", "storage_engine", "dbd");
-	if (strDBEngine == "dbd")
-		m_pDB = new dbEngineBDB();
+	std::string strDBEngine = iniFile->GetValue("data", "storage_engine", "rdb");
+	if (strDBEngine == "rdb")
+		m_pDB = new dbEngineRDB();
+#ifdef DB_ENGINE_MYSQL
 	else if (strDBEngine == "mysql")
 		m_pDB = new dbEngineMYSQL();
+#endif
 	else
 	{
 		LOG_ERROR("Unknown DB Engine: " + strDBEngine, "SM");
