@@ -70,6 +70,7 @@ const uint32_t g_cuint32tVersion = 1;
 #define	CHECKSUM_SIZE 4 // 4 bytes per network message as checksum
 #define MAX_MSG_QUEUE 10
 #define LOCK_FILE ".lock"
+#define RAW_FILEENDING ".mbl"
 
 // HAVE_MSG_NOSIGNAL may not be available on all platforms
 #if !defined(MSG_NOSIGNAL)

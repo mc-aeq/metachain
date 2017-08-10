@@ -10,6 +10,7 @@
 #define __STORAGEMANAGER_H__ 1
 
 #include <string>
+#include <fstream>
 #include "rocksdb/db.h"
 #include <boost/filesystem/path.hpp>
 #include "../MetaChain.h"
@@ -39,10 +40,18 @@ class StorageManager
 		boost::filesystem::path				m_pathDataDirectory;
 		boost::filesystem::path				m_pathRawDirectory;
 
+		// variables for raw file output
+		cCriticalSection					m_csRaw;
+		unsigned int						m_uiRawFileCounter;
+		std::ofstream						m_streamRaw;
+		boost::filesystem::path				m_fileRaw;
+		uintmax_t							m_uimRawFileSize;
+		uintmax_t							m_uimRawFileSizeMax;
 public:
 											StorageManager(MetaChain *mc);
 											~StorageManager();
 	bool									initialize(CSimpleIniA* iniFile);
+	void									writeRaw(unsigned int uiLength, void *raw);
 };
 
 #endif

@@ -22,6 +22,10 @@ StorageManager::~StorageManager()
 	// remove the lock file in the data directory
 	remove(std::string(m_pathDataDirectory.string() + LOCK_FILE).c_str());
 
+	// close the raw output file
+	if( m_bModeFN)
+		m_streamRaw.close();
+
 	// close the meta info db
 	delete m_pMetaDB;
 }
@@ -97,6 +101,7 @@ bool StorageManager::initialize(CSimpleIniA* iniFile)
 		rocksdb::WriteBatch batch;
 		batch.Put("initialized", "1");
 		batch.Put("mc.height", "0");
+		batch.Put("raw.file", "0");
 		m_pMetaDB->Write(rocksdb::WriteOptions(), &batch);
 	}
 
@@ -139,8 +144,60 @@ bool StorageManager::initialize(CSimpleIniA* iniFile)
 			}
 		}
 
+		// get the raw file counter from the meta info db
+		std::string strFileCounter;
+		m_pMetaDB->Get(rocksdb::ReadOptions(), "raw.file", &strFileCounter);
+		m_uiRawFileCounter = boost::lexical_cast<unsigned int>(strFileCounter);
+
+		// open our fstream for raw output
+		{
+			LOCK(m_csRaw);
+			std::ostringstream ssFileName;
+			ssFileName << std::setw(6) << std::setfill('0') << m_uiRawFileCounter;
+
+			m_fileRaw = m_pathRawDirectory;
+			m_fileRaw /= ssFileName.str();
+			m_uimRawFileSize = boost::filesystem::file_size(m_fileRaw);
+
+			m_streamRaw.open(ssFileName.str() + RAW_FILEENDING, std::ios_base::app);
+		}
+
+		// get our max file size from the ini (the value there is in M, so we need to multiply it to get bytes
+		m_uimRawFileSizeMax = iniFile->GetLongValue("data", "raw_filesplit", 100) * 1048576;
 	}
 
 	// everything smooth
 	return true;
+}
+
+void StorageManager::writeRaw(unsigned int uiLength, void *raw)
+{
+	if (m_bModeFN)
+	{
+		// write the output in the file
+		{
+			LOCK(m_csRaw);
+			m_streamRaw.write((char *)raw, uiLength);
+		}
+
+		m_uimRawFileSize += uiLength;
+
+		// if the new file size is bigger than our maximum value, we close this file and open a new one for output
+		if (m_uimRawFileSize >= m_uimRawFileSizeMax)
+		{
+			LOCK(m_csRaw);
+			m_uiRawFileCounter++;
+			std::ostringstream ssFileName;
+			ssFileName << std::setw(6) << std::setfill('0') << m_uiRawFileCounter;
+
+			m_fileRaw = m_pathRawDirectory;
+			m_fileRaw /= ssFileName.str();
+			m_uimRawFileSize = 0;
+
+			m_streamRaw.close();
+			m_streamRaw.open(ssFileName.str() + RAW_FILEENDING, std::ios_base::trunc | std::ios_base::app);
+
+			m_pMetaDB->Put(rocksdb::WriteOptions(), "raw.file", boost::lexical_cast<std::string>(m_uiRawFileCounter));
+		}
+	}
 }
