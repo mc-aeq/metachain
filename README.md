@@ -121,4 +121,4 @@ GPL
    [bitcoin/bitcoin]: <https://github.com/bitcoin/bitcoin>
    [boost]: <http://www.boost.org/>
    [openssl]: <https://github.com/openssl/openssl>
-   [rocksdb]: <https://github.com/facebook/rocksdb/>
+   [facebook/rocksdb]: <https://github.com/facebook/rocksdb/>
