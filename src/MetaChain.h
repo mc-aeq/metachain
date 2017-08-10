@@ -13,7 +13,7 @@
 
 #include "network/NetworkManager.h"
 #include "io/StorageManager.h"
-#include "external/scheduler.h"
+#include "scheduler.h"
 
 class NetworkManager;
 class StorageManager;

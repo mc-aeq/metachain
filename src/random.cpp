@@ -31,8 +31,8 @@
 #include <atomic>
 #include <thread>
 
-#include "../logger.h"
-#include "../functions.h"
+#include "logger.h"
+#include "functions.h"
 #include "tinyformat.h"
 #include "crypto/sha256.h"
 #include "crypto/sha512.h"

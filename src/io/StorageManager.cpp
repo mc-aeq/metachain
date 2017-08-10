@@ -170,7 +170,7 @@ bool StorageManager::initialize(CSimpleIniA* iniFile)
 	return true;
 }
 
-void StorageManager::writeRaw(unsigned int uiLength, void *raw)
+void StorageManager::writeRaw(unsigned int uiBlockNumber, unsigned int uiLength, void *raw)
 {
 	if (m_bModeFN)
 	{
@@ -179,6 +179,12 @@ void StorageManager::writeRaw(unsigned int uiLength, void *raw)
 			LOCK(m_csRaw);
 			m_streamRaw.write((char *)raw, uiLength);
 		}
+
+		// write some meta data
+		rocksdb::WriteBatch batch;
+		batch.Put("mbl." + boost::lexical_cast<std::string>(uiBlockNumber) + ".file", m_fileRaw.string());
+		batch.Put("mbl." + boost::lexical_cast<std::string>(uiBlockNumber) + ".offset", boost::lexical_cast<std::string>(m_uimRawFileSize) );
+		m_pMetaDB->Write(rocksdb::WriteOptions(), &batch);
 
 		m_uimRawFileSize += uiLength;
 

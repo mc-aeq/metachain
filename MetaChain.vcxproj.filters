@@ -60,7 +60,7 @@
     <ClInclude Include="targetver.h">
       <Filter>Headerdateien</Filter>
     </ClInclude>
-    <ClInclude Include="src\external\SimpleIni.h">
+    <ClInclude Include="src\SimpleIni.h">
       <Filter>Headerdateien</Filter>
     </ClInclude>
     <ClInclude Include="src\defines.h">
@@ -84,70 +84,70 @@
     <ClInclude Include="src\network\CService.h">
       <Filter>Headerdateien\MetaChain\Network</Filter>
     </ClInclude>
-    <ClInclude Include="src\external\tinyformat.h">
+    <ClInclude Include="src\tinyformat.h">
       <Filter>Headerdateien</Filter>
     </ClInclude>
-    <ClInclude Include="src\external\uint256.h">
+    <ClInclude Include="src\uint256.h">
       <Filter>Headerdateien</Filter>
     </ClInclude>
-    <ClInclude Include="src\external\endian.h">
+    <ClInclude Include="src\endian.h">
       <Filter>Headerdateien</Filter>
     </ClInclude>
-    <ClInclude Include="src\external\byteswap.h">
+    <ClInclude Include="src\byteswap.h">
       <Filter>Headerdateien</Filter>
     </ClInclude>
-    <ClInclude Include="src\external\hash.h">
+    <ClInclude Include="src\hash.h">
       <Filter>Headerdateien</Filter>
     </ClInclude>
-    <ClInclude Include="src\external\crypto\hmac_sha256.h">
+    <ClInclude Include="src\crypto\hmac_sha256.h">
       <Filter>Headerdateien\crypto</Filter>
     </ClInclude>
-    <ClInclude Include="src\external\crypto\hmac_sha512.h">
+    <ClInclude Include="src\crypto\hmac_sha512.h">
       <Filter>Headerdateien\crypto</Filter>
     </ClInclude>
-    <ClInclude Include="src\external\crypto\ripemd160.h">
+    <ClInclude Include="src\crypto\ripemd160.h">
       <Filter>Headerdateien\crypto</Filter>
     </ClInclude>
-    <ClInclude Include="src\external\crypto\sha1.h">
+    <ClInclude Include="src\crypto\sha1.h">
       <Filter>Headerdateien\crypto</Filter>
     </ClInclude>
-    <ClInclude Include="src\external\crypto\sha256.h">
+    <ClInclude Include="src\crypto\sha256.h">
       <Filter>Headerdateien\crypto</Filter>
     </ClInclude>
-    <ClInclude Include="src\external\crypto\sha512.h">
+    <ClInclude Include="src\crypto\sha512.h">
       <Filter>Headerdateien\crypto</Filter>
     </ClInclude>
-    <ClInclude Include="src\external\crypto\aes.h">
+    <ClInclude Include="src\crypto\aes.h">
       <Filter>Headerdateien\crypto</Filter>
     </ClInclude>
-    <ClInclude Include="src\external\crypto\chacha20.h">
+    <ClInclude Include="src\crypto\chacha20.h">
       <Filter>Headerdateien\crypto</Filter>
     </ClInclude>
-    <ClInclude Include="src\external\prevector.h">
+    <ClInclude Include="src\prevector.h">
       <Filter>Headerdateien</Filter>
     </ClInclude>
-    <ClInclude Include="src\external\utilstrencodings.h">
+    <ClInclude Include="src\utilstrencodings.h">
       <Filter>Headerdateien</Filter>
     </ClInclude>
-    <ClInclude Include="src\external\crypto\common.h">
+    <ClInclude Include="src\crypto\common.h">
       <Filter>Headerdateien\crypto</Filter>
     </ClInclude>
-    <ClInclude Include="src\external\crypto\ctaes\ctaes.h">
+    <ClInclude Include="src\crypto\ctaes\ctaes.h">
       <Filter>Headerdateien\crypto\ctaes</Filter>
     </ClInclude>
-    <ClInclude Include="src\external\cThreadInterrupt.h">
+    <ClInclude Include="src\cThreadInterrupt.h">
       <Filter>Headerdateien</Filter>
     </ClInclude>
     <ClInclude Include="src\functions.h">
       <Filter>Headerdateien</Filter>
     </ClInclude>
-    <ClInclude Include="src\external\scheduler.h">
+    <ClInclude Include="src\scheduler.h">
       <Filter>Headerdateien</Filter>
     </ClInclude>
-    <ClInclude Include="src\external\random.h">
+    <ClInclude Include="src\random.h">
       <Filter>Headerdateien</Filter>
     </ClInclude>
-    <ClInclude Include="src\external\reverselock.h">
+    <ClInclude Include="src\reverselock.h">
       <Filter>Headerdateien</Filter>
     </ClInclude>
     <ClInclude Include="src\io\ipContainer.h">
@@ -156,25 +156,25 @@
     <ClInclude Include="src\io\netPeers.h">
       <Filter>Headerdateien\IO</Filter>
     </ClInclude>
-    <ClInclude Include="src\external\cSemaphore.h">
+    <ClInclude Include="src\cSemaphore.h">
       <Filter>Headerdateien</Filter>
     </ClInclude>
-    <ClInclude Include="src\external\cCriticalSection.h">
+    <ClInclude Include="src\cCriticalSection.h">
       <Filter>Headerdateien</Filter>
     </ClInclude>
     <ClInclude Include="src\network\netMessage.h">
       <Filter>Headerdateien\MetaChain\Network</Filter>
     </ClInclude>
-    <ClInclude Include="src\external\zeroAfterFree.h">
+    <ClInclude Include="src\zeroAfterFree.h">
       <Filter>Headerdateien</Filter>
     </ClInclude>
-    <ClInclude Include="src\external\cDataStream.h">
+    <ClInclude Include="src\cDataStream.h">
       <Filter>Headerdateien</Filter>
     </ClInclude>
-    <ClInclude Include="src\external\crypto\cHash256.h">
+    <ClInclude Include="src\crypto\cHash256.h">
       <Filter>Headerdateien\crypto</Filter>
     </ClInclude>
-    <ClInclude Include="src\external\ArgsManager.h">
+    <ClInclude Include="src\ArgsManager.h">
       <Filter>Headerdateien</Filter>
     </ClInclude>
     <ClInclude Include="src\io\StorageManager.h">
@@ -212,52 +212,52 @@
     <ClCompile Include="src\network\CSubnet.cpp">
       <Filter>Quelldateien\MetaChain\Network</Filter>
     </ClCompile>
-    <ClCompile Include="src\external\uint256.cpp">
+    <ClCompile Include="src\uint256.cpp">
       <Filter>Quelldateien</Filter>
     </ClCompile>
-    <ClCompile Include="src\external\hash.cpp">
+    <ClCompile Include="src\hash.cpp">
       <Filter>Quelldateien</Filter>
     </ClCompile>
-    <ClCompile Include="src\external\crypto\hmac_sha512.cpp">
+    <ClCompile Include="src\crypto\hmac_sha512.cpp">
       <Filter>Quelldateien\crypto</Filter>
     </ClCompile>
-    <ClCompile Include="src\external\crypto\ripemd160.cpp">
+    <ClCompile Include="src\crypto\ripemd160.cpp">
       <Filter>Quelldateien\crypto</Filter>
     </ClCompile>
-    <ClCompile Include="src\external\crypto\sha1.cpp">
+    <ClCompile Include="src\crypto\sha1.cpp">
       <Filter>Quelldateien\crypto</Filter>
     </ClCompile>
-    <ClCompile Include="src\external\crypto\sha256.cpp">
+    <ClCompile Include="src\crypto\sha256.cpp">
       <Filter>Quelldateien\crypto</Filter>
     </ClCompile>
-    <ClCompile Include="src\external\crypto\sha512.cpp">
+    <ClCompile Include="src\crypto\sha512.cpp">
       <Filter>Quelldateien\crypto</Filter>
     </ClCompile>
-    <ClCompile Include="src\external\crypto\aes.cpp">
+    <ClCompile Include="src\crypto\aes.cpp">
       <Filter>Quelldateien\crypto</Filter>
     </ClCompile>
-    <ClCompile Include="src\external\crypto\chacha20.cpp">
+    <ClCompile Include="src\crypto\chacha20.cpp">
       <Filter>Quelldateien\crypto</Filter>
     </ClCompile>
-    <ClCompile Include="src\external\crypto\hmac_sha256.cpp">
+    <ClCompile Include="src\crypto\hmac_sha256.cpp">
       <Filter>Quelldateien\crypto</Filter>
     </ClCompile>
-    <ClCompile Include="src\external\utilstrencodings.cpp">
+    <ClCompile Include="src\utilstrencodings.cpp">
       <Filter>Quelldateien</Filter>
     </ClCompile>
-    <ClCompile Include="src\external\crypto\ctaes\ctaes.c">
+    <ClCompile Include="src\crypto\ctaes\ctaes.c">
       <Filter>Quelldateien\crypto\ctaes</Filter>
     </ClCompile>
-    <ClCompile Include="src\external\cThreadInterrupt.cpp">
+    <ClCompile Include="src\cThreadInterrupt.cpp">
       <Filter>Quelldateien</Filter>
     </ClCompile>
     <ClCompile Include="src\functions.cpp">
       <Filter>Quelldateien</Filter>
     </ClCompile>
-    <ClCompile Include="src\external\scheduler.cpp">
+    <ClCompile Include="src\scheduler.cpp">
       <Filter>Quelldateien</Filter>
     </ClCompile>
-    <ClCompile Include="src\external\random.cpp">
+    <ClCompile Include="src\random.cpp">
       <Filter>Quelldateien</Filter>
     </ClCompile>
     <ClCompile Include="src\io\netPeers.cpp">
@@ -266,7 +266,7 @@
     <ClCompile Include="src\network\netMessage.cpp">
       <Filter>Quelldateien\MetaChain\Network</Filter>
     </ClCompile>
-    <ClCompile Include="src\external\ArgsManager.cpp">
+    <ClCompile Include="src\ArgsManager.cpp">
       <Filter>Quelldateien</Filter>
     </ClCompile>
     <ClCompile Include="src\io\StorageManager.cpp">

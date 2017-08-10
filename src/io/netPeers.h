@@ -14,8 +14,8 @@
 #include <list>
 
 #include "../defines.h"
-#include "../external/cCriticalSection.h"
-#include "../external/cSemaphore.h"
+#include "../cCriticalSection.h"
+#include "../cSemaphore.h"
 #include "../network/netMessage.h"
 #include "../network/CService.h"
 

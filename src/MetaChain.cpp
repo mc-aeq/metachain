@@ -8,8 +8,8 @@
 
 #include <atomic>
 
-#include "external/SimpleIni.h"
-#include "external/scheduler.h"
+#include "SimpleIni.h"
+#include "scheduler.h"
 #include "functions.h"
 #include "network/NetworkManager.h"
 #include "logger.h"

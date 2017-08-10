@@ -10,7 +10,7 @@
 #define __DB_ENGINE_RDB_H__ 1
 
 #include "dbEngine.h"
-#include "../../external/SimpleIni.h"
+#include "../../SimpleIni.h"
 
 /*
 storage class for rocks db

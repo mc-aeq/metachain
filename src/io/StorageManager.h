@@ -14,7 +14,7 @@
 #include "rocksdb/db.h"
 #include <boost/filesystem/path.hpp>
 #include "../MetaChain.h"
-#include "../external/SimpleIni.h"
+#include "../SimpleIni.h"
 #include "db/dbEngine.h";
 
 class MetaChain;
@@ -51,7 +51,7 @@ public:
 											StorageManager(MetaChain *mc);
 											~StorageManager();
 	bool									initialize(CSimpleIniA* iniFile);
-	void									writeRaw(unsigned int uiLength, void *raw);
+	void									writeRaw(unsigned int uiBlockNumber, unsigned int uiLength, void *raw);
 };
 
 #endif

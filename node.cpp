@@ -9,7 +9,7 @@
 #include <boost/thread/thread.hpp>
 
 #include "src/defines.h"
-#include "src/external/ArgsManager.h"
+#include "src/ArgsManager.h"
 #include "src/functions.h"
 #include "src/logger.h"
 #include "src/MetaChain.h"

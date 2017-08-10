@@ -9,7 +9,7 @@
 #include <stdint.h>
 
 #include "../defines.h"
-#include "../external/uint256.h"
+#include "../uint256.h"
 #include "../logger.h"
 
 netMessage::netMessage():

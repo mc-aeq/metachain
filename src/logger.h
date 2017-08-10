@@ -13,7 +13,7 @@
 #include <fstream>
 #include <mutex>
 
-#include "external/SimpleIni.h"
+#include "SimpleIni.h"
 
 /*
 	This is the logging class, it'll use file logging if wanted and also print out to the cmdline.

@@ -12,7 +12,7 @@
 #define __DB_ENGINE_MYSQL_H__ 1
 
 #include "dbEngine.h"
-#include "../../external/SimpleIni.h"
+#include "../../SimpleIni.h"
 
 /*
 storage class for mysql

@@ -12,23 +12,23 @@ tctnoded_CPPFLAGS = $(AM_CPPFLAGS) $(BITCOIN_INCLUDES) $(MINIUPNPC_CPPFLAGS) $(E
 tctnoded_CXXFLAGS = $(AM_CXXFLAGS) $(PIE_FLAGS)
 tctnoded_LDADD = $(BOOST_LIBS) $(BDB_LIBS) $(SSL_LIBS) $(CRYPTO_LIBS)
 tctnoded_SOURCES = \
-	src/external/crypto/ctaes/ctaes.c \
-	src/external/crypto/aes.cpp \
-	src/external/crypto/chacha20.cpp \
-	src/external/crypto/hmac_sha256.cpp \
-	src/external/crypto/hmac_sha512.cpp \
-	src/external/crypto/ripemd160.cpp \
-	src/external/crypto/sha1.cpp \
-	src/external/crypto/sha256.cpp \
-	src/external/crypto/sha512.cpp \
-	src/external/ArgsManager.cpp \
-	src/external/ConvertUTF.c \
-	src/external/cThreadInterrupt.cpp \
-	src/external/hash.cpp \
-	src/external/random.cpp \
-	src/external/scheduler.cpp \
-	src/external/uint256.cpp \
-	src/external/utilstrencodings.cpp \
+	src/crypto/ctaes/ctaes.c \
+	src/crypto/aes.cpp \
+	src/crypto/chacha20.cpp \
+	src/crypto/hmac_sha256.cpp \
+	src/crypto/hmac_sha512.cpp \
+	src/crypto/ripemd160.cpp \
+	src/crypto/sha1.cpp \
+	src/crypto/sha256.cpp \
+	src/crypto/sha512.cpp \
+	src/ArgsManager.cpp \
+	src/ConvertUTF.c \
+	src/cThreadInterrupt.cpp \
+	src/hash.cpp \
+	src/random.cpp \
+	src/scheduler.cpp \
+	src/uint256.cpp \
+	src/utilstrencodings.cpp \
 	src/io/netPeers.cpp \
 	src/network/CNetAddr.cpp \
 	src/network/CService.cpp \

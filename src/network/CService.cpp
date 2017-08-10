@@ -3,7 +3,7 @@
 #include <assert.h>
 
 #include "CNetAddr.h"
-#include "../external/tinyformat.h"
+#include "../tinyformat.h"
 
 void CService::Init()
 {

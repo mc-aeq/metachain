@@ -10,9 +10,9 @@
 #endif
 
 
-#include "../external/tinyformat.h"
-#include "../external/uint256.h"
-#include "../external/hash.h"
+#include "../tinyformat.h"
+#include "../uint256.h"
+#include "../hash.h"
 #include "../logger.h"
 
 static const unsigned char pchIPv4[12] = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0xff, 0xff };

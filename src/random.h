@@ -11,7 +11,7 @@
 #include <stdint.h>
 #include <string>
 
-#include "../defines.h"
+#include "defines.h"
 #include "uint256.h"
 #include "crypto/chacha20.h"
 

@@ -11,10 +11,10 @@
 
 #include <stdint.h>
 
-#include "../external/uint256.h"
+#include "../uint256.h"
 #include "../defines.h"
-#include "../external/cDataStream.h"
-#include "../external/crypto/cHash256.h"
+#include "../cDataStream.h"
+#include "../crypto/cHash256.h"
 
 // the struct of the header
 // only needed in this class, thus no single file

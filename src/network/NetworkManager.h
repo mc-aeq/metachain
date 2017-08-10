@@ -15,15 +15,15 @@
 #include <list>
 #include <boost/thread/condition_variable.hpp>
 
-#include "../external/cThreadInterrupt.h"
-#include "../external/cCriticalSection.h"
+#include "../cThreadInterrupt.h"
+#include "../cCriticalSection.h"
 #include "../network/CService.h"
 #include "../network/CNetAddr.h"
 #include "../io/ipContainer.h"
 #include "../io/netPeers.h"
 #include "netMessage.h"
 #include "../MetaChain.h"
-#include "../external/SimpleIni.h"
+#include "../SimpleIni.h"
 
 class MetaChain;
 

@@ -14,15 +14,15 @@
 #include "../MetaChain.h"
 #include "../defines.h"
 #include "../logger.h"
-#include "../external/cSemaphore.h"
+#include "../cSemaphore.h"
 #include "../io/ipContainer.h"
 #include "../io/netPeers.h"
 #include "../functions.h"
 #include "CNetAddr.h"
 #include "CService.h"
-#include "../external/tinyformat.h"
+#include "../tinyformat.h"
 #include "netMessage.h"
-#include "../external/cCriticalSection.h"
+#include "../cCriticalSection.h"
 
 NetworkManager::NetworkManager(MetaChain *mc) :
 	m_pMC(mc),

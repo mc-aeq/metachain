@@ -13,7 +13,7 @@
 #include <boost/thread/thread.hpp>
 
 #include "defines.h"
-#include "external/tinyformat.h"
+#include "tinyformat.h"
 
 // thread renaming
 void RenameThread(const char* name)

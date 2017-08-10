@@ -5,7 +5,7 @@
 #include <string>
 
 #include "CNetAddr.h"
-#include "../external/tinyformat.h"
+#include "../tinyformat.h"
 
 CSubNet::CSubNet() :
 	valid(false)
