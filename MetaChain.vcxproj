@@ -141,6 +141,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="src\crypto\sha3.h" />
     <ClInclude Include="src\defines.h" />
     <ClInclude Include="src\ArgsManager.h" />
     <ClInclude Include="src\byteswap.h" />
@@ -197,6 +198,7 @@
     <ClCompile Include="src\crypto\ripemd160.cpp" />
     <ClCompile Include="src\crypto\sha1.cpp" />
     <ClCompile Include="src\crypto\sha256.cpp" />
+    <ClCompile Include="src\crypto\sha3.cpp" />
     <ClCompile Include="src\crypto\sha512.cpp" />
     <ClCompile Include="src\cThreadInterrupt.cpp" />
     <ClCompile Include="src\hash.cpp" />

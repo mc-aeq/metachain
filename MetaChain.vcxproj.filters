@@ -189,6 +189,9 @@
     <ClInclude Include="src\io\db\rdb.h">
       <Filter>Headerdateien\IO\db</Filter>
     </ClInclude>
+    <ClInclude Include="src\crypto\sha3.h">
+      <Filter>Headerdateien\crypto</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="node.cpp">
@@ -277,6 +280,9 @@
     </ClCompile>
     <ClCompile Include="src\io\db\rdb.cpp">
       <Filter>Quelldateien\IO\db</Filter>
+    </ClCompile>
+    <ClCompile Include="src\crypto\sha3.cpp">
+      <Filter>Quelldateien\crypto</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
