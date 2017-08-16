@@ -13,7 +13,7 @@
 const uint32_t g_cuint32tVersion = 1;
 
 // windows special includes
-#ifdef _WINDOWS
+#ifdef _WIN32
 	#include "../targetver.h"
 	#include <tchar.h>
 	#include <WinSock2.h>

@@ -44,7 +44,7 @@ void Logger::log( std::string strLogLine, facility logFacility, std::string strM
 		memset(this->m_caTimeBuf, '\0', sizeof(this->m_caTimeBuf));
 
 		// get the structure
-		#ifdef _WINDOWS
+		#ifdef _WIN32
 			localtime_s(&this->m_timeStruct, &this->m_timeCur);
 		#else
 			localtime_r(&this->m_timeCur, &this->m_timeStruct);

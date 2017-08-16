@@ -5,11 +5,11 @@
 
 #include "random.h"
 
-#ifdef _WINDOWS
+#ifdef _WIN32
 #include <wincrypt.h>
 #endif
 
-#ifndef _WINDOWS
+#ifndef _WIN32
 #include <sys/time.h>
 #include <fcntl.h>
 #include <unistd.h>
@@ -139,7 +139,7 @@ static void RandAddSeedPerfmon()
 {
     RandAddSeed();
 
-#ifdef _WINDOWS
+#ifdef _WIN32
     // Don't need this on Linux, OpenSSL automatically uses /dev/urandom
     // Seed with the entire set of perfmon data
 
@@ -175,7 +175,7 @@ static void RandAddSeedPerfmon()
 #endif
 }
 
-#ifndef _WINDOWS
+#ifndef _WIN32
 /** Fallback: get 32 bytes of system entropy from /dev/urandom. The most
  * compatible way to get cryptographic randomness on UNIX-ish platforms.
  */
@@ -200,7 +200,7 @@ void GetDevURandom(unsigned char *ent32)
 /** Get 32 bytes of system entropy. */
 void GetOSRand(unsigned char *ent32)
 {
-#if defined(_WINDOWS)
+#if defined(_WIN32)
     HCRYPTPROV hProvider;
     int ret = CryptAcquireContextW(&hProvider, NULL, NULL, PROV_RSA_FULL, CRYPT_VERIFYCONTEXT);
     if (!ret) {

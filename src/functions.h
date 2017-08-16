@@ -81,7 +81,7 @@ template <typename Callable> void TraceThread(const char* name, Callable func)
 
 // selectable socket - always true for windows
 bool static inline IsSelectableSocket(SOCKET s) {
-#ifdef _WINDOWS
+#ifdef _WIN32
 	return true;
 #else
 	return (s < FD_SETSIZE);

@@ -5,7 +5,7 @@
 #include <string>
 #include <assert.h>
 
-#ifndef _WINDOWS
+#ifndef _WIN32
 	#include <fcntl.h>
 #endif
 
@@ -44,7 +44,7 @@ bool CNetAddr::init(std::string strEntry)
 		aiHint.ai_socktype = SOCK_STREAM;
 		aiHint.ai_protocol = IPPROTO_TCP;
 		aiHint.ai_family = AF_UNSPEC;
-#ifdef _WINDOWS
+#ifdef _WIN32
 		aiHint.ai_flags = 0;
 #else
 		aiHint.ai_flags = AI_ADDRCONFIG;

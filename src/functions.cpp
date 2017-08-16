@@ -42,7 +42,7 @@ static std::atomic<int64_t> nMockTime(0); //!< For unit testing
 // formatting exceptions
 std::string FormatException(const std::exception* pex, const char* pszThread)
 {
-#ifdef _WINDOWS
+#ifdef _WIN32
 	char pszModule[MAX_PATH] = "";
 	GetModuleFileNameA(NULL, pszModule, sizeof(pszModule));
 #else
@@ -56,7 +56,7 @@ std::string FormatException(const std::exception* pex, const char* pszThread)
 			"UNKNOWN EXCEPTION       \n%s in %s       \n", pszModule, pszThread);
 }
 
-#ifdef _WINDOWS
+#ifdef _WIN32
 std::string NetworkErrorString(int err)
 {
 	char buf[256];
@@ -96,7 +96,7 @@ bool SetSocketNonBlocking(SOCKET& hSocket, bool fNonBlocking)
 {
 	if (fNonBlocking)
 	{
-#ifdef _WINDOWS
+#ifdef _WIN32
 		u_long nOne = 1;
 		if (ioctlsocket(hSocket, FIONBIO, &nOne) == SOCKET_ERROR)
 		{
@@ -110,7 +110,7 @@ bool SetSocketNonBlocking(SOCKET& hSocket, bool fNonBlocking)
 		}
 	else
 	{
-#ifdef _WINDOWS
+#ifdef _WIN32
 		u_long nZero = 0;
 		if (ioctlsocket(hSocket, FIONBIO, &nZero) == SOCKET_ERROR)
 		{
@@ -130,7 +130,7 @@ bool CloseSocket(SOCKET& hSocket)
 {
 	if (hSocket == INVALID_SOCKET)
 		return false;
-#ifdef _WINDOWS
+#ifdef _WIN32
 	int ret = closesocket(hSocket);
 #else
 	int ret = close(hSocket);

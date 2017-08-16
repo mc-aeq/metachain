@@ -235,7 +235,7 @@ bool netPeers::tryConnectOutbound()
 				return false;
 			}
 			socklen_t nRetSize = sizeof(nRet);
-#ifdef _WINDOWS
+#ifdef _WIN32
 			if (getsockopt(hSocket, SOL_SOCKET, SO_ERROR, (char*)(&nRet), &nRetSize) == SOCKET_ERROR)
 #else
 			if (getsockopt(hSocket, SOL_SOCKET, SO_ERROR, &nRet, &nRetSize) == SOCKET_ERROR)
@@ -252,7 +252,7 @@ bool netPeers::tryConnectOutbound()
 				return false;
 			}
 		}
-#ifdef _WINDOWS
+#ifdef _WIN32
 		else if (WSAGetLastError() != WSAEISCONN)
 #else
 		else

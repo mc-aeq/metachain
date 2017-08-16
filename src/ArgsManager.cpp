@@ -44,7 +44,7 @@ void ArgsManager::ParseParameters(int argc, const char* const argv[])
 			strValue = str.substr(is_index + 1);
 			str = str.substr(0, is_index);
 		}
-#ifdef _WINDOWS
+#ifdef _WIN32
 		boost::to_lower(str);
 		if (boost::algorithm::starts_with(str, "/"))
 			str = "-" + str.substr(1);

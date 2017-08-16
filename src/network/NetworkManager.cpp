@@ -61,7 +61,7 @@ bool NetworkManager::initialize(CSimpleIniA* iniFile)
 	m_pSemOutbound = new cSemaphore(m_iMaxOutboundConnections);
 	m_pSemInbound = new cSemaphore(m_iMaxInboundConnections);
 
-#ifdef _WINDOWS
+#ifdef _WIN32
 	// Initialize Windows Sockets
 	WSADATA wsadata;
 	int ret = WSAStartup(MAKEWORD(2, 2), &wsadata);
@@ -129,7 +129,7 @@ bool NetworkManager::startListeningSocket()
 		return false;
 	}
 
-#ifndef _WINDOWS
+#ifndef _WIN32
 #ifdef SO_NOSIGPIPE
 	// Different way of disabling SIGPIPE on BSD
 	setsockopt(m_hListenSocket, SOL_SOCKET, SO_NOSIGPIPE, (void*)&nOne, sizeof(int));
@@ -157,13 +157,13 @@ bool NetworkManager::startListeningSocket()
 	if(m_pServiceLocal->IsIPv6())
 	{
 #ifdef IPV6_V6ONLY
-#ifdef _WINDOWS
+#ifdef _WIN32
 		setsockopt(m_hListenSocket, IPPROTO_IPV6, IPV6_V6ONLY, (const char*)&nOne, sizeof(int));
 #else
 		setsockopt(m_hListenSocket, IPPROTO_IPV6, IPV6_V6ONLY, (void*)&nOne, sizeof(int));
 #endif
 #endif
-#ifdef _WINDOWS
+#ifdef _WIN32
 		int nProtLevel = PROTECTION_LEVEL_UNRESTRICTED;
 		setsockopt(m_hListenSocket, IPPROTO_IPV6, IPV6_PROTECTION_LEVEL, (const char*)&nProtLevel, sizeof(int));
 #endif
