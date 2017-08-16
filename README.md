@@ -122,6 +122,6 @@ GPLv3
    [bitcoin/bitcoin]: <https://github.com/bitcoin/bitcoin>
    [boost]: <http://www.boost.org/>
    [openssl]: <https://github.com/openssl/openssl>
-   [facebook/rocksdb]: <https://github.com/facebook/rocksdb/>
+   [rocksdb]: <https://github.com/facebook/rocksdb/>
    [bitcoin-core/secp256k1]: <https://github.com/bitcoin-core/secp256k1>
    [cryptopp]: <https://github.com/weidai11/cryptopp>
