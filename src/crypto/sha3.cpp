@@ -5,6 +5,7 @@
 **********************************************************************/
 
 #include "sha3.h"
+#include <iomanip>
 #include <boost/lexical_cast.hpp>
 #include "../endian.h"
 
@@ -33,19 +34,29 @@ std::string SHA3::hash(HashType type, HashSize size, char * pcBuffer, unsigned i
 		shakeCreate(size, uiDigestLength);
 	else
 		keccakCreate(size);
-	
-	keccakUpdate((uint8_t*)pcBuffer, 0, uiLength);
-	return boost::lexical_cast<std::string>(sha3Digest());	
 
+	keccakUpdate((uint8_t*)pcBuffer, 0, uiLength);
+
+	unsigned char *op;
 	switch (type)
 	{
 	case SHA3::HashType::DEFAULT:
-		return boost::lexical_cast<std::string>(sha3Digest());
+		op = sha3Digest();
+		break;
 	case SHA3::HashType::KECCAK:
-		return boost::lexical_cast<std::string>(keccakDigest());
+		op = keccakDigest();
+		break;
 	case SHA3::HashType::SHAKE:
-		return boost::lexical_cast<std::string>(shakeDigest());
+		op = shakeDigest();
+		break;
 	}
+
+	std::stringstream ss;
+	ss << std::hex << std::setfill('0');
+	for (unsigned int i = 0; i < (size / 8); i++)
+		ss << std::setw(2) << static_cast<unsigned>(op[i]);
+
+	return ss.str();
 }
 
 // Function to create the state structure for keccak application, of size length

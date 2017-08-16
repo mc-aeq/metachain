@@ -23,7 +23,11 @@ currently not supported
 - for compiling from source you'll need a working [boost] installation with all libraries built.
 - [openssl] is widely used in this project. you'll need a working installation with all libraries.
 - [rocksdb] is our default meta info backend, even when you use mysql or other db engines, we still rely on [rocksdb]. A working install must be present!
+- [brofield/simpleini] is used for ini parsing
+- [bitcoin-core/secp256k1] used as C backend for secp256k1 ECDA algorithm
+- [cryptopp] a widely known and usefull crypto library supporting us with crypto algorithms
 - C++ compiler needs to have C++11 compability. As soon as C++17.2 is available, changes will be made to use the C++17.2 standard as dependency!
+We provide forks of all the needed dependencies in our github organization account. These are the tested versions and those forks will be updated frequently. You can rely on those forks in terms of building the MetaChain.
 #### Building for source on windows
 - clone the git repository using github for Desktop
 - place all dependencies in a folder named "dependencies" in the project root. clone the corresponding git repositories of the dependencies into this folder
@@ -96,16 +100,13 @@ database = trustchain
 ```
 
 # External resources used in the source code
-- [brofield/simpleini] - for parsing ini files
 - [bitcoin/bitcoin] - parts of the network communication, parts of the crypto sources (e.g. sha256 etc). Everything heavily modified, changed for our demands and integrated into our structure
-- [boost] - used for special timings, threads and scheduling
-- [openssl] - used for securing communications as well as some crypto functionalities.
-- [facebook/rocksdb] - meta information backend db
+- and dependencies as declared earlier
 
 License
 ----
 
-GPL
+GPLv3
 
 
 **(c) the TCT-Devs**
@@ -122,3 +123,5 @@ GPL
    [boost]: <http://www.boost.org/>
    [openssl]: <https://github.com/openssl/openssl>
    [facebook/rocksdb]: <https://github.com/facebook/rocksdb/>
+   [bitcoin-core/secp256k1]: <https://github.com/bitcoin-core/secp256k1>
+   [cryptopp]: <https://github.com/weidai11/cryptopp>
