@@ -14,32 +14,34 @@
 #include <cstring>
 #include <string>
 
-// State structure
-struct keccakState
-{
-	uint64_t *A;
-	unsigned int blockLen;
-	uint8_t *buffer;
-	unsigned int bufferLen;
-	int length;
-	unsigned int d;
-};
-
-struct keccakfState
-{
-	uint64_t B[25];
-	uint64_t C[5];
-	uint64_t D[5];
-};
-
 /*
 sha-3 implementation based on https://github.com/DuSTman31/SHA-3
+with heavy modifications to use it as a class and more implementations regarding cShake and KMAC
 */
 
 class SHA3
 {
 private:
+	// State structure
+	struct keccakState
+	{
+		uint64_t *A;
+		unsigned int blockLen;
+		uint8_t *buffer;
+		unsigned int bufferLen;
+		int length;
+		unsigned int d;
+	};
+
+	struct keccakfState
+	{
+		uint64_t B[25];
+		uint64_t C[5];
+		uint64_t D[5];
+	};
+
 	keccakState								m_keccakState;
+	unsigned char							*m_pEncBuf;
 
 	void									keccakCreate(int length);
 	void									shakeCreate(int length, unsigned int d_);
@@ -60,6 +62,10 @@ private:
 	// inline optimization functions
 	inline int								index(int x);
 	inline int								index(int x, int y);
+
+	unsigned int							left_encode(unsigned char * encbuf, size_t value);
+	unsigned int							right_encode(unsigned char * encbuf, size_t value);
+	unsigned char *							encode_string(unsigned char *pInput, unsigned int uiLength, unsigned int *uiBytesWritten);
 
 	// Constants of the Keccak algorithm.
 	static constexpr uint64_t RC[] = {
@@ -88,13 +94,21 @@ public:
 
 	enum HashSize
 	{
+		SHA3_128 = 128,
 		SHA3_224 = 224,
 		SHA3_256 = 256,
 		SHA3_384 = 384,
 		SHA3_512 = 512
 	};
 
-	std::string								hash(HashType type, HashSize size, char *pcBuffer, unsigned int uiLength, unsigned int uiDigestLength = 0);
+	SHA3();
+	~SHA3();
+
+	std::string								to_string(uint8_t *input, unsigned int uiSize);
+
+	uint8_t*								hash(HashType type, HashSize size, const uint8_t *pBuffer, unsigned int uiLength, unsigned int uiDigestLength = 0);
+	uint8_t*								cShake(HashSize size, const uint8_t *pBuffer, unsigned int uiLength, unsigned int uiDigestLength, std::string strFunctionName, std::string strCustomization);
+	uint8_t*								kmac(HashSize size, const uint8_t *pBuffer, unsigned int uiLength, unsigned int uiDigestLength, std::string strKey, std::string strCustomization);
 };
 
 #endif

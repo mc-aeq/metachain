@@ -7,7 +7,7 @@
 #include "sha3.h"
 #include <iomanip>
 #include <boost/lexical_cast.hpp>
-#include "../endian.h"
+#include "endian.h"
 
 static inline uint64_t rotateLeft(uint64_t x, unsigned int n)
 {
@@ -28,16 +28,37 @@ static inline uint64_t rotateRight(uint64_t x, int n)
 
 }
 
-std::string SHA3::hash(HashType type, HashSize size, char * pcBuffer, unsigned int uiLength, unsigned int uiDigestLength )
+SHA3::SHA3()
+	:m_pEncBuf(NULL)
+{
+}
+
+SHA3::~SHA3()
+{
+	if (m_pEncBuf)
+		delete m_pEncBuf;
+}
+
+std::string	SHA3::to_string(uint8_t *input, unsigned int uiSize)
+{	
+	std::stringstream ss;
+	ss << std::hex << std::setfill('0');
+	for (unsigned int i = 0; i < (uiSize / 8); i++)
+		ss << std::setw(2) << static_cast<unsigned>(input[i]);
+
+	return ss.str();
+}
+
+uint8_t* SHA3::hash(HashType type, HashSize size, const uint8_t * pBuffer, unsigned int uiLength, unsigned int uiDigestLength )
 {
 	if (type == SHA3::HashType::SHAKE)
 		shakeCreate(size, uiDigestLength);
 	else
 		keccakCreate(size);
-
-	keccakUpdate((uint8_t*)pcBuffer, 0, uiLength);
-
-	unsigned char *op;
+	
+	keccakUpdate(pBuffer, 0, uiLength);
+		
+	uint8_t *op;
 	switch (type)
 	{
 	case SHA3::HashType::DEFAULT:
@@ -51,12 +72,69 @@ std::string SHA3::hash(HashType type, HashSize size, char * pcBuffer, unsigned i
 		break;
 	}
 
-	std::stringstream ss;
-	ss << std::hex << std::setfill('0');
-	for (unsigned int i = 0; i < (size / 8); i++)
-		ss << std::setw(2) << static_cast<unsigned>(op[i]);
+	return op;
+}
 
-	return ss.str();
+uint8_t* SHA3::cShake(HashSize size, const uint8_t *pBuffer, unsigned int uiLength, unsigned int uiDigestLength, std::string strFunctionName, std::string strCustomization)
+{
+	if (strFunctionName == "" && strCustomization == "")
+		return hash(SHA3::HashType::SHAKE, size, pBuffer, uiLength, uiDigestLength);
+
+	unsigned int uiBlockSize = 200 - 2 * (size / 8);
+	unsigned int uiBufferSize = (strFunctionName.length() + strCustomization.length() == 0 ? 1 : ceil((float)(strFunctionName.length() + strCustomization.length()) / uiBlockSize))*uiBlockSize + uiLength + 1;
+	m_pEncBuf = new unsigned char[uiBufferSize];
+	memset(m_pEncBuf, 0x00, uiBufferSize);
+
+	// the block size
+	unsigned int uiBytesWritten = 0;
+	unsigned int uiOffset = left_encode(m_pEncBuf, uiBlockSize);
+
+	// the function name
+	unsigned char *pPtr = encode_string((unsigned char*)strFunctionName.c_str(), strFunctionName.length(), &uiBytesWritten);
+	memcpy( (m_pEncBuf + uiOffset), pPtr, uiBytesWritten);
+	uiOffset += uiBytesWritten;
+	delete pPtr;
+
+	// the customization string
+	pPtr = encode_string((unsigned char*)strCustomization.c_str(), strCustomization.length(), &uiBytesWritten);
+	memcpy( (m_pEncBuf + uiOffset), pPtr, uiBytesWritten);
+	uiOffset += uiBytesWritten;
+	delete pPtr;
+
+	// the content itself
+	uiOffset = (strFunctionName.length() + strCustomization.length() == 0 ? 1 : ceil((float)(strFunctionName.length() + strCustomization.length()) / uiBlockSize))*uiBlockSize; //bytepad
+	memcpy((m_pEncBuf + uiOffset), pBuffer, uiLength);
+
+	uiOffset += uiLength;
+
+	// call the has function with the prepared cShake buffer
+	return hash(SHA3::HashType::SHAKE, size, m_pEncBuf, uiOffset, uiDigestLength);
+}
+
+uint8_t* SHA3::kmac(HashSize size, const uint8_t *pBuffer, unsigned int uiLength, unsigned int uiDigestLength, std::string strKey, std::string strCustomization)
+{
+	unsigned int uiBlockSize = 200 - 2 * (size / 8);
+	unsigned int uiBufferSize = (strKey.length() == 0 ? 1 : ceil((float)strKey.length() / uiBlockSize))*uiBlockSize + uiLength + sizeof(size_t) + 1;
+	m_pEncBuf = new unsigned char[uiBufferSize];
+	memset(m_pEncBuf, 0x00, uiBufferSize);
+	unsigned int uiBytesWritten = 0;
+
+	// the key
+	unsigned char *pPtr = encode_string((unsigned char*)strKey.c_str(), strKey.length(), &uiBytesWritten);
+	memcpy(m_pEncBuf, pPtr, uiBytesWritten);
+	delete pPtr;
+
+	// the content
+	unsigned int uiOffset = (strKey.length() == 0 ? 1 : ceil(strKey.length() / uiBlockSize))*uiBlockSize; //bytepad
+	memcpy((m_pEncBuf + uiOffset), pBuffer, uiLength);
+	uiOffset += uiLength;
+	
+	// the digest length
+	uiBytesWritten = right_encode( (m_pEncBuf +uiOffset), uiDigestLength);
+	uiOffset += uiBytesWritten;
+
+	//cshake
+	return cShake(size, m_pEncBuf, uiOffset, uiDigestLength, "KMAC", strCustomization);
 }
 
 // Function to create the state structure for keccak application, of size length
@@ -513,4 +591,52 @@ inline int SHA3::index(int x)
 inline int SHA3::index(int x, int y)
 {
 	return index(x) + 5 * index(y);
+}
+
+unsigned int SHA3::left_encode(unsigned char * encbuf, size_t value)
+{
+	unsigned int n, i;
+	size_t v;
+
+	for (v = value, n = 0; v && (n < sizeof(size_t)); ++n, v >>= 8)
+		; /* empty */
+	if (n == 0)
+		n = 1;
+	for (i = 1; i <= n; ++i)
+	{
+		encbuf[i] = (unsigned char)(value >> (8 * (n - i)));
+	}
+	encbuf[0] = (unsigned char)n;
+	return n + 1;
+}
+
+unsigned int SHA3::right_encode(unsigned char * encbuf, size_t value)
+{
+	unsigned int n, i;
+	size_t v;
+
+	for (v = value, n = 0; v && (n < sizeof(size_t)); ++n, v >>= 8)
+		; /* empty */
+	if (n == 0)
+		n = 1;
+	for (i = 1; i <= n; ++i)
+	{
+		encbuf[i - 1] = (unsigned char)(value >> (8 * (n - i)));
+	}
+	encbuf[n] = (unsigned char)n;
+	return n + 1;
+}
+
+unsigned char* SHA3::encode_string(unsigned char *pInput, unsigned int uiLength, unsigned int *uiBytesWritten)
+{
+	unsigned char encbuf[sizeof(size_t) + 1];
+	*uiBytesWritten = left_encode(encbuf, uiLength);
+	unsigned char *pBuffer = new unsigned char[*uiBytesWritten + uiLength];
+
+	memcpy(pBuffer, encbuf, *uiBytesWritten);
+	memcpy((pBuffer + *uiBytesWritten), pInput, uiLength);
+
+	*uiBytesWritten += uiLength;
+
+	return pBuffer;
 }
