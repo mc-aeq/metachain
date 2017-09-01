@@ -72,6 +72,9 @@ const uint32_t g_cuint32tVersion = 1;
 #define LOCK_FILE ".lock"
 #define RAW_FILEENDING ".mbl"
 
+// autoupdate defines
+#define AU_VERSION_FILE "latest.version"
+
 // HAVE_MSG_NOSIGNAL may not be available on all platforms
 #if !defined(MSG_NOSIGNAL)
 #define MSG_NOSIGNAL 0

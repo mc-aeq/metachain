@@ -76,6 +76,7 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
+    <IncludePath>dependencies\curl-7.55.1\builds\libcurl-vc14-x64-release-static-ssl-static-ipv6-sspi\include;dependencies\zlib-1.2.11;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
@@ -99,15 +100,15 @@
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
-      <PreprocessorDefinitions>_DEBUG;_CONSOLE;HAVE_WORKING_BOOST_SLEEP_FOR;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>_DEBUG;_CONSOLE;_X86_64;HAVE_WORKING_BOOST_SLEEP_FOR;CURL_STATICLIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <AdditionalIncludeDirectories>dependencies\boost_1_64_0;dependencies\openssl-x64\include;dependencies\rocksdb\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <MinimalRebuild>false</MinimalRebuild>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
-      <AdditionalDependencies>ws2_32.lib;Advapi32.lib;Rpcrt4.lib;libssl.lib;libcrypto.lib;rocksdb.lib</AdditionalDependencies>
-      <AdditionalLibraryDirectories>dependencies\boost_1_64_0\stage\lib;dependencies\openssl-x64\lib;dependencies\rocksdb\build\Debug;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>ws2_32.lib;Advapi32.lib;Rpcrt4.lib;libssl.lib;libcrypto.lib;rocksdb.lib;libcurl_a.lib;zlibstat.lib</AdditionalDependencies>
+      <AdditionalLibraryDirectories>dependencies\boost_1_64_0\stage\lib;dependencies\openssl-x64\lib;dependencies\rocksdb\build\Debug;dependencies\curl-7.55.1\builds\libcurl-vc14-x64-release-static-ssl-static-ipv6-sspi\lib;dependencies\zlib-1.2.11\contrib\vstudio\vc14\x64\ZlibStatDebug;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -162,6 +163,8 @@
     <ClInclude Include="src\cThreadInterrupt.h" />
     <ClInclude Include="src\endian.h" />
     <ClInclude Include="src\hash.h" />
+    <ClInclude Include="src\io\zip\unzip.h" />
+    <ClInclude Include="src\io\zip\zip.h" />
     <ClInclude Include="src\prevector.h" />
     <ClInclude Include="src\random.h" />
     <ClInclude Include="src\reverselock.h" />
@@ -202,6 +205,8 @@
     <ClCompile Include="src\crypto\sha512.cpp" />
     <ClCompile Include="src\cThreadInterrupt.cpp" />
     <ClCompile Include="src\hash.cpp" />
+    <ClCompile Include="src\io\zip\unzip.cpp" />
+    <ClCompile Include="src\io\zip\zip.cpp" />
     <ClCompile Include="src\random.cpp" />
     <ClCompile Include="src\scheduler.cpp" />
     <ClCompile Include="src\uint256.cpp" />

@@ -7,7 +7,9 @@
 #include "sha3.h"
 #include <iomanip>
 #include <boost/lexical_cast.hpp>
-#include "endian.h"
+#include "../endian.h"
+
+const unsigned int cuiBufferSize = 1024 * 4;
 
 static inline uint64_t rotateLeft(uint64_t x, unsigned int n)
 {
@@ -40,7 +42,7 @@ SHA3::~SHA3()
 }
 
 std::string	SHA3::to_string(uint8_t *input, unsigned int uiSize)
-{	
+{
 	std::stringstream ss;
 	ss << std::hex << std::setfill('0');
 	for (unsigned int i = 0; i < (uiSize / 8); i++)
@@ -49,15 +51,56 @@ std::string	SHA3::to_string(uint8_t *input, unsigned int uiSize)
 	return ss.str();
 }
 
-uint8_t* SHA3::hash(HashType type, HashSize size, const uint8_t * pBuffer, unsigned int uiLength, unsigned int uiDigestLength )
+uint8_t* SHA3::hashFile(std::string strFileName, HashType type, HashSize size, unsigned int uiDigestLength)
 {
 	if (type == SHA3::HashType::SHAKE)
 		shakeCreate(size, uiDigestLength);
 	else
 		keccakCreate(size);
-	
+
+	FILE *fp = fopen(strFileName.c_str(), "rb");
+	if (!fp)
+		return NULL;
+
+	fseek(fp, 0, SEEK_SET);
+	char *cBuffer = new char[cuiBufferSize];
+	while (true)
+	{
+		unsigned int bytesRead = fread(cBuffer, 1, cuiBufferSize, fp);
+
+		keccakUpdate((uint8_t*)cBuffer, 0, bytesRead);
+		if (bytesRead < cuiBufferSize)
+			break;
+	}
+	delete[] cBuffer;
+	fclose(fp);
+
+	uint8_t *op;
+	switch (type)
+	{
+	case SHA3::HashType::DEFAULT:
+		op = sha3Digest();
+		break;
+	case SHA3::HashType::KECCAK:
+		op = keccakDigest();
+		break;
+	case SHA3::HashType::SHAKE:
+		op = shakeDigest();
+		break;
+	}
+
+	return op;
+}
+
+uint8_t* SHA3::hash(HashType type, HashSize size, const uint8_t * pBuffer, unsigned int uiLength, unsigned int uiDigestLength)
+{
+	if (type == SHA3::HashType::SHAKE)
+		shakeCreate(size, uiDigestLength);
+	else
+		keccakCreate(size);
+
 	keccakUpdate(pBuffer, 0, uiLength);
-		
+
 	uint8_t *op;
 	switch (type)
 	{
@@ -91,13 +134,13 @@ uint8_t* SHA3::cShake(HashSize size, const uint8_t *pBuffer, unsigned int uiLeng
 
 	// the function name
 	unsigned char *pPtr = encode_string((unsigned char*)strFunctionName.c_str(), strFunctionName.length(), &uiBytesWritten);
-	memcpy( (m_pEncBuf + uiOffset), pPtr, uiBytesWritten);
+	memcpy((m_pEncBuf + uiOffset), pPtr, uiBytesWritten);
 	uiOffset += uiBytesWritten;
 	delete pPtr;
 
 	// the customization string
 	pPtr = encode_string((unsigned char*)strCustomization.c_str(), strCustomization.length(), &uiBytesWritten);
-	memcpy( (m_pEncBuf + uiOffset), pPtr, uiBytesWritten);
+	memcpy((m_pEncBuf + uiOffset), pPtr, uiBytesWritten);
 	uiOffset += uiBytesWritten;
 	delete pPtr;
 
@@ -128,9 +171,9 @@ uint8_t* SHA3::kmac(HashSize size, const uint8_t *pBuffer, unsigned int uiLength
 	unsigned int uiOffset = (strKey.length() == 0 ? 1 : ceil(strKey.length() / uiBlockSize))*uiBlockSize; //bytepad
 	memcpy((m_pEncBuf + uiOffset), pBuffer, uiLength);
 	uiOffset += uiLength;
-	
+
 	// the digest length
-	uiBytesWritten = right_encode( (m_pEncBuf +uiOffset), uiDigestLength);
+	uiBytesWritten = right_encode((m_pEncBuf + uiOffset), uiDigestLength);
 	uiOffset += uiBytesWritten;
 
 	//cshake

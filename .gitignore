@@ -1,6 +1,7 @@
 ﻿/.vs
 /x64
 /metachain
+/tmp
 /MetaChain.o
 /output.log
 /dependencies

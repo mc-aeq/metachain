@@ -7,12 +7,16 @@
 #include "MetaChain.h"
 
 #include <atomic>
+#include <curl/curl.h>
+#include <boost/filesystem/operations.hpp>
 
 #include "SimpleIni.h"
 #include "scheduler.h"
 #include "functions.h"
 #include "network/NetworkManager.h"
 #include "logger.h"
+#include "crypto/sha3.h"
+#include "io/zip/unzip.h"
 
 extern std::atomic<bool> sabShutdown;
 
@@ -29,15 +33,22 @@ MetaChain& MetaChain::getInstance()
 	return instance;
 }
 
-bool MetaChain::initialize(CSimpleIniA* iniFile)
+bool MetaChain::initialize(CSimpleIniA* iniFile, boost::filesystem::path pathExecutable)
 {
+	m_pathExecutable = pathExecutable;
+
+	// read autoupdate settings
+	m_iVersionTicksTillUpdate = iniFile->GetLongValue("autoupdate", "ticks_until_update_triggered", 10);
+	m_bAutoUpdate = iniFile->GetBoolValue("autoupdate", "enable", true);
+	m_strCDNUrl = iniFile->GetValue("autoupdate", "cdn_url", "https://cdn.tct.io/");
+
+	// do a autoupdate call upon start if requested
+	if (iniFile->GetBoolValue("autoupdate", "autoupdate_on_start", true))
+		doAutoUpdate();
+
 	// start the lightweight scheduling thread
 	CScheduler::Function serviceLoop = boost::bind(&CScheduler::serviceQueue, &m_scheduler);
 	m_threadGroup.create_thread(boost::bind(&TraceThread<CScheduler::Function>, "scheduler", serviceLoop));
-
-	// read some ini settings
-	m_iVersionTicksTillUpdate = iniFile->GetLongValue("autoupdate", "ticks_until_update_triggered", 10);
-	m_bAutoUpdate = iniFile->GetBoolValue("autoupdate", "do_autoupdate", true);
 
 	// create the block storage backends, check their integrity and check if no other instance is running
 	m_pStorageManager = new StorageManager(this);
@@ -81,9 +92,207 @@ void MetaChain::incrementNewerVersionTicker()
 			sabShutdown = true;
 		}
 		else
+			doAutoUpdate();
+	}	
+}
+
+static size_t curlWriteCallback(void *contents, size_t size, size_t nmemb, void *userp)
+{
+	((std::string*)userp)->append((char*)contents, size * nmemb);
+	return size * nmemb;
+}
+
+// auto update function that returns false if nothing was updated and true if something was updated
+// when true is returned, the node needs to restart in order for changes to take affect
+bool MetaChain::doAutoUpdate()
+{
+	if (m_strCDNUrl == "")
+		return false;
+
+	LOG("Checking for newer Version at: " + m_strCDNUrl, "AU");
+
+	// first fetch the current version number from the CDN	
+	CURL *curl = curl_easy_init();
+	if (curl)
+	{
+		std::string strCurrentVersion;
+		curl_easy_setopt(curl, CURLOPT_URL, (m_strCDNUrl + "/" + AU_VERSION_FILE).c_str());
+		curl_easy_setopt(curl, CURLOPT_SSL_VERIFYPEER, 0);
+		curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, curlWriteCallback);
+		curl_easy_setopt(curl, CURLOPT_WRITEDATA, &strCurrentVersion);
+		CURLcode res = curl_easy_perform(curl);
+		curl_easy_cleanup(curl);
+
+		if (res != CURLE_OK)
 		{
-			// todo: auto update
+			LOG_ERROR("Error receiving version number: " + (std::string)curl_easy_strerror(res), "AU");
+			return false;
+		}
+
+		// remove tags that might be around and then convert to a number for version comparing
+		boost::trim_if(strCurrentVersion, boost::is_any_of("\n\r "));
+
+		// convert to number
+		uint32_t currentVersion = 0;
+		try
+		{
+			currentVersion = boost::lexical_cast<uint32_t>(strCurrentVersion);
+		}
+		catch (const boost::bad_lexical_cast &e)
+		{
+			LOG_ERROR("Can't convert version number to comparable format: (" + strCurrentVersion + ") " + (std::string)e.what(), "AU");
+			return false;
+		}
+
+		// compare version numbers
+		if (currentVersion != g_cuint32tVersion)
+		{
+			// get the newest version
+			LOG("New version found, updating", "AU");
+
+			// assembling the download uri
+			std::string strURI = m_strCDNUrl + "/";
+#ifdef _WIN32
+			strURI += "windows/";
+#else
+			strURI += "linux/";
+#endif
+#ifdef _X86_64
+			strURI += "x86_64/";
+#else
+			strURI += "i386/";
+#endif
+			strURI += strCurrentVersion + "/";
+
+			// make sure we have a clean tmp directory
+			std::string strTmpDir = boost::filesystem::current_path().string() + "/tmp/";
+			try
+			{
+				boost::filesystem::remove_all(strTmpDir);
+				boost::filesystem::create_directory(strTmpDir);
+			}
+			catch (const boost::filesystem::filesystem_error& e)
+			{
+				LOG_ERROR("Couldn't clean tmp directory for safe processing: " + (std::string)e.what(), "AU");
+				return false;
+			}
+
+			// download the files
+			if (!downloadFile(strURI + "check.sum", strTmpDir + "check.sum"))
+				return false;
+			if (!downloadFile(strURI + "node.zip", strTmpDir + "node.zip"))
+				return false;
+
+			// calc and check the hashsum
+			LOG("Checking checksums", "AU");
+			SHA3 crypto;
+			std::ifstream ifs(strTmpDir + "check.sum");
+			std::string strChecksum((std::istreambuf_iterator<char>(ifs)),	(std::istreambuf_iterator<char>()));
+			boost::trim_if(strChecksum, boost::is_any_of("\n\r "));
+			ifs.close();
+			if (crypto.to_string(crypto.hashFile(strTmpDir + "node.zip", SHA3::HashType::DEFAULT, SHA3::HashSize::SHA3_512), SHA3::HashSize::SHA3_512) != strChecksum)
+			{
+				LOG_ERROR("Checksums don't match", "AU");
+				return false;
+			}
+			LOG("Checksums match, continuing updating", "AU");
+
+			// extract content from the zip file
+			LOG("Extracting ZIP file", "AU");
+			ZIP::Unzip zipFile;
+			zipFile.open( (strTmpDir + "node.zip").c_str() );
+			auto filenames = zipFile.getFilenames();
+			for (auto it = filenames.begin(); it != filenames.end(); it++)
+			{
+				std::ofstream outFile(strTmpDir + *it, std::ofstream::binary);
+
+				zipFile.openEntry((*it).c_str());
+				zipFile >> outFile;
+
+				outFile.close();
+			}
+			zipFile.close();
+			boost::filesystem::remove(strTmpDir + "node.zip");
+			boost::filesystem::remove(strTmpDir + "check.sum");
+
+			LOG("Replacing old files with new files (except configs)", "AU");
+			boost::filesystem::path pathBackupExe(m_pathExecutable);
+			pathBackupExe.remove_filename();
+			pathBackupExe /= "node.bak";
+
+			// move the executable to a backup location
+			if (boost::filesystem::exists(pathBackupExe))
+				boost::filesystem::remove(pathBackupExe);
+			boost::filesystem::rename(m_pathExecutable, pathBackupExe);			
+
+			// copy all extracted files to our local path
+			boost::filesystem::path pathMover;
+			for (boost::filesystem::directory_iterator file(strTmpDir); file != boost::filesystem::directory_iterator(); file++)
+			{
+				pathMover = pathBackupExe;
+				pathMover.remove_filename();
+				pathMover /= file->path().filename();
+				try
+				{
+					boost::filesystem::rename(file->path(), pathMover);
+				}
+				catch (const boost::filesystem::filesystem_error& e)
+				{
+					LOG_ERROR("Couldn't move updated file sources: " + (std::string)e.what(), "AU");
+					return false;
+				}
+			}
+
+			// the update process is now completed. the function that called this function needs to handle the shutdown and restart of the updated version
+			LOG("Autoupdate process completed. Restarting node to finish the updating process... ", "AU");
+
+			return true;
+		}
+		else
+		{
+			LOG("No new version found, continuing work", "AU");
+			return false;
 		}
 	}
-	
+	else
+	{
+		LOG_ERROR("Error initializing curl, AutoUpdate aborted", "AU");
+		return false;
+	}
+}
+
+bool MetaChain::downloadFile(std::string strFrom, std::string strTo)
+{
+	FILE *fp = fopen(strTo.c_str(), "wb");
+	if (!fp)
+	{
+		LOG_ERROR("Couldn't open " + strTo + " file for writing", "DL");
+		return false;
+	}
+
+	CURL *curl = curl_easy_init();
+	if (curl)
+	{
+		curl_easy_setopt(curl, CURLOPT_URL, strFrom.c_str());
+		curl_easy_setopt(curl, CURLOPT_SSL_VERIFYPEER, 0);
+		curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, NULL);
+		curl_easy_setopt(curl, CURLOPT_WRITEDATA, fp);
+		CURLcode res = curl_easy_perform(curl);
+		curl_easy_cleanup(curl);
+		fclose(fp);
+
+		if (res != CURLE_OK)
+		{
+			LOG_ERROR("Couldn't download from " + strFrom + " and store it to " + strTo, "DL");
+			return false;
+		}
+		else
+			return true;
+	}
+	else
+	{
+		fclose(fp);
+		LOG_ERROR("Error initializing curl, download aborted", "DL");
+		return false;
+	}
 }

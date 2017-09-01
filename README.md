@@ -26,6 +26,8 @@ currently not supported
 - [brofield/simpleini] is used for ini parsing
 - [bitcoin-core/secp256k1] used as C backend for secp256k1 ECDA algorithm
 - [cryptopp] a widely known and usefull crypto library supporting us with crypto algorithms
+- [curl] curl is used for fast and easy access of files stored in the internet. Version 7.55.1 is used
+- [zlib] zlib is used for automatic decompression for autoupdating die node. Version 1.2.11 is used
 - C++ compiler needs to have C++11 compability. As soon as C++17.2 is available, changes will be made to use the C++17.2 standard as dependency!
 We provide forks of all the needed dependencies in our github organization account. These are the tested versions and those forks will be updated frequently. You can rely on those forks in terms of building the MetaChain.
 #### Building for source on windows
@@ -125,3 +127,5 @@ GPLv3
    [rocksdb]: <https://github.com/facebook/rocksdb/>
    [bitcoin-core/secp256k1]: <https://github.com/bitcoin-core/secp256k1>
    [cryptopp]: <https://github.com/weidai11/cryptopp>
+   [curl]: <https://curl.haxx.se/>
+   [zlib]: <http://zlib.net/>

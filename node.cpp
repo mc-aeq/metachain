@@ -7,6 +7,7 @@
 #include <atomic>
 #include <string>
 #include <boost/thread/thread.hpp>
+#include <boost/filesystem/operations.hpp>
 
 #include "src/defines.h"
 #include "src/ArgsManager.h"
@@ -108,7 +109,7 @@ int main( int argc, char* argv[] )
 		MetaChain::getInstance();
 
 		LOG("initializing MetaChain", "MC");
-		if (!MetaChain::getInstance().initialize(iniFile))
+		if (!MetaChain::getInstance().initialize(iniFile, boost::filesystem::system_complete(argv[0])))
 		{
 			LOG_ERROR("Something terrible happened, we're terminating for security reasons.", "MC");
 			return 1;

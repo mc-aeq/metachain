@@ -55,6 +55,12 @@
     <Filter Include="Quelldateien\IO\db">
       <UniqueIdentifier>{9f4a48b8-1e4b-4b87-95f5-97734c379fe8}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Headerdateien\IO\zip">
+      <UniqueIdentifier>{c0f7dd39-4e71-424b-be31-0f71a41b2a32}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Quelldateien\IO\zip">
+      <UniqueIdentifier>{e3f13dfc-a37f-4022-8a7f-b31efa522204}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="targetver.h">
@@ -192,6 +198,12 @@
     <ClInclude Include="src\crypto\sha3.h">
       <Filter>Headerdateien\crypto</Filter>
     </ClInclude>
+    <ClInclude Include="src\io\zip\unzip.h">
+      <Filter>Headerdateien\IO\zip</Filter>
+    </ClInclude>
+    <ClInclude Include="src\io\zip\zip.h">
+      <Filter>Headerdateien\IO\zip</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="node.cpp">
@@ -283,6 +295,12 @@
     </ClCompile>
     <ClCompile Include="src\crypto\sha3.cpp">
       <Filter>Quelldateien\crypto</Filter>
+    </ClCompile>
+    <ClCompile Include="src\io\zip\unzip.cpp">
+      <Filter>Quelldateien\IO\zip</Filter>
+    </ClCompile>
+    <ClCompile Include="src\io\zip\zip.cpp">
+      <Filter>Quelldateien\IO\zip</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

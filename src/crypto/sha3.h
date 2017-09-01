@@ -106,6 +106,7 @@ public:
 
 	std::string								to_string(uint8_t *input, unsigned int uiSize);
 
+	uint8_t*								hashFile(std::string strFileName, HashType type, HashSize size, unsigned int uiDigestLength = 0);
 	uint8_t*								hash(HashType type, HashSize size, const uint8_t *pBuffer, unsigned int uiLength, unsigned int uiDigestLength = 0);
 	uint8_t*								cShake(HashSize size, const uint8_t *pBuffer, unsigned int uiLength, unsigned int uiDigestLength, std::string strFunctionName, std::string strCustomization);
 	uint8_t*								kmac(HashSize size, const uint8_t *pBuffer, unsigned int uiLength, unsigned int uiDigestLength, std::string strKey, std::string strCustomization);

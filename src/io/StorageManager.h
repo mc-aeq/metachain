@@ -15,7 +15,7 @@
 #include <boost/filesystem/path.hpp>
 #include "../MetaChain.h"
 #include "../SimpleIni.h"
-#include "db/dbEngine.h";
+#include "db/dbEngine.h"
 
 class MetaChain;
 

@@ -30,10 +30,14 @@ private:
 	boost::thread_group			m_threadGroup;
 	CScheduler					m_scheduler;
 
+	// variables and functions for the autoupdate process
 	int							m_iVersionTicksTillUpdate;
 	bool						m_bAutoUpdate;
 	unsigned short				m_usNewerVersionTicker;
-
+	std::string					m_strCDNUrl;
+	boost::filesystem::path		m_pathExecutable;
+	bool						downloadFile(std::string strFrom, std::string strTo);
+	bool						doAutoUpdate();
 
 	// constructor and operator
 								MetaChain();
@@ -42,7 +46,7 @@ private:
 
 public:
 	static						MetaChain& getInstance();
-	bool						initialize(CSimpleIniA* iniFile);
+	bool						initialize(CSimpleIniA* iniFile, boost::filesystem::path pathExecutable);
 	void						LicenseInfo();
 
 	void						incrementNewerVersionTicker();
