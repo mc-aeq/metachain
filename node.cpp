@@ -8,6 +8,8 @@
 #include <string>
 #include <boost/thread/thread.hpp>
 #include <boost/filesystem/operations.hpp>
+#include <boost/process.hpp>
+#include <boost/process/spawn.hpp>
 
 #include "src/defines.h"
 #include "src/ArgsManager.h"
@@ -20,6 +22,7 @@
 */
 
 std::atomic<bool> sabShutdown(false);
+std::atomic<bool> sabReboot(false);
 
 // argument manager
 ArgsManager gArgs;
@@ -111,12 +114,30 @@ int main( int argc, char* argv[] )
 		LOG("initializing MetaChain", "MC");
 		if (!MetaChain::getInstance().initialize(iniFile, boost::filesystem::system_complete(argv[0])))
 		{
-			LOG_ERROR("Something terrible happened, we're terminating for security reasons.", "MC");
-			return 1;
+			// if sabReboot is set, the autoupdate upon start was successfull. we don't need an error msg and continue to restart the node with the new versions
+			if (!sabReboot)
+			{
+				LOG_ERROR("Something terrible happened, we're terminating for security reasons.", "MC");
+				return 1;
+			}
+		}
+		else
+		{
+			// go into our execution loop and wait for shutdown
+			WaitForShutdown(MetaChain::getInstance().getThreadGroup());
 		}
 
-		// go into our execution loop and wait for shutdown
-		WaitForShutdown(MetaChain::getInstance().getThreadGroup());
+		// it can happen that a update was successfully made. if so, everything is prepared and this variable is true
+		// we need to start up a new MC process and let this one die
+		// there are no race conditions with databases since everything needs to be shut down correctly before the following line is called
+		if (sabReboot)
+		{
+			// start a new process in async mode (we dont need anything from this new process)
+			std::string strParams;
+			for (int i = 1; i < argc; i++)
+				strParams += argv[i];
+			boost::process::spawn(argv[0], strParams);
+		}
 
 		// end metachain 
 		return 0;

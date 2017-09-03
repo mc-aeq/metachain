@@ -19,6 +19,7 @@
 #include "io/zip/unzip.h"
 
 extern std::atomic<bool> sabShutdown;
+extern std::atomic<bool> sabReboot;
 
 MetaChain::MetaChain() :
 	m_pNetworkManager( NULL ),
@@ -44,7 +45,12 @@ bool MetaChain::initialize(CSimpleIniA* iniFile, boost::filesystem::path pathExe
 
 	// do a autoupdate call upon start if requested
 	if (iniFile->GetBoolValue("autoupdate", "autoupdate_on_start", true))
-		doAutoUpdate();
+	{
+		// if the doAutoUpdate() function returns true, a update was successfully made.
+		// we skip the rest of the initialization function since we need to start the new version
+		if (doAutoUpdate())
+			return false;
+	}
 
 	// start the lightweight scheduling thread
 	CScheduler::Function serviceLoop = boost::bind(&CScheduler::serviceQueue, &m_scheduler);
@@ -245,6 +251,8 @@ bool MetaChain::doAutoUpdate()
 
 			// the update process is now completed. the function that called this function needs to handle the shutdown and restart of the updated version
 			LOG("Autoupdate process completed. Restarting node to finish the updating process... ", "AU");
+			sabShutdown = true;	// shutdown the thread that runs the MC
+			sabReboot = true;	// reboot the MC Node
 
 			return true;
 		}
