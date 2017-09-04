@@ -36,6 +36,7 @@ private:
 	unsigned short				m_usNewerVersionTicker;
 	std::string					m_strCDNUrl;
 	boost::filesystem::path		m_pathExecutable;
+	boost::filesystem::path		m_pathTmp;
 	bool						downloadFile(std::string strFrom, std::string strTo);
 	bool						doAutoUpdate();
 

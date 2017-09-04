@@ -42,6 +42,9 @@ bool MetaChain::initialize(CSimpleIniA* iniFile, boost::filesystem::path pathExe
 	m_iVersionTicksTillUpdate = iniFile->GetLongValue("autoupdate", "ticks_until_update_triggered", 10);
 	m_bAutoUpdate = iniFile->GetBoolValue("autoupdate", "enable", true);
 	m_strCDNUrl = iniFile->GetValue("autoupdate", "cdn_url", "https://cdn.tct.io/");
+	m_pathTmp = iniFile->GetValue("autoupdate", "tmp_dir", "tmp");
+	if (m_pathTmp.is_relative())
+		m_pathTmp = boost::filesystem::current_path() / iniFile->GetValue("autoupdate", "tmp_dir", "tmp");
 
 	// do a autoupdate call upon start if requested
 	if (iniFile->GetBoolValue("autoupdate", "autoupdate_on_start", true))
@@ -171,11 +174,10 @@ bool MetaChain::doAutoUpdate()
 			strURI += strCurrentVersion + "/";
 
 			// make sure we have a clean tmp directory
-			std::string strTmpDir = boost::filesystem::current_path().string() + "/tmp/";
 			try
 			{
-				boost::filesystem::remove_all(strTmpDir);
-				boost::filesystem::create_directory(strTmpDir);
+				boost::filesystem::remove_all(m_pathTmp);
+				boost::filesystem::create_directory(m_pathTmp);
 			}
 			catch (const boost::filesystem::filesystem_error& e)
 			{
@@ -184,19 +186,19 @@ bool MetaChain::doAutoUpdate()
 			}
 
 			// download the files
-			if (!downloadFile(strURI + "check.sum", strTmpDir + "check.sum"))
+			if (!downloadFile(strURI + "check.sum", (m_pathTmp / AU_CHECKSUM_FILE).string()))
 				return false;
-			if (!downloadFile(strURI + "node.zip", strTmpDir + "node.zip"))
+			if (!downloadFile(strURI + "node.zip", (m_pathTmp / AU_NODE_FILE).string()))
 				return false;
 
 			// calc and check the hashsum
 			LOG("Checking checksums", "AU");
 			SHA3 crypto;
-			std::ifstream ifs(strTmpDir + "check.sum");
+			std::ifstream ifs((m_pathTmp / AU_CHECKSUM_FILE).string());
 			std::string strChecksum((std::istreambuf_iterator<char>(ifs)),	(std::istreambuf_iterator<char>()));
 			boost::trim_if(strChecksum, boost::is_any_of("\n\r "));
 			ifs.close();
-			if (crypto.to_string(crypto.hashFile(strTmpDir + "node.zip", SHA3::HashType::DEFAULT, SHA3::HashSize::SHA3_512), SHA3::HashSize::SHA3_512) != strChecksum)
+			if (crypto.to_string(crypto.hashFile((m_pathTmp / AU_NODE_FILE).string(), SHA3::HashType::DEFAULT, SHA3::HashSize::SHA3_512), SHA3::HashSize::SHA3_512) != strChecksum)
 			{
 				LOG_ERROR("Checksums don't match", "AU");
 				return false;
@@ -206,11 +208,11 @@ bool MetaChain::doAutoUpdate()
 			// extract content from the zip file
 			LOG("Extracting ZIP file", "AU");
 			ZIP::Unzip zipFile;
-			zipFile.open( (strTmpDir + "node.zip").c_str() );
+			zipFile.open( (m_pathTmp / AU_NODE_FILE).string().c_str() );
 			auto filenames = zipFile.getFilenames();
 			for (auto it = filenames.begin(); it != filenames.end(); it++)
 			{
-				std::ofstream outFile(strTmpDir + *it, std::ofstream::binary);
+				std::ofstream outFile((m_pathTmp / *it).string(), std::ofstream::binary);
 
 				zipFile.openEntry((*it).c_str());
 				zipFile >> outFile;
@@ -218,29 +220,24 @@ bool MetaChain::doAutoUpdate()
 				outFile.close();
 			}
 			zipFile.close();
-			boost::filesystem::remove(strTmpDir + "node.zip");
-			boost::filesystem::remove(strTmpDir + "check.sum");
+			boost::filesystem::remove(m_pathTmp / AU_NODE_FILE);
+			boost::filesystem::remove(m_pathTmp / AU_CHECKSUM_FILE);
 
 			LOG("Replacing old files with new files (except configs)", "AU");
-			boost::filesystem::path pathBackupExe(m_pathExecutable);
-			pathBackupExe.remove_filename();
-			pathBackupExe /= "node.bak";
+			boost::filesystem::path pathRoot(m_pathExecutable);
+			pathRoot.remove_filename();
 
 			// move the executable to a backup location
-			if (boost::filesystem::exists(pathBackupExe))
-				boost::filesystem::remove(pathBackupExe);
-			boost::filesystem::rename(m_pathExecutable, pathBackupExe);			
+			if (boost::filesystem::exists(pathRoot / AU_NODE_BACKUPFILE))
+				boost::filesystem::remove(pathRoot / AU_NODE_BACKUPFILE);
+			boost::filesystem::rename(m_pathExecutable, pathRoot / AU_NODE_BACKUPFILE);			
 
 			// copy all extracted files to our local path
-			boost::filesystem::path pathMover;
-			for (boost::filesystem::directory_iterator file(strTmpDir); file != boost::filesystem::directory_iterator(); file++)
+			for (boost::filesystem::directory_iterator file(m_pathTmp); file != boost::filesystem::directory_iterator(); file++)
 			{
-				pathMover = pathBackupExe;
-				pathMover.remove_filename();
-				pathMover /= file->path().filename();
 				try
 				{
-					boost::filesystem::rename(file->path(), pathMover);
+					boost::filesystem::rename(file->path(), pathRoot / file->path().filename());
 				}
 				catch (const boost::filesystem::filesystem_error& e)
 				{

@@ -20,7 +20,7 @@ StorageManager::StorageManager(MetaChain *mc)
 StorageManager::~StorageManager()
 {
 	// remove the lock file in the data directory
-	remove(std::string(m_pathDataDirectory.string() + LOCK_FILE).c_str());
+	remove((m_pathDataDirectory /= LOCK_FILE).string().c_str());
 
 	// close the raw output file
 	if( m_bModeFN)
@@ -33,38 +33,41 @@ StorageManager::~StorageManager()
 bool StorageManager::initialize(CSimpleIniA* iniFile)
 {
 	// getting our mode, since we only have FN and CL, we use a flag
-	m_bModeFN = (iniFile->GetValue("general", "mode", "fn") == "fn" ? true : false);
+	m_bModeFN = ((std::string)iniFile->GetValue("general", "mode", "fn") == "fn" ? true : false);
 	LOG("initializing this node to run in mode: " + (std::string)(m_bModeFN ? "FN" : "CL"), "SM");
 
-	// get the data directory and sanitize it
-	m_strDataDirectory = iniFile->GetValue("data", "data_dir", "data");
-	boost::trim_right_if(m_strDataDirectory, boost::is_any_of("/"));
-	m_pathDataDirectory = boost::filesystem::current_path();
-	m_pathRawDirectory = m_pathDataDirectory /= m_strDataDirectory;
+	// get the data directory
+	m_pathDataDirectory = iniFile->GetValue("data", "data_dir", "data");
+	if( m_pathDataDirectory.is_relative() )
+		m_pathDataDirectory = boost::filesystem::current_path() / iniFile->GetValue("data", "data_dir", "data");
 
 	// security check if data directory exists, if it doesnt, create one
 	if (!boost::filesystem::exists(m_pathDataDirectory) || !boost::filesystem::is_directory(m_pathDataDirectory))
 	{
 		LOG_ERROR("Data directory doesn't exist: " + m_pathDataDirectory.string(), "SM");
 		LOG_ERROR("Creating data directory and resuming operation", "SM");
-		boost::filesystem::create_directory(m_pathDataDirectory);
+		if (!boost::filesystem::create_directory(m_pathDataDirectory))
+		{
+			LOG_ERROR("Couldn't create Data directory, exiting.", "SM");
+			return false;
+		}
 	}
 
 	// security check if there is a lock file (crashed instance or double starting in the same data directory)
-	if (boost::filesystem::exists(m_pathDataDirectory.string() + LOCK_FILE))
+	if (boost::filesystem::exists(m_pathDataDirectory / LOCK_FILE))
 	{
-		LOG_ERROR((std::string)LOCK_FILE + " file exists within the data directory. Instance crashed or started twice?", "SM");
+		LOG_ERROR((m_pathDataDirectory / LOCK_FILE).string() + " file exists within the data directory. Instance crashed or started twice?", "SM");
 		return false;
 	}
 	else
 	{
 		// create the lock file with the current timestamp info
 #ifdef _DEBUG
-		LOG_DEBUG("writing lock file: " + (std::string)LOCK_FILE, "SM");
+		LOG_DEBUG("writing lock file: " + (m_pathDataDirectory / LOCK_FILE).string(), "SM");
 #endif
 
 		std::ofstream streamOut;
-		streamOut.open(m_pathDataDirectory.string() + LOCK_FILE, std::ios_base::out | std::ios_base::trunc);
+		streamOut.open((m_pathDataDirectory / LOCK_FILE).string(), std::ios_base::out | std::ios_base::trunc);
 
 		// create a date/time string
 		std::basic_stringstream<char> wss;
@@ -76,14 +79,19 @@ bool StorageManager::initialize(CSimpleIniA* iniFile)
 		streamOut.close();
 
 #ifdef _DEBUG
-		LOG_DEBUG("done writing lock file: " + (std::string)LOCK_FILE, "SM");
+		LOG_DEBUG("done writing lock file: " + (m_pathDataDirectory / LOCK_FILE).string(), "SM");
 #endif
 	}
 
 	// fireing up the meta db
 	rocksdb::Options dbOptions;
 	dbOptions.create_if_missing = true;
-	rocksdb::Status dbStatus = rocksdb::DB::Open(dbOptions, m_pathDataDirectory.string() + "meta", &m_pMetaDB);
+#ifndef _DEBUG
+	dbOptions.info_log = std::make_shared<RocksDBNullLogger>();
+	dbOptions.keep_log_file_num = 1;
+#endif
+
+	rocksdb::Status dbStatus = rocksdb::DB::Open(dbOptions, (m_pathDataDirectory / META_DB_FOLDER).string(), &m_pMetaDB);
 	if (!dbStatus.ok())
 	{
 		LOG_ERROR("Can't open the meta information database: " + dbStatus.ToString(), "SM");
@@ -100,8 +108,8 @@ bool StorageManager::initialize(CSimpleIniA* iniFile)
 	{
 		rocksdb::WriteBatch batch;
 		batch.Put("initialized", "1");
-		batch.Put("mc.height", "0");
-		batch.Put("raw.file", "0");
+		batch.Put(MC_HEIGHT, "0");
+		batch.Put(LAST_RAW_FILE, "0");
 		m_pMetaDB->Write(rocksdb::WriteOptions(), &batch);
 	}
 
@@ -123,7 +131,7 @@ bool StorageManager::initialize(CSimpleIniA* iniFile)
 	// check for the raw directory (this is only needed when we're in FN mode)
 	if (m_bModeFN)
 	{
-		m_pathRawDirectory /= iniFile->GetValue("data", "raw_dir", "raw");
+		m_pathRawDirectory = m_pathDataDirectory / iniFile->GetValue("data", "raw_dir", "raw");
 		if(!boost::filesystem::exists(m_pathRawDirectory) || !boost::filesystem::is_directory(m_pathRawDirectory))
 		{
 			LOG_ERROR("Raw directory doesn't exist: " + m_pathRawDirectory.string(), "SM");
@@ -134,7 +142,11 @@ bool StorageManager::initialize(CSimpleIniA* iniFile)
 			if (bNewNode)
 			{
 				LOG_ERROR("Creating new raw directory since it's a new node", "SM");
-				boost::filesystem::create_directory(m_pathRawDirectory);
+				if (!boost::filesystem::create_directory(m_pathRawDirectory))
+				{
+					LOG_ERROR("Couldn't create raw directory: " + m_pathRawDirectory.string(), "SM");
+					return false;
+				}
 			}
 			else
 			{
@@ -144,29 +156,51 @@ bool StorageManager::initialize(CSimpleIniA* iniFile)
 			}
 		}
 
-		// get the raw file counter from the meta info db
-		std::string strFileCounter;
-		m_pMetaDB->Get(rocksdb::ReadOptions(), "raw.file", &strFileCounter);
-		m_uiRawFileCounter = boost::lexical_cast<unsigned int>(strFileCounter);
-
-		// open our fstream for raw output
-		{
-			LOCK(m_csRaw);
-			std::ostringstream ssFileName;
-			ssFileName << std::setw(6) << std::setfill('0') << m_uiRawFileCounter;
-
-			m_fileRaw = m_pathRawDirectory;
-			m_fileRaw /= ssFileName.str();
-			m_uimRawFileSize = boost::filesystem::file_size(m_fileRaw);
-
-			m_streamRaw.open(ssFileName.str() + RAW_FILEENDING, std::ios_base::app);
-		}
-
 		// get our max file size from the ini (the value there is in M, so we need to multiply it to get bytes
 		m_uimRawFileSizeMax = iniFile->GetLongValue("data", "raw_filesplit", 100) * 1048576;
+
+		// finally open the last raw file for writing
+		openRawFile();
 	}
 
 	// everything smooth
+	return true;
+}
+
+bool StorageManager::openRawFile()
+{
+	// close the stream if opened
+	{
+		LOCK(m_csRaw);
+		if (m_streamRaw.is_open())
+			m_streamRaw.close();
+	}
+
+	// get the raw file counter from the meta info db
+	std::string strFileCounter;
+	m_pMetaDB->Get(rocksdb::ReadOptions(), LAST_RAW_FILE, &strFileCounter);
+	unsigned int uiRawFileCounter = boost::lexical_cast<unsigned int>(strFileCounter);
+
+	// open our fstream for raw output
+	{
+		LOCK(m_csRaw);
+		std::ostringstream ssFileName;
+		ssFileName << std::setw(8) << std::setfill('0') << uiRawFileCounter;
+		m_fileRaw = m_pathRawDirectory / ssFileName.str();
+
+		// if the file exists we get the size to calculate our splitting. If it doesn't we start with 0
+		if (boost::filesystem::exists(m_fileRaw))
+			m_uimRawFileSize = boost::filesystem::file_size(m_fileRaw);
+		else
+			m_uimRawFileSize = 0;
+
+		m_streamRaw.open(m_fileRaw.string() + RAW_FILEENDING, std::ios_base::app);
+		if (!m_streamRaw.is_open())
+		{
+			LOG_ERROR("Unable to open raw file: " + m_fileRaw.string(), "SM");
+			return false;
+		}
+	}
 	return true;
 }
 
@@ -184,26 +218,25 @@ void StorageManager::writeRaw(unsigned int uiBlockNumber, unsigned int uiLength,
 		rocksdb::WriteBatch batch;
 		batch.Put("mbl." + boost::lexical_cast<std::string>(uiBlockNumber) + ".file", m_fileRaw.string());
 		batch.Put("mbl." + boost::lexical_cast<std::string>(uiBlockNumber) + ".offset", boost::lexical_cast<std::string>(m_uimRawFileSize) );
+		batch.Put("mbl." + boost::lexical_cast<std::string>(uiBlockNumber) + ".length", boost::lexical_cast<std::string>(uiLength));
 		m_pMetaDB->Write(rocksdb::WriteOptions(), &batch);
 
 		m_uimRawFileSize += uiLength;
+
 
 		// if the new file size is bigger than our maximum value, we close this file and open a new one for output
 		if (m_uimRawFileSize >= m_uimRawFileSizeMax)
 		{
 			LOCK(m_csRaw);
-			m_uiRawFileCounter++;
-			std::ostringstream ssFileName;
-			ssFileName << std::setw(6) << std::setfill('0') << m_uiRawFileCounter;
 
-			m_fileRaw = m_pathRawDirectory;
-			m_fileRaw /= ssFileName.str();
-			m_uimRawFileSize = 0;
+			// increment raw file counter
+			std::string strFileCounter;
+			m_pMetaDB->Get(rocksdb::ReadOptions(), LAST_RAW_FILE, &strFileCounter);
+			unsigned int uiRawFileCounter = boost::lexical_cast<unsigned int>(strFileCounter) + 1;
+			m_pMetaDB->Put(rocksdb::WriteOptions(), LAST_RAW_FILE, boost::lexical_cast<std::string>(uiRawFileCounter));
 
-			m_streamRaw.close();
-			m_streamRaw.open(ssFileName.str() + RAW_FILEENDING, std::ios_base::trunc | std::ios_base::app);
-
-			m_pMetaDB->Put(rocksdb::WriteOptions(), "raw.file", boost::lexical_cast<std::string>(m_uiRawFileCounter));
+			if (openRawFile())
+				m_uimRawFileSize = 0;
 		}
 	}
 }

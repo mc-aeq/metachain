@@ -36,22 +36,32 @@ class StorageManager
 		rocksdb::DB							*m_pMetaDB;
 
 		bool								m_bModeFN;
-		std::string							m_strDataDirectory;
 		boost::filesystem::path				m_pathDataDirectory;
 		boost::filesystem::path				m_pathRawDirectory;
 
-		// variables for raw file output
+		// functions and variables for raw file output
 		cCriticalSection					m_csRaw;
-		unsigned int						m_uiRawFileCounter;
 		std::ofstream						m_streamRaw;
 		boost::filesystem::path				m_fileRaw;
 		uintmax_t							m_uimRawFileSize;
 		uintmax_t							m_uimRawFileSizeMax;
+		bool								openRawFile();
+
 public:
 											StorageManager(MetaChain *mc);
 											~StorageManager();
 	bool									initialize(CSimpleIniA* iniFile);
 	void									writeRaw(unsigned int uiBlockNumber, unsigned int uiLength, void *raw);
 };
+
+#ifndef _DEBUG
+	// NullLogger class for rocksdb on release
+	class RocksDBNullLogger : public rocksdb::Logger {
+	public:
+		using rocksdb::Logger::Logv;
+		virtual void Logv(const char* format, va_list ap) override {}
+		virtual size_t GetLogFileSize() const override { return 0; }
+	};
+#endif
 
 #endif

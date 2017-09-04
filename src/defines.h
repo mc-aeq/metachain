@@ -69,11 +69,19 @@ const uint32_t g_cuint32tVersion = 1;
 #define MAX_BLOCK_SIZE 4124672 // 8M in bytes
 #define	CHECKSUM_SIZE 4 // 4 bytes per network message as checksum
 #define MAX_MSG_QUEUE 10
+
+// meta database, rawfile and blockchain output defines
 #define LOCK_FILE ".lock"
 #define RAW_FILEENDING ".mbl"
+#define META_DB_FOLDER "meta"
+#define LAST_RAW_FILE "last.raw.file"
+#define MC_HEIGHT "mc.height"
 
 // autoupdate defines
 #define AU_VERSION_FILE "latest.version"
+#define AU_CHECKSUM_FILE "check.sum"
+#define AU_NODE_FILE "node.zip"
+#define AU_NODE_BACKUPFILE "node.bak"
 
 // HAVE_MSG_NOSIGNAL may not be available on all platforms
 #if !defined(MSG_NOSIGNAL)
