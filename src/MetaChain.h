@@ -47,6 +47,7 @@ private:
 
 public:
 	static						MetaChain& getInstance();
+	void						shutdown();
 	bool						initialize(CSimpleIniA* iniFile, boost::filesystem::path pathExecutable);
 	void						LicenseInfo();
 

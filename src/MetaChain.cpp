@@ -34,6 +34,20 @@ MetaChain& MetaChain::getInstance()
 	return instance;
 }
 
+void MetaChain::shutdown()
+{
+	if (m_pStorageManager)
+	{
+		delete m_pStorageManager;
+		m_pStorageManager = NULL;
+	}
+	if (m_pNetworkManager)
+	{
+		delete m_pNetworkManager;
+		m_pNetworkManager = NULL;
+	}
+}
+
 bool MetaChain::initialize(CSimpleIniA* iniFile, boost::filesystem::path pathExecutable)
 {
 	m_pathExecutable = pathExecutable;

@@ -27,6 +27,21 @@ std::atomic<bool> sabReboot(false);
 // argument manager
 ArgsManager gArgs;
 
+#ifdef _WIN32
+	// Windows close function handling to ensure proper closing of files and removing lockfiles
+	BOOL WINAPI ConsoleHandlerRoutine(DWORD dwCtrlType)
+	{
+		if (CTRL_CLOSE_EVENT == dwCtrlType)
+		{
+			sabShutdown = true;
+			Sleep(1000000);
+			return TRUE;
+		}
+
+		return FALSE;
+	}
+#endif
+
 // our loop for the main thread
 void WaitForShutdown(boost::thread_group* threadGroup)
 {
@@ -45,6 +60,11 @@ void WaitForShutdown(boost::thread_group* threadGroup)
 // main entry point
 int main( int argc, char* argv[] )
 {
+#ifdef _WIN32
+	// set the control handler for the closing routine when pressing the close button
+	if (FALSE == SetConsoleCtrlHandler(ConsoleHandlerRoutine, TRUE))
+		LOG_ERROR("Problem binding the close function", "WIN32");
+#endif
 	// initialize the logging instance
 	LOG("-------------------------------", "");
 
@@ -125,6 +145,9 @@ int main( int argc, char* argv[] )
 		{
 			// go into our execution loop and wait for shutdown
 			WaitForShutdown(MetaChain::getInstance().getThreadGroup());
+
+			// we call our custom destructor for this singleton
+			MetaChain::getInstance().shutdown();
 		}
 
 		// it can happen that a update was successfully made. if so, everything is prepared and this variable is true

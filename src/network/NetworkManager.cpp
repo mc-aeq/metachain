@@ -858,7 +858,7 @@ NetworkManager::~NetworkManager()
 
 	// delete the semaphores
 	delete m_pSemInbound;
-	delete m_pSemInbound;
+	delete m_pSemOutbound;
 }
 
 void NetworkManager::Interrupt()

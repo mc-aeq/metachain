@@ -2,6 +2,8 @@
 /x64
 /metachain
 /tmp
+/data
+/Release
 /MetaChain.o
 /output.log
 /dependencies
