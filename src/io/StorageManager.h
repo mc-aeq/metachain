@@ -11,7 +11,7 @@
 
 #include <string>
 #include <fstream>
-#include "rocksdb/db.h"
+#include <rocksdb/db.h>
 #include <boost/filesystem/path.hpp>
 #include "../MetaChain.h"
 #include "../SimpleIni.h"
@@ -59,7 +59,7 @@ public:
 	class RocksDBNullLogger : public rocksdb::Logger {
 	public:
 		using rocksdb::Logger::Logv;
-		virtual void Logv(const char* format, va_list ap) override {}
+		virtual void Logv(const char* format, va_list hap) override {}
 		virtual size_t GetLogFileSize() const override { return 0; }
 	};
 #endif

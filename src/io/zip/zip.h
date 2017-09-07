@@ -7,8 +7,8 @@
 #ifndef __ZIP_ZIP_H__
 #define __ZIP_ZIP_H__ 1
 
-#include <contrib/minizip/ioapi.h>
-#include <contrib/minizip/zip.h>
+#include <minizip/ioapi.h>
+#include <minizip/zip.h>
 #include <string>
 #include <vector>
 #include <iostream>

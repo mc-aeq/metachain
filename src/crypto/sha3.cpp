@@ -10,6 +10,8 @@
 #include "../endian.h"
 
 const unsigned int cuiBufferSize = 1024 * 4;
+constexpr uint64_t SHA3::RC[];
+constexpr int SHA3::R[];
 
 static inline uint64_t rotateLeft(uint64_t x, unsigned int n)
 {

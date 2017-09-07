@@ -627,6 +627,10 @@ am__EXEEXT_TRUE
 LTLIBOBJS
 LIBOBJS
 EVENT_LIBS
+RDB_LIBS
+MINIZIP_LIBS
+ZLIB_LIBS
+CURL_LIBS
 SSL_LIBS
 CRYPTO_LIBS
 BOOST_LIBS
@@ -4970,7 +4974,7 @@ case $host in
      ;;
    *linux*)
      	TARGET_OS=linux
-	 CPPFLAGS="$CPPFLAGS -D_LINUX -DHAVE_DAEMON"
+	 CPPFLAGS="$CPPFLAGS -D_LINUX -DHAVE_DAEMON -D_X86_64 -D_CONSOLE -DCURL_STATICLIB"
      ;;
    *freebsd*)
     as_fn_error $? "Not supporting build for freebsd yet" "$LINENO" 5
@@ -5688,6 +5692,190 @@ if test "x$ac_cv_lib_ssl_main" = xyes; then :
 else
   as_fn_error $? "libssl missing" "$LINENO" 5
 fi
+
+ac_fn_cxx_check_header_mongrel "$LINENO" "zlib.h" "ac_cv_header_zlib_h" "$ac_includes_default"
+if test "x$ac_cv_header_zlib_h" = xyes; then :
+
+else
+  as_fn_error $? "zlib headers missing" "$LINENO" 5
+fi
+
+
+{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for main in -lz" >&5
+$as_echo_n "checking for main in -lz... " >&6; }
+if ${ac_cv_lib_z_main+:} false; then :
+  $as_echo_n "(cached) " >&6
+else
+  ac_check_lib_save_LIBS=$LIBS
+LIBS="-lz  $LIBS"
+cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+
+
+int
+main ()
+{
+return main ();
+  ;
+  return 0;
+}
+_ACEOF
+if ac_fn_cxx_try_link "$LINENO"; then :
+  ac_cv_lib_z_main=yes
+else
+  ac_cv_lib_z_main=no
+fi
+rm -f core conftest.err conftest.$ac_objext \
+    conftest$ac_exeext conftest.$ac_ext
+LIBS=$ac_check_lib_save_LIBS
+fi
+{ $as_echo "$as_me:${as_lineno-$LINENO}: result: $ac_cv_lib_z_main" >&5
+$as_echo "$ac_cv_lib_z_main" >&6; }
+if test "x$ac_cv_lib_z_main" = xyes; then :
+  ZLIB_LIBS=-lz
+else
+  as_fn_error $? "zlib missing" "$LINENO" 5
+fi
+
+for ac_header in minizip/ioapi.h minizip/unzip.h
+do :
+  as_ac_Header=`$as_echo "ac_cv_header_$ac_header" | $as_tr_sh`
+ac_fn_cxx_check_header_mongrel "$LINENO" "$ac_header" "$as_ac_Header" "$ac_includes_default"
+if eval test \"x\$"$as_ac_Header"\" = x"yes"; then :
+  cat >>confdefs.h <<_ACEOF
+#define `$as_echo "HAVE_$ac_header" | $as_tr_cpp` 1
+_ACEOF
+
+else
+  as_fn_error $? "minizip missing" "$LINENO" 5
+fi
+
+done
+
+{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for main in -lminizip" >&5
+$as_echo_n "checking for main in -lminizip... " >&6; }
+if ${ac_cv_lib_minizip_main+:} false; then :
+  $as_echo_n "(cached) " >&6
+else
+  ac_check_lib_save_LIBS=$LIBS
+LIBS="-lminizip  $LIBS"
+cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+
+
+int
+main ()
+{
+return main ();
+  ;
+  return 0;
+}
+_ACEOF
+if ac_fn_cxx_try_link "$LINENO"; then :
+  ac_cv_lib_minizip_main=yes
+else
+  ac_cv_lib_minizip_main=no
+fi
+rm -f core conftest.err conftest.$ac_objext \
+    conftest$ac_exeext conftest.$ac_ext
+LIBS=$ac_check_lib_save_LIBS
+fi
+{ $as_echo "$as_me:${as_lineno-$LINENO}: result: $ac_cv_lib_minizip_main" >&5
+$as_echo "$ac_cv_lib_minizip_main" >&6; }
+if test "x$ac_cv_lib_minizip_main" = xyes; then :
+  MINIZIP_LIBS=-lminizip
+else
+  as_fn_error $? "libminizip missing" "$LINENO" 5
+fi
+
+ac_fn_cxx_check_header_mongrel "$LINENO" "rocksdb/db.h" "ac_cv_header_rocksdb_db_h" "$ac_includes_default"
+if test "x$ac_cv_header_rocksdb_db_h" = xyes; then :
+
+else
+  as_fn_error $? "rocksdb headers missing" "$LINENO" 5
+fi
+
+
+{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for main in -lrocksdb" >&5
+$as_echo_n "checking for main in -lrocksdb... " >&6; }
+if ${ac_cv_lib_rocksdb_main+:} false; then :
+  $as_echo_n "(cached) " >&6
+else
+  ac_check_lib_save_LIBS=$LIBS
+LIBS="-lrocksdb  $LIBS"
+cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+
+
+int
+main ()
+{
+return main ();
+  ;
+  return 0;
+}
+_ACEOF
+if ac_fn_cxx_try_link "$LINENO"; then :
+  ac_cv_lib_rocksdb_main=yes
+else
+  ac_cv_lib_rocksdb_main=no
+fi
+rm -f core conftest.err conftest.$ac_objext \
+    conftest$ac_exeext conftest.$ac_ext
+LIBS=$ac_check_lib_save_LIBS
+fi
+{ $as_echo "$as_me:${as_lineno-$LINENO}: result: $ac_cv_lib_rocksdb_main" >&5
+$as_echo "$ac_cv_lib_rocksdb_main" >&6; }
+if test "x$ac_cv_lib_rocksdb_main" = xyes; then :
+  RDB_LIBS=-lrocksdb
+else
+  as_fn_error $? "librocksdb missing" "$LINENO" 5
+fi
+
+ac_fn_cxx_check_header_mongrel "$LINENO" "curl/curl.h" "ac_cv_header_curl_curl_h" "$ac_includes_default"
+if test "x$ac_cv_header_curl_curl_h" = xyes; then :
+
+else
+  as_fn_error $? "curl headers missing" "$LINENO" 5
+fi
+
+
+{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for main in -lcurl" >&5
+$as_echo_n "checking for main in -lcurl... " >&6; }
+if ${ac_cv_lib_curl_main+:} false; then :
+  $as_echo_n "(cached) " >&6
+else
+  ac_check_lib_save_LIBS=$LIBS
+LIBS="-lcurl  $LIBS"
+cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+
+
+int
+main ()
+{
+return main ();
+  ;
+  return 0;
+}
+_ACEOF
+if ac_fn_cxx_try_link "$LINENO"; then :
+  ac_cv_lib_curl_main=yes
+else
+  ac_cv_lib_curl_main=no
+fi
+rm -f core conftest.err conftest.$ac_objext \
+    conftest$ac_exeext conftest.$ac_ext
+LIBS=$ac_check_lib_save_LIBS
+fi
+{ $as_echo "$as_me:${as_lineno-$LINENO}: result: $ac_cv_lib_curl_main" >&5
+$as_echo "$ac_cv_lib_curl_main" >&6; }
+if test "x$ac_cv_lib_curl_main" = xyes; then :
+  CURL_LIBS=-lcurl
+else
+  as_fn_error $? "libcurl missing" "$LINENO" 5
+fi
+
 
 
 # checks for typedefs, structures and compiler charactaristics
@@ -10359,6 +10547,13 @@ _ACEOF
 
 CXXFLAGS="${save_CXXFLAGS}"
 
+LDFLAGS="-Wl,-rpath,dependencies/"
+
+
+
+
+
+
 
 
 
@@ -11677,6 +11872,7 @@ if test -n "$ac_unrecognized_opts" && test "$enable_option_checking" != no; then
   { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: unrecognized options: $ac_unrecognized_opts" >&5
 $as_echo "$as_me: WARNING: unrecognized options: $ac_unrecognized_opts" >&2;}
 fi
+
 
 
 echo

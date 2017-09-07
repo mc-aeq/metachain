@@ -9,8 +9,8 @@
 #ifndef __ZIP_UNZIP_H__
 #define __ZIP_UNZIP_H__ 1
 
-#include <contrib/minizip/ioapi.h>
-#include <contrib/minizip/unzip.h>
+#include <minizip/ioapi.h>
+#include <minizip/unzip.h>
 #include <string>
 #include <vector>
 #include <iostream>

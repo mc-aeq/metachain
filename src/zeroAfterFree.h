@@ -8,7 +8,7 @@
 #ifndef __ZERO_AFTER_FREE_H__
 #define __ZERO_AFTER_FREE_H__ 1
 
-#include "../functions.h"
+#include "functions.h"
 
 template <typename T>
 struct zero_after_free_allocator : public std::allocator<T> {

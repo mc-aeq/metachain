@@ -105,27 +105,48 @@ CONFIG_CLEAN_FILES =
 CONFIG_CLEAN_VPATH_FILES =
 am__installdirs = "$(DESTDIR)$(bindir)"
 PROGRAMS = $(bin_PROGRAMS)
-am_tctnoded_OBJECTS = tctnoded-ctaes.$(OBJEXT) tctnoded-aes.$(OBJEXT) \
-	tctnoded-chacha20.$(OBJEXT) tctnoded-hmac_sha256.$(OBJEXT) \
-	tctnoded-hmac_sha512.$(OBJEXT) tctnoded-ripemd160.$(OBJEXT) \
-	tctnoded-sha1.$(OBJEXT) tctnoded-sha256.$(OBJEXT) \
-	tctnoded-sha512.$(OBJEXT) tctnoded-ArgsManager.$(OBJEXT) \
-	tctnoded-ConvertUTF.$(OBJEXT) \
-	tctnoded-cThreadInterrupt.$(OBJEXT) tctnoded-hash.$(OBJEXT) \
-	tctnoded-random.$(OBJEXT) tctnoded-scheduler.$(OBJEXT) \
-	tctnoded-uint256.$(OBJEXT) tctnoded-utilstrencodings.$(OBJEXT) \
-	tctnoded-netPeers.$(OBJEXT) tctnoded-CNetAddr.$(OBJEXT) \
-	tctnoded-CService.$(OBJEXT) tctnoded-CSubnet.$(OBJEXT) \
-	tctnoded-netMessage.$(OBJEXT) \
-	tctnoded-NetworkManager.$(OBJEXT) tctnoded-functions.$(OBJEXT) \
-	tctnoded-logger.$(OBJEXT) tctnoded-MetaChain.$(OBJEXT) \
+am__dirstamp = $(am__leading_dot)dirstamp
+am_tctnoded_OBJECTS =  \
+	dependencies/zlib/contrib/minizip/tctnoded-unzip.$(OBJEXT) \
+	dependencies/zlib/contrib/minizip/tctnoded-zip.$(OBJEXT) \
+	src/crypto/ctaes/tctnoded-ctaes.$(OBJEXT) \
+	src/crypto/tctnoded-aes.$(OBJEXT) \
+	src/crypto/tctnoded-chacha20.$(OBJEXT) \
+	src/crypto/tctnoded-hmac_sha256.$(OBJEXT) \
+	src/crypto/tctnoded-hmac_sha512.$(OBJEXT) \
+	src/crypto/tctnoded-ripemd160.$(OBJEXT) \
+	src/crypto/tctnoded-sha1.$(OBJEXT) \
+	src/crypto/tctnoded-sha3.$(OBJEXT) \
+	src/crypto/tctnoded-sha256.$(OBJEXT) \
+	src/crypto/tctnoded-sha512.$(OBJEXT) \
+	src/io/db/tctnoded-mysql.$(OBJEXT) \
+	src/io/db/tctnoded-rdb.$(OBJEXT) \
+	src/io/zip/tctnoded-unzip.$(OBJEXT) \
+	src/io/zip/tctnoded-zip.$(OBJEXT) \
+	src/io/tctnoded-netPeers.$(OBJEXT) \
+	src/io/tctnoded-StorageManager.$(OBJEXT) \
+	src/network/tctnoded-CNetAddr.$(OBJEXT) \
+	src/network/tctnoded-CService.$(OBJEXT) \
+	src/network/tctnoded-CSubnet.$(OBJEXT) \
+	src/network/tctnoded-netMessage.$(OBJEXT) \
+	src/network/tctnoded-NetworkManager.$(OBJEXT) \
+	src/tctnoded-ArgsManager.$(OBJEXT) \
+	src/tctnoded-ConvertUTF.$(OBJEXT) \
+	src/tctnoded-cThreadInterrupt.$(OBJEXT) \
+	src/tctnoded-functions.$(OBJEXT) src/tctnoded-hash.$(OBJEXT) \
+	src/tctnoded-logger.$(OBJEXT) src/tctnoded-MetaChain.$(OBJEXT) \
+	src/tctnoded-random.$(OBJEXT) src/tctnoded-scheduler.$(OBJEXT) \
+	src/tctnoded-uint256.$(OBJEXT) \
+	src/tctnoded-utilstrencodings.$(OBJEXT) \
 	tctnoded-node.$(OBJEXT)
 tctnoded_OBJECTS = $(am_tctnoded_OBJECTS)
 am__DEPENDENCIES_1 =
 tctnoded_DEPENDENCIES = $(am__DEPENDENCIES_1) $(am__DEPENDENCIES_1) \
+	$(am__DEPENDENCIES_1) $(am__DEPENDENCIES_1) \
+	$(am__DEPENDENCIES_1) $(am__DEPENDENCIES_1) \
 	$(am__DEPENDENCIES_1)
 tctnoded_LINK = $(CXXLD) $(tctnoded_CXXFLAGS) $(CXXFLAGS) \
-	$(AM_LDFLAGS) $(LDFLAGS) -o $@
+	$(tctnoded_LDFLAGS) $(LDFLAGS) -o $@
 AM_V_P = $(am__v_P_@AM_V@)
 am__v_P_ = $(am__v_P_@AM_DEFAULT_V@)
 am__v_P_0 = false
@@ -241,6 +262,7 @@ CFLAGS = @CFLAGS@
 CPP = @CPP@
 CPPFLAGS = @CPPFLAGS@
 CRYPTO_LIBS = @CRYPTO_LIBS@
+CURL_LIBS = @CURL_LIBS@
 CXX = @CXX@
 CXXCPP = @CXXCPP@
 CXXDEPMODE = @CXXDEPMODE@
@@ -267,6 +289,7 @@ LIBS = @LIBS@
 LIBTOOL_APP_LDFLAGS = @LIBTOOL_APP_LDFLAGS@
 LTLIBOBJS = @LTLIBOBJS@
 MAKEINFO = @MAKEINFO@
+MINIZIP_LIBS = @MINIZIP_LIBS@
 MKDIR_P = @MKDIR_P@
 OBJEXT = @OBJEXT@
 PACKAGE = @PACKAGE@
@@ -283,12 +306,14 @@ PKG_CONFIG_PATH = @PKG_CONFIG_PATH@
 PTHREAD_CC = @PTHREAD_CC@
 PTHREAD_CFLAGS = @PTHREAD_CFLAGS@
 PTHREAD_LIBS = @PTHREAD_LIBS@
+RDB_LIBS = @RDB_LIBS@
 SED = @SED@
 SET_MAKE = @SET_MAKE@
 SHELL = @SHELL@
 SSL_LIBS = @SSL_LIBS@
 STRIP = @STRIP@
 VERSION = @VERSION@
+ZLIB_LIBS = @ZLIB_LIBS@
 abs_builddir = @abs_builddir@
 abs_srcdir = @abs_srcdir@
 abs_top_builddir = @abs_top_builddir@
@@ -341,17 +366,20 @@ target_alias = @target_alias@
 top_build_prefix = @top_build_prefix@
 top_builddir = @top_builddir@
 top_srcdir = @top_srcdir@
-AUTOMAKE_OPTIONS = foreign
+AUTOMAKE_OPTIONS = foreign subdir-objects
 ACLOCAL_AMFLAGS = -I m4
 EXTRA_DIST = bootstrap
 AM_LDFLAGS = $(PTHREAD_CFLAGS) $(LIBTOOL_LDFLAGS) $(LDFLAGS)
 AM_CXXFLAGS = $(CXXFLAGS)
 AM_CPPFLAGS = $(CPPFLAGS)
-NODE_INCLUDES = -I$(builddir) -I$(builddir)/obj $(BDB_CPPFLAGS) $(BOOST_CPPFLAGS) $(CRYPTO_CFLAGS) $(SSL_CFLAGS)
-tctnoded_CPPFLAGS = $(AM_CPPFLAGS) $(BITCOIN_INCLUDES) $(MINIUPNPC_CPPFLAGS) $(EVENT_CFLAGS)
+NODE_INCLUDES = -I$(builddir) -I$(builddir)/obj $(BDB_CPPFLAGS) $(BOOST_CPPFLAGS) $(CRYPTO_CFLAGS) $(SSL_CFLAGS) -Idependencies/zlib/contrib/
+tctnoded_CPPFLAGS = $(AM_CPPFLAGS) $(MINIUPNPC_CPPFLAGS) $(EVENT_CFLAGS) $(NODE_INCLUDES)
 tctnoded_CXXFLAGS = $(AM_CXXFLAGS) $(PIE_FLAGS)
-tctnoded_LDADD = $(BOOST_LIBS) $(BDB_LIBS) $(SSL_LIBS) $(CRYPTO_LIBS)
+tctnoded_LDADD = $(BOOST_LIBS) $(BDB_LIBS) $(SSL_LIBS) $(CRYPTO_LIBS) $(CURL_LIBS) $(ZLIB_LIBS) $(MINIZIP_LIBS) $(RDB_LIBS)
+tctnoded_LDFLAGS = $(AM_LDFLAGS)
 tctnoded_SOURCES = \
+	dependencies/zlib/contrib/minizip/unzip.c \
+	dependencies/zlib/contrib/minizip/zip.c \
 	src/crypto/ctaes/ctaes.c \
 	src/crypto/aes.cpp \
 	src/crypto/chacha20.cpp \
@@ -359,25 +387,31 @@ tctnoded_SOURCES = \
 	src/crypto/hmac_sha512.cpp \
 	src/crypto/ripemd160.cpp \
 	src/crypto/sha1.cpp \
+	src/crypto/sha3.cpp \
 	src/crypto/sha256.cpp \
 	src/crypto/sha512.cpp \
+	src/io/db/mysql.cpp \
+	src/io/db/rdb.cpp \
+	src/io/zip/unzip.cpp \
+	src/io/zip/zip.cpp \
+	src/io/netPeers.cpp \
+	src/io/StorageManager.cpp \
+	src/network/CNetAddr.cpp \
+        src/network/CService.cpp \
+        src/network/CSubnet.cpp \
+        src/network/netMessage.cpp \
+        src/network/NetworkManager.cpp \
 	src/ArgsManager.cpp \
 	src/ConvertUTF.c \
 	src/cThreadInterrupt.cpp \
+	src/functions.cpp \
 	src/hash.cpp \
+        src/logger.cpp \
+        src/MetaChain.cpp \
 	src/random.cpp \
 	src/scheduler.cpp \
 	src/uint256.cpp \
 	src/utilstrencodings.cpp \
-	src/io/netPeers.cpp \
-	src/network/CNetAddr.cpp \
-	src/network/CService.cpp \
-	src/network/CSubnet.cpp \
-	src/network/netMessage.cpp \
-	src/network/NetworkManager.cpp \
-	src/functions.cpp \
-	src/logger.cpp \
-	src/MetaChain.cpp \
 	node.cpp
 
 all: all-am
@@ -460,6 +494,127 @@ uninstall-binPROGRAMS:
 
 clean-binPROGRAMS:
 	-test -z "$(bin_PROGRAMS)" || rm -f $(bin_PROGRAMS)
+dependencies/zlib/contrib/minizip/$(am__dirstamp):
+	@$(MKDIR_P) dependencies/zlib/contrib/minizip
+	@: > dependencies/zlib/contrib/minizip/$(am__dirstamp)
+dependencies/zlib/contrib/minizip/$(DEPDIR)/$(am__dirstamp):
+	@$(MKDIR_P) dependencies/zlib/contrib/minizip/$(DEPDIR)
+	@: > dependencies/zlib/contrib/minizip/$(DEPDIR)/$(am__dirstamp)
+dependencies/zlib/contrib/minizip/tctnoded-unzip.$(OBJEXT):  \
+	dependencies/zlib/contrib/minizip/$(am__dirstamp) \
+	dependencies/zlib/contrib/minizip/$(DEPDIR)/$(am__dirstamp)
+dependencies/zlib/contrib/minizip/tctnoded-zip.$(OBJEXT):  \
+	dependencies/zlib/contrib/minizip/$(am__dirstamp) \
+	dependencies/zlib/contrib/minizip/$(DEPDIR)/$(am__dirstamp)
+src/crypto/ctaes/$(am__dirstamp):
+	@$(MKDIR_P) src/crypto/ctaes
+	@: > src/crypto/ctaes/$(am__dirstamp)
+src/crypto/ctaes/$(DEPDIR)/$(am__dirstamp):
+	@$(MKDIR_P) src/crypto/ctaes/$(DEPDIR)
+	@: > src/crypto/ctaes/$(DEPDIR)/$(am__dirstamp)
+src/crypto/ctaes/tctnoded-ctaes.$(OBJEXT):  \
+	src/crypto/ctaes/$(am__dirstamp) \
+	src/crypto/ctaes/$(DEPDIR)/$(am__dirstamp)
+src/crypto/$(am__dirstamp):
+	@$(MKDIR_P) src/crypto
+	@: > src/crypto/$(am__dirstamp)
+src/crypto/$(DEPDIR)/$(am__dirstamp):
+	@$(MKDIR_P) src/crypto/$(DEPDIR)
+	@: > src/crypto/$(DEPDIR)/$(am__dirstamp)
+src/crypto/tctnoded-aes.$(OBJEXT): src/crypto/$(am__dirstamp) \
+	src/crypto/$(DEPDIR)/$(am__dirstamp)
+src/crypto/tctnoded-chacha20.$(OBJEXT): src/crypto/$(am__dirstamp) \
+	src/crypto/$(DEPDIR)/$(am__dirstamp)
+src/crypto/tctnoded-hmac_sha256.$(OBJEXT): src/crypto/$(am__dirstamp) \
+	src/crypto/$(DEPDIR)/$(am__dirstamp)
+src/crypto/tctnoded-hmac_sha512.$(OBJEXT): src/crypto/$(am__dirstamp) \
+	src/crypto/$(DEPDIR)/$(am__dirstamp)
+src/crypto/tctnoded-ripemd160.$(OBJEXT): src/crypto/$(am__dirstamp) \
+	src/crypto/$(DEPDIR)/$(am__dirstamp)
+src/crypto/tctnoded-sha1.$(OBJEXT): src/crypto/$(am__dirstamp) \
+	src/crypto/$(DEPDIR)/$(am__dirstamp)
+src/crypto/tctnoded-sha3.$(OBJEXT): src/crypto/$(am__dirstamp) \
+	src/crypto/$(DEPDIR)/$(am__dirstamp)
+src/crypto/tctnoded-sha256.$(OBJEXT): src/crypto/$(am__dirstamp) \
+	src/crypto/$(DEPDIR)/$(am__dirstamp)
+src/crypto/tctnoded-sha512.$(OBJEXT): src/crypto/$(am__dirstamp) \
+	src/crypto/$(DEPDIR)/$(am__dirstamp)
+src/io/db/$(am__dirstamp):
+	@$(MKDIR_P) src/io/db
+	@: > src/io/db/$(am__dirstamp)
+src/io/db/$(DEPDIR)/$(am__dirstamp):
+	@$(MKDIR_P) src/io/db/$(DEPDIR)
+	@: > src/io/db/$(DEPDIR)/$(am__dirstamp)
+src/io/db/tctnoded-mysql.$(OBJEXT): src/io/db/$(am__dirstamp) \
+	src/io/db/$(DEPDIR)/$(am__dirstamp)
+src/io/db/tctnoded-rdb.$(OBJEXT): src/io/db/$(am__dirstamp) \
+	src/io/db/$(DEPDIR)/$(am__dirstamp)
+src/io/zip/$(am__dirstamp):
+	@$(MKDIR_P) src/io/zip
+	@: > src/io/zip/$(am__dirstamp)
+src/io/zip/$(DEPDIR)/$(am__dirstamp):
+	@$(MKDIR_P) src/io/zip/$(DEPDIR)
+	@: > src/io/zip/$(DEPDIR)/$(am__dirstamp)
+src/io/zip/tctnoded-unzip.$(OBJEXT): src/io/zip/$(am__dirstamp) \
+	src/io/zip/$(DEPDIR)/$(am__dirstamp)
+src/io/zip/tctnoded-zip.$(OBJEXT): src/io/zip/$(am__dirstamp) \
+	src/io/zip/$(DEPDIR)/$(am__dirstamp)
+src/io/$(am__dirstamp):
+	@$(MKDIR_P) src/io
+	@: > src/io/$(am__dirstamp)
+src/io/$(DEPDIR)/$(am__dirstamp):
+	@$(MKDIR_P) src/io/$(DEPDIR)
+	@: > src/io/$(DEPDIR)/$(am__dirstamp)
+src/io/tctnoded-netPeers.$(OBJEXT): src/io/$(am__dirstamp) \
+	src/io/$(DEPDIR)/$(am__dirstamp)
+src/io/tctnoded-StorageManager.$(OBJEXT): src/io/$(am__dirstamp) \
+	src/io/$(DEPDIR)/$(am__dirstamp)
+src/network/$(am__dirstamp):
+	@$(MKDIR_P) src/network
+	@: > src/network/$(am__dirstamp)
+src/network/$(DEPDIR)/$(am__dirstamp):
+	@$(MKDIR_P) src/network/$(DEPDIR)
+	@: > src/network/$(DEPDIR)/$(am__dirstamp)
+src/network/tctnoded-CNetAddr.$(OBJEXT): src/network/$(am__dirstamp) \
+	src/network/$(DEPDIR)/$(am__dirstamp)
+src/network/tctnoded-CService.$(OBJEXT): src/network/$(am__dirstamp) \
+	src/network/$(DEPDIR)/$(am__dirstamp)
+src/network/tctnoded-CSubnet.$(OBJEXT): src/network/$(am__dirstamp) \
+	src/network/$(DEPDIR)/$(am__dirstamp)
+src/network/tctnoded-netMessage.$(OBJEXT):  \
+	src/network/$(am__dirstamp) \
+	src/network/$(DEPDIR)/$(am__dirstamp)
+src/network/tctnoded-NetworkManager.$(OBJEXT):  \
+	src/network/$(am__dirstamp) \
+	src/network/$(DEPDIR)/$(am__dirstamp)
+src/$(am__dirstamp):
+	@$(MKDIR_P) src
+	@: > src/$(am__dirstamp)
+src/$(DEPDIR)/$(am__dirstamp):
+	@$(MKDIR_P) src/$(DEPDIR)
+	@: > src/$(DEPDIR)/$(am__dirstamp)
+src/tctnoded-ArgsManager.$(OBJEXT): src/$(am__dirstamp) \
+	src/$(DEPDIR)/$(am__dirstamp)
+src/tctnoded-ConvertUTF.$(OBJEXT): src/$(am__dirstamp) \
+	src/$(DEPDIR)/$(am__dirstamp)
+src/tctnoded-cThreadInterrupt.$(OBJEXT): src/$(am__dirstamp) \
+	src/$(DEPDIR)/$(am__dirstamp)
+src/tctnoded-functions.$(OBJEXT): src/$(am__dirstamp) \
+	src/$(DEPDIR)/$(am__dirstamp)
+src/tctnoded-hash.$(OBJEXT): src/$(am__dirstamp) \
+	src/$(DEPDIR)/$(am__dirstamp)
+src/tctnoded-logger.$(OBJEXT): src/$(am__dirstamp) \
+	src/$(DEPDIR)/$(am__dirstamp)
+src/tctnoded-MetaChain.$(OBJEXT): src/$(am__dirstamp) \
+	src/$(DEPDIR)/$(am__dirstamp)
+src/tctnoded-random.$(OBJEXT): src/$(am__dirstamp) \
+	src/$(DEPDIR)/$(am__dirstamp)
+src/tctnoded-scheduler.$(OBJEXT): src/$(am__dirstamp) \
+	src/$(DEPDIR)/$(am__dirstamp)
+src/tctnoded-uint256.$(OBJEXT): src/$(am__dirstamp) \
+	src/$(DEPDIR)/$(am__dirstamp)
+src/tctnoded-utilstrencodings.$(OBJEXT): src/$(am__dirstamp) \
+	src/$(DEPDIR)/$(am__dirstamp)
 
 tctnoded$(EXEEXT): $(tctnoded_OBJECTS) $(tctnoded_DEPENDENCIES) $(EXTRA_tctnoded_DEPENDENCIES) 
 	@rm -f tctnoded$(EXEEXT)
@@ -467,429 +622,561 @@ tctnoded$(EXEEXT): $(tctnoded_OBJECTS) $(tctnoded_DEPENDENCIES) $(EXTRA_tctnoded
 
 mostlyclean-compile:
 	-rm -f *.$(OBJEXT)
+	-rm -f dependencies/zlib/contrib/minizip/*.$(OBJEXT)
+	-rm -f src/*.$(OBJEXT)
+	-rm -f src/crypto/*.$(OBJEXT)
+	-rm -f src/crypto/ctaes/*.$(OBJEXT)
+	-rm -f src/io/*.$(OBJEXT)
+	-rm -f src/io/db/*.$(OBJEXT)
+	-rm -f src/io/zip/*.$(OBJEXT)
+	-rm -f src/network/*.$(OBJEXT)
 
 distclean-compile:
 	-rm -f *.tab.c
 
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/tctnoded-ArgsManager.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/tctnoded-CNetAddr.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/tctnoded-CService.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/tctnoded-CSubnet.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/tctnoded-ConvertUTF.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/tctnoded-MetaChain.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/tctnoded-NetworkManager.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/tctnoded-aes.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/tctnoded-cThreadInterrupt.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/tctnoded-chacha20.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/tctnoded-ctaes.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/tctnoded-functions.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/tctnoded-hash.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/tctnoded-hmac_sha256.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/tctnoded-hmac_sha512.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/tctnoded-logger.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/tctnoded-netMessage.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/tctnoded-netPeers.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/tctnoded-node.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/tctnoded-random.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/tctnoded-ripemd160.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/tctnoded-scheduler.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/tctnoded-sha1.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/tctnoded-sha256.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/tctnoded-sha512.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/tctnoded-uint256.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/tctnoded-utilstrencodings.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@dependencies/zlib/contrib/minizip/$(DEPDIR)/tctnoded-unzip.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@dependencies/zlib/contrib/minizip/$(DEPDIR)/tctnoded-zip.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@src/$(DEPDIR)/tctnoded-ArgsManager.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@src/$(DEPDIR)/tctnoded-ConvertUTF.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@src/$(DEPDIR)/tctnoded-MetaChain.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@src/$(DEPDIR)/tctnoded-cThreadInterrupt.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@src/$(DEPDIR)/tctnoded-functions.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@src/$(DEPDIR)/tctnoded-hash.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@src/$(DEPDIR)/tctnoded-logger.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@src/$(DEPDIR)/tctnoded-random.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@src/$(DEPDIR)/tctnoded-scheduler.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@src/$(DEPDIR)/tctnoded-uint256.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@src/$(DEPDIR)/tctnoded-utilstrencodings.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@src/crypto/$(DEPDIR)/tctnoded-aes.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@src/crypto/$(DEPDIR)/tctnoded-chacha20.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@src/crypto/$(DEPDIR)/tctnoded-hmac_sha256.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@src/crypto/$(DEPDIR)/tctnoded-hmac_sha512.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@src/crypto/$(DEPDIR)/tctnoded-ripemd160.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@src/crypto/$(DEPDIR)/tctnoded-sha1.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@src/crypto/$(DEPDIR)/tctnoded-sha256.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@src/crypto/$(DEPDIR)/tctnoded-sha3.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@src/crypto/$(DEPDIR)/tctnoded-sha512.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@src/crypto/ctaes/$(DEPDIR)/tctnoded-ctaes.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@src/io/$(DEPDIR)/tctnoded-StorageManager.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@src/io/$(DEPDIR)/tctnoded-netPeers.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@src/io/db/$(DEPDIR)/tctnoded-mysql.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@src/io/db/$(DEPDIR)/tctnoded-rdb.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@src/io/zip/$(DEPDIR)/tctnoded-unzip.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@src/io/zip/$(DEPDIR)/tctnoded-zip.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@src/network/$(DEPDIR)/tctnoded-CNetAddr.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@src/network/$(DEPDIR)/tctnoded-CService.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@src/network/$(DEPDIR)/tctnoded-CSubnet.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@src/network/$(DEPDIR)/tctnoded-NetworkManager.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@src/network/$(DEPDIR)/tctnoded-netMessage.Po@am__quote@
 
 .c.o:
-@am__fastdepCC_TRUE@	$(AM_V_CC)$(COMPILE) -MT $@ -MD -MP -MF $(DEPDIR)/$*.Tpo -c -o $@ $<
-@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/$*.Tpo $(DEPDIR)/$*.Po
+@am__fastdepCC_TRUE@	$(AM_V_CC)depbase=`echo $@ | sed 's|[^/]*$$|$(DEPDIR)/&|;s|\.o$$||'`;\
+@am__fastdepCC_TRUE@	$(COMPILE) -MT $@ -MD -MP -MF $$depbase.Tpo -c -o $@ $< &&\
+@am__fastdepCC_TRUE@	$(am__mv) $$depbase.Tpo $$depbase.Po
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='$<' object='$@' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(COMPILE) -c $<
+@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(COMPILE) -c -o $@ $<
 
 .c.obj:
-@am__fastdepCC_TRUE@	$(AM_V_CC)$(COMPILE) -MT $@ -MD -MP -MF $(DEPDIR)/$*.Tpo -c -o $@ `$(CYGPATH_W) '$<'`
-@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/$*.Tpo $(DEPDIR)/$*.Po
+@am__fastdepCC_TRUE@	$(AM_V_CC)depbase=`echo $@ | sed 's|[^/]*$$|$(DEPDIR)/&|;s|\.obj$$||'`;\
+@am__fastdepCC_TRUE@	$(COMPILE) -MT $@ -MD -MP -MF $$depbase.Tpo -c -o $@ `$(CYGPATH_W) '$<'` &&\
+@am__fastdepCC_TRUE@	$(am__mv) $$depbase.Tpo $$depbase.Po
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='$<' object='$@' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(COMPILE) -c `$(CYGPATH_W) '$<'`
+@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(COMPILE) -c -o $@ `$(CYGPATH_W) '$<'`
 
-tctnoded-ctaes.o: src/crypto/ctaes/ctaes.c
-@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(tctnoded_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -MT tctnoded-ctaes.o -MD -MP -MF $(DEPDIR)/tctnoded-ctaes.Tpo -c -o tctnoded-ctaes.o `test -f 'src/crypto/ctaes/ctaes.c' || echo '$(srcdir)/'`src/crypto/ctaes/ctaes.c
-@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/tctnoded-ctaes.Tpo $(DEPDIR)/tctnoded-ctaes.Po
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='src/crypto/ctaes/ctaes.c' object='tctnoded-ctaes.o' libtool=no @AMDEPBACKSLASH@
+dependencies/zlib/contrib/minizip/tctnoded-unzip.o: dependencies/zlib/contrib/minizip/unzip.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(tctnoded_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -MT dependencies/zlib/contrib/minizip/tctnoded-unzip.o -MD -MP -MF dependencies/zlib/contrib/minizip/$(DEPDIR)/tctnoded-unzip.Tpo -c -o dependencies/zlib/contrib/minizip/tctnoded-unzip.o `test -f 'dependencies/zlib/contrib/minizip/unzip.c' || echo '$(srcdir)/'`dependencies/zlib/contrib/minizip/unzip.c
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) dependencies/zlib/contrib/minizip/$(DEPDIR)/tctnoded-unzip.Tpo dependencies/zlib/contrib/minizip/$(DEPDIR)/tctnoded-unzip.Po
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='dependencies/zlib/contrib/minizip/unzip.c' object='dependencies/zlib/contrib/minizip/tctnoded-unzip.o' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(tctnoded_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o tctnoded-ctaes.o `test -f 'src/crypto/ctaes/ctaes.c' || echo '$(srcdir)/'`src/crypto/ctaes/ctaes.c
+@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(tctnoded_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o dependencies/zlib/contrib/minizip/tctnoded-unzip.o `test -f 'dependencies/zlib/contrib/minizip/unzip.c' || echo '$(srcdir)/'`dependencies/zlib/contrib/minizip/unzip.c
 
-tctnoded-ctaes.obj: src/crypto/ctaes/ctaes.c
-@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(tctnoded_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -MT tctnoded-ctaes.obj -MD -MP -MF $(DEPDIR)/tctnoded-ctaes.Tpo -c -o tctnoded-ctaes.obj `if test -f 'src/crypto/ctaes/ctaes.c'; then $(CYGPATH_W) 'src/crypto/ctaes/ctaes.c'; else $(CYGPATH_W) '$(srcdir)/src/crypto/ctaes/ctaes.c'; fi`
-@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/tctnoded-ctaes.Tpo $(DEPDIR)/tctnoded-ctaes.Po
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='src/crypto/ctaes/ctaes.c' object='tctnoded-ctaes.obj' libtool=no @AMDEPBACKSLASH@
+dependencies/zlib/contrib/minizip/tctnoded-unzip.obj: dependencies/zlib/contrib/minizip/unzip.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(tctnoded_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -MT dependencies/zlib/contrib/minizip/tctnoded-unzip.obj -MD -MP -MF dependencies/zlib/contrib/minizip/$(DEPDIR)/tctnoded-unzip.Tpo -c -o dependencies/zlib/contrib/minizip/tctnoded-unzip.obj `if test -f 'dependencies/zlib/contrib/minizip/unzip.c'; then $(CYGPATH_W) 'dependencies/zlib/contrib/minizip/unzip.c'; else $(CYGPATH_W) '$(srcdir)/dependencies/zlib/contrib/minizip/unzip.c'; fi`
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) dependencies/zlib/contrib/minizip/$(DEPDIR)/tctnoded-unzip.Tpo dependencies/zlib/contrib/minizip/$(DEPDIR)/tctnoded-unzip.Po
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='dependencies/zlib/contrib/minizip/unzip.c' object='dependencies/zlib/contrib/minizip/tctnoded-unzip.obj' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(tctnoded_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o tctnoded-ctaes.obj `if test -f 'src/crypto/ctaes/ctaes.c'; then $(CYGPATH_W) 'src/crypto/ctaes/ctaes.c'; else $(CYGPATH_W) '$(srcdir)/src/crypto/ctaes/ctaes.c'; fi`
+@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(tctnoded_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o dependencies/zlib/contrib/minizip/tctnoded-unzip.obj `if test -f 'dependencies/zlib/contrib/minizip/unzip.c'; then $(CYGPATH_W) 'dependencies/zlib/contrib/minizip/unzip.c'; else $(CYGPATH_W) '$(srcdir)/dependencies/zlib/contrib/minizip/unzip.c'; fi`
 
-tctnoded-ConvertUTF.o: src/ConvertUTF.c
-@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(tctnoded_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -MT tctnoded-ConvertUTF.o -MD -MP -MF $(DEPDIR)/tctnoded-ConvertUTF.Tpo -c -o tctnoded-ConvertUTF.o `test -f 'src/ConvertUTF.c' || echo '$(srcdir)/'`src/ConvertUTF.c
-@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/tctnoded-ConvertUTF.Tpo $(DEPDIR)/tctnoded-ConvertUTF.Po
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='src/ConvertUTF.c' object='tctnoded-ConvertUTF.o' libtool=no @AMDEPBACKSLASH@
+dependencies/zlib/contrib/minizip/tctnoded-zip.o: dependencies/zlib/contrib/minizip/zip.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(tctnoded_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -MT dependencies/zlib/contrib/minizip/tctnoded-zip.o -MD -MP -MF dependencies/zlib/contrib/minizip/$(DEPDIR)/tctnoded-zip.Tpo -c -o dependencies/zlib/contrib/minizip/tctnoded-zip.o `test -f 'dependencies/zlib/contrib/minizip/zip.c' || echo '$(srcdir)/'`dependencies/zlib/contrib/minizip/zip.c
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) dependencies/zlib/contrib/minizip/$(DEPDIR)/tctnoded-zip.Tpo dependencies/zlib/contrib/minizip/$(DEPDIR)/tctnoded-zip.Po
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='dependencies/zlib/contrib/minizip/zip.c' object='dependencies/zlib/contrib/minizip/tctnoded-zip.o' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(tctnoded_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o tctnoded-ConvertUTF.o `test -f 'src/ConvertUTF.c' || echo '$(srcdir)/'`src/ConvertUTF.c
+@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(tctnoded_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o dependencies/zlib/contrib/minizip/tctnoded-zip.o `test -f 'dependencies/zlib/contrib/minizip/zip.c' || echo '$(srcdir)/'`dependencies/zlib/contrib/minizip/zip.c
 
-tctnoded-ConvertUTF.obj: src/ConvertUTF.c
-@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(tctnoded_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -MT tctnoded-ConvertUTF.obj -MD -MP -MF $(DEPDIR)/tctnoded-ConvertUTF.Tpo -c -o tctnoded-ConvertUTF.obj `if test -f 'src/ConvertUTF.c'; then $(CYGPATH_W) 'src/ConvertUTF.c'; else $(CYGPATH_W) '$(srcdir)/src/ConvertUTF.c'; fi`
-@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/tctnoded-ConvertUTF.Tpo $(DEPDIR)/tctnoded-ConvertUTF.Po
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='src/ConvertUTF.c' object='tctnoded-ConvertUTF.obj' libtool=no @AMDEPBACKSLASH@
+dependencies/zlib/contrib/minizip/tctnoded-zip.obj: dependencies/zlib/contrib/minizip/zip.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(tctnoded_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -MT dependencies/zlib/contrib/minizip/tctnoded-zip.obj -MD -MP -MF dependencies/zlib/contrib/minizip/$(DEPDIR)/tctnoded-zip.Tpo -c -o dependencies/zlib/contrib/minizip/tctnoded-zip.obj `if test -f 'dependencies/zlib/contrib/minizip/zip.c'; then $(CYGPATH_W) 'dependencies/zlib/contrib/minizip/zip.c'; else $(CYGPATH_W) '$(srcdir)/dependencies/zlib/contrib/minizip/zip.c'; fi`
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) dependencies/zlib/contrib/minizip/$(DEPDIR)/tctnoded-zip.Tpo dependencies/zlib/contrib/minizip/$(DEPDIR)/tctnoded-zip.Po
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='dependencies/zlib/contrib/minizip/zip.c' object='dependencies/zlib/contrib/minizip/tctnoded-zip.obj' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(tctnoded_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o tctnoded-ConvertUTF.obj `if test -f 'src/ConvertUTF.c'; then $(CYGPATH_W) 'src/ConvertUTF.c'; else $(CYGPATH_W) '$(srcdir)/src/ConvertUTF.c'; fi`
+@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(tctnoded_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o dependencies/zlib/contrib/minizip/tctnoded-zip.obj `if test -f 'dependencies/zlib/contrib/minizip/zip.c'; then $(CYGPATH_W) 'dependencies/zlib/contrib/minizip/zip.c'; else $(CYGPATH_W) '$(srcdir)/dependencies/zlib/contrib/minizip/zip.c'; fi`
+
+src/crypto/ctaes/tctnoded-ctaes.o: src/crypto/ctaes/ctaes.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(tctnoded_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -MT src/crypto/ctaes/tctnoded-ctaes.o -MD -MP -MF src/crypto/ctaes/$(DEPDIR)/tctnoded-ctaes.Tpo -c -o src/crypto/ctaes/tctnoded-ctaes.o `test -f 'src/crypto/ctaes/ctaes.c' || echo '$(srcdir)/'`src/crypto/ctaes/ctaes.c
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) src/crypto/ctaes/$(DEPDIR)/tctnoded-ctaes.Tpo src/crypto/ctaes/$(DEPDIR)/tctnoded-ctaes.Po
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='src/crypto/ctaes/ctaes.c' object='src/crypto/ctaes/tctnoded-ctaes.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(tctnoded_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o src/crypto/ctaes/tctnoded-ctaes.o `test -f 'src/crypto/ctaes/ctaes.c' || echo '$(srcdir)/'`src/crypto/ctaes/ctaes.c
+
+src/crypto/ctaes/tctnoded-ctaes.obj: src/crypto/ctaes/ctaes.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(tctnoded_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -MT src/crypto/ctaes/tctnoded-ctaes.obj -MD -MP -MF src/crypto/ctaes/$(DEPDIR)/tctnoded-ctaes.Tpo -c -o src/crypto/ctaes/tctnoded-ctaes.obj `if test -f 'src/crypto/ctaes/ctaes.c'; then $(CYGPATH_W) 'src/crypto/ctaes/ctaes.c'; else $(CYGPATH_W) '$(srcdir)/src/crypto/ctaes/ctaes.c'; fi`
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) src/crypto/ctaes/$(DEPDIR)/tctnoded-ctaes.Tpo src/crypto/ctaes/$(DEPDIR)/tctnoded-ctaes.Po
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='src/crypto/ctaes/ctaes.c' object='src/crypto/ctaes/tctnoded-ctaes.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(tctnoded_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o src/crypto/ctaes/tctnoded-ctaes.obj `if test -f 'src/crypto/ctaes/ctaes.c'; then $(CYGPATH_W) 'src/crypto/ctaes/ctaes.c'; else $(CYGPATH_W) '$(srcdir)/src/crypto/ctaes/ctaes.c'; fi`
+
+src/tctnoded-ConvertUTF.o: src/ConvertUTF.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(tctnoded_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -MT src/tctnoded-ConvertUTF.o -MD -MP -MF src/$(DEPDIR)/tctnoded-ConvertUTF.Tpo -c -o src/tctnoded-ConvertUTF.o `test -f 'src/ConvertUTF.c' || echo '$(srcdir)/'`src/ConvertUTF.c
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) src/$(DEPDIR)/tctnoded-ConvertUTF.Tpo src/$(DEPDIR)/tctnoded-ConvertUTF.Po
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='src/ConvertUTF.c' object='src/tctnoded-ConvertUTF.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(tctnoded_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o src/tctnoded-ConvertUTF.o `test -f 'src/ConvertUTF.c' || echo '$(srcdir)/'`src/ConvertUTF.c
+
+src/tctnoded-ConvertUTF.obj: src/ConvertUTF.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(tctnoded_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -MT src/tctnoded-ConvertUTF.obj -MD -MP -MF src/$(DEPDIR)/tctnoded-ConvertUTF.Tpo -c -o src/tctnoded-ConvertUTF.obj `if test -f 'src/ConvertUTF.c'; then $(CYGPATH_W) 'src/ConvertUTF.c'; else $(CYGPATH_W) '$(srcdir)/src/ConvertUTF.c'; fi`
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) src/$(DEPDIR)/tctnoded-ConvertUTF.Tpo src/$(DEPDIR)/tctnoded-ConvertUTF.Po
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='src/ConvertUTF.c' object='src/tctnoded-ConvertUTF.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(tctnoded_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o src/tctnoded-ConvertUTF.obj `if test -f 'src/ConvertUTF.c'; then $(CYGPATH_W) 'src/ConvertUTF.c'; else $(CYGPATH_W) '$(srcdir)/src/ConvertUTF.c'; fi`
 
 .cpp.o:
-@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXXCOMPILE) -MT $@ -MD -MP -MF $(DEPDIR)/$*.Tpo -c -o $@ $<
-@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/$*.Tpo $(DEPDIR)/$*.Po
+@am__fastdepCXX_TRUE@	$(AM_V_CXX)depbase=`echo $@ | sed 's|[^/]*$$|$(DEPDIR)/&|;s|\.o$$||'`;\
+@am__fastdepCXX_TRUE@	$(CXXCOMPILE) -MT $@ -MD -MP -MF $$depbase.Tpo -c -o $@ $< &&\
+@am__fastdepCXX_TRUE@	$(am__mv) $$depbase.Tpo $$depbase.Po
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='$<' object='$@' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 @am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(CXXCOMPILE) -c -o $@ $<
 
 .cpp.obj:
-@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXXCOMPILE) -MT $@ -MD -MP -MF $(DEPDIR)/$*.Tpo -c -o $@ `$(CYGPATH_W) '$<'`
-@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/$*.Tpo $(DEPDIR)/$*.Po
+@am__fastdepCXX_TRUE@	$(AM_V_CXX)depbase=`echo $@ | sed 's|[^/]*$$|$(DEPDIR)/&|;s|\.obj$$||'`;\
+@am__fastdepCXX_TRUE@	$(CXXCOMPILE) -MT $@ -MD -MP -MF $$depbase.Tpo -c -o $@ `$(CYGPATH_W) '$<'` &&\
+@am__fastdepCXX_TRUE@	$(am__mv) $$depbase.Tpo $$depbase.Po
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='$<' object='$@' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 @am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(CXXCOMPILE) -c -o $@ `$(CYGPATH_W) '$<'`
 
-tctnoded-aes.o: src/crypto/aes.cpp
-@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(tctnoded_CPPFLAGS) $(CPPFLAGS) $(tctnoded_CXXFLAGS) $(CXXFLAGS) -MT tctnoded-aes.o -MD -MP -MF $(DEPDIR)/tctnoded-aes.Tpo -c -o tctnoded-aes.o `test -f 'src/crypto/aes.cpp' || echo '$(srcdir)/'`src/crypto/aes.cpp
-@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/tctnoded-aes.Tpo $(DEPDIR)/tctnoded-aes.Po
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='src/crypto/aes.cpp' object='tctnoded-aes.o' libtool=no @AMDEPBACKSLASH@
+src/crypto/tctnoded-aes.o: src/crypto/aes.cpp
+@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(tctnoded_CPPFLAGS) $(CPPFLAGS) $(tctnoded_CXXFLAGS) $(CXXFLAGS) -MT src/crypto/tctnoded-aes.o -MD -MP -MF src/crypto/$(DEPDIR)/tctnoded-aes.Tpo -c -o src/crypto/tctnoded-aes.o `test -f 'src/crypto/aes.cpp' || echo '$(srcdir)/'`src/crypto/aes.cpp
+@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) src/crypto/$(DEPDIR)/tctnoded-aes.Tpo src/crypto/$(DEPDIR)/tctnoded-aes.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='src/crypto/aes.cpp' object='src/crypto/tctnoded-aes.o' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(tctnoded_CPPFLAGS) $(CPPFLAGS) $(tctnoded_CXXFLAGS) $(CXXFLAGS) -c -o tctnoded-aes.o `test -f 'src/crypto/aes.cpp' || echo '$(srcdir)/'`src/crypto/aes.cpp
+@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(tctnoded_CPPFLAGS) $(CPPFLAGS) $(tctnoded_CXXFLAGS) $(CXXFLAGS) -c -o src/crypto/tctnoded-aes.o `test -f 'src/crypto/aes.cpp' || echo '$(srcdir)/'`src/crypto/aes.cpp
 
-tctnoded-aes.obj: src/crypto/aes.cpp
-@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(tctnoded_CPPFLAGS) $(CPPFLAGS) $(tctnoded_CXXFLAGS) $(CXXFLAGS) -MT tctnoded-aes.obj -MD -MP -MF $(DEPDIR)/tctnoded-aes.Tpo -c -o tctnoded-aes.obj `if test -f 'src/crypto/aes.cpp'; then $(CYGPATH_W) 'src/crypto/aes.cpp'; else $(CYGPATH_W) '$(srcdir)/src/crypto/aes.cpp'; fi`
-@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/tctnoded-aes.Tpo $(DEPDIR)/tctnoded-aes.Po
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='src/crypto/aes.cpp' object='tctnoded-aes.obj' libtool=no @AMDEPBACKSLASH@
+src/crypto/tctnoded-aes.obj: src/crypto/aes.cpp
+@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(tctnoded_CPPFLAGS) $(CPPFLAGS) $(tctnoded_CXXFLAGS) $(CXXFLAGS) -MT src/crypto/tctnoded-aes.obj -MD -MP -MF src/crypto/$(DEPDIR)/tctnoded-aes.Tpo -c -o src/crypto/tctnoded-aes.obj `if test -f 'src/crypto/aes.cpp'; then $(CYGPATH_W) 'src/crypto/aes.cpp'; else $(CYGPATH_W) '$(srcdir)/src/crypto/aes.cpp'; fi`
+@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) src/crypto/$(DEPDIR)/tctnoded-aes.Tpo src/crypto/$(DEPDIR)/tctnoded-aes.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='src/crypto/aes.cpp' object='src/crypto/tctnoded-aes.obj' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(tctnoded_CPPFLAGS) $(CPPFLAGS) $(tctnoded_CXXFLAGS) $(CXXFLAGS) -c -o tctnoded-aes.obj `if test -f 'src/crypto/aes.cpp'; then $(CYGPATH_W) 'src/crypto/aes.cpp'; else $(CYGPATH_W) '$(srcdir)/src/crypto/aes.cpp'; fi`
+@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(tctnoded_CPPFLAGS) $(CPPFLAGS) $(tctnoded_CXXFLAGS) $(CXXFLAGS) -c -o src/crypto/tctnoded-aes.obj `if test -f 'src/crypto/aes.cpp'; then $(CYGPATH_W) 'src/crypto/aes.cpp'; else $(CYGPATH_W) '$(srcdir)/src/crypto/aes.cpp'; fi`
 
-tctnoded-chacha20.o: src/crypto/chacha20.cpp
-@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(tctnoded_CPPFLAGS) $(CPPFLAGS) $(tctnoded_CXXFLAGS) $(CXXFLAGS) -MT tctnoded-chacha20.o -MD -MP -MF $(DEPDIR)/tctnoded-chacha20.Tpo -c -o tctnoded-chacha20.o `test -f 'src/crypto/chacha20.cpp' || echo '$(srcdir)/'`src/crypto/chacha20.cpp
-@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/tctnoded-chacha20.Tpo $(DEPDIR)/tctnoded-chacha20.Po
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='src/crypto/chacha20.cpp' object='tctnoded-chacha20.o' libtool=no @AMDEPBACKSLASH@
+src/crypto/tctnoded-chacha20.o: src/crypto/chacha20.cpp
+@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(tctnoded_CPPFLAGS) $(CPPFLAGS) $(tctnoded_CXXFLAGS) $(CXXFLAGS) -MT src/crypto/tctnoded-chacha20.o -MD -MP -MF src/crypto/$(DEPDIR)/tctnoded-chacha20.Tpo -c -o src/crypto/tctnoded-chacha20.o `test -f 'src/crypto/chacha20.cpp' || echo '$(srcdir)/'`src/crypto/chacha20.cpp
+@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) src/crypto/$(DEPDIR)/tctnoded-chacha20.Tpo src/crypto/$(DEPDIR)/tctnoded-chacha20.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='src/crypto/chacha20.cpp' object='src/crypto/tctnoded-chacha20.o' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(tctnoded_CPPFLAGS) $(CPPFLAGS) $(tctnoded_CXXFLAGS) $(CXXFLAGS) -c -o tctnoded-chacha20.o `test -f 'src/crypto/chacha20.cpp' || echo '$(srcdir)/'`src/crypto/chacha20.cpp
+@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(tctnoded_CPPFLAGS) $(CPPFLAGS) $(tctnoded_CXXFLAGS) $(CXXFLAGS) -c -o src/crypto/tctnoded-chacha20.o `test -f 'src/crypto/chacha20.cpp' || echo '$(srcdir)/'`src/crypto/chacha20.cpp
 
-tctnoded-chacha20.obj: src/crypto/chacha20.cpp
-@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(tctnoded_CPPFLAGS) $(CPPFLAGS) $(tctnoded_CXXFLAGS) $(CXXFLAGS) -MT tctnoded-chacha20.obj -MD -MP -MF $(DEPDIR)/tctnoded-chacha20.Tpo -c -o tctnoded-chacha20.obj `if test -f 'src/crypto/chacha20.cpp'; then $(CYGPATH_W) 'src/crypto/chacha20.cpp'; else $(CYGPATH_W) '$(srcdir)/src/crypto/chacha20.cpp'; fi`
-@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/tctnoded-chacha20.Tpo $(DEPDIR)/tctnoded-chacha20.Po
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='src/crypto/chacha20.cpp' object='tctnoded-chacha20.obj' libtool=no @AMDEPBACKSLASH@
+src/crypto/tctnoded-chacha20.obj: src/crypto/chacha20.cpp
+@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(tctnoded_CPPFLAGS) $(CPPFLAGS) $(tctnoded_CXXFLAGS) $(CXXFLAGS) -MT src/crypto/tctnoded-chacha20.obj -MD -MP -MF src/crypto/$(DEPDIR)/tctnoded-chacha20.Tpo -c -o src/crypto/tctnoded-chacha20.obj `if test -f 'src/crypto/chacha20.cpp'; then $(CYGPATH_W) 'src/crypto/chacha20.cpp'; else $(CYGPATH_W) '$(srcdir)/src/crypto/chacha20.cpp'; fi`
+@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) src/crypto/$(DEPDIR)/tctnoded-chacha20.Tpo src/crypto/$(DEPDIR)/tctnoded-chacha20.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='src/crypto/chacha20.cpp' object='src/crypto/tctnoded-chacha20.obj' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(tctnoded_CPPFLAGS) $(CPPFLAGS) $(tctnoded_CXXFLAGS) $(CXXFLAGS) -c -o tctnoded-chacha20.obj `if test -f 'src/crypto/chacha20.cpp'; then $(CYGPATH_W) 'src/crypto/chacha20.cpp'; else $(CYGPATH_W) '$(srcdir)/src/crypto/chacha20.cpp'; fi`
+@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(tctnoded_CPPFLAGS) $(CPPFLAGS) $(tctnoded_CXXFLAGS) $(CXXFLAGS) -c -o src/crypto/tctnoded-chacha20.obj `if test -f 'src/crypto/chacha20.cpp'; then $(CYGPATH_W) 'src/crypto/chacha20.cpp'; else $(CYGPATH_W) '$(srcdir)/src/crypto/chacha20.cpp'; fi`
 
-tctnoded-hmac_sha256.o: src/crypto/hmac_sha256.cpp
-@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(tctnoded_CPPFLAGS) $(CPPFLAGS) $(tctnoded_CXXFLAGS) $(CXXFLAGS) -MT tctnoded-hmac_sha256.o -MD -MP -MF $(DEPDIR)/tctnoded-hmac_sha256.Tpo -c -o tctnoded-hmac_sha256.o `test -f 'src/crypto/hmac_sha256.cpp' || echo '$(srcdir)/'`src/crypto/hmac_sha256.cpp
-@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/tctnoded-hmac_sha256.Tpo $(DEPDIR)/tctnoded-hmac_sha256.Po
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='src/crypto/hmac_sha256.cpp' object='tctnoded-hmac_sha256.o' libtool=no @AMDEPBACKSLASH@
+src/crypto/tctnoded-hmac_sha256.o: src/crypto/hmac_sha256.cpp
+@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(tctnoded_CPPFLAGS) $(CPPFLAGS) $(tctnoded_CXXFLAGS) $(CXXFLAGS) -MT src/crypto/tctnoded-hmac_sha256.o -MD -MP -MF src/crypto/$(DEPDIR)/tctnoded-hmac_sha256.Tpo -c -o src/crypto/tctnoded-hmac_sha256.o `test -f 'src/crypto/hmac_sha256.cpp' || echo '$(srcdir)/'`src/crypto/hmac_sha256.cpp
+@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) src/crypto/$(DEPDIR)/tctnoded-hmac_sha256.Tpo src/crypto/$(DEPDIR)/tctnoded-hmac_sha256.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='src/crypto/hmac_sha256.cpp' object='src/crypto/tctnoded-hmac_sha256.o' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(tctnoded_CPPFLAGS) $(CPPFLAGS) $(tctnoded_CXXFLAGS) $(CXXFLAGS) -c -o tctnoded-hmac_sha256.o `test -f 'src/crypto/hmac_sha256.cpp' || echo '$(srcdir)/'`src/crypto/hmac_sha256.cpp
+@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(tctnoded_CPPFLAGS) $(CPPFLAGS) $(tctnoded_CXXFLAGS) $(CXXFLAGS) -c -o src/crypto/tctnoded-hmac_sha256.o `test -f 'src/crypto/hmac_sha256.cpp' || echo '$(srcdir)/'`src/crypto/hmac_sha256.cpp
 
-tctnoded-hmac_sha256.obj: src/crypto/hmac_sha256.cpp
-@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(tctnoded_CPPFLAGS) $(CPPFLAGS) $(tctnoded_CXXFLAGS) $(CXXFLAGS) -MT tctnoded-hmac_sha256.obj -MD -MP -MF $(DEPDIR)/tctnoded-hmac_sha256.Tpo -c -o tctnoded-hmac_sha256.obj `if test -f 'src/crypto/hmac_sha256.cpp'; then $(CYGPATH_W) 'src/crypto/hmac_sha256.cpp'; else $(CYGPATH_W) '$(srcdir)/src/crypto/hmac_sha256.cpp'; fi`
-@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/tctnoded-hmac_sha256.Tpo $(DEPDIR)/tctnoded-hmac_sha256.Po
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='src/crypto/hmac_sha256.cpp' object='tctnoded-hmac_sha256.obj' libtool=no @AMDEPBACKSLASH@
+src/crypto/tctnoded-hmac_sha256.obj: src/crypto/hmac_sha256.cpp
+@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(tctnoded_CPPFLAGS) $(CPPFLAGS) $(tctnoded_CXXFLAGS) $(CXXFLAGS) -MT src/crypto/tctnoded-hmac_sha256.obj -MD -MP -MF src/crypto/$(DEPDIR)/tctnoded-hmac_sha256.Tpo -c -o src/crypto/tctnoded-hmac_sha256.obj `if test -f 'src/crypto/hmac_sha256.cpp'; then $(CYGPATH_W) 'src/crypto/hmac_sha256.cpp'; else $(CYGPATH_W) '$(srcdir)/src/crypto/hmac_sha256.cpp'; fi`
+@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) src/crypto/$(DEPDIR)/tctnoded-hmac_sha256.Tpo src/crypto/$(DEPDIR)/tctnoded-hmac_sha256.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='src/crypto/hmac_sha256.cpp' object='src/crypto/tctnoded-hmac_sha256.obj' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(tctnoded_CPPFLAGS) $(CPPFLAGS) $(tctnoded_CXXFLAGS) $(CXXFLAGS) -c -o tctnoded-hmac_sha256.obj `if test -f 'src/crypto/hmac_sha256.cpp'; then $(CYGPATH_W) 'src/crypto/hmac_sha256.cpp'; else $(CYGPATH_W) '$(srcdir)/src/crypto/hmac_sha256.cpp'; fi`
+@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(tctnoded_CPPFLAGS) $(CPPFLAGS) $(tctnoded_CXXFLAGS) $(CXXFLAGS) -c -o src/crypto/tctnoded-hmac_sha256.obj `if test -f 'src/crypto/hmac_sha256.cpp'; then $(CYGPATH_W) 'src/crypto/hmac_sha256.cpp'; else $(CYGPATH_W) '$(srcdir)/src/crypto/hmac_sha256.cpp'; fi`
 
-tctnoded-hmac_sha512.o: src/crypto/hmac_sha512.cpp
-@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(tctnoded_CPPFLAGS) $(CPPFLAGS) $(tctnoded_CXXFLAGS) $(CXXFLAGS) -MT tctnoded-hmac_sha512.o -MD -MP -MF $(DEPDIR)/tctnoded-hmac_sha512.Tpo -c -o tctnoded-hmac_sha512.o `test -f 'src/crypto/hmac_sha512.cpp' || echo '$(srcdir)/'`src/crypto/hmac_sha512.cpp
-@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/tctnoded-hmac_sha512.Tpo $(DEPDIR)/tctnoded-hmac_sha512.Po
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='src/crypto/hmac_sha512.cpp' object='tctnoded-hmac_sha512.o' libtool=no @AMDEPBACKSLASH@
+src/crypto/tctnoded-hmac_sha512.o: src/crypto/hmac_sha512.cpp
+@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(tctnoded_CPPFLAGS) $(CPPFLAGS) $(tctnoded_CXXFLAGS) $(CXXFLAGS) -MT src/crypto/tctnoded-hmac_sha512.o -MD -MP -MF src/crypto/$(DEPDIR)/tctnoded-hmac_sha512.Tpo -c -o src/crypto/tctnoded-hmac_sha512.o `test -f 'src/crypto/hmac_sha512.cpp' || echo '$(srcdir)/'`src/crypto/hmac_sha512.cpp
+@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) src/crypto/$(DEPDIR)/tctnoded-hmac_sha512.Tpo src/crypto/$(DEPDIR)/tctnoded-hmac_sha512.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='src/crypto/hmac_sha512.cpp' object='src/crypto/tctnoded-hmac_sha512.o' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(tctnoded_CPPFLAGS) $(CPPFLAGS) $(tctnoded_CXXFLAGS) $(CXXFLAGS) -c -o tctnoded-hmac_sha512.o `test -f 'src/crypto/hmac_sha512.cpp' || echo '$(srcdir)/'`src/crypto/hmac_sha512.cpp
+@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(tctnoded_CPPFLAGS) $(CPPFLAGS) $(tctnoded_CXXFLAGS) $(CXXFLAGS) -c -o src/crypto/tctnoded-hmac_sha512.o `test -f 'src/crypto/hmac_sha512.cpp' || echo '$(srcdir)/'`src/crypto/hmac_sha512.cpp
 
-tctnoded-hmac_sha512.obj: src/crypto/hmac_sha512.cpp
-@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(tctnoded_CPPFLAGS) $(CPPFLAGS) $(tctnoded_CXXFLAGS) $(CXXFLAGS) -MT tctnoded-hmac_sha512.obj -MD -MP -MF $(DEPDIR)/tctnoded-hmac_sha512.Tpo -c -o tctnoded-hmac_sha512.obj `if test -f 'src/crypto/hmac_sha512.cpp'; then $(CYGPATH_W) 'src/crypto/hmac_sha512.cpp'; else $(CYGPATH_W) '$(srcdir)/src/crypto/hmac_sha512.cpp'; fi`
-@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/tctnoded-hmac_sha512.Tpo $(DEPDIR)/tctnoded-hmac_sha512.Po
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='src/crypto/hmac_sha512.cpp' object='tctnoded-hmac_sha512.obj' libtool=no @AMDEPBACKSLASH@
+src/crypto/tctnoded-hmac_sha512.obj: src/crypto/hmac_sha512.cpp
+@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(tctnoded_CPPFLAGS) $(CPPFLAGS) $(tctnoded_CXXFLAGS) $(CXXFLAGS) -MT src/crypto/tctnoded-hmac_sha512.obj -MD -MP -MF src/crypto/$(DEPDIR)/tctnoded-hmac_sha512.Tpo -c -o src/crypto/tctnoded-hmac_sha512.obj `if test -f 'src/crypto/hmac_sha512.cpp'; then $(CYGPATH_W) 'src/crypto/hmac_sha512.cpp'; else $(CYGPATH_W) '$(srcdir)/src/crypto/hmac_sha512.cpp'; fi`
+@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) src/crypto/$(DEPDIR)/tctnoded-hmac_sha512.Tpo src/crypto/$(DEPDIR)/tctnoded-hmac_sha512.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='src/crypto/hmac_sha512.cpp' object='src/crypto/tctnoded-hmac_sha512.obj' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(tctnoded_CPPFLAGS) $(CPPFLAGS) $(tctnoded_CXXFLAGS) $(CXXFLAGS) -c -o tctnoded-hmac_sha512.obj `if test -f 'src/crypto/hmac_sha512.cpp'; then $(CYGPATH_W) 'src/crypto/hmac_sha512.cpp'; else $(CYGPATH_W) '$(srcdir)/src/crypto/hmac_sha512.cpp'; fi`
+@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(tctnoded_CPPFLAGS) $(CPPFLAGS) $(tctnoded_CXXFLAGS) $(CXXFLAGS) -c -o src/crypto/tctnoded-hmac_sha512.obj `if test -f 'src/crypto/hmac_sha512.cpp'; then $(CYGPATH_W) 'src/crypto/hmac_sha512.cpp'; else $(CYGPATH_W) '$(srcdir)/src/crypto/hmac_sha512.cpp'; fi`
 
-tctnoded-ripemd160.o: src/crypto/ripemd160.cpp
-@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(tctnoded_CPPFLAGS) $(CPPFLAGS) $(tctnoded_CXXFLAGS) $(CXXFLAGS) -MT tctnoded-ripemd160.o -MD -MP -MF $(DEPDIR)/tctnoded-ripemd160.Tpo -c -o tctnoded-ripemd160.o `test -f 'src/crypto/ripemd160.cpp' || echo '$(srcdir)/'`src/crypto/ripemd160.cpp
-@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/tctnoded-ripemd160.Tpo $(DEPDIR)/tctnoded-ripemd160.Po
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='src/crypto/ripemd160.cpp' object='tctnoded-ripemd160.o' libtool=no @AMDEPBACKSLASH@
+src/crypto/tctnoded-ripemd160.o: src/crypto/ripemd160.cpp
+@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(tctnoded_CPPFLAGS) $(CPPFLAGS) $(tctnoded_CXXFLAGS) $(CXXFLAGS) -MT src/crypto/tctnoded-ripemd160.o -MD -MP -MF src/crypto/$(DEPDIR)/tctnoded-ripemd160.Tpo -c -o src/crypto/tctnoded-ripemd160.o `test -f 'src/crypto/ripemd160.cpp' || echo '$(srcdir)/'`src/crypto/ripemd160.cpp
+@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) src/crypto/$(DEPDIR)/tctnoded-ripemd160.Tpo src/crypto/$(DEPDIR)/tctnoded-ripemd160.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='src/crypto/ripemd160.cpp' object='src/crypto/tctnoded-ripemd160.o' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(tctnoded_CPPFLAGS) $(CPPFLAGS) $(tctnoded_CXXFLAGS) $(CXXFLAGS) -c -o tctnoded-ripemd160.o `test -f 'src/crypto/ripemd160.cpp' || echo '$(srcdir)/'`src/crypto/ripemd160.cpp
+@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(tctnoded_CPPFLAGS) $(CPPFLAGS) $(tctnoded_CXXFLAGS) $(CXXFLAGS) -c -o src/crypto/tctnoded-ripemd160.o `test -f 'src/crypto/ripemd160.cpp' || echo '$(srcdir)/'`src/crypto/ripemd160.cpp
 
-tctnoded-ripemd160.obj: src/crypto/ripemd160.cpp
-@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(tctnoded_CPPFLAGS) $(CPPFLAGS) $(tctnoded_CXXFLAGS) $(CXXFLAGS) -MT tctnoded-ripemd160.obj -MD -MP -MF $(DEPDIR)/tctnoded-ripemd160.Tpo -c -o tctnoded-ripemd160.obj `if test -f 'src/crypto/ripemd160.cpp'; then $(CYGPATH_W) 'src/crypto/ripemd160.cpp'; else $(CYGPATH_W) '$(srcdir)/src/crypto/ripemd160.cpp'; fi`
-@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/tctnoded-ripemd160.Tpo $(DEPDIR)/tctnoded-ripemd160.Po
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='src/crypto/ripemd160.cpp' object='tctnoded-ripemd160.obj' libtool=no @AMDEPBACKSLASH@
+src/crypto/tctnoded-ripemd160.obj: src/crypto/ripemd160.cpp
+@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(tctnoded_CPPFLAGS) $(CPPFLAGS) $(tctnoded_CXXFLAGS) $(CXXFLAGS) -MT src/crypto/tctnoded-ripemd160.obj -MD -MP -MF src/crypto/$(DEPDIR)/tctnoded-ripemd160.Tpo -c -o src/crypto/tctnoded-ripemd160.obj `if test -f 'src/crypto/ripemd160.cpp'; then $(CYGPATH_W) 'src/crypto/ripemd160.cpp'; else $(CYGPATH_W) '$(srcdir)/src/crypto/ripemd160.cpp'; fi`
+@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) src/crypto/$(DEPDIR)/tctnoded-ripemd160.Tpo src/crypto/$(DEPDIR)/tctnoded-ripemd160.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='src/crypto/ripemd160.cpp' object='src/crypto/tctnoded-ripemd160.obj' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(tctnoded_CPPFLAGS) $(CPPFLAGS) $(tctnoded_CXXFLAGS) $(CXXFLAGS) -c -o tctnoded-ripemd160.obj `if test -f 'src/crypto/ripemd160.cpp'; then $(CYGPATH_W) 'src/crypto/ripemd160.cpp'; else $(CYGPATH_W) '$(srcdir)/src/crypto/ripemd160.cpp'; fi`
+@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(tctnoded_CPPFLAGS) $(CPPFLAGS) $(tctnoded_CXXFLAGS) $(CXXFLAGS) -c -o src/crypto/tctnoded-ripemd160.obj `if test -f 'src/crypto/ripemd160.cpp'; then $(CYGPATH_W) 'src/crypto/ripemd160.cpp'; else $(CYGPATH_W) '$(srcdir)/src/crypto/ripemd160.cpp'; fi`
 
-tctnoded-sha1.o: src/crypto/sha1.cpp
-@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(tctnoded_CPPFLAGS) $(CPPFLAGS) $(tctnoded_CXXFLAGS) $(CXXFLAGS) -MT tctnoded-sha1.o -MD -MP -MF $(DEPDIR)/tctnoded-sha1.Tpo -c -o tctnoded-sha1.o `test -f 'src/crypto/sha1.cpp' || echo '$(srcdir)/'`src/crypto/sha1.cpp
-@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/tctnoded-sha1.Tpo $(DEPDIR)/tctnoded-sha1.Po
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='src/crypto/sha1.cpp' object='tctnoded-sha1.o' libtool=no @AMDEPBACKSLASH@
+src/crypto/tctnoded-sha1.o: src/crypto/sha1.cpp
+@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(tctnoded_CPPFLAGS) $(CPPFLAGS) $(tctnoded_CXXFLAGS) $(CXXFLAGS) -MT src/crypto/tctnoded-sha1.o -MD -MP -MF src/crypto/$(DEPDIR)/tctnoded-sha1.Tpo -c -o src/crypto/tctnoded-sha1.o `test -f 'src/crypto/sha1.cpp' || echo '$(srcdir)/'`src/crypto/sha1.cpp
+@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) src/crypto/$(DEPDIR)/tctnoded-sha1.Tpo src/crypto/$(DEPDIR)/tctnoded-sha1.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='src/crypto/sha1.cpp' object='src/crypto/tctnoded-sha1.o' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(tctnoded_CPPFLAGS) $(CPPFLAGS) $(tctnoded_CXXFLAGS) $(CXXFLAGS) -c -o tctnoded-sha1.o `test -f 'src/crypto/sha1.cpp' || echo '$(srcdir)/'`src/crypto/sha1.cpp
+@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(tctnoded_CPPFLAGS) $(CPPFLAGS) $(tctnoded_CXXFLAGS) $(CXXFLAGS) -c -o src/crypto/tctnoded-sha1.o `test -f 'src/crypto/sha1.cpp' || echo '$(srcdir)/'`src/crypto/sha1.cpp
 
-tctnoded-sha1.obj: src/crypto/sha1.cpp
-@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(tctnoded_CPPFLAGS) $(CPPFLAGS) $(tctnoded_CXXFLAGS) $(CXXFLAGS) -MT tctnoded-sha1.obj -MD -MP -MF $(DEPDIR)/tctnoded-sha1.Tpo -c -o tctnoded-sha1.obj `if test -f 'src/crypto/sha1.cpp'; then $(CYGPATH_W) 'src/crypto/sha1.cpp'; else $(CYGPATH_W) '$(srcdir)/src/crypto/sha1.cpp'; fi`
-@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/tctnoded-sha1.Tpo $(DEPDIR)/tctnoded-sha1.Po
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='src/crypto/sha1.cpp' object='tctnoded-sha1.obj' libtool=no @AMDEPBACKSLASH@
+src/crypto/tctnoded-sha1.obj: src/crypto/sha1.cpp
+@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(tctnoded_CPPFLAGS) $(CPPFLAGS) $(tctnoded_CXXFLAGS) $(CXXFLAGS) -MT src/crypto/tctnoded-sha1.obj -MD -MP -MF src/crypto/$(DEPDIR)/tctnoded-sha1.Tpo -c -o src/crypto/tctnoded-sha1.obj `if test -f 'src/crypto/sha1.cpp'; then $(CYGPATH_W) 'src/crypto/sha1.cpp'; else $(CYGPATH_W) '$(srcdir)/src/crypto/sha1.cpp'; fi`
+@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) src/crypto/$(DEPDIR)/tctnoded-sha1.Tpo src/crypto/$(DEPDIR)/tctnoded-sha1.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='src/crypto/sha1.cpp' object='src/crypto/tctnoded-sha1.obj' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(tctnoded_CPPFLAGS) $(CPPFLAGS) $(tctnoded_CXXFLAGS) $(CXXFLAGS) -c -o tctnoded-sha1.obj `if test -f 'src/crypto/sha1.cpp'; then $(CYGPATH_W) 'src/crypto/sha1.cpp'; else $(CYGPATH_W) '$(srcdir)/src/crypto/sha1.cpp'; fi`
+@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(tctnoded_CPPFLAGS) $(CPPFLAGS) $(tctnoded_CXXFLAGS) $(CXXFLAGS) -c -o src/crypto/tctnoded-sha1.obj `if test -f 'src/crypto/sha1.cpp'; then $(CYGPATH_W) 'src/crypto/sha1.cpp'; else $(CYGPATH_W) '$(srcdir)/src/crypto/sha1.cpp'; fi`
 
-tctnoded-sha256.o: src/crypto/sha256.cpp
-@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(tctnoded_CPPFLAGS) $(CPPFLAGS) $(tctnoded_CXXFLAGS) $(CXXFLAGS) -MT tctnoded-sha256.o -MD -MP -MF $(DEPDIR)/tctnoded-sha256.Tpo -c -o tctnoded-sha256.o `test -f 'src/crypto/sha256.cpp' || echo '$(srcdir)/'`src/crypto/sha256.cpp
-@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/tctnoded-sha256.Tpo $(DEPDIR)/tctnoded-sha256.Po
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='src/crypto/sha256.cpp' object='tctnoded-sha256.o' libtool=no @AMDEPBACKSLASH@
+src/crypto/tctnoded-sha3.o: src/crypto/sha3.cpp
+@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(tctnoded_CPPFLAGS) $(CPPFLAGS) $(tctnoded_CXXFLAGS) $(CXXFLAGS) -MT src/crypto/tctnoded-sha3.o -MD -MP -MF src/crypto/$(DEPDIR)/tctnoded-sha3.Tpo -c -o src/crypto/tctnoded-sha3.o `test -f 'src/crypto/sha3.cpp' || echo '$(srcdir)/'`src/crypto/sha3.cpp
+@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) src/crypto/$(DEPDIR)/tctnoded-sha3.Tpo src/crypto/$(DEPDIR)/tctnoded-sha3.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='src/crypto/sha3.cpp' object='src/crypto/tctnoded-sha3.o' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(tctnoded_CPPFLAGS) $(CPPFLAGS) $(tctnoded_CXXFLAGS) $(CXXFLAGS) -c -o tctnoded-sha256.o `test -f 'src/crypto/sha256.cpp' || echo '$(srcdir)/'`src/crypto/sha256.cpp
+@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(tctnoded_CPPFLAGS) $(CPPFLAGS) $(tctnoded_CXXFLAGS) $(CXXFLAGS) -c -o src/crypto/tctnoded-sha3.o `test -f 'src/crypto/sha3.cpp' || echo '$(srcdir)/'`src/crypto/sha3.cpp
 
-tctnoded-sha256.obj: src/crypto/sha256.cpp
-@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(tctnoded_CPPFLAGS) $(CPPFLAGS) $(tctnoded_CXXFLAGS) $(CXXFLAGS) -MT tctnoded-sha256.obj -MD -MP -MF $(DEPDIR)/tctnoded-sha256.Tpo -c -o tctnoded-sha256.obj `if test -f 'src/crypto/sha256.cpp'; then $(CYGPATH_W) 'src/crypto/sha256.cpp'; else $(CYGPATH_W) '$(srcdir)/src/crypto/sha256.cpp'; fi`
-@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/tctnoded-sha256.Tpo $(DEPDIR)/tctnoded-sha256.Po
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='src/crypto/sha256.cpp' object='tctnoded-sha256.obj' libtool=no @AMDEPBACKSLASH@
+src/crypto/tctnoded-sha3.obj: src/crypto/sha3.cpp
+@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(tctnoded_CPPFLAGS) $(CPPFLAGS) $(tctnoded_CXXFLAGS) $(CXXFLAGS) -MT src/crypto/tctnoded-sha3.obj -MD -MP -MF src/crypto/$(DEPDIR)/tctnoded-sha3.Tpo -c -o src/crypto/tctnoded-sha3.obj `if test -f 'src/crypto/sha3.cpp'; then $(CYGPATH_W) 'src/crypto/sha3.cpp'; else $(CYGPATH_W) '$(srcdir)/src/crypto/sha3.cpp'; fi`
+@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) src/crypto/$(DEPDIR)/tctnoded-sha3.Tpo src/crypto/$(DEPDIR)/tctnoded-sha3.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='src/crypto/sha3.cpp' object='src/crypto/tctnoded-sha3.obj' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(tctnoded_CPPFLAGS) $(CPPFLAGS) $(tctnoded_CXXFLAGS) $(CXXFLAGS) -c -o tctnoded-sha256.obj `if test -f 'src/crypto/sha256.cpp'; then $(CYGPATH_W) 'src/crypto/sha256.cpp'; else $(CYGPATH_W) '$(srcdir)/src/crypto/sha256.cpp'; fi`
+@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(tctnoded_CPPFLAGS) $(CPPFLAGS) $(tctnoded_CXXFLAGS) $(CXXFLAGS) -c -o src/crypto/tctnoded-sha3.obj `if test -f 'src/crypto/sha3.cpp'; then $(CYGPATH_W) 'src/crypto/sha3.cpp'; else $(CYGPATH_W) '$(srcdir)/src/crypto/sha3.cpp'; fi`
 
-tctnoded-sha512.o: src/crypto/sha512.cpp
-@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(tctnoded_CPPFLAGS) $(CPPFLAGS) $(tctnoded_CXXFLAGS) $(CXXFLAGS) -MT tctnoded-sha512.o -MD -MP -MF $(DEPDIR)/tctnoded-sha512.Tpo -c -o tctnoded-sha512.o `test -f 'src/crypto/sha512.cpp' || echo '$(srcdir)/'`src/crypto/sha512.cpp
-@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/tctnoded-sha512.Tpo $(DEPDIR)/tctnoded-sha512.Po
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='src/crypto/sha512.cpp' object='tctnoded-sha512.o' libtool=no @AMDEPBACKSLASH@
+src/crypto/tctnoded-sha256.o: src/crypto/sha256.cpp
+@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(tctnoded_CPPFLAGS) $(CPPFLAGS) $(tctnoded_CXXFLAGS) $(CXXFLAGS) -MT src/crypto/tctnoded-sha256.o -MD -MP -MF src/crypto/$(DEPDIR)/tctnoded-sha256.Tpo -c -o src/crypto/tctnoded-sha256.o `test -f 'src/crypto/sha256.cpp' || echo '$(srcdir)/'`src/crypto/sha256.cpp
+@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) src/crypto/$(DEPDIR)/tctnoded-sha256.Tpo src/crypto/$(DEPDIR)/tctnoded-sha256.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='src/crypto/sha256.cpp' object='src/crypto/tctnoded-sha256.o' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(tctnoded_CPPFLAGS) $(CPPFLAGS) $(tctnoded_CXXFLAGS) $(CXXFLAGS) -c -o tctnoded-sha512.o `test -f 'src/crypto/sha512.cpp' || echo '$(srcdir)/'`src/crypto/sha512.cpp
+@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(tctnoded_CPPFLAGS) $(CPPFLAGS) $(tctnoded_CXXFLAGS) $(CXXFLAGS) -c -o src/crypto/tctnoded-sha256.o `test -f 'src/crypto/sha256.cpp' || echo '$(srcdir)/'`src/crypto/sha256.cpp
 
-tctnoded-sha512.obj: src/crypto/sha512.cpp
-@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(tctnoded_CPPFLAGS) $(CPPFLAGS) $(tctnoded_CXXFLAGS) $(CXXFLAGS) -MT tctnoded-sha512.obj -MD -MP -MF $(DEPDIR)/tctnoded-sha512.Tpo -c -o tctnoded-sha512.obj `if test -f 'src/crypto/sha512.cpp'; then $(CYGPATH_W) 'src/crypto/sha512.cpp'; else $(CYGPATH_W) '$(srcdir)/src/crypto/sha512.cpp'; fi`
-@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/tctnoded-sha512.Tpo $(DEPDIR)/tctnoded-sha512.Po
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='src/crypto/sha512.cpp' object='tctnoded-sha512.obj' libtool=no @AMDEPBACKSLASH@
+src/crypto/tctnoded-sha256.obj: src/crypto/sha256.cpp
+@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(tctnoded_CPPFLAGS) $(CPPFLAGS) $(tctnoded_CXXFLAGS) $(CXXFLAGS) -MT src/crypto/tctnoded-sha256.obj -MD -MP -MF src/crypto/$(DEPDIR)/tctnoded-sha256.Tpo -c -o src/crypto/tctnoded-sha256.obj `if test -f 'src/crypto/sha256.cpp'; then $(CYGPATH_W) 'src/crypto/sha256.cpp'; else $(CYGPATH_W) '$(srcdir)/src/crypto/sha256.cpp'; fi`
+@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) src/crypto/$(DEPDIR)/tctnoded-sha256.Tpo src/crypto/$(DEPDIR)/tctnoded-sha256.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='src/crypto/sha256.cpp' object='src/crypto/tctnoded-sha256.obj' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(tctnoded_CPPFLAGS) $(CPPFLAGS) $(tctnoded_CXXFLAGS) $(CXXFLAGS) -c -o tctnoded-sha512.obj `if test -f 'src/crypto/sha512.cpp'; then $(CYGPATH_W) 'src/crypto/sha512.cpp'; else $(CYGPATH_W) '$(srcdir)/src/crypto/sha512.cpp'; fi`
+@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(tctnoded_CPPFLAGS) $(CPPFLAGS) $(tctnoded_CXXFLAGS) $(CXXFLAGS) -c -o src/crypto/tctnoded-sha256.obj `if test -f 'src/crypto/sha256.cpp'; then $(CYGPATH_W) 'src/crypto/sha256.cpp'; else $(CYGPATH_W) '$(srcdir)/src/crypto/sha256.cpp'; fi`
 
-tctnoded-ArgsManager.o: src/ArgsManager.cpp
-@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(tctnoded_CPPFLAGS) $(CPPFLAGS) $(tctnoded_CXXFLAGS) $(CXXFLAGS) -MT tctnoded-ArgsManager.o -MD -MP -MF $(DEPDIR)/tctnoded-ArgsManager.Tpo -c -o tctnoded-ArgsManager.o `test -f 'src/ArgsManager.cpp' || echo '$(srcdir)/'`src/ArgsManager.cpp
-@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/tctnoded-ArgsManager.Tpo $(DEPDIR)/tctnoded-ArgsManager.Po
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='src/ArgsManager.cpp' object='tctnoded-ArgsManager.o' libtool=no @AMDEPBACKSLASH@
+src/crypto/tctnoded-sha512.o: src/crypto/sha512.cpp
+@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(tctnoded_CPPFLAGS) $(CPPFLAGS) $(tctnoded_CXXFLAGS) $(CXXFLAGS) -MT src/crypto/tctnoded-sha512.o -MD -MP -MF src/crypto/$(DEPDIR)/tctnoded-sha512.Tpo -c -o src/crypto/tctnoded-sha512.o `test -f 'src/crypto/sha512.cpp' || echo '$(srcdir)/'`src/crypto/sha512.cpp
+@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) src/crypto/$(DEPDIR)/tctnoded-sha512.Tpo src/crypto/$(DEPDIR)/tctnoded-sha512.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='src/crypto/sha512.cpp' object='src/crypto/tctnoded-sha512.o' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(tctnoded_CPPFLAGS) $(CPPFLAGS) $(tctnoded_CXXFLAGS) $(CXXFLAGS) -c -o tctnoded-ArgsManager.o `test -f 'src/ArgsManager.cpp' || echo '$(srcdir)/'`src/ArgsManager.cpp
+@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(tctnoded_CPPFLAGS) $(CPPFLAGS) $(tctnoded_CXXFLAGS) $(CXXFLAGS) -c -o src/crypto/tctnoded-sha512.o `test -f 'src/crypto/sha512.cpp' || echo '$(srcdir)/'`src/crypto/sha512.cpp
 
-tctnoded-ArgsManager.obj: src/ArgsManager.cpp
-@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(tctnoded_CPPFLAGS) $(CPPFLAGS) $(tctnoded_CXXFLAGS) $(CXXFLAGS) -MT tctnoded-ArgsManager.obj -MD -MP -MF $(DEPDIR)/tctnoded-ArgsManager.Tpo -c -o tctnoded-ArgsManager.obj `if test -f 'src/ArgsManager.cpp'; then $(CYGPATH_W) 'src/ArgsManager.cpp'; else $(CYGPATH_W) '$(srcdir)/src/ArgsManager.cpp'; fi`
-@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/tctnoded-ArgsManager.Tpo $(DEPDIR)/tctnoded-ArgsManager.Po
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='src/ArgsManager.cpp' object='tctnoded-ArgsManager.obj' libtool=no @AMDEPBACKSLASH@
+src/crypto/tctnoded-sha512.obj: src/crypto/sha512.cpp
+@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(tctnoded_CPPFLAGS) $(CPPFLAGS) $(tctnoded_CXXFLAGS) $(CXXFLAGS) -MT src/crypto/tctnoded-sha512.obj -MD -MP -MF src/crypto/$(DEPDIR)/tctnoded-sha512.Tpo -c -o src/crypto/tctnoded-sha512.obj `if test -f 'src/crypto/sha512.cpp'; then $(CYGPATH_W) 'src/crypto/sha512.cpp'; else $(CYGPATH_W) '$(srcdir)/src/crypto/sha512.cpp'; fi`
+@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) src/crypto/$(DEPDIR)/tctnoded-sha512.Tpo src/crypto/$(DEPDIR)/tctnoded-sha512.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='src/crypto/sha512.cpp' object='src/crypto/tctnoded-sha512.obj' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(tctnoded_CPPFLAGS) $(CPPFLAGS) $(tctnoded_CXXFLAGS) $(CXXFLAGS) -c -o tctnoded-ArgsManager.obj `if test -f 'src/ArgsManager.cpp'; then $(CYGPATH_W) 'src/ArgsManager.cpp'; else $(CYGPATH_W) '$(srcdir)/src/ArgsManager.cpp'; fi`
+@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(tctnoded_CPPFLAGS) $(CPPFLAGS) $(tctnoded_CXXFLAGS) $(CXXFLAGS) -c -o src/crypto/tctnoded-sha512.obj `if test -f 'src/crypto/sha512.cpp'; then $(CYGPATH_W) 'src/crypto/sha512.cpp'; else $(CYGPATH_W) '$(srcdir)/src/crypto/sha512.cpp'; fi`
 
-tctnoded-cThreadInterrupt.o: src/cThreadInterrupt.cpp
-@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(tctnoded_CPPFLAGS) $(CPPFLAGS) $(tctnoded_CXXFLAGS) $(CXXFLAGS) -MT tctnoded-cThreadInterrupt.o -MD -MP -MF $(DEPDIR)/tctnoded-cThreadInterrupt.Tpo -c -o tctnoded-cThreadInterrupt.o `test -f 'src/cThreadInterrupt.cpp' || echo '$(srcdir)/'`src/cThreadInterrupt.cpp
-@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/tctnoded-cThreadInterrupt.Tpo $(DEPDIR)/tctnoded-cThreadInterrupt.Po
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='src/cThreadInterrupt.cpp' object='tctnoded-cThreadInterrupt.o' libtool=no @AMDEPBACKSLASH@
+src/io/db/tctnoded-mysql.o: src/io/db/mysql.cpp
+@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(tctnoded_CPPFLAGS) $(CPPFLAGS) $(tctnoded_CXXFLAGS) $(CXXFLAGS) -MT src/io/db/tctnoded-mysql.o -MD -MP -MF src/io/db/$(DEPDIR)/tctnoded-mysql.Tpo -c -o src/io/db/tctnoded-mysql.o `test -f 'src/io/db/mysql.cpp' || echo '$(srcdir)/'`src/io/db/mysql.cpp
+@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) src/io/db/$(DEPDIR)/tctnoded-mysql.Tpo src/io/db/$(DEPDIR)/tctnoded-mysql.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='src/io/db/mysql.cpp' object='src/io/db/tctnoded-mysql.o' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(tctnoded_CPPFLAGS) $(CPPFLAGS) $(tctnoded_CXXFLAGS) $(CXXFLAGS) -c -o tctnoded-cThreadInterrupt.o `test -f 'src/cThreadInterrupt.cpp' || echo '$(srcdir)/'`src/cThreadInterrupt.cpp
+@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(tctnoded_CPPFLAGS) $(CPPFLAGS) $(tctnoded_CXXFLAGS) $(CXXFLAGS) -c -o src/io/db/tctnoded-mysql.o `test -f 'src/io/db/mysql.cpp' || echo '$(srcdir)/'`src/io/db/mysql.cpp
 
-tctnoded-cThreadInterrupt.obj: src/cThreadInterrupt.cpp
-@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(tctnoded_CPPFLAGS) $(CPPFLAGS) $(tctnoded_CXXFLAGS) $(CXXFLAGS) -MT tctnoded-cThreadInterrupt.obj -MD -MP -MF $(DEPDIR)/tctnoded-cThreadInterrupt.Tpo -c -o tctnoded-cThreadInterrupt.obj `if test -f 'src/cThreadInterrupt.cpp'; then $(CYGPATH_W) 'src/cThreadInterrupt.cpp'; else $(CYGPATH_W) '$(srcdir)/src/cThreadInterrupt.cpp'; fi`
-@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/tctnoded-cThreadInterrupt.Tpo $(DEPDIR)/tctnoded-cThreadInterrupt.Po
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='src/cThreadInterrupt.cpp' object='tctnoded-cThreadInterrupt.obj' libtool=no @AMDEPBACKSLASH@
+src/io/db/tctnoded-mysql.obj: src/io/db/mysql.cpp
+@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(tctnoded_CPPFLAGS) $(CPPFLAGS) $(tctnoded_CXXFLAGS) $(CXXFLAGS) -MT src/io/db/tctnoded-mysql.obj -MD -MP -MF src/io/db/$(DEPDIR)/tctnoded-mysql.Tpo -c -o src/io/db/tctnoded-mysql.obj `if test -f 'src/io/db/mysql.cpp'; then $(CYGPATH_W) 'src/io/db/mysql.cpp'; else $(CYGPATH_W) '$(srcdir)/src/io/db/mysql.cpp'; fi`
+@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) src/io/db/$(DEPDIR)/tctnoded-mysql.Tpo src/io/db/$(DEPDIR)/tctnoded-mysql.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='src/io/db/mysql.cpp' object='src/io/db/tctnoded-mysql.obj' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(tctnoded_CPPFLAGS) $(CPPFLAGS) $(tctnoded_CXXFLAGS) $(CXXFLAGS) -c -o tctnoded-cThreadInterrupt.obj `if test -f 'src/cThreadInterrupt.cpp'; then $(CYGPATH_W) 'src/cThreadInterrupt.cpp'; else $(CYGPATH_W) '$(srcdir)/src/cThreadInterrupt.cpp'; fi`
+@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(tctnoded_CPPFLAGS) $(CPPFLAGS) $(tctnoded_CXXFLAGS) $(CXXFLAGS) -c -o src/io/db/tctnoded-mysql.obj `if test -f 'src/io/db/mysql.cpp'; then $(CYGPATH_W) 'src/io/db/mysql.cpp'; else $(CYGPATH_W) '$(srcdir)/src/io/db/mysql.cpp'; fi`
 
-tctnoded-hash.o: src/hash.cpp
-@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(tctnoded_CPPFLAGS) $(CPPFLAGS) $(tctnoded_CXXFLAGS) $(CXXFLAGS) -MT tctnoded-hash.o -MD -MP -MF $(DEPDIR)/tctnoded-hash.Tpo -c -o tctnoded-hash.o `test -f 'src/hash.cpp' || echo '$(srcdir)/'`src/hash.cpp
-@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/tctnoded-hash.Tpo $(DEPDIR)/tctnoded-hash.Po
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='src/hash.cpp' object='tctnoded-hash.o' libtool=no @AMDEPBACKSLASH@
+src/io/db/tctnoded-rdb.o: src/io/db/rdb.cpp
+@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(tctnoded_CPPFLAGS) $(CPPFLAGS) $(tctnoded_CXXFLAGS) $(CXXFLAGS) -MT src/io/db/tctnoded-rdb.o -MD -MP -MF src/io/db/$(DEPDIR)/tctnoded-rdb.Tpo -c -o src/io/db/tctnoded-rdb.o `test -f 'src/io/db/rdb.cpp' || echo '$(srcdir)/'`src/io/db/rdb.cpp
+@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) src/io/db/$(DEPDIR)/tctnoded-rdb.Tpo src/io/db/$(DEPDIR)/tctnoded-rdb.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='src/io/db/rdb.cpp' object='src/io/db/tctnoded-rdb.o' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(tctnoded_CPPFLAGS) $(CPPFLAGS) $(tctnoded_CXXFLAGS) $(CXXFLAGS) -c -o tctnoded-hash.o `test -f 'src/hash.cpp' || echo '$(srcdir)/'`src/hash.cpp
+@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(tctnoded_CPPFLAGS) $(CPPFLAGS) $(tctnoded_CXXFLAGS) $(CXXFLAGS) -c -o src/io/db/tctnoded-rdb.o `test -f 'src/io/db/rdb.cpp' || echo '$(srcdir)/'`src/io/db/rdb.cpp
 
-tctnoded-hash.obj: src/hash.cpp
-@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(tctnoded_CPPFLAGS) $(CPPFLAGS) $(tctnoded_CXXFLAGS) $(CXXFLAGS) -MT tctnoded-hash.obj -MD -MP -MF $(DEPDIR)/tctnoded-hash.Tpo -c -o tctnoded-hash.obj `if test -f 'src/hash.cpp'; then $(CYGPATH_W) 'src/hash.cpp'; else $(CYGPATH_W) '$(srcdir)/src/hash.cpp'; fi`
-@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/tctnoded-hash.Tpo $(DEPDIR)/tctnoded-hash.Po
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='src/hash.cpp' object='tctnoded-hash.obj' libtool=no @AMDEPBACKSLASH@
+src/io/db/tctnoded-rdb.obj: src/io/db/rdb.cpp
+@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(tctnoded_CPPFLAGS) $(CPPFLAGS) $(tctnoded_CXXFLAGS) $(CXXFLAGS) -MT src/io/db/tctnoded-rdb.obj -MD -MP -MF src/io/db/$(DEPDIR)/tctnoded-rdb.Tpo -c -o src/io/db/tctnoded-rdb.obj `if test -f 'src/io/db/rdb.cpp'; then $(CYGPATH_W) 'src/io/db/rdb.cpp'; else $(CYGPATH_W) '$(srcdir)/src/io/db/rdb.cpp'; fi`
+@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) src/io/db/$(DEPDIR)/tctnoded-rdb.Tpo src/io/db/$(DEPDIR)/tctnoded-rdb.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='src/io/db/rdb.cpp' object='src/io/db/tctnoded-rdb.obj' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(tctnoded_CPPFLAGS) $(CPPFLAGS) $(tctnoded_CXXFLAGS) $(CXXFLAGS) -c -o tctnoded-hash.obj `if test -f 'src/hash.cpp'; then $(CYGPATH_W) 'src/hash.cpp'; else $(CYGPATH_W) '$(srcdir)/src/hash.cpp'; fi`
+@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(tctnoded_CPPFLAGS) $(CPPFLAGS) $(tctnoded_CXXFLAGS) $(CXXFLAGS) -c -o src/io/db/tctnoded-rdb.obj `if test -f 'src/io/db/rdb.cpp'; then $(CYGPATH_W) 'src/io/db/rdb.cpp'; else $(CYGPATH_W) '$(srcdir)/src/io/db/rdb.cpp'; fi`
 
-tctnoded-random.o: src/random.cpp
-@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(tctnoded_CPPFLAGS) $(CPPFLAGS) $(tctnoded_CXXFLAGS) $(CXXFLAGS) -MT tctnoded-random.o -MD -MP -MF $(DEPDIR)/tctnoded-random.Tpo -c -o tctnoded-random.o `test -f 'src/random.cpp' || echo '$(srcdir)/'`src/random.cpp
-@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/tctnoded-random.Tpo $(DEPDIR)/tctnoded-random.Po
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='src/random.cpp' object='tctnoded-random.o' libtool=no @AMDEPBACKSLASH@
+src/io/zip/tctnoded-unzip.o: src/io/zip/unzip.cpp
+@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(tctnoded_CPPFLAGS) $(CPPFLAGS) $(tctnoded_CXXFLAGS) $(CXXFLAGS) -MT src/io/zip/tctnoded-unzip.o -MD -MP -MF src/io/zip/$(DEPDIR)/tctnoded-unzip.Tpo -c -o src/io/zip/tctnoded-unzip.o `test -f 'src/io/zip/unzip.cpp' || echo '$(srcdir)/'`src/io/zip/unzip.cpp
+@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) src/io/zip/$(DEPDIR)/tctnoded-unzip.Tpo src/io/zip/$(DEPDIR)/tctnoded-unzip.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='src/io/zip/unzip.cpp' object='src/io/zip/tctnoded-unzip.o' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(tctnoded_CPPFLAGS) $(CPPFLAGS) $(tctnoded_CXXFLAGS) $(CXXFLAGS) -c -o tctnoded-random.o `test -f 'src/random.cpp' || echo '$(srcdir)/'`src/random.cpp
+@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(tctnoded_CPPFLAGS) $(CPPFLAGS) $(tctnoded_CXXFLAGS) $(CXXFLAGS) -c -o src/io/zip/tctnoded-unzip.o `test -f 'src/io/zip/unzip.cpp' || echo '$(srcdir)/'`src/io/zip/unzip.cpp
 
-tctnoded-random.obj: src/random.cpp
-@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(tctnoded_CPPFLAGS) $(CPPFLAGS) $(tctnoded_CXXFLAGS) $(CXXFLAGS) -MT tctnoded-random.obj -MD -MP -MF $(DEPDIR)/tctnoded-random.Tpo -c -o tctnoded-random.obj `if test -f 'src/random.cpp'; then $(CYGPATH_W) 'src/random.cpp'; else $(CYGPATH_W) '$(srcdir)/src/random.cpp'; fi`
-@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/tctnoded-random.Tpo $(DEPDIR)/tctnoded-random.Po
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='src/random.cpp' object='tctnoded-random.obj' libtool=no @AMDEPBACKSLASH@
+src/io/zip/tctnoded-unzip.obj: src/io/zip/unzip.cpp
+@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(tctnoded_CPPFLAGS) $(CPPFLAGS) $(tctnoded_CXXFLAGS) $(CXXFLAGS) -MT src/io/zip/tctnoded-unzip.obj -MD -MP -MF src/io/zip/$(DEPDIR)/tctnoded-unzip.Tpo -c -o src/io/zip/tctnoded-unzip.obj `if test -f 'src/io/zip/unzip.cpp'; then $(CYGPATH_W) 'src/io/zip/unzip.cpp'; else $(CYGPATH_W) '$(srcdir)/src/io/zip/unzip.cpp'; fi`
+@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) src/io/zip/$(DEPDIR)/tctnoded-unzip.Tpo src/io/zip/$(DEPDIR)/tctnoded-unzip.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='src/io/zip/unzip.cpp' object='src/io/zip/tctnoded-unzip.obj' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(tctnoded_CPPFLAGS) $(CPPFLAGS) $(tctnoded_CXXFLAGS) $(CXXFLAGS) -c -o tctnoded-random.obj `if test -f 'src/random.cpp'; then $(CYGPATH_W) 'src/random.cpp'; else $(CYGPATH_W) '$(srcdir)/src/random.cpp'; fi`
+@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(tctnoded_CPPFLAGS) $(CPPFLAGS) $(tctnoded_CXXFLAGS) $(CXXFLAGS) -c -o src/io/zip/tctnoded-unzip.obj `if test -f 'src/io/zip/unzip.cpp'; then $(CYGPATH_W) 'src/io/zip/unzip.cpp'; else $(CYGPATH_W) '$(srcdir)/src/io/zip/unzip.cpp'; fi`
 
-tctnoded-scheduler.o: src/scheduler.cpp
-@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(tctnoded_CPPFLAGS) $(CPPFLAGS) $(tctnoded_CXXFLAGS) $(CXXFLAGS) -MT tctnoded-scheduler.o -MD -MP -MF $(DEPDIR)/tctnoded-scheduler.Tpo -c -o tctnoded-scheduler.o `test -f 'src/scheduler.cpp' || echo '$(srcdir)/'`src/scheduler.cpp
-@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/tctnoded-scheduler.Tpo $(DEPDIR)/tctnoded-scheduler.Po
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='src/scheduler.cpp' object='tctnoded-scheduler.o' libtool=no @AMDEPBACKSLASH@
+src/io/zip/tctnoded-zip.o: src/io/zip/zip.cpp
+@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(tctnoded_CPPFLAGS) $(CPPFLAGS) $(tctnoded_CXXFLAGS) $(CXXFLAGS) -MT src/io/zip/tctnoded-zip.o -MD -MP -MF src/io/zip/$(DEPDIR)/tctnoded-zip.Tpo -c -o src/io/zip/tctnoded-zip.o `test -f 'src/io/zip/zip.cpp' || echo '$(srcdir)/'`src/io/zip/zip.cpp
+@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) src/io/zip/$(DEPDIR)/tctnoded-zip.Tpo src/io/zip/$(DEPDIR)/tctnoded-zip.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='src/io/zip/zip.cpp' object='src/io/zip/tctnoded-zip.o' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(tctnoded_CPPFLAGS) $(CPPFLAGS) $(tctnoded_CXXFLAGS) $(CXXFLAGS) -c -o tctnoded-scheduler.o `test -f 'src/scheduler.cpp' || echo '$(srcdir)/'`src/scheduler.cpp
+@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(tctnoded_CPPFLAGS) $(CPPFLAGS) $(tctnoded_CXXFLAGS) $(CXXFLAGS) -c -o src/io/zip/tctnoded-zip.o `test -f 'src/io/zip/zip.cpp' || echo '$(srcdir)/'`src/io/zip/zip.cpp
 
-tctnoded-scheduler.obj: src/scheduler.cpp
-@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(tctnoded_CPPFLAGS) $(CPPFLAGS) $(tctnoded_CXXFLAGS) $(CXXFLAGS) -MT tctnoded-scheduler.obj -MD -MP -MF $(DEPDIR)/tctnoded-scheduler.Tpo -c -o tctnoded-scheduler.obj `if test -f 'src/scheduler.cpp'; then $(CYGPATH_W) 'src/scheduler.cpp'; else $(CYGPATH_W) '$(srcdir)/src/scheduler.cpp'; fi`
-@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/tctnoded-scheduler.Tpo $(DEPDIR)/tctnoded-scheduler.Po
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='src/scheduler.cpp' object='tctnoded-scheduler.obj' libtool=no @AMDEPBACKSLASH@
+src/io/zip/tctnoded-zip.obj: src/io/zip/zip.cpp
+@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(tctnoded_CPPFLAGS) $(CPPFLAGS) $(tctnoded_CXXFLAGS) $(CXXFLAGS) -MT src/io/zip/tctnoded-zip.obj -MD -MP -MF src/io/zip/$(DEPDIR)/tctnoded-zip.Tpo -c -o src/io/zip/tctnoded-zip.obj `if test -f 'src/io/zip/zip.cpp'; then $(CYGPATH_W) 'src/io/zip/zip.cpp'; else $(CYGPATH_W) '$(srcdir)/src/io/zip/zip.cpp'; fi`
+@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) src/io/zip/$(DEPDIR)/tctnoded-zip.Tpo src/io/zip/$(DEPDIR)/tctnoded-zip.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='src/io/zip/zip.cpp' object='src/io/zip/tctnoded-zip.obj' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(tctnoded_CPPFLAGS) $(CPPFLAGS) $(tctnoded_CXXFLAGS) $(CXXFLAGS) -c -o tctnoded-scheduler.obj `if test -f 'src/scheduler.cpp'; then $(CYGPATH_W) 'src/scheduler.cpp'; else $(CYGPATH_W) '$(srcdir)/src/scheduler.cpp'; fi`
+@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(tctnoded_CPPFLAGS) $(CPPFLAGS) $(tctnoded_CXXFLAGS) $(CXXFLAGS) -c -o src/io/zip/tctnoded-zip.obj `if test -f 'src/io/zip/zip.cpp'; then $(CYGPATH_W) 'src/io/zip/zip.cpp'; else $(CYGPATH_W) '$(srcdir)/src/io/zip/zip.cpp'; fi`
 
-tctnoded-uint256.o: src/uint256.cpp
-@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(tctnoded_CPPFLAGS) $(CPPFLAGS) $(tctnoded_CXXFLAGS) $(CXXFLAGS) -MT tctnoded-uint256.o -MD -MP -MF $(DEPDIR)/tctnoded-uint256.Tpo -c -o tctnoded-uint256.o `test -f 'src/uint256.cpp' || echo '$(srcdir)/'`src/uint256.cpp
-@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/tctnoded-uint256.Tpo $(DEPDIR)/tctnoded-uint256.Po
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='src/uint256.cpp' object='tctnoded-uint256.o' libtool=no @AMDEPBACKSLASH@
+src/io/tctnoded-netPeers.o: src/io/netPeers.cpp
+@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(tctnoded_CPPFLAGS) $(CPPFLAGS) $(tctnoded_CXXFLAGS) $(CXXFLAGS) -MT src/io/tctnoded-netPeers.o -MD -MP -MF src/io/$(DEPDIR)/tctnoded-netPeers.Tpo -c -o src/io/tctnoded-netPeers.o `test -f 'src/io/netPeers.cpp' || echo '$(srcdir)/'`src/io/netPeers.cpp
+@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) src/io/$(DEPDIR)/tctnoded-netPeers.Tpo src/io/$(DEPDIR)/tctnoded-netPeers.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='src/io/netPeers.cpp' object='src/io/tctnoded-netPeers.o' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(tctnoded_CPPFLAGS) $(CPPFLAGS) $(tctnoded_CXXFLAGS) $(CXXFLAGS) -c -o tctnoded-uint256.o `test -f 'src/uint256.cpp' || echo '$(srcdir)/'`src/uint256.cpp
+@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(tctnoded_CPPFLAGS) $(CPPFLAGS) $(tctnoded_CXXFLAGS) $(CXXFLAGS) -c -o src/io/tctnoded-netPeers.o `test -f 'src/io/netPeers.cpp' || echo '$(srcdir)/'`src/io/netPeers.cpp
 
-tctnoded-uint256.obj: src/uint256.cpp
-@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(tctnoded_CPPFLAGS) $(CPPFLAGS) $(tctnoded_CXXFLAGS) $(CXXFLAGS) -MT tctnoded-uint256.obj -MD -MP -MF $(DEPDIR)/tctnoded-uint256.Tpo -c -o tctnoded-uint256.obj `if test -f 'src/uint256.cpp'; then $(CYGPATH_W) 'src/uint256.cpp'; else $(CYGPATH_W) '$(srcdir)/src/uint256.cpp'; fi`
-@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/tctnoded-uint256.Tpo $(DEPDIR)/tctnoded-uint256.Po
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='src/uint256.cpp' object='tctnoded-uint256.obj' libtool=no @AMDEPBACKSLASH@
+src/io/tctnoded-netPeers.obj: src/io/netPeers.cpp
+@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(tctnoded_CPPFLAGS) $(CPPFLAGS) $(tctnoded_CXXFLAGS) $(CXXFLAGS) -MT src/io/tctnoded-netPeers.obj -MD -MP -MF src/io/$(DEPDIR)/tctnoded-netPeers.Tpo -c -o src/io/tctnoded-netPeers.obj `if test -f 'src/io/netPeers.cpp'; then $(CYGPATH_W) 'src/io/netPeers.cpp'; else $(CYGPATH_W) '$(srcdir)/src/io/netPeers.cpp'; fi`
+@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) src/io/$(DEPDIR)/tctnoded-netPeers.Tpo src/io/$(DEPDIR)/tctnoded-netPeers.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='src/io/netPeers.cpp' object='src/io/tctnoded-netPeers.obj' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(tctnoded_CPPFLAGS) $(CPPFLAGS) $(tctnoded_CXXFLAGS) $(CXXFLAGS) -c -o tctnoded-uint256.obj `if test -f 'src/uint256.cpp'; then $(CYGPATH_W) 'src/uint256.cpp'; else $(CYGPATH_W) '$(srcdir)/src/uint256.cpp'; fi`
+@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(tctnoded_CPPFLAGS) $(CPPFLAGS) $(tctnoded_CXXFLAGS) $(CXXFLAGS) -c -o src/io/tctnoded-netPeers.obj `if test -f 'src/io/netPeers.cpp'; then $(CYGPATH_W) 'src/io/netPeers.cpp'; else $(CYGPATH_W) '$(srcdir)/src/io/netPeers.cpp'; fi`
 
-tctnoded-utilstrencodings.o: src/utilstrencodings.cpp
-@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(tctnoded_CPPFLAGS) $(CPPFLAGS) $(tctnoded_CXXFLAGS) $(CXXFLAGS) -MT tctnoded-utilstrencodings.o -MD -MP -MF $(DEPDIR)/tctnoded-utilstrencodings.Tpo -c -o tctnoded-utilstrencodings.o `test -f 'src/utilstrencodings.cpp' || echo '$(srcdir)/'`src/utilstrencodings.cpp
-@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/tctnoded-utilstrencodings.Tpo $(DEPDIR)/tctnoded-utilstrencodings.Po
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='src/utilstrencodings.cpp' object='tctnoded-utilstrencodings.o' libtool=no @AMDEPBACKSLASH@
+src/io/tctnoded-StorageManager.o: src/io/StorageManager.cpp
+@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(tctnoded_CPPFLAGS) $(CPPFLAGS) $(tctnoded_CXXFLAGS) $(CXXFLAGS) -MT src/io/tctnoded-StorageManager.o -MD -MP -MF src/io/$(DEPDIR)/tctnoded-StorageManager.Tpo -c -o src/io/tctnoded-StorageManager.o `test -f 'src/io/StorageManager.cpp' || echo '$(srcdir)/'`src/io/StorageManager.cpp
+@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) src/io/$(DEPDIR)/tctnoded-StorageManager.Tpo src/io/$(DEPDIR)/tctnoded-StorageManager.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='src/io/StorageManager.cpp' object='src/io/tctnoded-StorageManager.o' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(tctnoded_CPPFLAGS) $(CPPFLAGS) $(tctnoded_CXXFLAGS) $(CXXFLAGS) -c -o tctnoded-utilstrencodings.o `test -f 'src/utilstrencodings.cpp' || echo '$(srcdir)/'`src/utilstrencodings.cpp
+@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(tctnoded_CPPFLAGS) $(CPPFLAGS) $(tctnoded_CXXFLAGS) $(CXXFLAGS) -c -o src/io/tctnoded-StorageManager.o `test -f 'src/io/StorageManager.cpp' || echo '$(srcdir)/'`src/io/StorageManager.cpp
 
-tctnoded-utilstrencodings.obj: src/utilstrencodings.cpp
-@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(tctnoded_CPPFLAGS) $(CPPFLAGS) $(tctnoded_CXXFLAGS) $(CXXFLAGS) -MT tctnoded-utilstrencodings.obj -MD -MP -MF $(DEPDIR)/tctnoded-utilstrencodings.Tpo -c -o tctnoded-utilstrencodings.obj `if test -f 'src/utilstrencodings.cpp'; then $(CYGPATH_W) 'src/utilstrencodings.cpp'; else $(CYGPATH_W) '$(srcdir)/src/utilstrencodings.cpp'; fi`
-@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/tctnoded-utilstrencodings.Tpo $(DEPDIR)/tctnoded-utilstrencodings.Po
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='src/utilstrencodings.cpp' object='tctnoded-utilstrencodings.obj' libtool=no @AMDEPBACKSLASH@
+src/io/tctnoded-StorageManager.obj: src/io/StorageManager.cpp
+@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(tctnoded_CPPFLAGS) $(CPPFLAGS) $(tctnoded_CXXFLAGS) $(CXXFLAGS) -MT src/io/tctnoded-StorageManager.obj -MD -MP -MF src/io/$(DEPDIR)/tctnoded-StorageManager.Tpo -c -o src/io/tctnoded-StorageManager.obj `if test -f 'src/io/StorageManager.cpp'; then $(CYGPATH_W) 'src/io/StorageManager.cpp'; else $(CYGPATH_W) '$(srcdir)/src/io/StorageManager.cpp'; fi`
+@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) src/io/$(DEPDIR)/tctnoded-StorageManager.Tpo src/io/$(DEPDIR)/tctnoded-StorageManager.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='src/io/StorageManager.cpp' object='src/io/tctnoded-StorageManager.obj' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(tctnoded_CPPFLAGS) $(CPPFLAGS) $(tctnoded_CXXFLAGS) $(CXXFLAGS) -c -o tctnoded-utilstrencodings.obj `if test -f 'src/utilstrencodings.cpp'; then $(CYGPATH_W) 'src/utilstrencodings.cpp'; else $(CYGPATH_W) '$(srcdir)/src/utilstrencodings.cpp'; fi`
+@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(tctnoded_CPPFLAGS) $(CPPFLAGS) $(tctnoded_CXXFLAGS) $(CXXFLAGS) -c -o src/io/tctnoded-StorageManager.obj `if test -f 'src/io/StorageManager.cpp'; then $(CYGPATH_W) 'src/io/StorageManager.cpp'; else $(CYGPATH_W) '$(srcdir)/src/io/StorageManager.cpp'; fi`
 
-tctnoded-netPeers.o: src/io/netPeers.cpp
-@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(tctnoded_CPPFLAGS) $(CPPFLAGS) $(tctnoded_CXXFLAGS) $(CXXFLAGS) -MT tctnoded-netPeers.o -MD -MP -MF $(DEPDIR)/tctnoded-netPeers.Tpo -c -o tctnoded-netPeers.o `test -f 'src/io/netPeers.cpp' || echo '$(srcdir)/'`src/io/netPeers.cpp
-@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/tctnoded-netPeers.Tpo $(DEPDIR)/tctnoded-netPeers.Po
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='src/io/netPeers.cpp' object='tctnoded-netPeers.o' libtool=no @AMDEPBACKSLASH@
+src/network/tctnoded-CNetAddr.o: src/network/CNetAddr.cpp
+@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(tctnoded_CPPFLAGS) $(CPPFLAGS) $(tctnoded_CXXFLAGS) $(CXXFLAGS) -MT src/network/tctnoded-CNetAddr.o -MD -MP -MF src/network/$(DEPDIR)/tctnoded-CNetAddr.Tpo -c -o src/network/tctnoded-CNetAddr.o `test -f 'src/network/CNetAddr.cpp' || echo '$(srcdir)/'`src/network/CNetAddr.cpp
+@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) src/network/$(DEPDIR)/tctnoded-CNetAddr.Tpo src/network/$(DEPDIR)/tctnoded-CNetAddr.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='src/network/CNetAddr.cpp' object='src/network/tctnoded-CNetAddr.o' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(tctnoded_CPPFLAGS) $(CPPFLAGS) $(tctnoded_CXXFLAGS) $(CXXFLAGS) -c -o tctnoded-netPeers.o `test -f 'src/io/netPeers.cpp' || echo '$(srcdir)/'`src/io/netPeers.cpp
+@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(tctnoded_CPPFLAGS) $(CPPFLAGS) $(tctnoded_CXXFLAGS) $(CXXFLAGS) -c -o src/network/tctnoded-CNetAddr.o `test -f 'src/network/CNetAddr.cpp' || echo '$(srcdir)/'`src/network/CNetAddr.cpp
 
-tctnoded-netPeers.obj: src/io/netPeers.cpp
-@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(tctnoded_CPPFLAGS) $(CPPFLAGS) $(tctnoded_CXXFLAGS) $(CXXFLAGS) -MT tctnoded-netPeers.obj -MD -MP -MF $(DEPDIR)/tctnoded-netPeers.Tpo -c -o tctnoded-netPeers.obj `if test -f 'src/io/netPeers.cpp'; then $(CYGPATH_W) 'src/io/netPeers.cpp'; else $(CYGPATH_W) '$(srcdir)/src/io/netPeers.cpp'; fi`
-@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/tctnoded-netPeers.Tpo $(DEPDIR)/tctnoded-netPeers.Po
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='src/io/netPeers.cpp' object='tctnoded-netPeers.obj' libtool=no @AMDEPBACKSLASH@
+src/network/tctnoded-CNetAddr.obj: src/network/CNetAddr.cpp
+@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(tctnoded_CPPFLAGS) $(CPPFLAGS) $(tctnoded_CXXFLAGS) $(CXXFLAGS) -MT src/network/tctnoded-CNetAddr.obj -MD -MP -MF src/network/$(DEPDIR)/tctnoded-CNetAddr.Tpo -c -o src/network/tctnoded-CNetAddr.obj `if test -f 'src/network/CNetAddr.cpp'; then $(CYGPATH_W) 'src/network/CNetAddr.cpp'; else $(CYGPATH_W) '$(srcdir)/src/network/CNetAddr.cpp'; fi`
+@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) src/network/$(DEPDIR)/tctnoded-CNetAddr.Tpo src/network/$(DEPDIR)/tctnoded-CNetAddr.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='src/network/CNetAddr.cpp' object='src/network/tctnoded-CNetAddr.obj' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(tctnoded_CPPFLAGS) $(CPPFLAGS) $(tctnoded_CXXFLAGS) $(CXXFLAGS) -c -o tctnoded-netPeers.obj `if test -f 'src/io/netPeers.cpp'; then $(CYGPATH_W) 'src/io/netPeers.cpp'; else $(CYGPATH_W) '$(srcdir)/src/io/netPeers.cpp'; fi`
+@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(tctnoded_CPPFLAGS) $(CPPFLAGS) $(tctnoded_CXXFLAGS) $(CXXFLAGS) -c -o src/network/tctnoded-CNetAddr.obj `if test -f 'src/network/CNetAddr.cpp'; then $(CYGPATH_W) 'src/network/CNetAddr.cpp'; else $(CYGPATH_W) '$(srcdir)/src/network/CNetAddr.cpp'; fi`
 
-tctnoded-CNetAddr.o: src/network/CNetAddr.cpp
-@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(tctnoded_CPPFLAGS) $(CPPFLAGS) $(tctnoded_CXXFLAGS) $(CXXFLAGS) -MT tctnoded-CNetAddr.o -MD -MP -MF $(DEPDIR)/tctnoded-CNetAddr.Tpo -c -o tctnoded-CNetAddr.o `test -f 'src/network/CNetAddr.cpp' || echo '$(srcdir)/'`src/network/CNetAddr.cpp
-@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/tctnoded-CNetAddr.Tpo $(DEPDIR)/tctnoded-CNetAddr.Po
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='src/network/CNetAddr.cpp' object='tctnoded-CNetAddr.o' libtool=no @AMDEPBACKSLASH@
+src/network/tctnoded-CService.o: src/network/CService.cpp
+@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(tctnoded_CPPFLAGS) $(CPPFLAGS) $(tctnoded_CXXFLAGS) $(CXXFLAGS) -MT src/network/tctnoded-CService.o -MD -MP -MF src/network/$(DEPDIR)/tctnoded-CService.Tpo -c -o src/network/tctnoded-CService.o `test -f 'src/network/CService.cpp' || echo '$(srcdir)/'`src/network/CService.cpp
+@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) src/network/$(DEPDIR)/tctnoded-CService.Tpo src/network/$(DEPDIR)/tctnoded-CService.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='src/network/CService.cpp' object='src/network/tctnoded-CService.o' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(tctnoded_CPPFLAGS) $(CPPFLAGS) $(tctnoded_CXXFLAGS) $(CXXFLAGS) -c -o tctnoded-CNetAddr.o `test -f 'src/network/CNetAddr.cpp' || echo '$(srcdir)/'`src/network/CNetAddr.cpp
+@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(tctnoded_CPPFLAGS) $(CPPFLAGS) $(tctnoded_CXXFLAGS) $(CXXFLAGS) -c -o src/network/tctnoded-CService.o `test -f 'src/network/CService.cpp' || echo '$(srcdir)/'`src/network/CService.cpp
 
-tctnoded-CNetAddr.obj: src/network/CNetAddr.cpp
-@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(tctnoded_CPPFLAGS) $(CPPFLAGS) $(tctnoded_CXXFLAGS) $(CXXFLAGS) -MT tctnoded-CNetAddr.obj -MD -MP -MF $(DEPDIR)/tctnoded-CNetAddr.Tpo -c -o tctnoded-CNetAddr.obj `if test -f 'src/network/CNetAddr.cpp'; then $(CYGPATH_W) 'src/network/CNetAddr.cpp'; else $(CYGPATH_W) '$(srcdir)/src/network/CNetAddr.cpp'; fi`
-@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/tctnoded-CNetAddr.Tpo $(DEPDIR)/tctnoded-CNetAddr.Po
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='src/network/CNetAddr.cpp' object='tctnoded-CNetAddr.obj' libtool=no @AMDEPBACKSLASH@
+src/network/tctnoded-CService.obj: src/network/CService.cpp
+@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(tctnoded_CPPFLAGS) $(CPPFLAGS) $(tctnoded_CXXFLAGS) $(CXXFLAGS) -MT src/network/tctnoded-CService.obj -MD -MP -MF src/network/$(DEPDIR)/tctnoded-CService.Tpo -c -o src/network/tctnoded-CService.obj `if test -f 'src/network/CService.cpp'; then $(CYGPATH_W) 'src/network/CService.cpp'; else $(CYGPATH_W) '$(srcdir)/src/network/CService.cpp'; fi`
+@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) src/network/$(DEPDIR)/tctnoded-CService.Tpo src/network/$(DEPDIR)/tctnoded-CService.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='src/network/CService.cpp' object='src/network/tctnoded-CService.obj' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(tctnoded_CPPFLAGS) $(CPPFLAGS) $(tctnoded_CXXFLAGS) $(CXXFLAGS) -c -o tctnoded-CNetAddr.obj `if test -f 'src/network/CNetAddr.cpp'; then $(CYGPATH_W) 'src/network/CNetAddr.cpp'; else $(CYGPATH_W) '$(srcdir)/src/network/CNetAddr.cpp'; fi`
+@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(tctnoded_CPPFLAGS) $(CPPFLAGS) $(tctnoded_CXXFLAGS) $(CXXFLAGS) -c -o src/network/tctnoded-CService.obj `if test -f 'src/network/CService.cpp'; then $(CYGPATH_W) 'src/network/CService.cpp'; else $(CYGPATH_W) '$(srcdir)/src/network/CService.cpp'; fi`
 
-tctnoded-CService.o: src/network/CService.cpp
-@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(tctnoded_CPPFLAGS) $(CPPFLAGS) $(tctnoded_CXXFLAGS) $(CXXFLAGS) -MT tctnoded-CService.o -MD -MP -MF $(DEPDIR)/tctnoded-CService.Tpo -c -o tctnoded-CService.o `test -f 'src/network/CService.cpp' || echo '$(srcdir)/'`src/network/CService.cpp
-@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/tctnoded-CService.Tpo $(DEPDIR)/tctnoded-CService.Po
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='src/network/CService.cpp' object='tctnoded-CService.o' libtool=no @AMDEPBACKSLASH@
+src/network/tctnoded-CSubnet.o: src/network/CSubnet.cpp
+@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(tctnoded_CPPFLAGS) $(CPPFLAGS) $(tctnoded_CXXFLAGS) $(CXXFLAGS) -MT src/network/tctnoded-CSubnet.o -MD -MP -MF src/network/$(DEPDIR)/tctnoded-CSubnet.Tpo -c -o src/network/tctnoded-CSubnet.o `test -f 'src/network/CSubnet.cpp' || echo '$(srcdir)/'`src/network/CSubnet.cpp
+@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) src/network/$(DEPDIR)/tctnoded-CSubnet.Tpo src/network/$(DEPDIR)/tctnoded-CSubnet.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='src/network/CSubnet.cpp' object='src/network/tctnoded-CSubnet.o' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(tctnoded_CPPFLAGS) $(CPPFLAGS) $(tctnoded_CXXFLAGS) $(CXXFLAGS) -c -o tctnoded-CService.o `test -f 'src/network/CService.cpp' || echo '$(srcdir)/'`src/network/CService.cpp
+@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(tctnoded_CPPFLAGS) $(CPPFLAGS) $(tctnoded_CXXFLAGS) $(CXXFLAGS) -c -o src/network/tctnoded-CSubnet.o `test -f 'src/network/CSubnet.cpp' || echo '$(srcdir)/'`src/network/CSubnet.cpp
 
-tctnoded-CService.obj: src/network/CService.cpp
-@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(tctnoded_CPPFLAGS) $(CPPFLAGS) $(tctnoded_CXXFLAGS) $(CXXFLAGS) -MT tctnoded-CService.obj -MD -MP -MF $(DEPDIR)/tctnoded-CService.Tpo -c -o tctnoded-CService.obj `if test -f 'src/network/CService.cpp'; then $(CYGPATH_W) 'src/network/CService.cpp'; else $(CYGPATH_W) '$(srcdir)/src/network/CService.cpp'; fi`
-@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/tctnoded-CService.Tpo $(DEPDIR)/tctnoded-CService.Po
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='src/network/CService.cpp' object='tctnoded-CService.obj' libtool=no @AMDEPBACKSLASH@
+src/network/tctnoded-CSubnet.obj: src/network/CSubnet.cpp
+@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(tctnoded_CPPFLAGS) $(CPPFLAGS) $(tctnoded_CXXFLAGS) $(CXXFLAGS) -MT src/network/tctnoded-CSubnet.obj -MD -MP -MF src/network/$(DEPDIR)/tctnoded-CSubnet.Tpo -c -o src/network/tctnoded-CSubnet.obj `if test -f 'src/network/CSubnet.cpp'; then $(CYGPATH_W) 'src/network/CSubnet.cpp'; else $(CYGPATH_W) '$(srcdir)/src/network/CSubnet.cpp'; fi`
+@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) src/network/$(DEPDIR)/tctnoded-CSubnet.Tpo src/network/$(DEPDIR)/tctnoded-CSubnet.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='src/network/CSubnet.cpp' object='src/network/tctnoded-CSubnet.obj' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(tctnoded_CPPFLAGS) $(CPPFLAGS) $(tctnoded_CXXFLAGS) $(CXXFLAGS) -c -o tctnoded-CService.obj `if test -f 'src/network/CService.cpp'; then $(CYGPATH_W) 'src/network/CService.cpp'; else $(CYGPATH_W) '$(srcdir)/src/network/CService.cpp'; fi`
+@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(tctnoded_CPPFLAGS) $(CPPFLAGS) $(tctnoded_CXXFLAGS) $(CXXFLAGS) -c -o src/network/tctnoded-CSubnet.obj `if test -f 'src/network/CSubnet.cpp'; then $(CYGPATH_W) 'src/network/CSubnet.cpp'; else $(CYGPATH_W) '$(srcdir)/src/network/CSubnet.cpp'; fi`
 
-tctnoded-CSubnet.o: src/network/CSubnet.cpp
-@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(tctnoded_CPPFLAGS) $(CPPFLAGS) $(tctnoded_CXXFLAGS) $(CXXFLAGS) -MT tctnoded-CSubnet.o -MD -MP -MF $(DEPDIR)/tctnoded-CSubnet.Tpo -c -o tctnoded-CSubnet.o `test -f 'src/network/CSubnet.cpp' || echo '$(srcdir)/'`src/network/CSubnet.cpp
-@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/tctnoded-CSubnet.Tpo $(DEPDIR)/tctnoded-CSubnet.Po
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='src/network/CSubnet.cpp' object='tctnoded-CSubnet.o' libtool=no @AMDEPBACKSLASH@
+src/network/tctnoded-netMessage.o: src/network/netMessage.cpp
+@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(tctnoded_CPPFLAGS) $(CPPFLAGS) $(tctnoded_CXXFLAGS) $(CXXFLAGS) -MT src/network/tctnoded-netMessage.o -MD -MP -MF src/network/$(DEPDIR)/tctnoded-netMessage.Tpo -c -o src/network/tctnoded-netMessage.o `test -f 'src/network/netMessage.cpp' || echo '$(srcdir)/'`src/network/netMessage.cpp
+@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) src/network/$(DEPDIR)/tctnoded-netMessage.Tpo src/network/$(DEPDIR)/tctnoded-netMessage.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='src/network/netMessage.cpp' object='src/network/tctnoded-netMessage.o' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(tctnoded_CPPFLAGS) $(CPPFLAGS) $(tctnoded_CXXFLAGS) $(CXXFLAGS) -c -o tctnoded-CSubnet.o `test -f 'src/network/CSubnet.cpp' || echo '$(srcdir)/'`src/network/CSubnet.cpp
+@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(tctnoded_CPPFLAGS) $(CPPFLAGS) $(tctnoded_CXXFLAGS) $(CXXFLAGS) -c -o src/network/tctnoded-netMessage.o `test -f 'src/network/netMessage.cpp' || echo '$(srcdir)/'`src/network/netMessage.cpp
 
-tctnoded-CSubnet.obj: src/network/CSubnet.cpp
-@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(tctnoded_CPPFLAGS) $(CPPFLAGS) $(tctnoded_CXXFLAGS) $(CXXFLAGS) -MT tctnoded-CSubnet.obj -MD -MP -MF $(DEPDIR)/tctnoded-CSubnet.Tpo -c -o tctnoded-CSubnet.obj `if test -f 'src/network/CSubnet.cpp'; then $(CYGPATH_W) 'src/network/CSubnet.cpp'; else $(CYGPATH_W) '$(srcdir)/src/network/CSubnet.cpp'; fi`
-@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/tctnoded-CSubnet.Tpo $(DEPDIR)/tctnoded-CSubnet.Po
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='src/network/CSubnet.cpp' object='tctnoded-CSubnet.obj' libtool=no @AMDEPBACKSLASH@
+src/network/tctnoded-netMessage.obj: src/network/netMessage.cpp
+@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(tctnoded_CPPFLAGS) $(CPPFLAGS) $(tctnoded_CXXFLAGS) $(CXXFLAGS) -MT src/network/tctnoded-netMessage.obj -MD -MP -MF src/network/$(DEPDIR)/tctnoded-netMessage.Tpo -c -o src/network/tctnoded-netMessage.obj `if test -f 'src/network/netMessage.cpp'; then $(CYGPATH_W) 'src/network/netMessage.cpp'; else $(CYGPATH_W) '$(srcdir)/src/network/netMessage.cpp'; fi`
+@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) src/network/$(DEPDIR)/tctnoded-netMessage.Tpo src/network/$(DEPDIR)/tctnoded-netMessage.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='src/network/netMessage.cpp' object='src/network/tctnoded-netMessage.obj' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(tctnoded_CPPFLAGS) $(CPPFLAGS) $(tctnoded_CXXFLAGS) $(CXXFLAGS) -c -o tctnoded-CSubnet.obj `if test -f 'src/network/CSubnet.cpp'; then $(CYGPATH_W) 'src/network/CSubnet.cpp'; else $(CYGPATH_W) '$(srcdir)/src/network/CSubnet.cpp'; fi`
+@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(tctnoded_CPPFLAGS) $(CPPFLAGS) $(tctnoded_CXXFLAGS) $(CXXFLAGS) -c -o src/network/tctnoded-netMessage.obj `if test -f 'src/network/netMessage.cpp'; then $(CYGPATH_W) 'src/network/netMessage.cpp'; else $(CYGPATH_W) '$(srcdir)/src/network/netMessage.cpp'; fi`
 
-tctnoded-netMessage.o: src/network/netMessage.cpp
-@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(tctnoded_CPPFLAGS) $(CPPFLAGS) $(tctnoded_CXXFLAGS) $(CXXFLAGS) -MT tctnoded-netMessage.o -MD -MP -MF $(DEPDIR)/tctnoded-netMessage.Tpo -c -o tctnoded-netMessage.o `test -f 'src/network/netMessage.cpp' || echo '$(srcdir)/'`src/network/netMessage.cpp
-@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/tctnoded-netMessage.Tpo $(DEPDIR)/tctnoded-netMessage.Po
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='src/network/netMessage.cpp' object='tctnoded-netMessage.o' libtool=no @AMDEPBACKSLASH@
+src/network/tctnoded-NetworkManager.o: src/network/NetworkManager.cpp
+@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(tctnoded_CPPFLAGS) $(CPPFLAGS) $(tctnoded_CXXFLAGS) $(CXXFLAGS) -MT src/network/tctnoded-NetworkManager.o -MD -MP -MF src/network/$(DEPDIR)/tctnoded-NetworkManager.Tpo -c -o src/network/tctnoded-NetworkManager.o `test -f 'src/network/NetworkManager.cpp' || echo '$(srcdir)/'`src/network/NetworkManager.cpp
+@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) src/network/$(DEPDIR)/tctnoded-NetworkManager.Tpo src/network/$(DEPDIR)/tctnoded-NetworkManager.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='src/network/NetworkManager.cpp' object='src/network/tctnoded-NetworkManager.o' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(tctnoded_CPPFLAGS) $(CPPFLAGS) $(tctnoded_CXXFLAGS) $(CXXFLAGS) -c -o tctnoded-netMessage.o `test -f 'src/network/netMessage.cpp' || echo '$(srcdir)/'`src/network/netMessage.cpp
+@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(tctnoded_CPPFLAGS) $(CPPFLAGS) $(tctnoded_CXXFLAGS) $(CXXFLAGS) -c -o src/network/tctnoded-NetworkManager.o `test -f 'src/network/NetworkManager.cpp' || echo '$(srcdir)/'`src/network/NetworkManager.cpp
 
-tctnoded-netMessage.obj: src/network/netMessage.cpp
-@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(tctnoded_CPPFLAGS) $(CPPFLAGS) $(tctnoded_CXXFLAGS) $(CXXFLAGS) -MT tctnoded-netMessage.obj -MD -MP -MF $(DEPDIR)/tctnoded-netMessage.Tpo -c -o tctnoded-netMessage.obj `if test -f 'src/network/netMessage.cpp'; then $(CYGPATH_W) 'src/network/netMessage.cpp'; else $(CYGPATH_W) '$(srcdir)/src/network/netMessage.cpp'; fi`
-@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/tctnoded-netMessage.Tpo $(DEPDIR)/tctnoded-netMessage.Po
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='src/network/netMessage.cpp' object='tctnoded-netMessage.obj' libtool=no @AMDEPBACKSLASH@
+src/network/tctnoded-NetworkManager.obj: src/network/NetworkManager.cpp
+@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(tctnoded_CPPFLAGS) $(CPPFLAGS) $(tctnoded_CXXFLAGS) $(CXXFLAGS) -MT src/network/tctnoded-NetworkManager.obj -MD -MP -MF src/network/$(DEPDIR)/tctnoded-NetworkManager.Tpo -c -o src/network/tctnoded-NetworkManager.obj `if test -f 'src/network/NetworkManager.cpp'; then $(CYGPATH_W) 'src/network/NetworkManager.cpp'; else $(CYGPATH_W) '$(srcdir)/src/network/NetworkManager.cpp'; fi`
+@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) src/network/$(DEPDIR)/tctnoded-NetworkManager.Tpo src/network/$(DEPDIR)/tctnoded-NetworkManager.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='src/network/NetworkManager.cpp' object='src/network/tctnoded-NetworkManager.obj' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(tctnoded_CPPFLAGS) $(CPPFLAGS) $(tctnoded_CXXFLAGS) $(CXXFLAGS) -c -o tctnoded-netMessage.obj `if test -f 'src/network/netMessage.cpp'; then $(CYGPATH_W) 'src/network/netMessage.cpp'; else $(CYGPATH_W) '$(srcdir)/src/network/netMessage.cpp'; fi`
+@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(tctnoded_CPPFLAGS) $(CPPFLAGS) $(tctnoded_CXXFLAGS) $(CXXFLAGS) -c -o src/network/tctnoded-NetworkManager.obj `if test -f 'src/network/NetworkManager.cpp'; then $(CYGPATH_W) 'src/network/NetworkManager.cpp'; else $(CYGPATH_W) '$(srcdir)/src/network/NetworkManager.cpp'; fi`
 
-tctnoded-NetworkManager.o: src/network/NetworkManager.cpp
-@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(tctnoded_CPPFLAGS) $(CPPFLAGS) $(tctnoded_CXXFLAGS) $(CXXFLAGS) -MT tctnoded-NetworkManager.o -MD -MP -MF $(DEPDIR)/tctnoded-NetworkManager.Tpo -c -o tctnoded-NetworkManager.o `test -f 'src/network/NetworkManager.cpp' || echo '$(srcdir)/'`src/network/NetworkManager.cpp
-@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/tctnoded-NetworkManager.Tpo $(DEPDIR)/tctnoded-NetworkManager.Po
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='src/network/NetworkManager.cpp' object='tctnoded-NetworkManager.o' libtool=no @AMDEPBACKSLASH@
+src/tctnoded-ArgsManager.o: src/ArgsManager.cpp
+@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(tctnoded_CPPFLAGS) $(CPPFLAGS) $(tctnoded_CXXFLAGS) $(CXXFLAGS) -MT src/tctnoded-ArgsManager.o -MD -MP -MF src/$(DEPDIR)/tctnoded-ArgsManager.Tpo -c -o src/tctnoded-ArgsManager.o `test -f 'src/ArgsManager.cpp' || echo '$(srcdir)/'`src/ArgsManager.cpp
+@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) src/$(DEPDIR)/tctnoded-ArgsManager.Tpo src/$(DEPDIR)/tctnoded-ArgsManager.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='src/ArgsManager.cpp' object='src/tctnoded-ArgsManager.o' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(tctnoded_CPPFLAGS) $(CPPFLAGS) $(tctnoded_CXXFLAGS) $(CXXFLAGS) -c -o tctnoded-NetworkManager.o `test -f 'src/network/NetworkManager.cpp' || echo '$(srcdir)/'`src/network/NetworkManager.cpp
+@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(tctnoded_CPPFLAGS) $(CPPFLAGS) $(tctnoded_CXXFLAGS) $(CXXFLAGS) -c -o src/tctnoded-ArgsManager.o `test -f 'src/ArgsManager.cpp' || echo '$(srcdir)/'`src/ArgsManager.cpp
 
-tctnoded-NetworkManager.obj: src/network/NetworkManager.cpp
-@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(tctnoded_CPPFLAGS) $(CPPFLAGS) $(tctnoded_CXXFLAGS) $(CXXFLAGS) -MT tctnoded-NetworkManager.obj -MD -MP -MF $(DEPDIR)/tctnoded-NetworkManager.Tpo -c -o tctnoded-NetworkManager.obj `if test -f 'src/network/NetworkManager.cpp'; then $(CYGPATH_W) 'src/network/NetworkManager.cpp'; else $(CYGPATH_W) '$(srcdir)/src/network/NetworkManager.cpp'; fi`
-@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/tctnoded-NetworkManager.Tpo $(DEPDIR)/tctnoded-NetworkManager.Po
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='src/network/NetworkManager.cpp' object='tctnoded-NetworkManager.obj' libtool=no @AMDEPBACKSLASH@
+src/tctnoded-ArgsManager.obj: src/ArgsManager.cpp
+@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(tctnoded_CPPFLAGS) $(CPPFLAGS) $(tctnoded_CXXFLAGS) $(CXXFLAGS) -MT src/tctnoded-ArgsManager.obj -MD -MP -MF src/$(DEPDIR)/tctnoded-ArgsManager.Tpo -c -o src/tctnoded-ArgsManager.obj `if test -f 'src/ArgsManager.cpp'; then $(CYGPATH_W) 'src/ArgsManager.cpp'; else $(CYGPATH_W) '$(srcdir)/src/ArgsManager.cpp'; fi`
+@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) src/$(DEPDIR)/tctnoded-ArgsManager.Tpo src/$(DEPDIR)/tctnoded-ArgsManager.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='src/ArgsManager.cpp' object='src/tctnoded-ArgsManager.obj' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(tctnoded_CPPFLAGS) $(CPPFLAGS) $(tctnoded_CXXFLAGS) $(CXXFLAGS) -c -o tctnoded-NetworkManager.obj `if test -f 'src/network/NetworkManager.cpp'; then $(CYGPATH_W) 'src/network/NetworkManager.cpp'; else $(CYGPATH_W) '$(srcdir)/src/network/NetworkManager.cpp'; fi`
+@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(tctnoded_CPPFLAGS) $(CPPFLAGS) $(tctnoded_CXXFLAGS) $(CXXFLAGS) -c -o src/tctnoded-ArgsManager.obj `if test -f 'src/ArgsManager.cpp'; then $(CYGPATH_W) 'src/ArgsManager.cpp'; else $(CYGPATH_W) '$(srcdir)/src/ArgsManager.cpp'; fi`
 
-tctnoded-functions.o: src/functions.cpp
-@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(tctnoded_CPPFLAGS) $(CPPFLAGS) $(tctnoded_CXXFLAGS) $(CXXFLAGS) -MT tctnoded-functions.o -MD -MP -MF $(DEPDIR)/tctnoded-functions.Tpo -c -o tctnoded-functions.o `test -f 'src/functions.cpp' || echo '$(srcdir)/'`src/functions.cpp
-@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/tctnoded-functions.Tpo $(DEPDIR)/tctnoded-functions.Po
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='src/functions.cpp' object='tctnoded-functions.o' libtool=no @AMDEPBACKSLASH@
+src/tctnoded-cThreadInterrupt.o: src/cThreadInterrupt.cpp
+@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(tctnoded_CPPFLAGS) $(CPPFLAGS) $(tctnoded_CXXFLAGS) $(CXXFLAGS) -MT src/tctnoded-cThreadInterrupt.o -MD -MP -MF src/$(DEPDIR)/tctnoded-cThreadInterrupt.Tpo -c -o src/tctnoded-cThreadInterrupt.o `test -f 'src/cThreadInterrupt.cpp' || echo '$(srcdir)/'`src/cThreadInterrupt.cpp
+@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) src/$(DEPDIR)/tctnoded-cThreadInterrupt.Tpo src/$(DEPDIR)/tctnoded-cThreadInterrupt.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='src/cThreadInterrupt.cpp' object='src/tctnoded-cThreadInterrupt.o' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(tctnoded_CPPFLAGS) $(CPPFLAGS) $(tctnoded_CXXFLAGS) $(CXXFLAGS) -c -o tctnoded-functions.o `test -f 'src/functions.cpp' || echo '$(srcdir)/'`src/functions.cpp
+@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(tctnoded_CPPFLAGS) $(CPPFLAGS) $(tctnoded_CXXFLAGS) $(CXXFLAGS) -c -o src/tctnoded-cThreadInterrupt.o `test -f 'src/cThreadInterrupt.cpp' || echo '$(srcdir)/'`src/cThreadInterrupt.cpp
 
-tctnoded-functions.obj: src/functions.cpp
-@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(tctnoded_CPPFLAGS) $(CPPFLAGS) $(tctnoded_CXXFLAGS) $(CXXFLAGS) -MT tctnoded-functions.obj -MD -MP -MF $(DEPDIR)/tctnoded-functions.Tpo -c -o tctnoded-functions.obj `if test -f 'src/functions.cpp'; then $(CYGPATH_W) 'src/functions.cpp'; else $(CYGPATH_W) '$(srcdir)/src/functions.cpp'; fi`
-@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/tctnoded-functions.Tpo $(DEPDIR)/tctnoded-functions.Po
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='src/functions.cpp' object='tctnoded-functions.obj' libtool=no @AMDEPBACKSLASH@
+src/tctnoded-cThreadInterrupt.obj: src/cThreadInterrupt.cpp
+@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(tctnoded_CPPFLAGS) $(CPPFLAGS) $(tctnoded_CXXFLAGS) $(CXXFLAGS) -MT src/tctnoded-cThreadInterrupt.obj -MD -MP -MF src/$(DEPDIR)/tctnoded-cThreadInterrupt.Tpo -c -o src/tctnoded-cThreadInterrupt.obj `if test -f 'src/cThreadInterrupt.cpp'; then $(CYGPATH_W) 'src/cThreadInterrupt.cpp'; else $(CYGPATH_W) '$(srcdir)/src/cThreadInterrupt.cpp'; fi`
+@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) src/$(DEPDIR)/tctnoded-cThreadInterrupt.Tpo src/$(DEPDIR)/tctnoded-cThreadInterrupt.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='src/cThreadInterrupt.cpp' object='src/tctnoded-cThreadInterrupt.obj' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(tctnoded_CPPFLAGS) $(CPPFLAGS) $(tctnoded_CXXFLAGS) $(CXXFLAGS) -c -o tctnoded-functions.obj `if test -f 'src/functions.cpp'; then $(CYGPATH_W) 'src/functions.cpp'; else $(CYGPATH_W) '$(srcdir)/src/functions.cpp'; fi`
+@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(tctnoded_CPPFLAGS) $(CPPFLAGS) $(tctnoded_CXXFLAGS) $(CXXFLAGS) -c -o src/tctnoded-cThreadInterrupt.obj `if test -f 'src/cThreadInterrupt.cpp'; then $(CYGPATH_W) 'src/cThreadInterrupt.cpp'; else $(CYGPATH_W) '$(srcdir)/src/cThreadInterrupt.cpp'; fi`
 
-tctnoded-logger.o: src/logger.cpp
-@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(tctnoded_CPPFLAGS) $(CPPFLAGS) $(tctnoded_CXXFLAGS) $(CXXFLAGS) -MT tctnoded-logger.o -MD -MP -MF $(DEPDIR)/tctnoded-logger.Tpo -c -o tctnoded-logger.o `test -f 'src/logger.cpp' || echo '$(srcdir)/'`src/logger.cpp
-@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/tctnoded-logger.Tpo $(DEPDIR)/tctnoded-logger.Po
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='src/logger.cpp' object='tctnoded-logger.o' libtool=no @AMDEPBACKSLASH@
+src/tctnoded-functions.o: src/functions.cpp
+@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(tctnoded_CPPFLAGS) $(CPPFLAGS) $(tctnoded_CXXFLAGS) $(CXXFLAGS) -MT src/tctnoded-functions.o -MD -MP -MF src/$(DEPDIR)/tctnoded-functions.Tpo -c -o src/tctnoded-functions.o `test -f 'src/functions.cpp' || echo '$(srcdir)/'`src/functions.cpp
+@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) src/$(DEPDIR)/tctnoded-functions.Tpo src/$(DEPDIR)/tctnoded-functions.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='src/functions.cpp' object='src/tctnoded-functions.o' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(tctnoded_CPPFLAGS) $(CPPFLAGS) $(tctnoded_CXXFLAGS) $(CXXFLAGS) -c -o tctnoded-logger.o `test -f 'src/logger.cpp' || echo '$(srcdir)/'`src/logger.cpp
+@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(tctnoded_CPPFLAGS) $(CPPFLAGS) $(tctnoded_CXXFLAGS) $(CXXFLAGS) -c -o src/tctnoded-functions.o `test -f 'src/functions.cpp' || echo '$(srcdir)/'`src/functions.cpp
 
-tctnoded-logger.obj: src/logger.cpp
-@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(tctnoded_CPPFLAGS) $(CPPFLAGS) $(tctnoded_CXXFLAGS) $(CXXFLAGS) -MT tctnoded-logger.obj -MD -MP -MF $(DEPDIR)/tctnoded-logger.Tpo -c -o tctnoded-logger.obj `if test -f 'src/logger.cpp'; then $(CYGPATH_W) 'src/logger.cpp'; else $(CYGPATH_W) '$(srcdir)/src/logger.cpp'; fi`
-@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/tctnoded-logger.Tpo $(DEPDIR)/tctnoded-logger.Po
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='src/logger.cpp' object='tctnoded-logger.obj' libtool=no @AMDEPBACKSLASH@
+src/tctnoded-functions.obj: src/functions.cpp
+@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(tctnoded_CPPFLAGS) $(CPPFLAGS) $(tctnoded_CXXFLAGS) $(CXXFLAGS) -MT src/tctnoded-functions.obj -MD -MP -MF src/$(DEPDIR)/tctnoded-functions.Tpo -c -o src/tctnoded-functions.obj `if test -f 'src/functions.cpp'; then $(CYGPATH_W) 'src/functions.cpp'; else $(CYGPATH_W) '$(srcdir)/src/functions.cpp'; fi`
+@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) src/$(DEPDIR)/tctnoded-functions.Tpo src/$(DEPDIR)/tctnoded-functions.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='src/functions.cpp' object='src/tctnoded-functions.obj' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(tctnoded_CPPFLAGS) $(CPPFLAGS) $(tctnoded_CXXFLAGS) $(CXXFLAGS) -c -o tctnoded-logger.obj `if test -f 'src/logger.cpp'; then $(CYGPATH_W) 'src/logger.cpp'; else $(CYGPATH_W) '$(srcdir)/src/logger.cpp'; fi`
+@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(tctnoded_CPPFLAGS) $(CPPFLAGS) $(tctnoded_CXXFLAGS) $(CXXFLAGS) -c -o src/tctnoded-functions.obj `if test -f 'src/functions.cpp'; then $(CYGPATH_W) 'src/functions.cpp'; else $(CYGPATH_W) '$(srcdir)/src/functions.cpp'; fi`
 
-tctnoded-MetaChain.o: src/MetaChain.cpp
-@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(tctnoded_CPPFLAGS) $(CPPFLAGS) $(tctnoded_CXXFLAGS) $(CXXFLAGS) -MT tctnoded-MetaChain.o -MD -MP -MF $(DEPDIR)/tctnoded-MetaChain.Tpo -c -o tctnoded-MetaChain.o `test -f 'src/MetaChain.cpp' || echo '$(srcdir)/'`src/MetaChain.cpp
-@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/tctnoded-MetaChain.Tpo $(DEPDIR)/tctnoded-MetaChain.Po
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='src/MetaChain.cpp' object='tctnoded-MetaChain.o' libtool=no @AMDEPBACKSLASH@
+src/tctnoded-hash.o: src/hash.cpp
+@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(tctnoded_CPPFLAGS) $(CPPFLAGS) $(tctnoded_CXXFLAGS) $(CXXFLAGS) -MT src/tctnoded-hash.o -MD -MP -MF src/$(DEPDIR)/tctnoded-hash.Tpo -c -o src/tctnoded-hash.o `test -f 'src/hash.cpp' || echo '$(srcdir)/'`src/hash.cpp
+@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) src/$(DEPDIR)/tctnoded-hash.Tpo src/$(DEPDIR)/tctnoded-hash.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='src/hash.cpp' object='src/tctnoded-hash.o' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(tctnoded_CPPFLAGS) $(CPPFLAGS) $(tctnoded_CXXFLAGS) $(CXXFLAGS) -c -o tctnoded-MetaChain.o `test -f 'src/MetaChain.cpp' || echo '$(srcdir)/'`src/MetaChain.cpp
+@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(tctnoded_CPPFLAGS) $(CPPFLAGS) $(tctnoded_CXXFLAGS) $(CXXFLAGS) -c -o src/tctnoded-hash.o `test -f 'src/hash.cpp' || echo '$(srcdir)/'`src/hash.cpp
 
-tctnoded-MetaChain.obj: src/MetaChain.cpp
-@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(tctnoded_CPPFLAGS) $(CPPFLAGS) $(tctnoded_CXXFLAGS) $(CXXFLAGS) -MT tctnoded-MetaChain.obj -MD -MP -MF $(DEPDIR)/tctnoded-MetaChain.Tpo -c -o tctnoded-MetaChain.obj `if test -f 'src/MetaChain.cpp'; then $(CYGPATH_W) 'src/MetaChain.cpp'; else $(CYGPATH_W) '$(srcdir)/src/MetaChain.cpp'; fi`
-@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/tctnoded-MetaChain.Tpo $(DEPDIR)/tctnoded-MetaChain.Po
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='src/MetaChain.cpp' object='tctnoded-MetaChain.obj' libtool=no @AMDEPBACKSLASH@
+src/tctnoded-hash.obj: src/hash.cpp
+@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(tctnoded_CPPFLAGS) $(CPPFLAGS) $(tctnoded_CXXFLAGS) $(CXXFLAGS) -MT src/tctnoded-hash.obj -MD -MP -MF src/$(DEPDIR)/tctnoded-hash.Tpo -c -o src/tctnoded-hash.obj `if test -f 'src/hash.cpp'; then $(CYGPATH_W) 'src/hash.cpp'; else $(CYGPATH_W) '$(srcdir)/src/hash.cpp'; fi`
+@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) src/$(DEPDIR)/tctnoded-hash.Tpo src/$(DEPDIR)/tctnoded-hash.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='src/hash.cpp' object='src/tctnoded-hash.obj' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(tctnoded_CPPFLAGS) $(CPPFLAGS) $(tctnoded_CXXFLAGS) $(CXXFLAGS) -c -o tctnoded-MetaChain.obj `if test -f 'src/MetaChain.cpp'; then $(CYGPATH_W) 'src/MetaChain.cpp'; else $(CYGPATH_W) '$(srcdir)/src/MetaChain.cpp'; fi`
+@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(tctnoded_CPPFLAGS) $(CPPFLAGS) $(tctnoded_CXXFLAGS) $(CXXFLAGS) -c -o src/tctnoded-hash.obj `if test -f 'src/hash.cpp'; then $(CYGPATH_W) 'src/hash.cpp'; else $(CYGPATH_W) '$(srcdir)/src/hash.cpp'; fi`
+
+src/tctnoded-logger.o: src/logger.cpp
+@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(tctnoded_CPPFLAGS) $(CPPFLAGS) $(tctnoded_CXXFLAGS) $(CXXFLAGS) -MT src/tctnoded-logger.o -MD -MP -MF src/$(DEPDIR)/tctnoded-logger.Tpo -c -o src/tctnoded-logger.o `test -f 'src/logger.cpp' || echo '$(srcdir)/'`src/logger.cpp
+@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) src/$(DEPDIR)/tctnoded-logger.Tpo src/$(DEPDIR)/tctnoded-logger.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='src/logger.cpp' object='src/tctnoded-logger.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(tctnoded_CPPFLAGS) $(CPPFLAGS) $(tctnoded_CXXFLAGS) $(CXXFLAGS) -c -o src/tctnoded-logger.o `test -f 'src/logger.cpp' || echo '$(srcdir)/'`src/logger.cpp
+
+src/tctnoded-logger.obj: src/logger.cpp
+@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(tctnoded_CPPFLAGS) $(CPPFLAGS) $(tctnoded_CXXFLAGS) $(CXXFLAGS) -MT src/tctnoded-logger.obj -MD -MP -MF src/$(DEPDIR)/tctnoded-logger.Tpo -c -o src/tctnoded-logger.obj `if test -f 'src/logger.cpp'; then $(CYGPATH_W) 'src/logger.cpp'; else $(CYGPATH_W) '$(srcdir)/src/logger.cpp'; fi`
+@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) src/$(DEPDIR)/tctnoded-logger.Tpo src/$(DEPDIR)/tctnoded-logger.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='src/logger.cpp' object='src/tctnoded-logger.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(tctnoded_CPPFLAGS) $(CPPFLAGS) $(tctnoded_CXXFLAGS) $(CXXFLAGS) -c -o src/tctnoded-logger.obj `if test -f 'src/logger.cpp'; then $(CYGPATH_W) 'src/logger.cpp'; else $(CYGPATH_W) '$(srcdir)/src/logger.cpp'; fi`
+
+src/tctnoded-MetaChain.o: src/MetaChain.cpp
+@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(tctnoded_CPPFLAGS) $(CPPFLAGS) $(tctnoded_CXXFLAGS) $(CXXFLAGS) -MT src/tctnoded-MetaChain.o -MD -MP -MF src/$(DEPDIR)/tctnoded-MetaChain.Tpo -c -o src/tctnoded-MetaChain.o `test -f 'src/MetaChain.cpp' || echo '$(srcdir)/'`src/MetaChain.cpp
+@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) src/$(DEPDIR)/tctnoded-MetaChain.Tpo src/$(DEPDIR)/tctnoded-MetaChain.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='src/MetaChain.cpp' object='src/tctnoded-MetaChain.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(tctnoded_CPPFLAGS) $(CPPFLAGS) $(tctnoded_CXXFLAGS) $(CXXFLAGS) -c -o src/tctnoded-MetaChain.o `test -f 'src/MetaChain.cpp' || echo '$(srcdir)/'`src/MetaChain.cpp
+
+src/tctnoded-MetaChain.obj: src/MetaChain.cpp
+@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(tctnoded_CPPFLAGS) $(CPPFLAGS) $(tctnoded_CXXFLAGS) $(CXXFLAGS) -MT src/tctnoded-MetaChain.obj -MD -MP -MF src/$(DEPDIR)/tctnoded-MetaChain.Tpo -c -o src/tctnoded-MetaChain.obj `if test -f 'src/MetaChain.cpp'; then $(CYGPATH_W) 'src/MetaChain.cpp'; else $(CYGPATH_W) '$(srcdir)/src/MetaChain.cpp'; fi`
+@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) src/$(DEPDIR)/tctnoded-MetaChain.Tpo src/$(DEPDIR)/tctnoded-MetaChain.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='src/MetaChain.cpp' object='src/tctnoded-MetaChain.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(tctnoded_CPPFLAGS) $(CPPFLAGS) $(tctnoded_CXXFLAGS) $(CXXFLAGS) -c -o src/tctnoded-MetaChain.obj `if test -f 'src/MetaChain.cpp'; then $(CYGPATH_W) 'src/MetaChain.cpp'; else $(CYGPATH_W) '$(srcdir)/src/MetaChain.cpp'; fi`
+
+src/tctnoded-random.o: src/random.cpp
+@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(tctnoded_CPPFLAGS) $(CPPFLAGS) $(tctnoded_CXXFLAGS) $(CXXFLAGS) -MT src/tctnoded-random.o -MD -MP -MF src/$(DEPDIR)/tctnoded-random.Tpo -c -o src/tctnoded-random.o `test -f 'src/random.cpp' || echo '$(srcdir)/'`src/random.cpp
+@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) src/$(DEPDIR)/tctnoded-random.Tpo src/$(DEPDIR)/tctnoded-random.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='src/random.cpp' object='src/tctnoded-random.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(tctnoded_CPPFLAGS) $(CPPFLAGS) $(tctnoded_CXXFLAGS) $(CXXFLAGS) -c -o src/tctnoded-random.o `test -f 'src/random.cpp' || echo '$(srcdir)/'`src/random.cpp
+
+src/tctnoded-random.obj: src/random.cpp
+@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(tctnoded_CPPFLAGS) $(CPPFLAGS) $(tctnoded_CXXFLAGS) $(CXXFLAGS) -MT src/tctnoded-random.obj -MD -MP -MF src/$(DEPDIR)/tctnoded-random.Tpo -c -o src/tctnoded-random.obj `if test -f 'src/random.cpp'; then $(CYGPATH_W) 'src/random.cpp'; else $(CYGPATH_W) '$(srcdir)/src/random.cpp'; fi`
+@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) src/$(DEPDIR)/tctnoded-random.Tpo src/$(DEPDIR)/tctnoded-random.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='src/random.cpp' object='src/tctnoded-random.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(tctnoded_CPPFLAGS) $(CPPFLAGS) $(tctnoded_CXXFLAGS) $(CXXFLAGS) -c -o src/tctnoded-random.obj `if test -f 'src/random.cpp'; then $(CYGPATH_W) 'src/random.cpp'; else $(CYGPATH_W) '$(srcdir)/src/random.cpp'; fi`
+
+src/tctnoded-scheduler.o: src/scheduler.cpp
+@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(tctnoded_CPPFLAGS) $(CPPFLAGS) $(tctnoded_CXXFLAGS) $(CXXFLAGS) -MT src/tctnoded-scheduler.o -MD -MP -MF src/$(DEPDIR)/tctnoded-scheduler.Tpo -c -o src/tctnoded-scheduler.o `test -f 'src/scheduler.cpp' || echo '$(srcdir)/'`src/scheduler.cpp
+@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) src/$(DEPDIR)/tctnoded-scheduler.Tpo src/$(DEPDIR)/tctnoded-scheduler.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='src/scheduler.cpp' object='src/tctnoded-scheduler.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(tctnoded_CPPFLAGS) $(CPPFLAGS) $(tctnoded_CXXFLAGS) $(CXXFLAGS) -c -o src/tctnoded-scheduler.o `test -f 'src/scheduler.cpp' || echo '$(srcdir)/'`src/scheduler.cpp
+
+src/tctnoded-scheduler.obj: src/scheduler.cpp
+@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(tctnoded_CPPFLAGS) $(CPPFLAGS) $(tctnoded_CXXFLAGS) $(CXXFLAGS) -MT src/tctnoded-scheduler.obj -MD -MP -MF src/$(DEPDIR)/tctnoded-scheduler.Tpo -c -o src/tctnoded-scheduler.obj `if test -f 'src/scheduler.cpp'; then $(CYGPATH_W) 'src/scheduler.cpp'; else $(CYGPATH_W) '$(srcdir)/src/scheduler.cpp'; fi`
+@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) src/$(DEPDIR)/tctnoded-scheduler.Tpo src/$(DEPDIR)/tctnoded-scheduler.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='src/scheduler.cpp' object='src/tctnoded-scheduler.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(tctnoded_CPPFLAGS) $(CPPFLAGS) $(tctnoded_CXXFLAGS) $(CXXFLAGS) -c -o src/tctnoded-scheduler.obj `if test -f 'src/scheduler.cpp'; then $(CYGPATH_W) 'src/scheduler.cpp'; else $(CYGPATH_W) '$(srcdir)/src/scheduler.cpp'; fi`
+
+src/tctnoded-uint256.o: src/uint256.cpp
+@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(tctnoded_CPPFLAGS) $(CPPFLAGS) $(tctnoded_CXXFLAGS) $(CXXFLAGS) -MT src/tctnoded-uint256.o -MD -MP -MF src/$(DEPDIR)/tctnoded-uint256.Tpo -c -o src/tctnoded-uint256.o `test -f 'src/uint256.cpp' || echo '$(srcdir)/'`src/uint256.cpp
+@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) src/$(DEPDIR)/tctnoded-uint256.Tpo src/$(DEPDIR)/tctnoded-uint256.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='src/uint256.cpp' object='src/tctnoded-uint256.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(tctnoded_CPPFLAGS) $(CPPFLAGS) $(tctnoded_CXXFLAGS) $(CXXFLAGS) -c -o src/tctnoded-uint256.o `test -f 'src/uint256.cpp' || echo '$(srcdir)/'`src/uint256.cpp
+
+src/tctnoded-uint256.obj: src/uint256.cpp
+@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(tctnoded_CPPFLAGS) $(CPPFLAGS) $(tctnoded_CXXFLAGS) $(CXXFLAGS) -MT src/tctnoded-uint256.obj -MD -MP -MF src/$(DEPDIR)/tctnoded-uint256.Tpo -c -o src/tctnoded-uint256.obj `if test -f 'src/uint256.cpp'; then $(CYGPATH_W) 'src/uint256.cpp'; else $(CYGPATH_W) '$(srcdir)/src/uint256.cpp'; fi`
+@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) src/$(DEPDIR)/tctnoded-uint256.Tpo src/$(DEPDIR)/tctnoded-uint256.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='src/uint256.cpp' object='src/tctnoded-uint256.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(tctnoded_CPPFLAGS) $(CPPFLAGS) $(tctnoded_CXXFLAGS) $(CXXFLAGS) -c -o src/tctnoded-uint256.obj `if test -f 'src/uint256.cpp'; then $(CYGPATH_W) 'src/uint256.cpp'; else $(CYGPATH_W) '$(srcdir)/src/uint256.cpp'; fi`
+
+src/tctnoded-utilstrencodings.o: src/utilstrencodings.cpp
+@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(tctnoded_CPPFLAGS) $(CPPFLAGS) $(tctnoded_CXXFLAGS) $(CXXFLAGS) -MT src/tctnoded-utilstrencodings.o -MD -MP -MF src/$(DEPDIR)/tctnoded-utilstrencodings.Tpo -c -o src/tctnoded-utilstrencodings.o `test -f 'src/utilstrencodings.cpp' || echo '$(srcdir)/'`src/utilstrencodings.cpp
+@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) src/$(DEPDIR)/tctnoded-utilstrencodings.Tpo src/$(DEPDIR)/tctnoded-utilstrencodings.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='src/utilstrencodings.cpp' object='src/tctnoded-utilstrencodings.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(tctnoded_CPPFLAGS) $(CPPFLAGS) $(tctnoded_CXXFLAGS) $(CXXFLAGS) -c -o src/tctnoded-utilstrencodings.o `test -f 'src/utilstrencodings.cpp' || echo '$(srcdir)/'`src/utilstrencodings.cpp
+
+src/tctnoded-utilstrencodings.obj: src/utilstrencodings.cpp
+@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(tctnoded_CPPFLAGS) $(CPPFLAGS) $(tctnoded_CXXFLAGS) $(CXXFLAGS) -MT src/tctnoded-utilstrencodings.obj -MD -MP -MF src/$(DEPDIR)/tctnoded-utilstrencodings.Tpo -c -o src/tctnoded-utilstrencodings.obj `if test -f 'src/utilstrencodings.cpp'; then $(CYGPATH_W) 'src/utilstrencodings.cpp'; else $(CYGPATH_W) '$(srcdir)/src/utilstrencodings.cpp'; fi`
+@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) src/$(DEPDIR)/tctnoded-utilstrencodings.Tpo src/$(DEPDIR)/tctnoded-utilstrencodings.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='src/utilstrencodings.cpp' object='src/tctnoded-utilstrencodings.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(tctnoded_CPPFLAGS) $(CPPFLAGS) $(tctnoded_CXXFLAGS) $(CXXFLAGS) -c -o src/tctnoded-utilstrencodings.obj `if test -f 'src/utilstrencodings.cpp'; then $(CYGPATH_W) 'src/utilstrencodings.cpp'; else $(CYGPATH_W) '$(srcdir)/src/utilstrencodings.cpp'; fi`
 
 tctnoded-node.o: node.cpp
 @am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(tctnoded_CPPFLAGS) $(CPPFLAGS) $(tctnoded_CXXFLAGS) $(CXXFLAGS) -MT tctnoded-node.o -MD -MP -MF $(DEPDIR)/tctnoded-node.Tpo -c -o tctnoded-node.o `test -f 'node.cpp' || echo '$(srcdir)/'`node.cpp
@@ -1153,6 +1440,22 @@ clean-generic:
 distclean-generic:
 	-test -z "$(CONFIG_CLEAN_FILES)" || rm -f $(CONFIG_CLEAN_FILES)
 	-test . = "$(srcdir)" || test -z "$(CONFIG_CLEAN_VPATH_FILES)" || rm -f $(CONFIG_CLEAN_VPATH_FILES)
+	-rm -f dependencies/zlib/contrib/minizip/$(DEPDIR)/$(am__dirstamp)
+	-rm -f dependencies/zlib/contrib/minizip/$(am__dirstamp)
+	-rm -f src/$(DEPDIR)/$(am__dirstamp)
+	-rm -f src/$(am__dirstamp)
+	-rm -f src/crypto/$(DEPDIR)/$(am__dirstamp)
+	-rm -f src/crypto/$(am__dirstamp)
+	-rm -f src/crypto/ctaes/$(DEPDIR)/$(am__dirstamp)
+	-rm -f src/crypto/ctaes/$(am__dirstamp)
+	-rm -f src/io/$(DEPDIR)/$(am__dirstamp)
+	-rm -f src/io/$(am__dirstamp)
+	-rm -f src/io/db/$(DEPDIR)/$(am__dirstamp)
+	-rm -f src/io/db/$(am__dirstamp)
+	-rm -f src/io/zip/$(DEPDIR)/$(am__dirstamp)
+	-rm -f src/io/zip/$(am__dirstamp)
+	-rm -f src/network/$(DEPDIR)/$(am__dirstamp)
+	-rm -f src/network/$(am__dirstamp)
 
 maintainer-clean-generic:
 	@echo "This command is intended for maintainers to use"
@@ -1163,7 +1466,7 @@ clean-am: clean-binPROGRAMS clean-generic mostlyclean-am
 
 distclean: distclean-am
 	-rm -f $(am__CONFIG_DISTCLEAN_FILES)
-	-rm -rf ./$(DEPDIR)
+	-rm -rf ./$(DEPDIR) dependencies/zlib/contrib/minizip/$(DEPDIR) src/$(DEPDIR) src/crypto/$(DEPDIR) src/crypto/ctaes/$(DEPDIR) src/io/$(DEPDIR) src/io/db/$(DEPDIR) src/io/zip/$(DEPDIR) src/network/$(DEPDIR)
 	-rm -f Makefile
 distclean-am: clean-am distclean-compile distclean-generic \
 	distclean-tags
@@ -1211,7 +1514,7 @@ installcheck-am:
 maintainer-clean: maintainer-clean-am
 	-rm -f $(am__CONFIG_DISTCLEAN_FILES)
 	-rm -rf $(top_srcdir)/autom4te.cache
-	-rm -rf ./$(DEPDIR)
+	-rm -rf ./$(DEPDIR) dependencies/zlib/contrib/minizip/$(DEPDIR) src/$(DEPDIR) src/crypto/$(DEPDIR) src/crypto/ctaes/$(DEPDIR) src/io/$(DEPDIR) src/io/db/$(DEPDIR) src/io/zip/$(DEPDIR) src/network/$(DEPDIR)
 	-rm -f Makefile
 maintainer-clean-am: distclean-am maintainer-clean-generic
 
