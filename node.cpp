@@ -11,6 +11,10 @@
 #include <boost/process.hpp>
 #include <boost/process/spawn.hpp>
 
+#ifdef _LINUX
+	#include <signal.h>
+#endif
+
 #include "src/defines.h"
 #include "src/ArgsManager.h"
 #include "src/functions.h"
@@ -42,6 +46,14 @@ ArgsManager gArgs;
 	}
 #endif
 
+#ifdef _LINUX
+	// Linux close function with CTRL+C
+	void SignalCatcher( int sig )
+	{
+		sabShutdown = true;
+	}
+#endif
+
 // our loop for the main thread
 void WaitForShutdown(boost::thread_group* threadGroup)
 {
@@ -64,6 +76,10 @@ int main( int argc, char* argv[] )
 	// set the control handler for the closing routine when pressing the close button
 	if (FALSE == SetConsoleCtrlHandler(ConsoleHandlerRoutine, TRUE))
 		LOG_ERROR("Problem binding the close function", "WIN32");
+#endif
+#ifdef _LINUX
+	// connect to the SIGINT (ctrl+c) signal
+	signal(SIGINT, SignalCatcher);
 #endif
 	// initialize the logging instance
 	LOG("-------------------------------", "");
