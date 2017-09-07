@@ -68,15 +68,15 @@ bool MetaChain::initialize(CSimpleIniA* iniFile, boost::filesystem::path pathExe
 		if (doAutoUpdate())
 			return false;
 	}
-
-	// start the lightweight scheduling thread
-	CScheduler::Function serviceLoop = boost::bind(&CScheduler::serviceQueue, &m_scheduler);
-	m_threadGroup.create_thread(boost::bind(&TraceThread<CScheduler::Function>, "scheduler", serviceLoop));
-
+	
 	// create the block storage backends, check their integrity and check if no other instance is running
 	m_pStorageManager = new StorageManager(this);
 	if (!m_pStorageManager->initialize(iniFile))
 		return false;
+
+	// start the lightweight scheduling thread
+	CScheduler::Function serviceLoop = boost::bind(&CScheduler::serviceQueue, &m_scheduler);
+	m_threadGroup.create_thread(boost::bind(&TraceThread<CScheduler::Function>, "scheduler", serviceLoop));
 
 	// create a new network manager
 	m_pNetworkManager = new NetworkManager(this);
