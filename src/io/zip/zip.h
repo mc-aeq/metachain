@@ -7,12 +7,13 @@
 #ifndef __ZIP_ZIP_H__
 #define __ZIP_ZIP_H__ 1
 
-#include <minizip/ioapi.h>
-#include <minizip/zip.h>
 #include <string>
 #include <vector>
 #include <iostream>
 #include <time.h>
+
+#include "ioapi.h"
+#include "zlib_zip.h"
 
 namespace ZIP
 {

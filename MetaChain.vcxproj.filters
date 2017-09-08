@@ -204,6 +204,18 @@
     <ClInclude Include="src\io\zip\zip.h">
       <Filter>Headerdateien\IO\zip</Filter>
     </ClInclude>
+    <ClInclude Include="src\io\zip\ioapi.h">
+      <Filter>Headerdateien\IO\zip</Filter>
+    </ClInclude>
+    <ClInclude Include="src\io\zip\zlib_unzip.h">
+      <Filter>Headerdateien\IO\zip</Filter>
+    </ClInclude>
+    <ClInclude Include="src\io\zip\zlib_zip.h">
+      <Filter>Headerdateien\IO\zip</Filter>
+    </ClInclude>
+    <ClInclude Include="src\io\zip\crypt.h">
+      <Filter>Headerdateien\IO\zip</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="node.cpp">
@@ -300,6 +312,15 @@
       <Filter>Quelldateien\IO\zip</Filter>
     </ClCompile>
     <ClCompile Include="src\io\zip\zip.cpp">
+      <Filter>Quelldateien\IO\zip</Filter>
+    </ClCompile>
+    <ClCompile Include="src\io\zip\ioapi.c">
+      <Filter>Quelldateien\IO\zip</Filter>
+    </ClCompile>
+    <ClCompile Include="src\io\zip\zlib_unzip.c">
+      <Filter>Quelldateien\IO\zip</Filter>
+    </ClCompile>
+    <ClCompile Include="src\io\zip\zlib_zip.c">
       <Filter>Quelldateien\IO\zip</Filter>
     </ClCompile>
   </ItemGroup>
