@@ -628,7 +628,6 @@ LTLIBOBJS
 LIBOBJS
 EVENT_LIBS
 RDB_LIBS
-MINIZIP_LIBS
 ZLIB_LIBS
 CURL_LIBS
 SSL_LIBS
@@ -761,6 +760,7 @@ enable_option_checking
 enable_silent_rules
 enable_dependency_tracking
 enable_debug
+enable_static
 with_boost
 with_boost_libdir
 with_boost_chrono
@@ -1414,6 +1414,7 @@ Optional Features:
   --disable-dependency-tracking
                           speeds up one-time build
   --enable-debug          use debug compiler flags and macros (default is no)
+  --enable-static         use static linking (default is dynamic)
 
 Optional Packages:
   --with-PACKAGE[=ARG]    use PACKAGE [ARG=yes]
@@ -5139,6 +5140,21 @@ if test "x$enable_debug" = xyes; then
     fi
 fi
 
+# linking method
+# Check whether --enable-static was given.
+if test "${enable_static+set}" = set; then :
+  enableval=$enable_static; link_static=$enableval
+else
+  link_static=no
+fi
+
+if test "x$link_static" = xyes; then
+	LDFLAGS="-static"
+else
+	LDFLAGS="-Wl,-rpath,dependencies/"
+fi
+
+
 # header checks
 
 { $as_echo "$as_me:${as_lineno-$LINENO}: checking for grep that handles long lines and -e" >&5
@@ -5735,57 +5751,6 @@ if test "x$ac_cv_lib_z_main" = xyes; then :
   ZLIB_LIBS=-lz
 else
   as_fn_error $? "zlib missing" "$LINENO" 5
-fi
-
-for ac_header in minizip/ioapi.h minizip/unzip.h
-do :
-  as_ac_Header=`$as_echo "ac_cv_header_$ac_header" | $as_tr_sh`
-ac_fn_cxx_check_header_mongrel "$LINENO" "$ac_header" "$as_ac_Header" "$ac_includes_default"
-if eval test \"x\$"$as_ac_Header"\" = x"yes"; then :
-  cat >>confdefs.h <<_ACEOF
-#define `$as_echo "HAVE_$ac_header" | $as_tr_cpp` 1
-_ACEOF
-
-else
-  as_fn_error $? "minizip missing" "$LINENO" 5
-fi
-
-done
-
-{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for main in -lminizip" >&5
-$as_echo_n "checking for main in -lminizip... " >&6; }
-if ${ac_cv_lib_minizip_main+:} false; then :
-  $as_echo_n "(cached) " >&6
-else
-  ac_check_lib_save_LIBS=$LIBS
-LIBS="-lminizip  $LIBS"
-cat confdefs.h - <<_ACEOF >conftest.$ac_ext
-/* end confdefs.h.  */
-
-
-int
-main ()
-{
-return main ();
-  ;
-  return 0;
-}
-_ACEOF
-if ac_fn_cxx_try_link "$LINENO"; then :
-  ac_cv_lib_minizip_main=yes
-else
-  ac_cv_lib_minizip_main=no
-fi
-rm -f core conftest.err conftest.$ac_objext \
-    conftest$ac_exeext conftest.$ac_ext
-LIBS=$ac_check_lib_save_LIBS
-fi
-{ $as_echo "$as_me:${as_lineno-$LINENO}: result: $ac_cv_lib_minizip_main" >&5
-$as_echo "$ac_cv_lib_minizip_main" >&6; }
-if test "x$ac_cv_lib_minizip_main" = xyes; then :
-  MINIZIP_LIBS=-lminizip
-else
-  as_fn_error $? "libminizip missing" "$LINENO" 5
 fi
 
 ac_fn_cxx_check_header_mongrel "$LINENO" "rocksdb/db.h" "ac_cv_header_rocksdb_db_h" "$ac_includes_default"
@@ -10547,9 +10512,6 @@ _ACEOF
 
 CXXFLAGS="${save_CXXFLAGS}"
 
-LDFLAGS="-Wl,-rpath,dependencies/"
-
-
 
 
 
@@ -11878,6 +11840,7 @@ fi
 echo
 echo "Options used to compile and link:"
 echo "  debug enabled (--enable-debug) = $enable_debug"
+echo "  link static (--enable-static) = $link_static"
 echo
 echo "  target OS     = $TARGET_OS"
 echo
