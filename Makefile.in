@@ -106,10 +106,7 @@ CONFIG_CLEAN_VPATH_FILES =
 am__installdirs = "$(DESTDIR)$(bindir)"
 PROGRAMS = $(bin_PROGRAMS)
 am__dirstamp = $(am__leading_dot)dirstamp
-am_tctnoded_OBJECTS =  \
-	dependencies/zlib/contrib/minizip/tctnoded-unzip.$(OBJEXT) \
-	dependencies/zlib/contrib/minizip/tctnoded-zip.$(OBJEXT) \
-	src/crypto/ctaes/tctnoded-ctaes.$(OBJEXT) \
+am_tctnoded_OBJECTS = src/crypto/ctaes/tctnoded-ctaes.$(OBJEXT) \
 	src/crypto/tctnoded-aes.$(OBJEXT) \
 	src/crypto/tctnoded-chacha20.$(OBJEXT) \
 	src/crypto/tctnoded-hmac_sha256.$(OBJEXT) \
@@ -121,8 +118,11 @@ am_tctnoded_OBJECTS =  \
 	src/crypto/tctnoded-sha512.$(OBJEXT) \
 	src/io/db/tctnoded-mysql.$(OBJEXT) \
 	src/io/db/tctnoded-rdb.$(OBJEXT) \
+	src/io/zip/tctnoded-ioapi.$(OBJEXT) \
 	src/io/zip/tctnoded-unzip.$(OBJEXT) \
 	src/io/zip/tctnoded-zip.$(OBJEXT) \
+	src/io/zip/tctnoded-zlib_unzip.$(OBJEXT) \
+	src/io/zip/tctnoded-zlib_zip.$(OBJEXT) \
 	src/io/tctnoded-netPeers.$(OBJEXT) \
 	src/io/tctnoded-StorageManager.$(OBJEXT) \
 	src/network/tctnoded-CNetAddr.$(OBJEXT) \
@@ -143,8 +143,7 @@ tctnoded_OBJECTS = $(am_tctnoded_OBJECTS)
 am__DEPENDENCIES_1 =
 tctnoded_DEPENDENCIES = $(am__DEPENDENCIES_1) $(am__DEPENDENCIES_1) \
 	$(am__DEPENDENCIES_1) $(am__DEPENDENCIES_1) \
-	$(am__DEPENDENCIES_1) $(am__DEPENDENCIES_1) \
-	$(am__DEPENDENCIES_1)
+	$(am__DEPENDENCIES_1) $(am__DEPENDENCIES_1)
 tctnoded_LINK = $(CXXLD) $(tctnoded_CXXFLAGS) $(CXXFLAGS) \
 	$(tctnoded_LDFLAGS) $(LDFLAGS) -o $@
 AM_V_P = $(am__v_P_@AM_V@)
@@ -289,7 +288,6 @@ LIBS = @LIBS@
 LIBTOOL_APP_LDFLAGS = @LIBTOOL_APP_LDFLAGS@
 LTLIBOBJS = @LTLIBOBJS@
 MAKEINFO = @MAKEINFO@
-MINIZIP_LIBS = @MINIZIP_LIBS@
 MKDIR_P = @MKDIR_P@
 OBJEXT = @OBJEXT@
 PACKAGE = @PACKAGE@
@@ -375,11 +373,9 @@ AM_CPPFLAGS = $(CPPFLAGS)
 NODE_INCLUDES = -I$(builddir) -I$(builddir)/obj $(BDB_CPPFLAGS) $(BOOST_CPPFLAGS) $(CRYPTO_CFLAGS) $(SSL_CFLAGS) -Idependencies/zlib/contrib/
 tctnoded_CPPFLAGS = $(AM_CPPFLAGS) $(MINIUPNPC_CPPFLAGS) $(EVENT_CFLAGS) $(NODE_INCLUDES)
 tctnoded_CXXFLAGS = $(AM_CXXFLAGS) $(PIE_FLAGS)
-tctnoded_LDADD = $(BOOST_LIBS) $(BDB_LIBS) $(SSL_LIBS) $(CRYPTO_LIBS) $(CURL_LIBS) $(ZLIB_LIBS) $(MINIZIP_LIBS) $(RDB_LIBS)
+tctnoded_LDADD = $(BOOST_LIBS) $(BDB_LIBS) $(SSL_LIBS) $(CRYPTO_LIBS) $(CURL_LIBS) $(ZLIB_LIBS) $(RDB_LIBS)
 tctnoded_LDFLAGS = $(AM_LDFLAGS)
 tctnoded_SOURCES = \
-	dependencies/zlib/contrib/minizip/unzip.c \
-	dependencies/zlib/contrib/minizip/zip.c \
 	src/crypto/ctaes/ctaes.c \
 	src/crypto/aes.cpp \
 	src/crypto/chacha20.cpp \
@@ -392,8 +388,11 @@ tctnoded_SOURCES = \
 	src/crypto/sha512.cpp \
 	src/io/db/mysql.cpp \
 	src/io/db/rdb.cpp \
+	src/io/zip/ioapi.c \
 	src/io/zip/unzip.cpp \
 	src/io/zip/zip.cpp \
+	src/io/zip/zlib_unzip.c \
+	src/io/zip/zlib_zip.c \
 	src/io/netPeers.cpp \
 	src/io/StorageManager.cpp \
 	src/network/CNetAddr.cpp \
@@ -494,18 +493,6 @@ uninstall-binPROGRAMS:
 
 clean-binPROGRAMS:
 	-test -z "$(bin_PROGRAMS)" || rm -f $(bin_PROGRAMS)
-dependencies/zlib/contrib/minizip/$(am__dirstamp):
-	@$(MKDIR_P) dependencies/zlib/contrib/minizip
-	@: > dependencies/zlib/contrib/minizip/$(am__dirstamp)
-dependencies/zlib/contrib/minizip/$(DEPDIR)/$(am__dirstamp):
-	@$(MKDIR_P) dependencies/zlib/contrib/minizip/$(DEPDIR)
-	@: > dependencies/zlib/contrib/minizip/$(DEPDIR)/$(am__dirstamp)
-dependencies/zlib/contrib/minizip/tctnoded-unzip.$(OBJEXT):  \
-	dependencies/zlib/contrib/minizip/$(am__dirstamp) \
-	dependencies/zlib/contrib/minizip/$(DEPDIR)/$(am__dirstamp)
-dependencies/zlib/contrib/minizip/tctnoded-zip.$(OBJEXT):  \
-	dependencies/zlib/contrib/minizip/$(am__dirstamp) \
-	dependencies/zlib/contrib/minizip/$(DEPDIR)/$(am__dirstamp)
 src/crypto/ctaes/$(am__dirstamp):
 	@$(MKDIR_P) src/crypto/ctaes
 	@: > src/crypto/ctaes/$(am__dirstamp)
@@ -555,9 +542,15 @@ src/io/zip/$(am__dirstamp):
 src/io/zip/$(DEPDIR)/$(am__dirstamp):
 	@$(MKDIR_P) src/io/zip/$(DEPDIR)
 	@: > src/io/zip/$(DEPDIR)/$(am__dirstamp)
+src/io/zip/tctnoded-ioapi.$(OBJEXT): src/io/zip/$(am__dirstamp) \
+	src/io/zip/$(DEPDIR)/$(am__dirstamp)
 src/io/zip/tctnoded-unzip.$(OBJEXT): src/io/zip/$(am__dirstamp) \
 	src/io/zip/$(DEPDIR)/$(am__dirstamp)
 src/io/zip/tctnoded-zip.$(OBJEXT): src/io/zip/$(am__dirstamp) \
+	src/io/zip/$(DEPDIR)/$(am__dirstamp)
+src/io/zip/tctnoded-zlib_unzip.$(OBJEXT): src/io/zip/$(am__dirstamp) \
+	src/io/zip/$(DEPDIR)/$(am__dirstamp)
+src/io/zip/tctnoded-zlib_zip.$(OBJEXT): src/io/zip/$(am__dirstamp) \
 	src/io/zip/$(DEPDIR)/$(am__dirstamp)
 src/io/$(am__dirstamp):
 	@$(MKDIR_P) src/io
@@ -622,7 +615,6 @@ tctnoded$(EXEEXT): $(tctnoded_OBJECTS) $(tctnoded_DEPENDENCIES) $(EXTRA_tctnoded
 
 mostlyclean-compile:
 	-rm -f *.$(OBJEXT)
-	-rm -f dependencies/zlib/contrib/minizip/*.$(OBJEXT)
 	-rm -f src/*.$(OBJEXT)
 	-rm -f src/crypto/*.$(OBJEXT)
 	-rm -f src/crypto/ctaes/*.$(OBJEXT)
@@ -635,8 +627,6 @@ distclean-compile:
 	-rm -f *.tab.c
 
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/tctnoded-node.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@dependencies/zlib/contrib/minizip/$(DEPDIR)/tctnoded-unzip.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@dependencies/zlib/contrib/minizip/$(DEPDIR)/tctnoded-zip.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@src/$(DEPDIR)/tctnoded-ArgsManager.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@src/$(DEPDIR)/tctnoded-ConvertUTF.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@src/$(DEPDIR)/tctnoded-MetaChain.Po@am__quote@
@@ -662,8 +652,11 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@src/io/$(DEPDIR)/tctnoded-netPeers.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@src/io/db/$(DEPDIR)/tctnoded-mysql.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@src/io/db/$(DEPDIR)/tctnoded-rdb.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@src/io/zip/$(DEPDIR)/tctnoded-ioapi.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@src/io/zip/$(DEPDIR)/tctnoded-unzip.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@src/io/zip/$(DEPDIR)/tctnoded-zip.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@src/io/zip/$(DEPDIR)/tctnoded-zlib_unzip.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@src/io/zip/$(DEPDIR)/tctnoded-zlib_zip.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@src/network/$(DEPDIR)/tctnoded-CNetAddr.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@src/network/$(DEPDIR)/tctnoded-CService.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@src/network/$(DEPDIR)/tctnoded-CSubnet.Po@am__quote@
@@ -686,34 +679,6 @@ distclean-compile:
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 @am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(COMPILE) -c -o $@ `$(CYGPATH_W) '$<'`
 
-dependencies/zlib/contrib/minizip/tctnoded-unzip.o: dependencies/zlib/contrib/minizip/unzip.c
-@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(tctnoded_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -MT dependencies/zlib/contrib/minizip/tctnoded-unzip.o -MD -MP -MF dependencies/zlib/contrib/minizip/$(DEPDIR)/tctnoded-unzip.Tpo -c -o dependencies/zlib/contrib/minizip/tctnoded-unzip.o `test -f 'dependencies/zlib/contrib/minizip/unzip.c' || echo '$(srcdir)/'`dependencies/zlib/contrib/minizip/unzip.c
-@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) dependencies/zlib/contrib/minizip/$(DEPDIR)/tctnoded-unzip.Tpo dependencies/zlib/contrib/minizip/$(DEPDIR)/tctnoded-unzip.Po
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='dependencies/zlib/contrib/minizip/unzip.c' object='dependencies/zlib/contrib/minizip/tctnoded-unzip.o' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(tctnoded_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o dependencies/zlib/contrib/minizip/tctnoded-unzip.o `test -f 'dependencies/zlib/contrib/minizip/unzip.c' || echo '$(srcdir)/'`dependencies/zlib/contrib/minizip/unzip.c
-
-dependencies/zlib/contrib/minizip/tctnoded-unzip.obj: dependencies/zlib/contrib/minizip/unzip.c
-@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(tctnoded_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -MT dependencies/zlib/contrib/minizip/tctnoded-unzip.obj -MD -MP -MF dependencies/zlib/contrib/minizip/$(DEPDIR)/tctnoded-unzip.Tpo -c -o dependencies/zlib/contrib/minizip/tctnoded-unzip.obj `if test -f 'dependencies/zlib/contrib/minizip/unzip.c'; then $(CYGPATH_W) 'dependencies/zlib/contrib/minizip/unzip.c'; else $(CYGPATH_W) '$(srcdir)/dependencies/zlib/contrib/minizip/unzip.c'; fi`
-@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) dependencies/zlib/contrib/minizip/$(DEPDIR)/tctnoded-unzip.Tpo dependencies/zlib/contrib/minizip/$(DEPDIR)/tctnoded-unzip.Po
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='dependencies/zlib/contrib/minizip/unzip.c' object='dependencies/zlib/contrib/minizip/tctnoded-unzip.obj' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(tctnoded_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o dependencies/zlib/contrib/minizip/tctnoded-unzip.obj `if test -f 'dependencies/zlib/contrib/minizip/unzip.c'; then $(CYGPATH_W) 'dependencies/zlib/contrib/minizip/unzip.c'; else $(CYGPATH_W) '$(srcdir)/dependencies/zlib/contrib/minizip/unzip.c'; fi`
-
-dependencies/zlib/contrib/minizip/tctnoded-zip.o: dependencies/zlib/contrib/minizip/zip.c
-@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(tctnoded_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -MT dependencies/zlib/contrib/minizip/tctnoded-zip.o -MD -MP -MF dependencies/zlib/contrib/minizip/$(DEPDIR)/tctnoded-zip.Tpo -c -o dependencies/zlib/contrib/minizip/tctnoded-zip.o `test -f 'dependencies/zlib/contrib/minizip/zip.c' || echo '$(srcdir)/'`dependencies/zlib/contrib/minizip/zip.c
-@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) dependencies/zlib/contrib/minizip/$(DEPDIR)/tctnoded-zip.Tpo dependencies/zlib/contrib/minizip/$(DEPDIR)/tctnoded-zip.Po
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='dependencies/zlib/contrib/minizip/zip.c' object='dependencies/zlib/contrib/minizip/tctnoded-zip.o' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(tctnoded_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o dependencies/zlib/contrib/minizip/tctnoded-zip.o `test -f 'dependencies/zlib/contrib/minizip/zip.c' || echo '$(srcdir)/'`dependencies/zlib/contrib/minizip/zip.c
-
-dependencies/zlib/contrib/minizip/tctnoded-zip.obj: dependencies/zlib/contrib/minizip/zip.c
-@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(tctnoded_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -MT dependencies/zlib/contrib/minizip/tctnoded-zip.obj -MD -MP -MF dependencies/zlib/contrib/minizip/$(DEPDIR)/tctnoded-zip.Tpo -c -o dependencies/zlib/contrib/minizip/tctnoded-zip.obj `if test -f 'dependencies/zlib/contrib/minizip/zip.c'; then $(CYGPATH_W) 'dependencies/zlib/contrib/minizip/zip.c'; else $(CYGPATH_W) '$(srcdir)/dependencies/zlib/contrib/minizip/zip.c'; fi`
-@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) dependencies/zlib/contrib/minizip/$(DEPDIR)/tctnoded-zip.Tpo dependencies/zlib/contrib/minizip/$(DEPDIR)/tctnoded-zip.Po
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='dependencies/zlib/contrib/minizip/zip.c' object='dependencies/zlib/contrib/minizip/tctnoded-zip.obj' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(tctnoded_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o dependencies/zlib/contrib/minizip/tctnoded-zip.obj `if test -f 'dependencies/zlib/contrib/minizip/zip.c'; then $(CYGPATH_W) 'dependencies/zlib/contrib/minizip/zip.c'; else $(CYGPATH_W) '$(srcdir)/dependencies/zlib/contrib/minizip/zip.c'; fi`
-
 src/crypto/ctaes/tctnoded-ctaes.o: src/crypto/ctaes/ctaes.c
 @am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(tctnoded_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -MT src/crypto/ctaes/tctnoded-ctaes.o -MD -MP -MF src/crypto/ctaes/$(DEPDIR)/tctnoded-ctaes.Tpo -c -o src/crypto/ctaes/tctnoded-ctaes.o `test -f 'src/crypto/ctaes/ctaes.c' || echo '$(srcdir)/'`src/crypto/ctaes/ctaes.c
 @am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) src/crypto/ctaes/$(DEPDIR)/tctnoded-ctaes.Tpo src/crypto/ctaes/$(DEPDIR)/tctnoded-ctaes.Po
@@ -727,6 +692,48 @@ src/crypto/ctaes/tctnoded-ctaes.obj: src/crypto/ctaes/ctaes.c
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='src/crypto/ctaes/ctaes.c' object='src/crypto/ctaes/tctnoded-ctaes.obj' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 @am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(tctnoded_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o src/crypto/ctaes/tctnoded-ctaes.obj `if test -f 'src/crypto/ctaes/ctaes.c'; then $(CYGPATH_W) 'src/crypto/ctaes/ctaes.c'; else $(CYGPATH_W) '$(srcdir)/src/crypto/ctaes/ctaes.c'; fi`
+
+src/io/zip/tctnoded-ioapi.o: src/io/zip/ioapi.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(tctnoded_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -MT src/io/zip/tctnoded-ioapi.o -MD -MP -MF src/io/zip/$(DEPDIR)/tctnoded-ioapi.Tpo -c -o src/io/zip/tctnoded-ioapi.o `test -f 'src/io/zip/ioapi.c' || echo '$(srcdir)/'`src/io/zip/ioapi.c
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) src/io/zip/$(DEPDIR)/tctnoded-ioapi.Tpo src/io/zip/$(DEPDIR)/tctnoded-ioapi.Po
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='src/io/zip/ioapi.c' object='src/io/zip/tctnoded-ioapi.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(tctnoded_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o src/io/zip/tctnoded-ioapi.o `test -f 'src/io/zip/ioapi.c' || echo '$(srcdir)/'`src/io/zip/ioapi.c
+
+src/io/zip/tctnoded-ioapi.obj: src/io/zip/ioapi.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(tctnoded_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -MT src/io/zip/tctnoded-ioapi.obj -MD -MP -MF src/io/zip/$(DEPDIR)/tctnoded-ioapi.Tpo -c -o src/io/zip/tctnoded-ioapi.obj `if test -f 'src/io/zip/ioapi.c'; then $(CYGPATH_W) 'src/io/zip/ioapi.c'; else $(CYGPATH_W) '$(srcdir)/src/io/zip/ioapi.c'; fi`
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) src/io/zip/$(DEPDIR)/tctnoded-ioapi.Tpo src/io/zip/$(DEPDIR)/tctnoded-ioapi.Po
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='src/io/zip/ioapi.c' object='src/io/zip/tctnoded-ioapi.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(tctnoded_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o src/io/zip/tctnoded-ioapi.obj `if test -f 'src/io/zip/ioapi.c'; then $(CYGPATH_W) 'src/io/zip/ioapi.c'; else $(CYGPATH_W) '$(srcdir)/src/io/zip/ioapi.c'; fi`
+
+src/io/zip/tctnoded-zlib_unzip.o: src/io/zip/zlib_unzip.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(tctnoded_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -MT src/io/zip/tctnoded-zlib_unzip.o -MD -MP -MF src/io/zip/$(DEPDIR)/tctnoded-zlib_unzip.Tpo -c -o src/io/zip/tctnoded-zlib_unzip.o `test -f 'src/io/zip/zlib_unzip.c' || echo '$(srcdir)/'`src/io/zip/zlib_unzip.c
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) src/io/zip/$(DEPDIR)/tctnoded-zlib_unzip.Tpo src/io/zip/$(DEPDIR)/tctnoded-zlib_unzip.Po
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='src/io/zip/zlib_unzip.c' object='src/io/zip/tctnoded-zlib_unzip.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(tctnoded_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o src/io/zip/tctnoded-zlib_unzip.o `test -f 'src/io/zip/zlib_unzip.c' || echo '$(srcdir)/'`src/io/zip/zlib_unzip.c
+
+src/io/zip/tctnoded-zlib_unzip.obj: src/io/zip/zlib_unzip.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(tctnoded_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -MT src/io/zip/tctnoded-zlib_unzip.obj -MD -MP -MF src/io/zip/$(DEPDIR)/tctnoded-zlib_unzip.Tpo -c -o src/io/zip/tctnoded-zlib_unzip.obj `if test -f 'src/io/zip/zlib_unzip.c'; then $(CYGPATH_W) 'src/io/zip/zlib_unzip.c'; else $(CYGPATH_W) '$(srcdir)/src/io/zip/zlib_unzip.c'; fi`
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) src/io/zip/$(DEPDIR)/tctnoded-zlib_unzip.Tpo src/io/zip/$(DEPDIR)/tctnoded-zlib_unzip.Po
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='src/io/zip/zlib_unzip.c' object='src/io/zip/tctnoded-zlib_unzip.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(tctnoded_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o src/io/zip/tctnoded-zlib_unzip.obj `if test -f 'src/io/zip/zlib_unzip.c'; then $(CYGPATH_W) 'src/io/zip/zlib_unzip.c'; else $(CYGPATH_W) '$(srcdir)/src/io/zip/zlib_unzip.c'; fi`
+
+src/io/zip/tctnoded-zlib_zip.o: src/io/zip/zlib_zip.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(tctnoded_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -MT src/io/zip/tctnoded-zlib_zip.o -MD -MP -MF src/io/zip/$(DEPDIR)/tctnoded-zlib_zip.Tpo -c -o src/io/zip/tctnoded-zlib_zip.o `test -f 'src/io/zip/zlib_zip.c' || echo '$(srcdir)/'`src/io/zip/zlib_zip.c
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) src/io/zip/$(DEPDIR)/tctnoded-zlib_zip.Tpo src/io/zip/$(DEPDIR)/tctnoded-zlib_zip.Po
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='src/io/zip/zlib_zip.c' object='src/io/zip/tctnoded-zlib_zip.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(tctnoded_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o src/io/zip/tctnoded-zlib_zip.o `test -f 'src/io/zip/zlib_zip.c' || echo '$(srcdir)/'`src/io/zip/zlib_zip.c
+
+src/io/zip/tctnoded-zlib_zip.obj: src/io/zip/zlib_zip.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(tctnoded_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -MT src/io/zip/tctnoded-zlib_zip.obj -MD -MP -MF src/io/zip/$(DEPDIR)/tctnoded-zlib_zip.Tpo -c -o src/io/zip/tctnoded-zlib_zip.obj `if test -f 'src/io/zip/zlib_zip.c'; then $(CYGPATH_W) 'src/io/zip/zlib_zip.c'; else $(CYGPATH_W) '$(srcdir)/src/io/zip/zlib_zip.c'; fi`
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) src/io/zip/$(DEPDIR)/tctnoded-zlib_zip.Tpo src/io/zip/$(DEPDIR)/tctnoded-zlib_zip.Po
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='src/io/zip/zlib_zip.c' object='src/io/zip/tctnoded-zlib_zip.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(tctnoded_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o src/io/zip/tctnoded-zlib_zip.obj `if test -f 'src/io/zip/zlib_zip.c'; then $(CYGPATH_W) 'src/io/zip/zlib_zip.c'; else $(CYGPATH_W) '$(srcdir)/src/io/zip/zlib_zip.c'; fi`
 
 src/tctnoded-ConvertUTF.o: src/ConvertUTF.c
 @am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(tctnoded_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -MT src/tctnoded-ConvertUTF.o -MD -MP -MF src/$(DEPDIR)/tctnoded-ConvertUTF.Tpo -c -o src/tctnoded-ConvertUTF.o `test -f 'src/ConvertUTF.c' || echo '$(srcdir)/'`src/ConvertUTF.c
@@ -1440,8 +1447,6 @@ clean-generic:
 distclean-generic:
 	-test -z "$(CONFIG_CLEAN_FILES)" || rm -f $(CONFIG_CLEAN_FILES)
 	-test . = "$(srcdir)" || test -z "$(CONFIG_CLEAN_VPATH_FILES)" || rm -f $(CONFIG_CLEAN_VPATH_FILES)
-	-rm -f dependencies/zlib/contrib/minizip/$(DEPDIR)/$(am__dirstamp)
-	-rm -f dependencies/zlib/contrib/minizip/$(am__dirstamp)
 	-rm -f src/$(DEPDIR)/$(am__dirstamp)
 	-rm -f src/$(am__dirstamp)
 	-rm -f src/crypto/$(DEPDIR)/$(am__dirstamp)
@@ -1466,7 +1471,7 @@ clean-am: clean-binPROGRAMS clean-generic mostlyclean-am
 
 distclean: distclean-am
 	-rm -f $(am__CONFIG_DISTCLEAN_FILES)
-	-rm -rf ./$(DEPDIR) dependencies/zlib/contrib/minizip/$(DEPDIR) src/$(DEPDIR) src/crypto/$(DEPDIR) src/crypto/ctaes/$(DEPDIR) src/io/$(DEPDIR) src/io/db/$(DEPDIR) src/io/zip/$(DEPDIR) src/network/$(DEPDIR)
+	-rm -rf ./$(DEPDIR) src/$(DEPDIR) src/crypto/$(DEPDIR) src/crypto/ctaes/$(DEPDIR) src/io/$(DEPDIR) src/io/db/$(DEPDIR) src/io/zip/$(DEPDIR) src/network/$(DEPDIR)
 	-rm -f Makefile
 distclean-am: clean-am distclean-compile distclean-generic \
 	distclean-tags
@@ -1514,7 +1519,7 @@ installcheck-am:
 maintainer-clean: maintainer-clean-am
 	-rm -f $(am__CONFIG_DISTCLEAN_FILES)
 	-rm -rf $(top_srcdir)/autom4te.cache
-	-rm -rf ./$(DEPDIR) dependencies/zlib/contrib/minizip/$(DEPDIR) src/$(DEPDIR) src/crypto/$(DEPDIR) src/crypto/ctaes/$(DEPDIR) src/io/$(DEPDIR) src/io/db/$(DEPDIR) src/io/zip/$(DEPDIR) src/network/$(DEPDIR)
+	-rm -rf ./$(DEPDIR) src/$(DEPDIR) src/crypto/$(DEPDIR) src/crypto/ctaes/$(DEPDIR) src/io/$(DEPDIR) src/io/db/$(DEPDIR) src/io/zip/$(DEPDIR) src/network/$(DEPDIR)
 	-rm -f Makefile
 maintainer-clean-am: distclean-am maintainer-clean-generic
 

@@ -77,6 +77,19 @@ if test "x$enable_debug" = xyes; then
     fi
 fi
 
+# linking method
+AC_ARG_ENABLE([static],
+    [AS_HELP_STRING([--enable-static],
+                    [use static linking (default is dynamic)])],
+    [link_static=$enableval],
+    [link_static=no])
+if test "x$link_static" = xyes; then
+	LDFLAGS="-static"
+else
+	LDFLAGS="-Wl,-rpath,dependencies/"
+fi
+
+
 # header checks
 AC_HEADER_STDC
 AC_CHECK_HEADERS([sys/socket.h])
@@ -102,8 +115,6 @@ AC_CHECK_HEADER([openssl/ssl.h],, AC_MSG_ERROR(libssl headers missing),)
 AC_CHECK_LIB([ssl],         [main],SSL_LIBS=-lssl, AC_MSG_ERROR(libssl missing))
 AC_CHECK_HEADER([zlib.h],,AC_MSG_ERROR(zlib headers missing))
 AC_CHECK_LIB([z], [main],ZLIB_LIBS=-lz, AC_MSG_ERROR(zlib missing))
-AC_CHECK_HEADERS([minizip/ioapi.h minizip/unzip.h],,AC_MSG_ERROR(minizip missing))
-AC_CHECK_LIB([minizip], [main],MINIZIP_LIBS=-lminizip, AC_MSG_ERROR(libminizip missing))
 AC_CHECK_HEADER([rocksdb/db.h],,AC_MSG_ERROR(rocksdb headers missing))
 AC_CHECK_LIB([rocksdb], [main],RDB_LIBS=-lrocksdb, AC_MSG_ERROR(librocksdb missing))
 AC_CHECK_HEADER([curl/curl.h],,AC_MSG_ERROR(curl headers missing))
@@ -247,15 +258,12 @@ AC_CHECK_DECLS([EVP_MD_CTX_new],,,[AC_INCLUDES_DEFAULT
 ])
 CXXFLAGS="${save_CXXFLAGS}"
 
-LDFLAGS="-Wl,-rpath,dependencies/"
-
 AC_SUBST(LIBTOOL_APP_LDFLAGS)
 AC_SUBST(BOOST_LIBS)
 AC_SUBST(CRYPTO_LIBS)
 AC_SUBST(SSL_LIBS)
 AC_SUBST(CURL_LIBS)
 AC_SUBST(ZLIB_LIBS)
-AC_SUBST(MINIZIP_LIBS)
 AC_SUBST(RDB_LIBS)
 AC_SUBST(EVENT_LIBS)
 AC_SUBST(LDFLAGS)
@@ -267,6 +275,7 @@ AC_OUTPUT
 echo 
 echo "Options used to compile and link:"
 echo "  debug enabled (--enable-debug) = $enable_debug"
+echo "  link static (--enable-static) = $link_static"
 echo
 echo "  target OS     = $TARGET_OS"
 echo

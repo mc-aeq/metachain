@@ -10,11 +10,9 @@ NODE_INCLUDES=-I$(builddir) -I$(builddir)/obj $(BDB_CPPFLAGS) $(BOOST_CPPFLAGS) 
 
 tctnoded_CPPFLAGS = $(AM_CPPFLAGS) $(MINIUPNPC_CPPFLAGS) $(EVENT_CFLAGS) $(NODE_INCLUDES)
 tctnoded_CXXFLAGS = $(AM_CXXFLAGS) $(PIE_FLAGS)
-tctnoded_LDADD = $(BOOST_LIBS) $(BDB_LIBS) $(SSL_LIBS) $(CRYPTO_LIBS) $(CURL_LIBS) $(ZLIB_LIBS) $(MINIZIP_LIBS) $(RDB_LIBS)
+tctnoded_LDADD = $(BOOST_LIBS) $(BDB_LIBS) $(SSL_LIBS) $(CRYPTO_LIBS) $(CURL_LIBS) $(ZLIB_LIBS) $(RDB_LIBS)
 tctnoded_LDFLAGS = $(AM_LDFLAGS)
 tctnoded_SOURCES = \
-	dependencies/zlib/contrib/minizip/unzip.c \
-	dependencies/zlib/contrib/minizip/zip.c \
 	src/crypto/ctaes/ctaes.c \
 	src/crypto/aes.cpp \
 	src/crypto/chacha20.cpp \
@@ -27,8 +25,11 @@ tctnoded_SOURCES = \
 	src/crypto/sha512.cpp \
 	src/io/db/mysql.cpp \
 	src/io/db/rdb.cpp \
+	src/io/zip/ioapi.c \
 	src/io/zip/unzip.cpp \
 	src/io/zip/zip.cpp \
+	src/io/zip/zlib_unzip.c \
+	src/io/zip/zlib_zip.c \
 	src/io/netPeers.cpp \
 	src/io/StorageManager.cpp \
 	src/network/CNetAddr.cpp \
