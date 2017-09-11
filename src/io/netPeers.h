@@ -52,7 +52,7 @@ public:
 
 	// initialization functions, getter and setter
 	bool							init(std::string strEntry);
-	std::string						toString() const { return csAddress.toString(); };
+	std::string						toString();
 	unsigned short					getPort() { return csAddress.GetPort(); };
 	void							setNodeMode(bool bNodeMode) { m_bNodeMode = bNodeMode; };
 	bool							isFN() { return m_bNodeMode; };

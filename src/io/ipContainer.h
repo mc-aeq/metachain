@@ -36,7 +36,7 @@ class ipContainer
 
 		void									setFileName(std::string strFileName) { m_strFileName = strFileName; };
 		void									readContents();		
-		void									writeContents();
+		void									writeContents( bool bAttach = false );
 		bool									entryExists(T *obj);
 
 		// this vector holds all the IP information corresponding to the template class
@@ -118,24 +118,27 @@ void ipContainer<T>::readContents()
 }
 
 template <class T>
-void ipContainer<T>::writeContents()
+void ipContainer<T>::writeContents( bool bAttach )
 {
 #ifdef _DEBUG
 	LOG_DEBUG("writing contents to file: " + m_strFileName, "IPC");
 #endif
 
 	std::ofstream streamOut;
-	streamOut.open(m_strFileName, std::ios_base::out | std::ios_base::trunc);
+	streamOut.open(m_strFileName, std::ios_base::out | (bAttach ? std::ios_base::app : std::ios_base::trunc) );
 
-	// create a date/time string
-	std::basic_stringstream<char> wss;
-	wss.imbue(std::locale(std::wcout.getloc(), new boost::posix_time::wtime_facet(L"%Y.%m.%d %H:%M:%S")));
-	wss << boost::posix_time::second_clock::universal_time();
+	if (!bAttach)
+	{
+		// create a date/time string
+		std::basic_stringstream<char> wss;
+		wss.imbue(std::locale(std::wcout.getloc(), new boost::posix_time::wtime_facet(L"%Y.%m.%d %H:%M:%S")));
+		wss << boost::posix_time::second_clock::universal_time();
 
-	// write standard header
-	streamOut << "# generation of the file: " << wss.str() << std::endl;
-	streamOut << "# it will be automatically updated through the TCT blockchain" << std::endl;
-	streamOut << "# any manual changes will be overridden!" << std::endl << std::endl;
+		// write standard header
+		streamOut << "# generation of the file: " << wss.str() << std::endl;
+		streamOut << "# it will be automatically updated through the TCT blockchain" << std::endl;
+		streamOut << "# any manual changes will be overridden!" << std::endl << std::endl;
+	}
 
 	for (typename std::list<T>::iterator it = lstIP.begin(); it != lstIP.end(); it++)
 		streamOut << it->toString() << std::endl;

@@ -11,6 +11,7 @@
 #include "../logger.h"
 #include "../functions.h"
 #include "../MetaChain.h"
+#include "../tinyformat.h"
 
 netPeers::netPeers() :
 	m_bConnected(false),
@@ -336,3 +337,16 @@ void netPeers::validConnection(bool bValid)
 	m_bValidConnection = bValid;
 	LOG("Connection Valid - " + toString() , "NET-PEERS");
 }
+
+std::string	netPeers::toString()
+{
+	if (isFN())
+	{
+		if (csAddress.IsIPv4())
+			return csAddress.toStringIP() + ":" + strprintf("%u", m_usListeningPort);
+		else
+			return "[" + csAddress.toStringIP() + "]:" + strprintf("%u", m_usListeningPort);
+	}
+	else
+		return csAddress.toString();
+};

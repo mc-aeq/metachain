@@ -79,8 +79,8 @@ bool NetworkManager::initialize(CSimpleIniA* iniFile)
 	m_lstPeerListOut = ipContainer< netPeers >(iniFile->GetValue("network", "peer_file", "peers.dat"));
 	m_lstPeerListOut.readContents();
 
-	// initialize the inbound peer list (which is ofc empty at start)
-	m_lstPeerListIn = ipContainer< netPeers >();
+	// initialize the inbound peer list (which is ofc empty at start, but we attach it to the same file as the outbound peer list so that we can sync FN nodes into the same file)
+	m_lstPeerListIn = ipContainer< netPeers >(iniFile->GetValue("network", "peer_file", "peers.dat"));
 
 	// creating a CService class for the listener and storing it for further purposes
 	try
@@ -769,6 +769,7 @@ bool NetworkManager::ProcessMessage(netMessage msg, std::list< netPeers >::itera
 		case netMessage::SUBJECT::NET_PEER_LIST_SEND:
 		{
 			int iNumOfPeers = 0;
+			unsigned int uiCount = 0;
 			uint8_t *puint8tBuffer;
 			// 18: ipv4 needs *4, ipv6 needs *16. So we use *16 for the IP and then *2 for the port
 			static unsigned short susIpPortSize = 18;
@@ -787,17 +788,16 @@ bool NetworkManager::ProcessMessage(netMessage msg, std::list< netPeers >::itera
 				puint8tBuffer = new uint8_t[iNumOfPeers * susIpPortSize];
 				memset(puint8tBuffer, '\0', iNumOfPeers * susIpPortSize);
 
-				// now copy it into the buffer
-				unsigned int uiCount = 0;
+				// now copy it into the buffer and skip all non full nodes
 				for (std::list<netPeers>::iterator it = m_lstPeerListOut.lstIP.begin(); it != m_lstPeerListOut.lstIP.end(); it++)
 				{
-					if( bInbound || it != peer)
+					if( (bInbound || it != peer) && (peer->isFN()) )
 					{
 						// copy the ip adress					
 						memcpy((puint8tBuffer + uiCount * sizeof(uint8_t) * susIpPortSize), it->csAddress.GetBytes(), sizeof(uint8_t) * 16);
 
 						// copy the port
-						uint16_t port = it->getPort();
+						uint16_t port = it->getListeningPort();
 						memcpy((puint8tBuffer + uiCount * sizeof(uint8_t) * susIpPortSize + susIpPortSize - 2 * sizeof(uint8_t)), &port, sizeof(port));
 
 						uiCount++;
@@ -805,13 +805,13 @@ bool NetworkManager::ProcessMessage(netMessage msg, std::list< netPeers >::itera
 				}
 				for (std::list<netPeers>::iterator it = m_lstPeerListIn.lstIP.begin(); it != m_lstPeerListIn.lstIP.end(); it++)
 				{
-					if ( !bInbound || it != peer)
+					if ( (!bInbound || it != peer) && (peer->isFN()) )
 					{
 						// copy the ip adress					
 						memcpy((puint8tBuffer + uiCount * sizeof(uint8_t) * susIpPortSize), it->csAddress.GetBytes(), sizeof(uint8_t) * 16);
 
 						// copy the port
-						uint16_t port = it->getPort();
+						uint16_t port = it->getListeningPort();
 						memcpy((puint8tBuffer + uiCount * sizeof(uint8_t) * susIpPortSize + susIpPortSize - 2 * sizeof(uint8_t)), &port, sizeof(port));
 
 						uiCount++;
@@ -821,7 +821,7 @@ bool NetworkManager::ProcessMessage(netMessage msg, std::list< netPeers >::itera
 
 			// and finally we sent our peer list on the way
 			LOCK(peer->pcsvSend);
-			peer->listSend.emplace_back(netMessage::SUBJECT::NET_PEER_LIST_GET, (void *)puint8tBuffer, iNumOfPeers * susIpPortSize, true);
+			peer->listSend.emplace_back(netMessage::SUBJECT::NET_PEER_LIST_GET, (void *)puint8tBuffer, uiCount * susIpPortSize, true);
 
 			delete[] puint8tBuffer;
 		}
@@ -853,6 +853,14 @@ bool NetworkManager::ProcessMessage(netMessage msg, std::list< netPeers >::itera
 				if (addr.IsLocal())
 					continue;
 	#endif 
+				// check if it's me
+				if (*m_pServiceLocal == addr)
+				{
+	#ifdef _DEBUG
+					LOG_DEBUG("Not adding new Peer since it's me!", "NET");
+	#endif
+					continue;
+				}
 
 				// check if we have this node already in our list
 				{
@@ -909,7 +917,9 @@ void NetworkManager::DumpData()
 
 	// write the Peer List Out
 	LOCK(m_csPeerListOut);
+	LOCK(m_csPeerListIn);
 	m_lstPeerListOut.writeContents();
+	m_lstPeerListIn.writeContents(true);
 }
 
 NetworkManager::~NetworkManager()
