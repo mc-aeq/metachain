@@ -89,7 +89,7 @@ bool NetworkManager::initialize(CSimpleIniA* iniFile)
 
 		// if we have a testnet, we increment the listening port by 100 to ensure no conflicts happen when a real and a testnet node are on the same system.
 		if (MetaChain::getInstance().isTestNet())
-			m_pServiceLocal->SetPortW(m_pServiceLocal->GetPort() + 100);
+			m_pServiceLocal->SetPort(m_pServiceLocal->GetPort() + 100);
 	}
 	catch (std::exception e)
 	{
