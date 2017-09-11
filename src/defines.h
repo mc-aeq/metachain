@@ -79,6 +79,7 @@ const uint32_t g_cuint32tVersion = 1;
 
 // autoupdate defines
 #define AU_VERSION_FILE "latest.version"
+#define AU_VERSION_FILE_TESTNET "latest.version.testnet"
 #define AU_CHECKSUM_FILE "check.sum"
 #define AU_NODE_FILE "node.zip"
 #define AU_NODE_BACKUPFILE "node.bak"

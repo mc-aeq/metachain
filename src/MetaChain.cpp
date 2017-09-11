@@ -148,7 +148,7 @@ bool MetaChain::doAutoUpdate()
 	if (curl)
 	{
 		std::string strCurrentVersion;
-		curl_easy_setopt(curl, CURLOPT_URL, (m_strCDNUrl + "/" + AU_VERSION_FILE).c_str());
+		curl_easy_setopt(curl, CURLOPT_URL, (m_strCDNUrl + "/" + (isTestNet() ? AU_VERSION_FILE_TESTNET : AU_VERSION_FILE)).c_str());
 		curl_easy_setopt(curl, CURLOPT_SSL_VERIFYPEER, 0);
 		curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, curlWriteCallback);
 		curl_easy_setopt(curl, CURLOPT_WRITEDATA, &strCurrentVersion);
