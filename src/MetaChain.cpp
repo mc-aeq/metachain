@@ -24,7 +24,9 @@ extern std::atomic<bool> sabReboot;
 MetaChain::MetaChain() :
 	m_pNetworkManager( NULL ),
 	m_iVersionTicksTillUpdate(0),
-	m_bAutoUpdate(true)
+	m_bAutoUpdate(true),
+	m_bModeFN(false),
+	m_bTestNet(false)
 {
 }
 
@@ -61,13 +63,20 @@ bool MetaChain::initialize(CSimpleIniA* iniFile, boost::filesystem::path pathExe
 		m_pathTmp = boost::filesystem::current_path() / iniFile->GetValue("autoupdate", "tmp_dir", "tmp");
 
 	// do a autoupdate call upon start if requested
-	if (iniFile->GetBoolValue("autoupdate", "autoupdate_on_start", true))
+	if (iniFile->GetBoolValue("autoupdate", "enable", true) && iniFile->GetBoolValue("autoupdate", "autoupdate_on_start", true))
 	{
 		// if the doAutoUpdate() function returns true, a update was successfully made.
 		// we skip the rest of the initialization function since we need to start the new version
 		if (doAutoUpdate())
 			return false;
 	}
+
+	// getting our mode, since we only have FN and CL, we use a flag
+	m_bModeFN = ((std::string)iniFile->GetValue("general", "mode", "fn") == "fn" ? true : false);
+	LOG("initializing this node to run in mode: " + (std::string)(m_bModeFN ? "FN" : "CL"), "MC");
+
+	// check wether this instance is testnet or not
+	m_bTestNet = iniFile->GetBoolValue("general", "testnet", false);
 	
 	// create the block storage backends, check their integrity and check if no other instance is running
 	m_pStorageManager = new StorageManager(this);

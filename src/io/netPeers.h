@@ -31,6 +31,8 @@ private:
 	int64_t							m_timeLastTry;				// timestamp of the last connection try	
 	unsigned short					m_usConnectionTries;		// variable that counts connection tries. over a certain limit we throw this peer away as unusable
 	int								m_iUsageCounter;			// counter that shows if this peer is still used. needed for safe destruction
+	bool							m_bNodeMode;				// flag that indicates if the peer is a Full Node (m_bNodeMode) or a Client (!m_bNodeMode)
+	unsigned short					m_usListeningPort;			// the listening port of the peer - only relevant when peer is FN
 
 	// variables used for receiving messages and storing them
 	cCriticalSection				*m_pcsvRecv;
@@ -52,6 +54,10 @@ public:
 	bool							init(std::string strEntry);
 	std::string						toString() const { return csAddress.toString(); };
 	unsigned short					getPort() { return csAddress.GetPort(); };
+	void							setNodeMode(bool bNodeMode) { m_bNodeMode = bNodeMode; };
+	bool							isFN() { return m_bNodeMode; };
+	void							setListeningPort(unsigned short usListeningPort) { m_usListeningPort = usListeningPort; };
+	unsigned short					getListeningPort() { return m_usListeningPort; };
 
 	// connection functions and variables
 	SOCKET							hSocket;

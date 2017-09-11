@@ -23,7 +23,7 @@ StorageManager::~StorageManager()
 	remove((m_pathDataDirectory /= LOCK_FILE).string().c_str());
 
 	// close the raw output file
-	if( m_bModeFN)
+	if( MetaChain::getInstance().isFN() )
 		m_streamRaw.close();
 
 	// close the meta info db
@@ -32,10 +32,6 @@ StorageManager::~StorageManager()
 
 bool StorageManager::initialize(CSimpleIniA* iniFile)
 {
-	// getting our mode, since we only have FN and CL, we use a flag
-	m_bModeFN = ((std::string)iniFile->GetValue("general", "mode", "fn") == "fn" ? true : false);
-	LOG("initializing this node to run in mode: " + (std::string)(m_bModeFN ? "FN" : "CL"), "SM");
-
 	// get the data directory
 	m_pathDataDirectory = iniFile->GetValue("data", "data_dir", "data");
 	if( m_pathDataDirectory.is_relative() )
@@ -129,7 +125,7 @@ bool StorageManager::initialize(CSimpleIniA* iniFile)
 	m_pDB->initialize(iniFile, &bNewNode);
 
 	// check for the raw directory (this is only needed when we're in FN mode)
-	if (m_bModeFN)
+	if (MetaChain::getInstance().isFN())
 	{
 		m_pathRawDirectory = m_pathDataDirectory / iniFile->GetValue("data", "raw_dir", "raw");
 		if(!boost::filesystem::exists(m_pathRawDirectory) || !boost::filesystem::is_directory(m_pathRawDirectory))
@@ -206,7 +202,7 @@ bool StorageManager::openRawFile()
 
 void StorageManager::writeRaw(unsigned int uiBlockNumber, unsigned int uiLength, void *raw)
 {
-	if (m_bModeFN)
+	if (MetaChain::getInstance().isFN())
 	{
 		// write the output in the file
 		{

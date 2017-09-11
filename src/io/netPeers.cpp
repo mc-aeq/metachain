@@ -19,7 +19,9 @@ netPeers::netPeers() :
 	hSocket(0),
 	m_usConnectionTries(0),
 	m_timeLastTry(0),
-	m_iUsageCounter(0)
+	m_iUsageCounter(0),
+	m_bNodeMode(false),
+	m_usListeningPort(0)
 {
 	pcshSocket = new cCriticalSection();
 	m_pcsvRecv = new cCriticalSection();
@@ -36,6 +38,8 @@ netPeers::netPeers(SOCKET *listenSocket, cSemaphore *semaphore)
 	m_usConnectionTries = 0;
 	m_timeLastTry = 0;
 	m_iUsageCounter = 0;
+	m_bNodeMode = false;
+	m_usListeningPort = 0;
 	pcshSocket = new cCriticalSection();
 	m_pcsvRecv = new cCriticalSection();
 	pcsvQueue = new cCriticalSection();
@@ -105,6 +109,7 @@ void netPeers::makeDeepCopy(const netPeers & obj)
 	m_usConnectionTries = obj.m_usConnectionTries;
 	m_timeLastTry = obj.m_timeLastTry;
 	m_iUsageCounter = obj.m_iUsageCounter;
+	m_bNodeMode = obj.m_bNodeMode;
 	pcshSocket = obj.pcshSocket;
 	m_pcsvRecv = obj.m_pcsvRecv;
 	pcsvQueue = obj.pcsvQueue;
@@ -112,6 +117,7 @@ void netPeers::makeDeepCopy(const netPeers & obj)
 	hSocket = obj.hSocket;
 	csAddress = obj.csAddress;
 	m_netMsg = obj.m_netMsg;
+	m_usListeningPort = obj.m_usListeningPort;
 	m_iUsageCounter = obj.m_iUsageCounter;
 	m_queueMessages = obj.m_queueMessages;
 	listSend = obj.listSend;

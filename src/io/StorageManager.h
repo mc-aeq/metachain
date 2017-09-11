@@ -35,7 +35,6 @@ class StorageManager
 		// the rdb specified here stores meta information
 		rocksdb::DB							*m_pMetaDB;
 
-		bool								m_bModeFN;
 		boost::filesystem::path				m_pathDataDirectory;
 		boost::filesystem::path				m_pathRawDirectory;
 

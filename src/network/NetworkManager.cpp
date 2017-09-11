@@ -86,6 +86,10 @@ bool NetworkManager::initialize(CSimpleIniA* iniFile)
 	try
 	{
 		m_pServiceLocal = new CService(iniFile->GetValue("network", "listening_ip", NET_STANDARD_CATCHALL_LISTENING), (unsigned short)iniFile->GetLongValue("network", "listening_port", NET_STANDARD_PORT_LISTENING));
+
+		// if we have a testnet, we increment the listening port by 100 to ensure no conflicts happen when a real and a testnet node are on the same system.
+		if (MetaChain::getInstance().isTestNet())
+			m_pServiceLocal->SetPortW(m_pServiceLocal->GetPort() + 100);
 	}
 	catch (std::exception e)
 	{
@@ -660,161 +664,222 @@ bool NetworkManager::ProcessMessage(netMessage msg, std::list< netPeers >::itera
 
 	switch (msg.getHeader().ui16tSubject)
 	{
-	case netMessage::SUBJECT::NET_VERSION:
-
-		// if the connection is already valid, we don't care for the version number anymore
-		if (peer->validConnection())
-			break;
-
-		uint32_t uint32tReceivedVersion;
-		memcpy(&uint32tReceivedVersion, msg.getData(), 4);
-#ifdef _DEBUG
-		LOG_DEBUG("Got Version Info from " + peer->toString() + " - Version: " + std::to_string(uint32tReceivedVersion), "NET");
-#endif
-		// if the connected client has an older version than ours, we inform him about a new version and then destroy the connection
-		if (g_cuint32tVersion > uint32tReceivedVersion)
+		case netMessage::SUBJECT::NET_VERSION:
 		{
+			// if the connection is already valid, we don't care for the version number anymore
+			if (peer->validConnection())
+				break;
+
+			uint32_t uint32tReceivedVersion;
+			memcpy(&uint32tReceivedVersion, msg.getData(), 4);
+	#ifdef _DEBUG
+			LOG_DEBUG("Got Version Info from " + peer->toString() + " - Version: " + std::to_string(uint32tReceivedVersion), "NET");
+	#endif
+			// if the connected client has an older version than ours, we inform him about a new version and then destroy the connection
+			if (g_cuint32tVersion > uint32tReceivedVersion)
 			{
-				LOCK(peer->pcsvSend);
-				peer->listSend.emplace_back(netMessage::SUBJECT::NET_VERSION_NEWER, (void *)&g_cuint32tVersion, sizeof(g_cuint32tVersion), true);
+				{
+					LOCK(peer->pcsvSend);
+					peer->listSend.emplace_back(netMessage::SUBJECT::NET_VERSION_NEWER, (void *)&g_cuint32tVersion, sizeof(g_cuint32tVersion), true);
+				}
+
+				LOG("Connected client has a lower version than ours, inform and disconnect - " + peer->toString(), "NET");
+				return false;
 			}
+			// if the connected client is newer than ours, we increment a ticker in the metachain and also destroy this connection
+			else if (g_cuint32tVersion < uint32tReceivedVersion)
+			{
+				MetaChain::getInstance().incrementNewerVersionTicker();
 
-			LOG("Connected client has a lower version than ours, inform and disconnect - " + peer->toString(), "NET");
-			return false;
+				LOG("We have an older version than the connected client, increment the version ticker and disconnect - " + peer->toString(), "NET");
+				return false;
+			}
+			// wenn the version number is the same, we don't do anything except we set a flag that the initial communication was made and the peer is ready for full service, as well as we ask them to send us their peer list
+			else
+			{
+				// the connection is now valid
+				peer->validConnection(true);
+
+				LOCK(peer->pcsvSend);
+				bool bTmp;
+				peer->listSend.emplace_back(netMessage::SUBJECT::NET_VERSION, (void *)&g_cuint32tVersion, sizeof(g_cuint32tVersion), true);
+				bTmp = MetaChain::getInstance().isTestNet();
+				peer->listSend.emplace_back(netMessage::SUBJECT::NET_TESTNET, (void *)&bTmp, sizeof(bool), true);
+				bTmp = MetaChain::getInstance().isFN();
+				peer->listSend.emplace_back(netMessage::SUBJECT::NET_NODEMODE, (void *)&bTmp, sizeof(bool), true);
+			}
 		}
-		// if the connected client is newer than ours, we increment a ticker in the metachain and also destroy this connection
-		else if (g_cuint32tVersion < uint32tReceivedVersion)
-		{
-			MetaChain::getInstance().incrementNewerVersionTicker();
+		break;
 
-			LOG("We have an older version than the connected client, increment the version ticker and disconnect - " + peer->toString(), "NET");
-			return false;
-		}
-		// wenn the version number is the same, we don't do anything except we set a flag that the initial communication was made and the peer is ready for full service, as well as we ask them to send us their peer list
-		else
+		case netMessage::SUBJECT::NET_NODEMODE:
 		{
-			// the connection is now valid
-			peer->validConnection(true);
-
+			// store the nodemode info for this peer. This is the last step in our handshake before the actual blockchain communication and that's why we request the peers from our partner now
+			bool bFN = false;
+			memcpy(&bFN, msg.getData(), sizeof(bool));
+			peer->setNodeMode(bFN);
+					
 			LOCK(peer->pcsvSend);
-			peer->listSend.emplace_back(netMessage::SUBJECT::NET_VERSION, (void *)&g_cuint32tVersion, sizeof(g_cuint32tVersion), true);
+
+			// if it's a full node, we want to know his listening port so that we can forward this information to all other connecting peers
+			if (bFN)
+				peer->listSend.emplace_back(netMessage::SUBJECT::NET_NODE_LISTENING_PORT_GET, (void*)NULL, 0, true);
+
+			// request peers
 			peer->listSend.emplace_back(netMessage::SUBJECT::NET_PEER_LIST_SEND, (void*)NULL, 0, true);
 		}
 		break;
 
-	case netMessage::SUBJECT::NET_VERSION_NEWER:
-		// it looks like we have an older version than the connected node. We increment our ticker for future checking of newer versions
-		MetaChain::getInstance().incrementNewerVersionTicker();
-		// we dont need to disconnect the node since after this Message the node will automatically disconnect
+		case netMessage::SUBJECT::NET_NODE_LISTENING_PORT_GET:
+		{
+			LOCK(peer->pcsvSend);
+			// send back our listening port from our socket.
+			unsigned short usTmp = m_pServiceLocal->GetPort();
+			peer->listSend.emplace_back(netMessage::SUBJECT::NET_NODE_LISTENING_PORT_SEND, (void*)&usTmp, sizeof(unsigned short), true);
+		}
 		break;
 
-	case netMessage::SUBJECT::NET_PEER_LIST_SEND:
-	{
-		// the connected node wants to know our peers for their reference. we build up some data, excluding the requesting peer itself and sending it over for them to process
-		int iNumOfPeers = m_lstPeerListOut.lstIP.size();
-
-		// we don't need to check if the connection is in our outbound list when we have an incoming connection. This is impossible
-		if(!bInbound)
+		case netMessage::SUBJECT::NET_NODE_LISTENING_PORT_SEND:
 		{
-			// very simplistic count through the connected outbound nodes to get the size of our data buffer
-			LOCK(m_csPeerListOut);
-			for (std::list<netPeers>::iterator it = m_lstPeerListOut.lstIP.begin(); it != m_lstPeerListOut.lstIP.end(); it++)
-			{
-				if (it == peer)
-					iNumOfPeers--;
-			}
+			// we get the listening port when the connected peer is a FN so that when the connection was incoming, we can forward the real port for the FN in our NET_PEER_LIST_SEND
+			unsigned short usListeningPort;
+			memcpy(&usListeningPort, msg.getData(), sizeof(unsigned short));
+			peer->setListeningPort(usListeningPort);
 		}
+		break;
 
-		// if we don't have any number of peers, we simply quit this operation without sending anything
-		if (iNumOfPeers == 0)
-			break;
-
-		// make us a buffer array. we multiply the number of peers by 18: ipv4 needs *4, ipv6 needs *16. So we use *16 for the IP and then *2 for the port
-		static unsigned short susIpPortSize = 18;
-		uint8_t *puint8tBuffer = new uint8_t[iNumOfPeers * susIpPortSize];
-		memset(puint8tBuffer, '\0', iNumOfPeers * susIpPortSize);
-		
-		// now copy it into the buffer
+		case netMessage::SUBJECT::NET_TESTNET:
 		{
-			unsigned int uiCount = 0;
-			LOCK(m_csPeerListOut);
-			for (std::list<netPeers>::iterator it = m_lstPeerListOut.lstIP.begin(); it != m_lstPeerListOut.lstIP.end(); it++ )
-			{
-				if (bInbound || it != peer)
-				{
-					// copy the ip adress					
-					memcpy((puint8tBuffer + uiCount * sizeof(uint8_t) * susIpPortSize), it->csAddress.GetBytes(), sizeof(uint8_t)*16);
+			// we compare if the new connection is in the testnet or not and if that's the same as our node. if not, we remove the connection
+			bool bTestNet = false;
+			memcpy(&bTestNet, msg.getData(), sizeof(bool));
 
-					// copy the port
-					uint16_t port = it->getPort();
-					memcpy((puint8tBuffer + uiCount * sizeof(uint8_t) * susIpPortSize + susIpPortSize - 2 * sizeof(uint8_t)), &port, sizeof(port));
-
-					uiCount++;
-				}
-			}
+			if (MetaChain::getInstance().isTestNet() != bTestNet)
+				return false;
 		}
+		break;
 
-		// and finally we sent our peer list on the way
-		LOCK(peer->pcsvSend);
-		peer->listSend.emplace_back(netMessage::SUBJECT::NET_PEER_LIST_GET, (void *)puint8tBuffer, iNumOfPeers * susIpPortSize, true);
-
-		delete[] puint8tBuffer;
-	}
-	break;
-
-	case netMessage::SUBJECT::NET_PEER_LIST_GET:
-	{
-		// make us a buffer array. the size of the buffer is defined by the payload and we can calculate backwards to the number of peers
-		static unsigned short susIpPortSize = 18;
-		int iNumOfPeers = msg.getHeader().ui32tPayloadSize / susIpPortSize;
-
-		// get the individual peers, create the adress and add it to our outgoing list
-		for (int i = 0; i < iNumOfPeers; i++)
+		case netMessage::SUBJECT::NET_VERSION_NEWER:
 		{
-			uint16_t port = 0;
-			uint8_t *puint8tBuffer = new uint8_t[susIpPortSize];
+			// it looks like we have an older version than the connected node. We increment our ticker for future checking of newer versions
+			MetaChain::getInstance().incrementNewerVersionTicker();
+			// we dont need to disconnect the node since after this Message the node will automatically disconnect
+		}
+		break;
 
-			memcpy(puint8tBuffer, msg.getData() + i*susIpPortSize, susIpPortSize);
-			memcpy(&port, puint8tBuffer + (susIpPortSize - sizeof(uint16_t)), sizeof(uint16_t));
-
-			netPeers tmp;
-			tmp.csAddress.SetRaw(puint8tBuffer);
-			tmp.csAddress.SetPort(port);
-
-			CNetAddr addr = tmp.csAddress;
-
-#ifndef _DEBUG
-			// when we're in production mode we don't accept new nodes that are on a local interface. it makes no sense to run multiple nodes on a single system
-			if (addr.IsLocal())
-				continue;
-#endif 
-
-			// check if we have this node already in our list
+		case netMessage::SUBJECT::NET_PEER_LIST_SEND:
+		{
+			int iNumOfPeers = 0;
+			uint8_t *puint8tBuffer;
+			// 18: ipv4 needs *4, ipv6 needs *16. So we use *16 for the IP and then *2 for the port
+			static unsigned short susIpPortSize = 18;
 			{
 				LOCK(m_csPeerListOut);
-				if (m_lstBanList.entryExists(&addr))
-					LOG_ERROR("Not adding new outbound peer - peer is banned - " + tmp.toString(), "NET");
-				else if (!m_lstPeerListOut.entryExists(&tmp) )
+				LOCK(m_csPeerListIn);
+
+				// the connected node wants to know our peers for their reference. we build up some data, excluding the requesting peer itself and sending it over for them to process
+				iNumOfPeers = m_lstPeerListOut.lstIP.size() + m_lstPeerListIn.lstIP.size() - 1;
+
+				// if we don't have any peers, we simply quit this operation without sending anything
+				if (iNumOfPeers == 0)
+					break;
+
+				// make us a buffer array. we multiply the number of peers by 18: ipv4 needs *4, ipv6 needs *16. So we use *16 for the IP and then *2 for the port			
+				puint8tBuffer = new uint8_t[iNumOfPeers * susIpPortSize];
+				memset(puint8tBuffer, '\0', iNumOfPeers * susIpPortSize);
+
+				// now copy it into the buffer
+				unsigned int uiCount = 0;
+				for (std::list<netPeers>::iterator it = m_lstPeerListOut.lstIP.begin(); it != m_lstPeerListOut.lstIP.end(); it++)
 				{
-					m_lstPeerListOut.lstIP.push_back(tmp);
-					LOG("Adding new outbound peer - " + tmp.toString(), "NET");
+					if( bInbound || it != peer)
+					{
+						// copy the ip adress					
+						memcpy((puint8tBuffer + uiCount * sizeof(uint8_t) * susIpPortSize), it->csAddress.GetBytes(), sizeof(uint8_t) * 16);
+
+						// copy the port
+						uint16_t port = it->getPort();
+						memcpy((puint8tBuffer + uiCount * sizeof(uint8_t) * susIpPortSize + susIpPortSize - 2 * sizeof(uint8_t)), &port, sizeof(port));
+
+						uiCount++;
+					}
 				}
-#ifdef _DEBUG
-				else
-					LOG_DEBUG("Not adding new Peer since it's already known - " + tmp.toString(), "NET");
-#endif
+				for (std::list<netPeers>::iterator it = m_lstPeerListIn.lstIP.begin(); it != m_lstPeerListIn.lstIP.end(); it++)
+				{
+					if ( !bInbound || it != peer)
+					{
+						// copy the ip adress					
+						memcpy((puint8tBuffer + uiCount * sizeof(uint8_t) * susIpPortSize), it->csAddress.GetBytes(), sizeof(uint8_t) * 16);
+
+						// copy the port
+						uint16_t port = it->getPort();
+						memcpy((puint8tBuffer + uiCount * sizeof(uint8_t) * susIpPortSize + susIpPortSize - 2 * sizeof(uint8_t)), &port, sizeof(port));
+
+						uiCount++;
+					}
+				}
 			}
 
-			delete[] puint8tBuffer;
-		}	
-		break;
-	}
+			// and finally we sent our peer list on the way
+			LOCK(peer->pcsvSend);
+			peer->listSend.emplace_back(netMessage::SUBJECT::NET_PEER_LIST_GET, (void *)puint8tBuffer, iNumOfPeers * susIpPortSize, true);
 
-	// the default statement as well as the ban list statements. We don't support sending ban lists, everyone has to build them theirselfs right now
-	case netMessage::SUBJECT::NET_BAN_LIST_GET:
-	case netMessage::SUBJECT::NET_BAN_LIST_SEND:
-	default:
-		return false;
+			delete[] puint8tBuffer;
+		}
+		break;
+
+		case netMessage::SUBJECT::NET_PEER_LIST_GET:
+		{
+			// make us a buffer array. the size of the buffer is defined by the payload and we can calculate backwards to the number of peers
+			static unsigned short susIpPortSize = 18;
+			int iNumOfPeers = msg.getHeader().ui32tPayloadSize / susIpPortSize;
+
+			// get the individual peers, create the adress and add it to our outgoing list
+			for (int i = 0; i < iNumOfPeers; i++)
+			{
+				uint16_t port = 0;
+				uint8_t *puint8tBuffer = new uint8_t[susIpPortSize];
+
+				memcpy(puint8tBuffer, msg.getData() + i*susIpPortSize, susIpPortSize);
+				memcpy(&port, puint8tBuffer + (susIpPortSize - sizeof(uint16_t)), sizeof(uint16_t));
+
+				netPeers tmp;
+				tmp.csAddress.SetRaw(puint8tBuffer);
+				tmp.csAddress.SetPort(port);
+
+				CNetAddr addr = tmp.csAddress;
+
+	#ifndef _DEBUG
+				// when we're in production mode we don't accept new nodes that are on a local interface. it makes no sense to run multiple nodes on a single system
+				if (addr.IsLocal())
+					continue;
+	#endif 
+
+				// check if we have this node already in our list
+				{
+					LOCK(m_csPeerListOut);
+					if (m_lstBanList.entryExists(&addr))
+						LOG_ERROR("Not adding new outbound peer - peer is banned - " + tmp.toString(), "NET");
+					else if (!m_lstPeerListOut.entryExists(&tmp) )
+					{
+						m_lstPeerListOut.lstIP.push_back(tmp);
+						LOG("Adding new outbound peer - " + tmp.toString(), "NET");
+					}
+	#ifdef _DEBUG
+					else
+						LOG_DEBUG("Not adding new Peer since it's already known - " + tmp.toString(), "NET");
+	#endif
+				}
+
+				delete[] puint8tBuffer;
+			}	
+			break;
+		}
+
+		// the default statement as well as the ban list statements. We don't support sending ban lists, everyone has to build them theirselfs right now
+		case netMessage::SUBJECT::NET_BAN_LIST_GET:
+		case netMessage::SUBJECT::NET_BAN_LIST_SEND:
+		default:
+			return false;
 	}
 
 	return true;
@@ -855,10 +920,6 @@ NetworkManager::~NetworkManager()
 
 	// dump the data one last time
 	DumpData();
-
-	// delete the semaphores
-	delete m_pSemInbound;
-	delete m_pSemOutbound;
 }
 
 void NetworkManager::Interrupt()

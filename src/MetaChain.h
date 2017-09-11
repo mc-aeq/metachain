@@ -40,6 +40,10 @@ private:
 	bool						downloadFile(std::string strFrom, std::string strTo);
 	bool						doAutoUpdate();
 
+	// variables that define the functionality of this node
+	bool						m_bModeFN;
+	bool						m_bTestNet;
+
 	// constructor and operator
 								MetaChain();
 								MetaChain(MetaChain const& copy);	// not implemented
@@ -57,6 +61,8 @@ public:
 	CScheduler*					getScheduler() { return &m_scheduler; };
 	boost::thread_group*		getThreadGroup() { return &m_threadGroup; };
 	NetworkManager*				getNetworkManager() { return m_pNetworkManager; };
+	bool						isFN() { return m_bModeFN; };
+	bool						isTestNet() { return m_bTestNet; };
 };	
 
 #endif

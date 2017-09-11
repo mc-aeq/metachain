@@ -55,19 +55,32 @@ class netMessage
 		* 0 0 0 0		0 0 0 1		->		GENERAL NET COMMUNICATION
 		*							0 0 0 0		0 0 0 1		->		0x0101		VERSION NUMBER
 		*							0 0 0 0		0 0 1 0		->		0x0102		NEWER VERSION AVAILABLE
+		*							0 0 0 0		0 0 1 1		->		0x0103		NODE MODE
+		*							0 0 0 0		0 1 0 0		->		0x0104		LISTENING PORT GET (for FN)
+		*							0 0 0 0		0 1 0 1		->		0x0105		LISTENING PORT SEND (for FN)
+		*
 		* 0 0 0 0		0 0 1 0		->		PEER AND BAN LIST COMMUNICATION
 		*							0 0 0 0		0 0 0 1		->		0x0201		GET PEER LIST
 		*							0 0 0 0		0 0 1 0		->		0x0202		SEND PEER LIST
 		*							0 0 0 0		0 0 1 1		->		0x0203		GET BAN LIST
 		*							0 0 0 0		0 1 0 0		->		0x0204		SEND BAN LIST
+		*
+		* 0 0 0 0		0 0 1 1		->		TESTNET COMMUNICATION
+		*							0 0 0 0		0 0 0 1		->		0x0301		TESTNET FLAG IDENTIFIER
 		*/
 		enum SUBJECT {
-			NET_VERSION = 0x0101,
-			NET_VERSION_NEWER = 0x0102,
-			NET_PEER_LIST_GET = 0x0201,
-			NET_PEER_LIST_SEND = 0x0202,
-			NET_BAN_LIST_GET = 0x0203,
-			NET_BAN_LIST_SEND = 0x0204
+			NET_VERSION						= 0x0101,
+			NET_VERSION_NEWER				= 0x0102,
+			NET_NODEMODE					= 0x0103,
+			NET_NODE_LISTENING_PORT_GET		= 0x0104,
+			NET_NODE_LISTENING_PORT_SEND	= 0x0105,
+
+			NET_PEER_LIST_GET				= 0x0201,
+			NET_PEER_LIST_SEND				= 0x0202,
+			NET_BAN_LIST_GET				= 0x0203,
+			NET_BAN_LIST_SEND				= 0x0204,
+
+			NET_TESTNET						= 0x0301,
 		};
 
 							netMessage();
