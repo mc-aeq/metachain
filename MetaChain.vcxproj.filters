@@ -61,6 +61,24 @@
     <Filter Include="Quelldateien\IO\zip">
       <UniqueIdentifier>{e3f13dfc-a37f-4022-8a7f-b31efa522204}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Headerdateien\MCP">
+      <UniqueIdentifier>{77b413bf-cc64-4358-9ce9-298e31f9328a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Headerdateien\MCP\MCP01">
+      <UniqueIdentifier>{ebda960a-e926-41df-86a0-1f62113e0ee9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Headerdateien\MCP\MCP39">
+      <UniqueIdentifier>{c521d5c7-584e-4ab4-bde7-fb812df45e4b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Quelldateien\MCP">
+      <UniqueIdentifier>{b5022235-c3ac-42dc-8686-3a12de3d0b4f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Quelldateien\MCP\MCP01">
+      <UniqueIdentifier>{9de54bb2-9c86-4403-8d6c-787adb84415b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Quelldateien\MCP\MCP39">
+      <UniqueIdentifier>{47d40750-4962-415b-be6d-9239b2bce2ad}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="targetver.h">
@@ -216,6 +234,24 @@
     <ClInclude Include="src\io\zip\crypt.h">
       <Filter>Headerdateien\IO\zip</Filter>
     </ClInclude>
+    <ClInclude Include="src\MCP\MCP01\Account.h">
+      <Filter>Headerdateien\MCP\MCP01</Filter>
+    </ClInclude>
+    <ClInclude Include="src\MCP\MCP01\base58.h">
+      <Filter>Headerdateien\MCP\MCP01</Filter>
+    </ClInclude>
+    <ClInclude Include="src\MCP\MCP39\dictionairy.h">
+      <Filter>Headerdateien\MCP\MCP39</Filter>
+    </ClInclude>
+    <ClInclude Include="src\MCP\MCP39\Mnemonic.h">
+      <Filter>Headerdateien\MCP\MCP39</Filter>
+    </ClInclude>
+    <ClInclude Include="src\MCP\array_slice.h">
+      <Filter>Headerdateien\MCP</Filter>
+    </ClInclude>
+    <ClInclude Include="src\MCP\base16.h">
+      <Filter>Headerdateien\MCP</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="node.cpp">
@@ -322,6 +358,21 @@
     </ClCompile>
     <ClCompile Include="src\io\zip\zlib_zip.c">
       <Filter>Quelldateien\IO\zip</Filter>
+    </ClCompile>
+    <ClCompile Include="src\MCP\MCP01\Account.cpp">
+      <Filter>Quelldateien\MCP\MCP01</Filter>
+    </ClCompile>
+    <ClCompile Include="src\MCP\MCP01\base58.cpp">
+      <Filter>Quelldateien\MCP\MCP01</Filter>
+    </ClCompile>
+    <ClCompile Include="src\MCP\MCP39\dictionairy.cpp">
+      <Filter>Quelldateien\MCP\MCP39</Filter>
+    </ClCompile>
+    <ClCompile Include="src\MCP\MCP39\Mnemonic.cpp">
+      <Filter>Quelldateien\MCP\MCP39</Filter>
+    </ClCompile>
+    <ClCompile Include="src\MCP\base16.cpp">
+      <Filter>Quelldateien\MCP</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

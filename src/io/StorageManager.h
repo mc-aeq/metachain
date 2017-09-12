@@ -32,8 +32,10 @@ class StorageManager
 		// this won't store the full blocks, they are in raw format stored somewhere else.
 		// the type of dbEngine can be chosen in the ini
 		dbEngine							*m_pDB;
-		// the rdb specified here stores meta information
+
+		// meta db and convenience functions
 		rocksdb::DB							*m_pMetaDB;
+		inline bool							getMetaValueBool(std::string strKey, bool bDefault);
 
 		boost::filesystem::path				m_pathDataDirectory;
 		boost::filesystem::path				m_pathRawDirectory;
@@ -51,6 +53,8 @@ public:
 											~StorageManager();
 	bool									initialize(CSimpleIniA* iniFile);
 	void									writeRaw(unsigned int uiBlockNumber, unsigned int uiLength, void *raw);
+	uint16_t								getChainIdentifier(std::string strChainIdentifier);
+	std::string								getChainIdentifier(uint16_t uint16ChainIdentifier);
 };
 
 #ifndef _DEBUG

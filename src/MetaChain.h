@@ -14,6 +14,7 @@
 #include "network/NetworkManager.h"
 #include "io/StorageManager.h"
 #include "scheduler.h"
+#include "MCP/MCP01/Account.h"
 
 class NetworkManager;
 class StorageManager;
@@ -43,6 +44,7 @@ private:
 	// variables that define the functionality of this node
 	bool						m_bModeFN;
 	bool						m_bTestNet;
+	MCP01::Account				m_mcpWallet;
 
 	// constructor and operator
 								MetaChain();
@@ -61,6 +63,7 @@ public:
 	CScheduler*					getScheduler() { return &m_scheduler; };
 	boost::thread_group*		getThreadGroup() { return &m_threadGroup; };
 	NetworkManager*				getNetworkManager() { return m_pNetworkManager; };
+	StorageManager*				getStorageManager() { return m_pStorageManager; };
 	bool						isFN() { return m_bModeFN; };
 	bool						isTestNet() { return m_bTestNet; };
 };	

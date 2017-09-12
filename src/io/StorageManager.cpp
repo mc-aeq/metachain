@@ -93,20 +93,24 @@ bool StorageManager::initialize(CSimpleIniA* iniFile)
 		LOG_ERROR("Can't open the meta information database: " + dbStatus.ToString(), "SM");
 		return false;
 	}
-
-	// checking the status of the meta info db, is it new?
-	std::string strInitialized = "0";
-	dbStatus = m_pMetaDB->Get(rocksdb::ReadOptions(), "initialized", &strInitialized);
-	bool bNewNode = !boost::lexical_cast<bool>(strInitialized);
-
+	
 	// if it's a new meta info db, we set the initialized flag and add some basic stuff
-	if (bNewNode)
+	bool bInitialized = getMetaValueBool("initialized", false);
+	if (!bInitialized)
 	{
 		rocksdb::WriteBatch batch;
 		batch.Put("initialized", "1");
 		batch.Put(MC_HEIGHT, "0");
 		batch.Put(LAST_RAW_FILE, "0");
+		batch.Put("TestNet", MetaChain::getInstance().isTestNet() ? "1" : "0");
 		m_pMetaDB->Write(rocksdb::WriteOptions(), &batch);
+	}
+
+	// check whether the meta db matches our testnet value or not (we don't accept meta DBs without testnet flag for testnet use and vice versa)
+	if (getMetaValueBool("TestNet", false) != MetaChain::getInstance().isTestNet())
+	{
+		LOG_ERROR("MetaDB and node.ini configurations about TestNet don't match. Terminating for security reasons", "SM");
+		return false;
 	}
 
 	// creating the dbEngine instance
@@ -122,7 +126,7 @@ bool StorageManager::initialize(CSimpleIniA* iniFile)
 		LOG_ERROR("Unknown DB Engine: " + strDBEngine, "SM");
 		return false;
 	}
-	m_pDB->initialize(iniFile, &bNewNode);
+	m_pDB->initialize(iniFile, &bInitialized);
 
 	// check for the raw directory (this is only needed when we're in FN mode)
 	if (MetaChain::getInstance().isFN())
@@ -135,7 +139,7 @@ bool StorageManager::initialize(CSimpleIniA* iniFile)
 			// if it's a new node, we simply create the raw directory.
 			// if the node has already worked and has data stored in the db engine, then we have to quit since we're missing the raw files
 			// in this case either the user has to restore the raw files or delete the db files in order to sync new
-			if (bNewNode)
+			if (!bInitialized)
 			{
 				LOG_ERROR("Creating new raw directory since it's a new node", "SM");
 				if (!boost::filesystem::create_directory(m_pathRawDirectory))
@@ -235,4 +239,35 @@ void StorageManager::writeRaw(unsigned int uiBlockNumber, unsigned int uiLength,
 				m_uimRawFileSize = 0;
 		}
 	}
+}
+
+uint16_t StorageManager::getChainIdentifier(std::string strChainIdentifier)
+{
+	// todo: make lookup in meta db
+	if (strChainIdentifier == "MC")
+		return 0;
+	else if (strChainIdentifier == "TCT")
+		return 1;
+	else if (strChainIdentifier == "MINE")
+		return 2;
+	else
+		return 99;
+}
+
+std::string StorageManager::getChainIdentifier(uint16_t uint16ChainIdentifier)
+{
+	// todo: make lookup in meta db
+	return "";
+}
+
+bool StorageManager::getMetaValueBool(std::string strKey, bool bDefault )
+{
+	rocksdb::Status dbStatus;
+	std::string strTmp;
+	dbStatus = m_pMetaDB->Get(rocksdb::ReadOptions(), strKey, &strTmp);
+
+	if (dbStatus.ok())
+		return boost::lexical_cast<bool>(strTmp);
+	else
+		return bDefault;
 }

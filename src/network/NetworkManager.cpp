@@ -754,12 +754,17 @@ bool NetworkManager::ProcessMessage(netMessage msg, std::list< netPeers >::itera
 			memcpy(&bTestNet, msg.getData(), sizeof(bool));
 
 			if (MetaChain::getInstance().isTestNet() != bTestNet)
+			{
+				LOG("removing peer due to incompability with testnet", "NET");
 				return false;
+			}
 		}
 		break;
 
 		case netMessage::SUBJECT::NET_VERSION_NEWER:
 		{
+			LOG("new version info received", "NET");
+
 			// it looks like we have an older version than the connected node. We increment our ticker for future checking of newer versions
 			MetaChain::getInstance().incrementNewerVersionTicker();
 			// we dont need to disconnect the node since after this Message the node will automatically disconnect
