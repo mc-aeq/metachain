@@ -79,6 +79,12 @@
     <Filter Include="Quelldateien\MCP\MCP39">
       <UniqueIdentifier>{47d40750-4962-415b-be6d-9239b2bce2ad}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Headerdateien\MCP\MCP02">
+      <UniqueIdentifier>{2a708dba-2c8a-4bfa-b65f-2eed149bfa50}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Quelldateien\MCP\MCP02">
+      <UniqueIdentifier>{f01146ce-f013-43a0-9cc1-26d42b98fa4e}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="targetver.h">
@@ -252,6 +258,12 @@
     <ClInclude Include="src\MCP\base16.h">
       <Filter>Headerdateien\MCP</Filter>
     </ClInclude>
+    <ClInclude Include="src\MCP\MCP02\SubChainStruct.h">
+      <Filter>Headerdateien\MCP\MCP02</Filter>
+    </ClInclude>
+    <ClInclude Include="src\MCP\MCP02\SubChainManager.h">
+      <Filter>Headerdateien\MCP\MCP02</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="node.cpp">
@@ -373,6 +385,9 @@
     </ClCompile>
     <ClCompile Include="src\MCP\base16.cpp">
       <Filter>Quelldateien\MCP</Filter>
+    </ClCompile>
+    <ClCompile Include="src\MCP\MCP02\SubChainManager.cpp">
+      <Filter>Quelldateien\MCP\MCP02</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

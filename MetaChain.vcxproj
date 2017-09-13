@@ -183,6 +183,8 @@
     <ClInclude Include="src\MCP\base16.h" />
     <ClInclude Include="src\MCP\MCP01\Account.h" />
     <ClInclude Include="src\MCP\MCP01\base58.h" />
+    <ClInclude Include="src\MCP\MCP02\SubChainStruct.h" />
+    <ClInclude Include="src\MCP\MCP02\SubChainManager.h" />
     <ClInclude Include="src\MCP\MCP39\dictionairy.h" />
     <ClInclude Include="src\MCP\MCP39\Mnemonic.h" />
     <ClInclude Include="src\prevector.h" />
@@ -233,6 +235,7 @@
     <ClCompile Include="src\MCP\base16.cpp" />
     <ClCompile Include="src\MCP\MCP01\Account.cpp" />
     <ClCompile Include="src\MCP\MCP01\base58.cpp" />
+    <ClCompile Include="src\MCP\MCP02\SubChainManager.cpp" />
     <ClCompile Include="src\MCP\MCP39\dictionairy.cpp" />
     <ClCompile Include="src\MCP\MCP39\Mnemonic.cpp" />
     <ClCompile Include="src\random.cpp" />

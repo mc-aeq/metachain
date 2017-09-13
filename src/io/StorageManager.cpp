@@ -6,14 +6,18 @@
 
 #include "StorageManager.h"
 
+#include <iostream>
 #include <boost/algorithm/string.hpp>
 #include <boost/filesystem/operations.hpp>
+#include <boost/archive/binary_oarchive.hpp>
+#include <boost/archive/binary_iarchive.hpp>
 #include "rocksdb/db.h"
 #include "db/rdb.h"
 #include "db/mysql.h"
 
 StorageManager::StorageManager(MetaChain *mc)
-	: m_pMC(mc)
+	: m_pMC(mc),
+	m_pSubChainManager(NULL)
 {
 }
 
@@ -25,6 +29,10 @@ StorageManager::~StorageManager()
 	// close the raw output file
 	if( MetaChain::getInstance().isFN() )
 		m_streamRaw.close();
+
+	// delete the subchain manager
+	if(m_pSubChainManager)
+		delete m_pSubChainManager;
 
 	// close the meta info db
 	delete m_pMetaDB;
@@ -103,7 +111,19 @@ bool StorageManager::initialize(CSimpleIniA* iniFile)
 		batch.Put(MC_HEIGHT, "0");
 		batch.Put(LAST_RAW_FILE, "0");
 		batch.Put("TestNet", MetaChain::getInstance().isTestNet() ? "1" : "0");
-		m_pMetaDB->Write(rocksdb::WriteOptions(), &batch);
+		m_pMetaDB->Write(rocksdb::WriteOptions(), &batch);		
+	}	
+
+	// initialize the subchain manager & serializing it into our metaDB
+	LOG("Initializing SubChainManager", "SM");
+	if( bInitialized )
+		// get our subchains
+		MetaDeserialize("SCM", &m_pSubChainManager);
+	else
+	{
+		m_pSubChainManager = new MCP02::SubChainManager();
+		m_pSubChainManager->init();
+		MetaSerialize("SCM", m_pSubChainManager);
 	}
 
 	// check whether the meta db matches our testnet value or not (we don't accept meta DBs without testnet flag for testnet use and vice versa)
