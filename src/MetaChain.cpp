@@ -87,6 +87,30 @@ bool MetaChain::initialize(CSimpleIniA* iniFile, boost::filesystem::path pathExe
 	CScheduler::Function serviceLoop = boost::bind(&CScheduler::serviceQueue, &m_scheduler);
 	m_threadGroup.create_thread(boost::bind(&TraceThread<CScheduler::Function>, "scheduler", serviceLoop));
 
+	// get the connected wallet address for this node
+	m_mcpWallet.setWalletAddress( iniFile->GetValue("general", "wallet") );
+	if (m_mcpWallet.verifyWalletAddress())
+	{
+		// check if testnet flag from ini and from wallet address match
+		if (m_bTestNet != m_mcpWallet.isTestNet())
+		{
+			m_mcpWallet = MCP01::Account();
+			LOG_ERROR("Wallet address doesn't match TestNet configuration, removing wallet address", "MC");
+		}
+		else if (!m_mcpWallet.isBaseAddress())
+		{
+			m_mcpWallet = MCP01::Account();
+			LOG_ERROR("Wallet address is not a base address.", "MC");
+		}
+		else
+			LOG("Wallet address " + m_mcpWallet.getWalletAddress() + " successfully connected to node", "MC");
+	}
+	else
+	{
+		m_mcpWallet = MCP01::Account();
+		LOG_ERROR("No valid wallet address connected to node", "MC");
+	}
+
 	// create a new network manager
 	m_pNetworkManager = new NetworkManager(this);
 
