@@ -44,6 +44,7 @@ class StorageManager
 		template<class obj>
 		inline void							MetaSerialize(std::string strKey, obj *ptr)
 		{
+			LOCK(ptr->csAccess);
 			std::stringstream stream(std::ios_base::in | std::ios_base::out | std::ios_base::binary);
 			boost::archive::binary_oarchive oa(stream);
 			oa << ptr;
@@ -93,8 +94,8 @@ public:
 											~StorageManager();
 	bool									initialize(CSimpleIniA* iniFile);
 	void									writeRaw(unsigned int uiBlockNumber, unsigned int uiLength, void *raw);
-	uint16_t								getChainIdentifier(std::string strChainIdentifier);
-	std::string								getChainIdentifier(uint16_t uint16ChainIdentifier);
+	uint16_t								getChainIdentifier(std::string strChainIdentifier) { return m_pSubChainManager->getChainIdentifier(strChainIdentifier); };
+	std::string								getChainIdentifier(uint16_t uint16ChainIdentifier) { return m_pSubChainManager->getChainIdentifier(uint16ChainIdentifier); };
 };
 
 #ifndef _DEBUG

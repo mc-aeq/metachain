@@ -261,25 +261,6 @@ void StorageManager::writeRaw(unsigned int uiBlockNumber, unsigned int uiLength,
 	}
 }
 
-uint16_t StorageManager::getChainIdentifier(std::string strChainIdentifier)
-{
-	// todo: make lookup in meta db
-	if (strChainIdentifier == "MC")
-		return 0;
-	else if (strChainIdentifier == "TCT")
-		return 1;
-	else if (strChainIdentifier == "MINE")
-		return 2;
-	else
-		return 99;
-}
-
-std::string StorageManager::getChainIdentifier(uint16_t uint16ChainIdentifier)
-{
-	// todo: make lookup in meta db
-	return "";
-}
-
 bool StorageManager::getMetaValueBool(std::string strKey, bool bDefault )
 {
 	rocksdb::Status dbStatus;
