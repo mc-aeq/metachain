@@ -5,6 +5,7 @@
 **********************************************************************/
 
 #include "SubChainManager.h"
+#include "../../MetaChain.h"
 #include "../../logger.h"
 
 namespace MCP02
@@ -15,20 +16,20 @@ namespace MCP02
 
 	SubChainManager::~SubChainManager()
 	{
-		LOCK(csAccess);
 	}
 
 	void SubChainManager::init()
 	{
 		// per default MC is loaded - these identifiers are always the same!
 		LOG("Loading default MetaChain identifier", "SCM");
-		LOCK(csAccess);
 		addSubChain(CI_DEFAULT_MC_STRING, CI_DEFAULT_MC_UINT16);
 	}
 
 	void SubChainManager::addSubChain(std::string strChainName, uint16_t uint16ChainIdentifier)
 	{
-		LOCK(csAccess);
+		// multithreading locking
+		LOCK(MetaChain::getInstance().getStorageManager()->csSubChainManager);
+
 		SubChainStruct tmp;
 		tmp.uint16ChainIdentifier = uint16ChainIdentifier;
 		strncpy(tmp.caChainName, strChainName.c_str(), MAX_CHAINNAME_LENGTH);
@@ -38,10 +39,12 @@ namespace MCP02
 
 	uint16_t SubChainManager::getChainIdentifier(std::string strChainName)
 	{
+		// multithreading locking
+		LOCK(MetaChain::getInstance().getStorageManager()->csSubChainManager);
+
 		char cBuffer[MAX_CHAINNAME_LENGTH];
 		strncpy(cBuffer, strChainName.c_str(), MAX_CHAINNAME_LENGTH);
 
-		LOCK(csAccess);
 		for (std::vector< SubChainStruct>::iterator it = m_vecSubChains.begin(); it != m_vecSubChains.end(); it++)
 		{
 			if (memcmp(cBuffer, it->caChainName, MAX_CHAINNAME_LENGTH) == 0)
@@ -53,7 +56,9 @@ namespace MCP02
 
 	std::string	SubChainManager::getChainIdentifier(uint16_t uint16tChainIdentifier)
 	{
-		LOCK(csAccess);
+		// multithreading locking
+		LOCK(MetaChain::getInstance().getStorageManager()->csSubChainManager);
+
 		for (std::vector< SubChainStruct>::iterator it = m_vecSubChains.begin(); it != m_vecSubChains.end(); it++)
 		{
 			if (it->uint16ChainIdentifier == uint16tChainIdentifier)

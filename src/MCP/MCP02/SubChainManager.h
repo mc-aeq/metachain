@@ -16,7 +16,6 @@
 #include <boost/serialization/version.hpp>
 #include <boost/serialization/split_member.hpp>
 #include "SubChainStruct.h"
-#include "../../cCriticalSection.h"
 
 namespace MCP02
 {
@@ -55,9 +54,6 @@ namespace MCP02
 			void									addSubChain(std::string strChainName, uint16_t uint16ChainIdentifier);
 			uint16_t								getChainIdentifier(std::string strChainName);
 			std::string								getChainIdentifier(uint16_t uint16tChainIdentifier);
-
-			// critical locking
-			cCriticalSection						csAccess;
 	};	
 }
 

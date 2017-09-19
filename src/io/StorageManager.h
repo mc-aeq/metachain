@@ -42,9 +42,9 @@ class StorageManager
 		inline bool							getMetaValueBool(std::string strKey, bool bDefault);
 
 		template<class obj>
-		inline void							MetaSerialize(std::string strKey, obj *ptr)
+		void							MetaSerialize(std::string strKey, obj *ptr, cCriticalSection *cs)
 		{
-			LOCK(ptr->csAccess);
+			LOCK(cs);
 			std::stringstream stream(std::ios_base::in | std::ios_base::out | std::ios_base::binary);
 			boost::archive::binary_oarchive oa(stream);
 			oa << ptr;
@@ -57,18 +57,19 @@ class StorageManager
 		};
 
 		template<class obj>
-		void							MetaDeserialize(std::string strKey, obj *ptr)
+		void							MetaDeserialize(std::string strKey, obj *ptr, cCriticalSection *cs)
 		{
+			LOCK(cs);
+			// we delete the object so that the memory is freed
 			if (*ptr)
-			{
 				delete *ptr;
-				*ptr = NULL;
-			}
+
 			std::string strTmp;
 			if (m_pMetaDB->Get(rocksdb::ReadOptions(), strKey, &strTmp).ok())
 			{
 				std::stringstream stream(strTmp);
 				boost::archive::binary_iarchive ia(stream);
+				// the >> operator creates a new object and the double pointer updates the reference
 				ia >> *ptr;
 #ifdef _DEBUG
 				LOG_DEBUG("Deserialized " + strKey, "SM");
@@ -96,6 +97,9 @@ public:
 	void									writeRaw(unsigned int uiBlockNumber, unsigned int uiLength, void *raw);
 	uint16_t								getChainIdentifier(std::string strChainIdentifier) { return m_pSubChainManager->getChainIdentifier(strChainIdentifier); };
 	std::string								getChainIdentifier(uint16_t uint16ChainIdentifier) { return m_pSubChainManager->getChainIdentifier(uint16ChainIdentifier); };
+
+	// critical section for the subchain manager
+	cCriticalSection						csSubChainManager;
 };
 
 #ifndef _DEBUG

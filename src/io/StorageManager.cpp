@@ -27,7 +27,7 @@ StorageManager::~StorageManager()
 	remove((m_pathDataDirectory /= LOCK_FILE).string().c_str());
 
 	// close the raw output file
-	if( MetaChain::getInstance().isFN() )
+	if(m_pMC->isFN() )
 		m_streamRaw.close();
 
 	// delete the subchain manager
@@ -110,7 +110,7 @@ bool StorageManager::initialize(CSimpleIniA* iniFile)
 		batch.Put("initialized", "1");
 		batch.Put(MC_HEIGHT, "0");
 		batch.Put(LAST_RAW_FILE, "0");
-		batch.Put("TestNet", MetaChain::getInstance().isTestNet() ? "1" : "0");
+		batch.Put("TestNet", m_pMC->isTestNet() ? "1" : "0");
 		m_pMetaDB->Write(rocksdb::WriteOptions(), &batch);		
 	}	
 
@@ -118,16 +118,16 @@ bool StorageManager::initialize(CSimpleIniA* iniFile)
 	LOG("Initializing SubChainManager", "SM");
 	if( bInitialized )
 		// get our subchains
-		MetaDeserialize("SCM", &m_pSubChainManager);
+		MetaDeserialize("SCM", &m_pSubChainManager, &csSubChainManager);
 	else
 	{
 		m_pSubChainManager = new MCP02::SubChainManager();
 		m_pSubChainManager->init();
-		MetaSerialize("SCM", m_pSubChainManager);
+		MetaSerialize("SCM", m_pSubChainManager, &csSubChainManager);
 	}
 
 	// check whether the meta db matches our testnet value or not (we don't accept meta DBs without testnet flag for testnet use and vice versa)
-	if (getMetaValueBool("TestNet", false) != MetaChain::getInstance().isTestNet())
+	if (getMetaValueBool("TestNet", false) != m_pMC->isTestNet())
 	{
 		LOG_ERROR("MetaDB and node.ini configurations about TestNet don't match. Terminating for security reasons", "SM");
 		return false;
@@ -149,7 +149,7 @@ bool StorageManager::initialize(CSimpleIniA* iniFile)
 	m_pDB->initialize(iniFile, &bInitialized);
 
 	// check for the raw directory (this is only needed when we're in FN mode)
-	if (MetaChain::getInstance().isFN())
+	if (m_pMC->isFN())
 	{
 		m_pathRawDirectory = m_pathDataDirectory / iniFile->GetValue("data", "raw_dir", "raw");
 		if(!boost::filesystem::exists(m_pathRawDirectory) || !boost::filesystem::is_directory(m_pathRawDirectory))
@@ -226,7 +226,7 @@ bool StorageManager::openRawFile()
 
 void StorageManager::writeRaw(unsigned int uiBlockNumber, unsigned int uiLength, void *raw)
 {
-	if (MetaChain::getInstance().isFN())
+	if (m_pMC->isFN())
 	{
 		// write the output in the file
 		{
