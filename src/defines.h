@@ -76,6 +76,7 @@ const uint32_t g_cuint32tVersion = 1;
 #define META_DB_FOLDER "meta"
 #define LAST_RAW_FILE "last.raw.file"
 #define MC_HEIGHT "mc.height"
+#define MC_NEXT_CI "mc.next_ci"
 
 // autoupdate defines
 #define AU_VERSION_FILE "latest.version"

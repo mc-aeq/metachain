@@ -103,12 +103,13 @@ bool StorageManager::initialize(CSimpleIniA* iniFile)
 	}
 	
 	// if it's a new meta info db, we set the initialized flag and add some basic stuff
-	bool bInitialized = getMetaValueBool("initialized", false);
+	bool bInitialized = getMetaValue("initialized", false);
 	if (!bInitialized)
 	{
 		rocksdb::WriteBatch batch;
 		batch.Put("initialized", "1");
 		batch.Put(MC_HEIGHT, "0");
+		batch.Put(MC_NEXT_CI, "0");
 		batch.Put(LAST_RAW_FILE, "0");
 		batch.Put("TestNet", m_pMC->isTestNet() ? "1" : "0");
 		m_pMetaDB->Write(rocksdb::WriteOptions(), &batch);		
@@ -122,12 +123,17 @@ bool StorageManager::initialize(CSimpleIniA* iniFile)
 	else
 	{
 		m_pSubChainManager = new MCP02::SubChainManager();
-		m_pSubChainManager->init();
+		if (!m_pSubChainManager->init())
+		{
+			LOG_ERROR("SCM didn't initialize correctly. Terminating for security reasons", "SM");
+			return false;
+		}
 		MetaSerialize("SCM", m_pSubChainManager, &csSubChainManager);
 	}
+	m_pSubChainManager->initStandardPoP();
 
 	// check whether the meta db matches our testnet value or not (we don't accept meta DBs without testnet flag for testnet use and vice versa)
-	if (getMetaValueBool("TestNet", false) != m_pMC->isTestNet())
+	if (getMetaValue("TestNet", false) != m_pMC->isTestNet())
 	{
 		LOG_ERROR("MetaDB and node.ini configurations about TestNet don't match. Terminating for security reasons", "SM");
 		return false;
@@ -197,9 +203,7 @@ bool StorageManager::openRawFile()
 	}
 
 	// get the raw file counter from the meta info db
-	std::string strFileCounter;
-	m_pMetaDB->Get(rocksdb::ReadOptions(), LAST_RAW_FILE, &strFileCounter);
-	unsigned int uiRawFileCounter = boost::lexical_cast<unsigned int>(strFileCounter);
+	unsigned int uiRawFileCounter = getMetaValue(LAST_RAW_FILE, (unsigned int)0);
 
 	// open our fstream for raw output
 	{
@@ -250,10 +254,7 @@ void StorageManager::writeRaw(unsigned int uiBlockNumber, unsigned int uiLength,
 			LOCK(m_csRaw);
 
 			// increment raw file counter
-			std::string strFileCounter;
-			m_pMetaDB->Get(rocksdb::ReadOptions(), LAST_RAW_FILE, &strFileCounter);
-			unsigned int uiRawFileCounter = boost::lexical_cast<unsigned int>(strFileCounter) + 1;
-			m_pMetaDB->Put(rocksdb::WriteOptions(), LAST_RAW_FILE, boost::lexical_cast<std::string>(uiRawFileCounter));
+			incMetaValue( LAST_RAW_FILE, (unsigned int)0 );
 
 			if (openRawFile())
 				m_uimRawFileSize = 0;
@@ -261,14 +262,13 @@ void StorageManager::writeRaw(unsigned int uiBlockNumber, unsigned int uiLength,
 	}
 }
 
-bool StorageManager::getMetaValueBool(std::string strKey, bool bDefault )
+uint16_t StorageManager::getChainIdentifier(std::string strChainIdentifier)
 {
-	rocksdb::Status dbStatus;
-	std::string strTmp;
-	dbStatus = m_pMetaDB->Get(rocksdb::ReadOptions(), strKey, &strTmp);
+	return m_pSubChainManager->getChainIdentifier(strChainIdentifier);
+};
 
-	if (dbStatus.ok())
-		return boost::lexical_cast<bool>(strTmp);
-	else
-		return bDefault;
-}
+
+std::string	StorageManager::getChainIdentifier(uint16_t uint16ChainIdentifier)
+{
+	return m_pSubChainManager->getChainIdentifier(uint16ChainIdentifier);
+};

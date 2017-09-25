@@ -18,7 +18,9 @@
 #include "db/dbEngine.h"
 #include "../MCP/MCP02/SubChainManager.h"
 
+// forward decl
 class MetaChain;
+namespace MCP02 { class SubChainManager; };
 
 /*
 this class handles the storage of the blocks and their metadata.
@@ -28,21 +30,20 @@ the functionality of this class differs in mode FN and CL, it also instances the
 class StorageManager
 {
 	private:
-		MetaChain							*m_pMC;
+		MetaChain								*m_pMC;
 		// the dbEngine defines where block informations will be stored.
 		// this won't store the full blocks, they are in raw format stored somewhere else.
 		// the type of dbEngine can be chosen in the ini
-		dbEngine							*m_pDB;
+		dbEngine								*m_pDB;
 
 		// subchains in the metachains with their functions
-		MCP02::SubChainManager				*m_pSubChainManager;
+		MCP02::SubChainManager					*m_pSubChainManager;
 
 		// meta db and convenience functions
-		rocksdb::DB							*m_pMetaDB;
-		inline bool							getMetaValueBool(std::string strKey, bool bDefault);
+		rocksdb::DB								*m_pMetaDB;
 
 		template<class obj>
-		void							MetaSerialize(std::string strKey, obj *ptr, cCriticalSection *cs)
+		void									MetaSerialize(std::string strKey, obj *ptr, cCriticalSection *cs)
 		{
 			LOCK(cs);
 			std::stringstream stream(std::ios_base::in | std::ios_base::out | std::ios_base::binary);
@@ -57,7 +58,7 @@ class StorageManager
 		};
 
 		template<class obj>
-		void							MetaDeserialize(std::string strKey, obj *ptr, cCriticalSection *cs)
+		void									MetaDeserialize(std::string strKey, obj *ptr, cCriticalSection *cs)
 		{
 			LOCK(cs);
 			// we delete the object so that the memory is freed
@@ -79,27 +80,73 @@ class StorageManager
 				LOG_ERROR("Unable to deserialize " + strKey, "SM");
 		};
 
-		boost::filesystem::path				m_pathDataDirectory;
-		boost::filesystem::path				m_pathRawDirectory;
+		boost::filesystem::path					m_pathDataDirectory;
+		boost::filesystem::path					m_pathRawDirectory;
 
 		// functions and variables for raw file output
-		cCriticalSection					m_csRaw;
-		std::ofstream						m_streamRaw;
-		boost::filesystem::path				m_fileRaw;
-		uintmax_t							m_uimRawFileSize;
-		uintmax_t							m_uimRawFileSizeMax;
-		bool								openRawFile();
+		cCriticalSection						m_csRaw;
+		std::ofstream							m_streamRaw;
+		boost::filesystem::path					m_fileRaw;
+		uintmax_t								m_uimRawFileSize;
+		uintmax_t								m_uimRawFileSizeMax;
+		bool									openRawFile();
 
-public:
-											StorageManager(MetaChain *mc);
-											~StorageManager();
-	bool									initialize(CSimpleIniA* iniFile);
-	void									writeRaw(unsigned int uiBlockNumber, unsigned int uiLength, void *raw);
-	uint16_t								getChainIdentifier(std::string strChainIdentifier) { return m_pSubChainManager->getChainIdentifier(strChainIdentifier); };
-	std::string								getChainIdentifier(uint16_t uint16ChainIdentifier) { return m_pSubChainManager->getChainIdentifier(uint16ChainIdentifier); };
+	public:
+												StorageManager(MetaChain *mc);
+												~StorageManager();
+		bool									initialize(CSimpleIniA* iniFile);
+		void									writeRaw(unsigned int uiBlockNumber, unsigned int uiLength, void *raw);
 
-	// critical section for the subchain manager
-	cCriticalSection						csSubChainManager;
+		// simple getter and setter
+		uint16_t								getChainIdentifier(std::string strChainIdentifier);
+		std::string								getChainIdentifier(uint16_t uint16ChainIdentifier);
+		MCP02::SubChainManager*					getSubChainManager() { return m_pSubChainManager; };
+
+		// meta db getter template
+		template<typename T>
+		T										getMetaValue(std::string strKey, T tDefault)
+		{
+			rocksdb::Status dbStatus;
+			std::string strTmp;
+			dbStatus = m_pMetaDB->Get(rocksdb::ReadOptions(), strKey, &strTmp);
+
+			if (dbStatus.ok())
+				return boost::lexical_cast<T>(strTmp);
+			else
+				return tDefault;
+		}
+
+		// meta db inc template for arithmetic types only!
+		template<typename T,
+				 typename = typename std::enable_if<std::is_arithmetic<T>::value, T>::type >
+		bool									incMetaValue(std::string strKey, T tDefault, T* tpOldValue = NULL, T tInc = 1)
+		{
+			T val = getMetaValue(strKey, tDefault);
+
+			if (tpOldValue)
+				*tpOldValue = val;
+
+			val += tInc;
+
+			return setMetaValue(strKey, &val);
+		}
+
+		// meta db setter template
+		template<typename T>
+		bool									setMetaValue(std::string strKey, T* value)
+		{
+			rocksdb::Status dbStatus;
+			dbStatus = m_pMetaDB->Put(rocksdb::WriteOptions(), strKey, boost::lexical_cast<std::string>(*value));
+
+			if (dbStatus.ok())
+				return true;
+			else
+				return false;
+		}
+
+
+		// critical section for the subchain manager
+		cCriticalSection						csSubChainManager;
 };
 
 #ifndef _DEBUG

@@ -47,6 +47,7 @@ class netMessage
 		/*
 		* we use a hex coding scheme to categorize our actions for easier splitting into groups.
 		* the following binary scheme will be used globally and updated every single time we add new categories and subjects
+		* the first bit in the category is reserved for special communications within the SC modules. To use special communications set the first bit to 1
 		*
 		* 0 0 0 0		0 0 0 0		0 0 0 0		0 0 0 0
 		*	8bit CATEGORY		 |	8bit SUBJECT

@@ -85,6 +85,18 @@
     <Filter Include="Quelldateien\MCP\MCP02">
       <UniqueIdentifier>{f01146ce-f013-43a0-9cc1-26d42b98fa4e}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Headerdateien\MCP\MCP03">
+      <UniqueIdentifier>{ca40f2ff-1d80-4d3c-af79-4e5b75955fe9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Quelldateien\MCP\MCP03">
+      <UniqueIdentifier>{3fb5c1ae-1600-4be0-a264-22d9849f3a23}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Headerdateien\MCP\MCP04">
+      <UniqueIdentifier>{bada4696-1a63-4c54-9060-b1ef6dd66306}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Quelldateien\MCP\MCP04">
+      <UniqueIdentifier>{653e8546-0c7a-4d47-948d-a313f64ea88c}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="targetver.h">
@@ -264,6 +276,36 @@
     <ClInclude Include="src\MCP\MCP02\SubChainManager.h">
       <Filter>Headerdateien\MCP\MCP02</Filter>
     </ClInclude>
+    <ClInclude Include="src\MCP\MCP03\Block.h">
+      <Filter>Headerdateien\MCP\MCP03</Filter>
+    </ClInclude>
+    <ClInclude Include="src\MCP\MCP03\Transaction.h">
+      <Filter>Headerdateien\MCP\MCP03</Filter>
+    </ClInclude>
+    <ClInclude Include="src\MCP\MCP03\txIn.h">
+      <Filter>Headerdateien\MCP\MCP03</Filter>
+    </ClInclude>
+    <ClInclude Include="src\MCP\MCP03\txOut.h">
+      <Filter>Headerdateien\MCP\MCP03</Filter>
+    </ClInclude>
+    <ClInclude Include="src\MCP\MCP03\txOutRef.h">
+      <Filter>Headerdateien\MCP\MCP03</Filter>
+    </ClInclude>
+    <ClInclude Include="src\MCP\MCP04\ChainInterface.h">
+      <Filter>Headerdateien\MCP\MCP04</Filter>
+    </ClInclude>
+    <ClInclude Include="src\MCP\MCP04\PoMC.h">
+      <Filter>Headerdateien\MCP\MCP04</Filter>
+    </ClInclude>
+    <ClInclude Include="src\MCP\MCP04\PoT.h">
+      <Filter>Headerdateien\MCP\MCP04</Filter>
+    </ClInclude>
+    <ClInclude Include="src\MCP\MCP04\PoS.h">
+      <Filter>Headerdateien\MCP\MCP04</Filter>
+    </ClInclude>
+    <ClInclude Include="src\MCP\MCP04\stub.h">
+      <Filter>Headerdateien\MCP\MCP04</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="node.cpp">
@@ -388,6 +430,30 @@
     </ClCompile>
     <ClCompile Include="src\MCP\MCP02\SubChainManager.cpp">
       <Filter>Quelldateien\MCP\MCP02</Filter>
+    </ClCompile>
+    <ClCompile Include="src\MCP\MCP03\Block.cpp">
+      <Filter>Quelldateien\MCP\MCP03</Filter>
+    </ClCompile>
+    <ClCompile Include="src\MCP\MCP03\Transaction.cpp">
+      <Filter>Quelldateien\MCP\MCP03</Filter>
+    </ClCompile>
+    <ClCompile Include="src\MCP\MCP03\txOut.cpp">
+      <Filter>Quelldateien\MCP\MCP03</Filter>
+    </ClCompile>
+    <ClCompile Include="src\MCP\MCP03\txIn.cpp">
+      <Filter>Quelldateien\MCP\MCP03</Filter>
+    </ClCompile>
+    <ClCompile Include="src\MCP\MCP03\txOutRef.cpp">
+      <Filter>Quelldateien\MCP\MCP03</Filter>
+    </ClCompile>
+    <ClCompile Include="src\MCP\MCP04\PoMC.cpp">
+      <Filter>Quelldateien\MCP\MCP04</Filter>
+    </ClCompile>
+    <ClCompile Include="src\MCP\MCP04\PoT.cpp">
+      <Filter>Quelldateien\MCP\MCP04</Filter>
+    </ClCompile>
+    <ClCompile Include="src\MCP\MCP04\PoS.cpp">
+      <Filter>Quelldateien\MCP\MCP04</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
