@@ -11,6 +11,11 @@
 
 #include <cstdint>
 #include <vector>
+#include <memory>
+#include <boost/serialization/access.hpp>
+#include <boost/serialization/version.hpp>
+#include <boost/serialization/vector.hpp>
+#include <boost/serialization/shared_ptr.hpp>
 #include "../../uint256.h"
 #include "Transaction.h"
 
@@ -22,27 +27,43 @@ namespace MCP03
 	class Block
 	{
 		private:
-			// general settings for this block
-			uint16_t								m_uint16tVersion;
-			uint256									m_hashPrevBlock;
-			uint256									m_hashMerkleRoot;
-			uint32_t								m_nTime;
-			uint32_t								m_uint32tByte;
+			// required to have serialization overrides
+			friend class ::boost::serialization::access;
 
-			// the tx inside this block
-			std::vector< Transaction >				m_vecTx;
+			// serialization
+			template<class Archive>
+			void												serialize(Archive &ar, const unsigned int version) const
+			{
+				// note: version is always stored last
+				if (version == 1)
+					ar << uint16tVersion << hashPrevBlock << hashMerkleRoot << hash << nTime << uint32tByte << vecTx;
+			}
 
 		public:
-													Block();
-													~Block();
+																Block(uint16_t Version = CURRENT_BLOCK_VERSION);
+																~Block();
+
+			// general settings for this block
+			uint16_t											uint16tVersion;
+			uint256												hashPrevBlock;
+			uint256												hashMerkleRoot;
+			uint256												hash;
+			uint32_t											nTime;
+			uint32_t											uint32tByte;
+
+			// the tx inside this block
+			std::vector< std::shared_ptr<Transaction> >			vecTx;
+
+			virtual void										calcMerkleRoot();
+			virtual void										calcSize();
+			virtual void										calcHash();
+			virtual void										calcAll() { calcSize(); calcMerkleRoot(); calcHash(); };
 
 			// simple getter and setter
-			bool									isEmpty() { return (m_uint32tByte == 0); };
-			uint16_t								getVersion() { return m_uint16tVersion; };
-			uint32_t								getTime() { return m_uint32tByte; };
-			std::string								toString();
-			uint256									getHash();
+			virtual bool										isEmpty() { return (uint32tByte == 0); };
+			virtual std::string									toString();
 	};
 }
 
+BOOST_CLASS_VERSION(MCP03::Block, CURRENT_BLOCK_VERSION)
 #endif

@@ -10,6 +10,7 @@
 
 #include <vector>
 #include <string>
+#include <boost/serialization/access.hpp>
 
 #include "crypto/common.h"
 
@@ -90,16 +91,13 @@ public:
 			((uint64_t)ptr[7]) << 56;
 	}
 
-	template<typename Stream>
-	void Serialize(Stream& s) const
+	// serialization
+	template<class Archive>
+	void serialize(Archive &ar, const unsigned int version) const
 	{
-		s.write((char*)data, sizeof(data));
-	}
-
-	template<typename Stream>
-	void Unserialize(Stream& s)
-	{
-		s.read((char*)data, sizeof(data));
+		// note: version is always stored last
+		if (version == 1)
+			ar << data;
 	}
 };
 

@@ -11,6 +11,9 @@
 
 #include <cstdint>
 #include <vector>
+#include <boost/serialization/access.hpp>
+#include <boost/serialization/version.hpp>
+#include <boost/serialization/vector.hpp>
 #include "../../uint256.h"
 #include "txIn.h"
 #include "txOut.h"
@@ -24,28 +27,42 @@ namespace MCP03
 
 	class Transaction
 	{
-		public:
-										Transaction();
-										~Transaction();
+		private:
+			// required to have serialization overrides
+			friend class ::boost::serialization::access;
 
-			// general settings for this block
-			uint16_t					m_uint16tVersion;
-			uint32_t					m_uint32tLockTime;
+			// serialization
+			template<class Archive>
+			void												serialize(Archive &ar, const unsigned int version) const
+			{
+				// note: version is always stored last
+				if (version == 1)
+					ar << uint16tVersion << uint32tLockTime << vecIn << vecOut;
+			}
+
+		public:
+												Transaction(uint16_t Version = CURRENT_TRANSACTION_VERSION);
+												~Transaction();
+
+			// general settings for this transaction
+			uint16_t							uint16tVersion;
+			uint32_t							uint32tLockTime;
 			
 			// in and outgoing transactions
-			std::vector<txIn>			m_vecIn;
-			std::vector<txOut>			m_vecOut;			
+			std::vector<txIn>					vecIn;
+			std::vector<txOut>					vecOut;			
 
 			// simple getter and setter
-			uint256						getHash();
-			bool						isEmpty() { return m_vecIn.empty() && m_vecOut.empty(); };
-			uint64_t					getValueOut();
-			uint32_t					getTotalSize();
-			bool						isCoinBase() { return (m_vecIn.size() == 1 && m_vecIn[0].getTxOutRef()->isEmpty()); };
-			std::string					toString();
+			virtual uint256						getHash();
+			virtual bool						isEmpty() { return vecIn.empty() && vecOut.empty(); };
+			virtual uint64_t					getValueOut();
+			virtual uint32_t					getTotalSize();
+			virtual bool						isCoinBase() { return (vecIn.size() == 1 && vecIn[0].txPrev->isEmpty()); };
+			virtual std::string					toString();
 	};
 
 	inline bool validCoinRange(const uint64_t& nValue) { return (nValue >= 0 && nValue <= MAX_AMOUNT_COIN); }
 }
 
+BOOST_CLASS_VERSION(MCP03::Transaction, CURRENT_TRANSACTION_VERSION)
 #endif

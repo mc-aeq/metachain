@@ -47,7 +47,7 @@ class StorageManager
 		{
 			LOCK(cs);
 			std::stringstream stream(std::ios_base::in | std::ios_base::out | std::ios_base::binary);
-			boost::archive::binary_oarchive oa(stream);
+			boost::archive::binary_oarchive oa(stream, boost::archive::no_header | boost::archive::no_tracking);
 			oa << ptr;
 			if (!m_pMetaDB->Put(rocksdb::WriteOptions(), strKey, rocksdb::Slice(stream.str().data(), stream.tellp())).ok())
 				LOG_ERROR("Unable to serialize " + strKey, "SM");
@@ -69,7 +69,7 @@ class StorageManager
 			if (m_pMetaDB->Get(rocksdb::ReadOptions(), strKey, &strTmp).ok())
 			{
 				std::stringstream stream(strTmp);
-				boost::archive::binary_iarchive ia(stream);
+				boost::archive::binary_iarchive ia(stream, boost::archive::no_header | boost::archive::no_tracking);
 				// the >> operator creates a new object and the double pointer updates the reference
 				ia >> *ptr;
 #ifdef _DEBUG

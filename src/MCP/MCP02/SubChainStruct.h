@@ -10,17 +10,17 @@
 #define __MCP02_SUBCHAINSTRUCT_H__ 1
 
 #include <string>
+#include "../../defines.h"
 
 namespace MCP02
 {
-#define MAX_CHAINNAME_LENGTH 4
-
 	// this is the struct that we store in our vector with information about the subchains
 	struct SubChainStruct
 	{
 		uint16_t		uint16ChainIdentifier;
 		char			caChainName[MAX_CHAINNAME_LENGTH];
 
+		// serialization
 		template <typename Archive>
 		void serialize(Archive& ar, const unsigned int version)
 		{

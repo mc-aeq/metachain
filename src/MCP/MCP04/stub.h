@@ -10,6 +10,8 @@
 #define __MCP04_STUB_H__ 1
 
 #include "ChainInterface.h"
+#include "../MCP03/Transaction.h"
+#include "../MCP03/Block.h"
 
 namespace MCP04
 {
@@ -24,7 +26,7 @@ namespace MCP04
 			static const std::string			m_strName;
 
 		public:
-			static bool							registerFactory() { return MetaChain::getInstance().getStorageManager()->getSubChainManager()->registerFactory(m_strName, &createInstance); };
+			static bool							registerFactory() { return ::MetaChain::getInstance().getStorageManager()->getSubChainManager()->registerFactory(m_strName, &createInstance); };
 			static ChainInterface				*createInstance() { return new STUB(); };
 	};
 }

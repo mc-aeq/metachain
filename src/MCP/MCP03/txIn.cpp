@@ -14,6 +14,12 @@ namespace MCP03
 
 	}
 
+	txIn::txIn(std::shared_ptr<txOutRef> ref, std::string sig)
+	{
+		strSignature = sig;
+		txPrev = ref;
+	}
+
 	txIn::~txIn()
 	{
 
@@ -23,12 +29,16 @@ namespace MCP03
 	{
 		std::string str;
 		str += "txIn(";
-		str += m_txPrev.toString();
 
-		if (m_txPrev.isEmpty())
-			str += strprintf(", coinbase %s", m_strSignature);
-		else
-			str += strprintf(", Signature=%s", m_strSignature);
+		if (txPrev)
+		{
+			str += txPrev->toString();
+
+			if (txPrev->isEmpty())
+				str += strprintf(", coinbase %s", strSignature);
+			else
+				str += strprintf(", Signature=%s", strSignature);
+		}
 
 		str += ")";
 		return str;
@@ -36,8 +46,8 @@ namespace MCP03
 
 	bool txIn::operator==(const txIn& ref)
 	{
-		return (m_txPrev == ref.m_txPrev &&
-			m_strSignature == ref.m_strSignature);
+		return (txPrev == ref.txPrev &&
+			strSignature == ref.strSignature);
 	}
 
 	bool txIn::operator!=(const txIn& ref)

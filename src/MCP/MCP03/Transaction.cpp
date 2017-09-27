@@ -5,23 +5,25 @@
 **********************************************************************/
 
 #include "Transaction.h"
+#include <boost/archive/binary_oarchive.hpp>
 #include "../../logger.h"
 #include "../../tinyformat.h"
 #include "../../hash.h"
+#include "../../prevector.h"
 
 namespace MCP03
 {
-	Transaction::Transaction()
-		: m_uint16tVersion(CURRENT_TRANSACTION_VERSION),
-		m_uint32tLockTime(0)
+	Transaction::Transaction(uint16_t Version)
+		: uint16tVersion(Version),
+		uint32tLockTime(0)
 	{
 
 	}
 
 	Transaction::~Transaction()
 	{
-		m_vecIn.clear();
-		m_vecOut.clear();
+		vecIn.clear();
+		vecOut.clear();
 	}
 
 
@@ -30,14 +32,14 @@ namespace MCP03
 		std::string str;
 		str += strprintf("Transaction(Hash=%s, Version=%d, vecIn.size=%u, vecOut.size=%u, LockTime=%u)\n",
 			getHash().ToString().substr(0, 10),
-			m_uint16tVersion,
-			m_vecIn.size(),
-			m_vecOut.size(),
-			m_uint32tLockTime);
+			uint16tVersion,
+			vecIn.size(),
+			vecOut.size(),
+			uint32tLockTime);
 
-		for( auto &it : m_vecIn )
+		for( auto &it : vecIn )
 			str += "    " + it.toString() + "\n";
-		for( auto &it : m_vecOut )
+		for( auto &it : vecOut )
 			str += "    " + it.toString() + "\n";
 
 		return str;
@@ -45,7 +47,12 @@ namespace MCP03
 
 	uint256 Transaction::getHash()
 	{
-		// todo: calculate sha3 hash
+		// serialize this transaction
+		std::stringstream stream(std::ios_base::in | std::ios_base::out | std::ios_base::binary);
+		{
+			boost::archive::binary_oarchive oa(stream, boost::archive::no_header | boost::archive::no_tracking);
+			oa << this;
+		}
 
 		return uint256();
 	}
@@ -53,7 +60,7 @@ namespace MCP03
 	uint64_t Transaction::getValueOut()
 	{
 		uint64_t nValueOut = 0;
-		for( auto &it : m_vecOut)
+		for( auto &it : vecOut)
 		{
 			nValueOut += it.getValue();
 			if (!validCoinRange(it.getValue()) || !validCoinRange(nValueOut))
@@ -67,7 +74,15 @@ namespace MCP03
 
 	uint32_t Transaction::getTotalSize()
 	{
-		// todo: calculate after serialization
-		return 1;
+		// header size
+		uint32_t size = sizeof(uint16tVersion) + sizeof(uint32tLockTime);
+
+		// tx sizes
+		for (auto &it : vecIn)
+			size += it.getSize();
+		for (auto &it : vecOut)
+			size += it.getSize();
+
+		return size;
 	}
 }

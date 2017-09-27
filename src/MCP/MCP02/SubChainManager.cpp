@@ -5,11 +5,13 @@
 **********************************************************************/
 
 #include "SubChainManager.h"
+#include <boost/archive/binary_oarchive.hpp>
 #include "../../MetaChain.h"
 #include "../../logger.h"
 #include "../MCP03/Transaction.h"
 #include "../MCP03/Block.h"
 #include "../MCP04/PoMC.h"
+#include "../MCP04/MC/mcActions.h"
 #include "../MCP04/PoS.h"
 #include "../MCP04/PoT.h"
 
@@ -37,22 +39,26 @@ namespace MCP02
 		// MC genesis block
 		LOG("Generating MetaChain genesis block", "SCM");
 
-		/*MCP03::Transaction txGenesis;
-		txGenesis.m_uint16tVersion = 1;
-		txGenesis.vin.resize(1);
-		txGenesis.vout.resize(1);
-		txGenesis.vin[0].scriptSig = CScript() << 486604799 << CScriptNum(4) << std::vector<unsigned char>((const unsigned char*)pszTimestamp, (const unsigned char*)pszTimestamp + strlen(pszTimestamp));
-		txGenesis.vout[0].nValue = genesisReward;
-		txGenesis.vout[0].scriptPubKey = genesisOutputScript;
+		std::shared_ptr< MCP04::MetaChain::mcTransaction > txGenesis;
+		txGenesis->uint16tVersion = 1;
+		txGenesis->vecIn.emplace_back(1, MCP04::MetaChain::mcTxIn::ACTION::CREATE_SUBCHAIN );
+		memcpy(((MCP04::MetaChain::createSubchain*)txGenesis->vecIn[0].pPayload)->caChainName, CI_DEFAULT_MC_STRING, sizeof(CI_DEFAULT_MC_STRING));
+		memcpy(((MCP04::MetaChain::createSubchain*)txGenesis->vecIn[0].pPayload)->caPoP, MC_DEFAULT_POP, sizeof(MC_DEFAULT_POP));
+		((MCP04::MetaChain::createSubchain*)txGenesis->vecIn[0].pPayload)->uint64tMaxCoins = 0;
 
-		MCP03::Block genesis;
-		genesis.nTime = nTime;
-		genesis.nBits = nBits;
-		genesis.nNonce = nNonce;
-		genesis.nVersion = nVersion;
-		genesis.vtx.push_back(MakeTransactionRef(std::move(txNew)));
+		MCP04::MetaChain::mcBlock genesis;
+		genesis.nTime = 1506343480;
+		genesis.uint16tVersion = 1;
+		genesis.vecTx.push_back( std::move(txGenesis) );
 		genesis.hashPrevBlock.SetNull();
-		genesis.hashMerkleRoot = BlockMerkleRoot(genesis);*/
+		genesis.calcAll();
+
+		// serialize this transaction
+		std::stringstream stream(std::ios_base::in | std::ios_base::out | std::ios_base::binary);
+		{
+			boost::archive::binary_oarchive oa(stream, boost::archive::no_header | boost::archive::no_tracking);
+			oa << genesis;
+		}
 
 		// TCT genesis block
 		LOG("Generating TCT genesis block", "SCM");

@@ -12,6 +12,8 @@
 #include <string>
 #include <cstdint>
 #include <limits>
+#include <boost/serialization/access.hpp>
+#include <boost/serialization/version.hpp>
 #include "../../uint256.h"
 
 namespace MCP03
@@ -19,6 +21,19 @@ namespace MCP03
 	class txOutRef
 	{
 		private:
+			// required to have serialization overrides
+			friend class ::boost::serialization::access;
+
+			// serialization
+			template<class Archive>
+			void								serialize(Archive &ar, const unsigned int version) const
+			{
+				// note: version is always stored last
+				if (version == 1)
+					ar << m_Hash << m_uint16tPos;
+			}
+
+		protected:
 			uint256							m_Hash;
 			uint16_t						m_uint16tPos;
 	
@@ -27,14 +42,17 @@ namespace MCP03
 											~txOutRef();
 
 			// simple getter and setter
-			bool							isEmpty() { return (m_Hash.IsNull() && m_uint16tPos == std::numeric_limits<uint16_t>::max()); }
-			std::string						toString();
+			virtual bool					isEmpty() { return (m_Hash.IsNull() && m_uint16tPos == (std::numeric_limits<uint16_t>::max)()); }
+			virtual std::string				toString();
+			virtual uint32_t				getSize() { return sizeof(m_Hash) + sizeof(m_uint16tPos); };
 
 			// operators
-			bool operator<(const txOutRef& ref);
-			bool operator==(const txOutRef& ref);
-			bool operator!=(const txOutRef& ref);
+			virtual bool					operator<(const txOutRef& ref);
+			virtual bool					operator==(const txOutRef& ref);
+			virtual bool					operator!=(const txOutRef& ref);
 	};
 }
+
+BOOST_CLASS_VERSION(MCP03::txOutRef, 1)
 
 #endif

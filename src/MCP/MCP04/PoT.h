@@ -19,7 +19,7 @@ namespace MCP04
 			static const std::string			m_strName;
 
 		public:
-			static bool							registerFactory() { return MetaChain::getInstance().getStorageManager()->getSubChainManager()->registerFactory(m_strName, &createInstance); };
+			static bool							registerFactory() { return ::MetaChain::getInstance().getStorageManager()->getSubChainManager()->registerFactory(m_strName, &createInstance); };
 			static ChainInterface				*createInstance() { return new PoT(); };
 	};
 }

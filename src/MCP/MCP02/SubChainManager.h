@@ -25,6 +25,7 @@ namespace MCP04 { class ChainInterface; };
 namespace MCP02
 {
 #define CI_DEFAULT_MC_STRING	"MC"
+#define MC_DEFAULT_POP "PoMC"
 
 	class SubChainManager
 	{
