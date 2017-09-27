@@ -27,6 +27,11 @@ public:
 		memset(data, 0, sizeof(data));
 	}
 
+	base_blob(uint8_t *pBuffer, uint16_t uiSize)
+	{
+		CopyData(pBuffer, uiSize);
+	}
+
 	explicit base_blob(const std::vector<unsigned char>& vch);
 
 	bool IsNull() const
@@ -40,6 +45,11 @@ public:
 	void SetNull()
 	{
 		memset(data, 0, sizeof(data));
+	}
+
+	void CopyData(uint8_t *pBuffer, uint16_t uiSize)
+	{
+		memcpy(data, pBuffer, (uiSize > WIDTH ? WIDTH : uiSize));
 	}
 
 	inline int Compare(const base_blob& other) const { return memcmp(data, other.data, sizeof(data)); }
@@ -121,6 +131,7 @@ class uint256 : public base_blob<256> {
 public:
 	uint256() {}
 	uint256(const base_blob<256>& b) : base_blob<256>(b) {}
+	uint256(uint8_t *pBuffer, uint16_t uiSize) : base_blob<256>(pBuffer, uiSize) {}
 	explicit uint256(const std::vector<unsigned char>& vch) : base_blob<256>(vch) {}
 
 	/** A cheap hash function that just returns 64 bits from the result, it can be

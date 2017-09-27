@@ -40,6 +40,8 @@ namespace MCP04
 
 			public:
 																		mcBlock();
+				
+				virtual void											calcMerkleRoot();
 
 				// the tx inside this block
 				std::vector< std::shared_ptr<mcTransaction> >			vecTx;

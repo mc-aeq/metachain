@@ -10,6 +10,7 @@
 #include "../../tinyformat.h"
 #include "../../hash.h"
 #include "../../prevector.h"
+#include "../../crypto/sha3.h"
 
 namespace MCP03
 {
@@ -51,10 +52,12 @@ namespace MCP03
 		std::stringstream stream(std::ios_base::in | std::ios_base::out | std::ios_base::binary);
 		{
 			boost::archive::binary_oarchive oa(stream, boost::archive::no_header | boost::archive::no_tracking);
-			oa << this;
+			oa << *this;
 		}
 
-		return uint256();
+		// return the calculated hash
+		SHA3 crypto;
+		return crypto.hash256(SHA3::HashType::DEFAULT, (uint8_t *)stream.str().data(), stream.str().size());
 	}
 
 	uint64_t Transaction::getValueOut()

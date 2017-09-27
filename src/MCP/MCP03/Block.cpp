@@ -6,6 +6,7 @@
 
 #include "Block.h"
 #include "../../tinyformat.h"
+#include "../../crypto/sha3.h"
 
 namespace MCP03
 {
@@ -25,7 +26,15 @@ namespace MCP03
 
 	void Block::calcHash()
 	{
-		// todo: calculate sha3 hash
+		// the hash of this block is the combined headers, plus the hash of our merkle root
+		SHA3 crypto(SHA3::HashType::DEFAULT, SHA3::HashSize::SHA3_256);
+		crypto.absorb(&uint16tVersion, sizeof(uint16_t));
+		crypto.absorb(hashPrevBlock.begin(), hashPrevBlock.size());
+		crypto.absorb(&nTime, sizeof(uint32_t));
+		crypto.absorb(&uint32tByte, sizeof(uint32_t));
+		crypto.absorb(hashMerkleRoot.begin(), hashMerkleRoot.size());
+
+		hash = crypto.digest256();
 	}
 
 	std::string Block::toString()
@@ -58,6 +67,7 @@ namespace MCP03
 
 	void Block::calcMerkleRoot()
 	{
+		SHA3 crypto;
 		std::vector< uint256 > leaves, tmp;
 
 		// get all our leaves in place
@@ -66,7 +76,10 @@ namespace MCP03
 
 		// if we don't have leaves we reset the merkle root
 		if (leaves.size() == 0)
+		{
 			hashMerkleRoot.SetNull();
+			return;
+		}
 
 		// if we have only one tx, we add a second one so that we have atleast one iteration in the merkle root calculation
 		// if we have more than one but an odd number, also add the last one
@@ -81,12 +94,15 @@ namespace MCP03
 
 			while (!leaves.empty())
 			{
-				// calculate the combined hashes of the leaves
-				uint256 leavesCombined;
-				// calc 2xsha3
+				// combine both leaves into one
+				uint8_t cmb[64];
+				memcpy(&cmb[0], leaves.back().begin(), 32);
 				leaves.pop_back();
+				memcpy(&cmb[31], leaves.back().begin(), 32);
 				leaves.pop_back();
-				tmp.push_back(leavesCombined);
+				
+				// calc combined hash and add it
+				tmp.push_back(crypto.hash256(SHA3::HashType::DEFAULT, cmb, 64));
 			}
 
 			// if we have more than 1 result in the vector and an odd number, we add the last entry again for hashing

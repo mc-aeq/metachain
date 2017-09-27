@@ -37,6 +37,18 @@ SHA3::SHA3()
 {
 }
 
+SHA3::SHA3(HashType type, HashSize size, unsigned int uiDigestLength)
+	: m_pEncBuf(NULL),
+	m_HashType(type),
+	m_HashSize(size),
+	m_uiDigestLength(uiDigestLength)
+{
+	if (type == SHA3::HashType::SHAKE)
+		shakeCreate(size, uiDigestLength);
+	else
+		keccakCreate(size);
+}
+
 SHA3::~SHA3()
 {
 	if (m_pEncBuf)
@@ -118,6 +130,37 @@ uint8_t* SHA3::hash(HashType type, HashSize size, const uint8_t * pBuffer, unsig
 	}
 
 	return op;
+}
+
+// wrapper that gets a 256 bit hash and puts it directly in a uint256 for easier handling
+uint256	SHA3::hash256(HashType type, const uint8_t *pBuffer, unsigned int uiLength, unsigned int uiDigestLength)
+{
+	uint8_t *ptr = hash(type, HashSize::SHA3_256, pBuffer, uiLength, uiDigestLength);
+	uint256 tmp(ptr, 32);
+	delete ptr;
+	return tmp;
+}
+
+uint256 SHA3::digest256()
+{
+	uint8_t *op;
+	switch (m_HashType)
+	{
+		case SHA3::HashType::DEFAULT:
+			op = sha3Digest();
+			break;
+		case SHA3::HashType::KECCAK:
+			op = keccakDigest();
+			break;
+		case SHA3::HashType::SHAKE:
+			op = shakeDigest();
+			break;
+	}
+
+	uint256 tmp(op, 32);
+	delete op;
+
+	return tmp;
 }
 
 uint8_t* SHA3::cShake(HashSize size, const uint8_t *pBuffer, unsigned int uiLength, unsigned int uiDigestLength, std::string strFunctionName, std::string strCustomization)

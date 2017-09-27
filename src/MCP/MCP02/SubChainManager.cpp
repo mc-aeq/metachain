@@ -39,7 +39,7 @@ namespace MCP02
 		// MC genesis block
 		LOG("Generating MetaChain genesis block", "SCM");
 
-		std::shared_ptr< MCP04::MetaChain::mcTransaction > txGenesis;
+		std::shared_ptr< MCP04::MetaChain::mcTransaction > txGenesis = std::make_shared<MCP04::MetaChain::mcTransaction>();
 		txGenesis->uint16tVersion = 1;
 		txGenesis->vecIn.emplace_back(1, MCP04::MetaChain::mcTxIn::ACTION::CREATE_SUBCHAIN );
 		memcpy(((MCP04::MetaChain::createSubchain*)txGenesis->vecIn[0].pPayload)->caChainName, CI_DEFAULT_MC_STRING, sizeof(CI_DEFAULT_MC_STRING));
@@ -52,13 +52,6 @@ namespace MCP02
 		genesis.vecTx.push_back( std::move(txGenesis) );
 		genesis.hashPrevBlock.SetNull();
 		genesis.calcAll();
-
-		// serialize this transaction
-		std::stringstream stream(std::ios_base::in | std::ios_base::out | std::ios_base::binary);
-		{
-			boost::archive::binary_oarchive oa(stream, boost::archive::no_header | boost::archive::no_tracking);
-			oa << genesis;
-		}
 
 		// TCT genesis block
 		LOG("Generating TCT genesis block", "SCM");
