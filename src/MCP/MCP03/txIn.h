@@ -41,7 +41,6 @@ namespace MCP03
 			std::shared_ptr<txOutRef>					txPrev;
 			std::string									strSignature;
 
-			virtual uint32_t							getSize() {	return sizeof(strSignature) + txPrev->getSize(); };
 			virtual std::string							toString();
 
 			// operators

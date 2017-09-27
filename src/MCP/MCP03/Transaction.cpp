@@ -77,15 +77,13 @@ namespace MCP03
 
 	uint32_t Transaction::getTotalSize()
 	{
-		// header size
-		uint32_t size = sizeof(uint16tVersion) + sizeof(uint32tLockTime);
+		// serialize this transaction
+		std::stringstream stream(std::ios_base::in | std::ios_base::out | std::ios_base::binary);
+		{
+			boost::archive::binary_oarchive oa(stream, boost::archive::no_header | boost::archive::no_tracking);
+			oa << *this;
+		}
 
-		// tx sizes
-		for (auto &it : vecIn)
-			size += it.getSize();
-		for (auto &it : vecOut)
-			size += it.getSize();
-
-		return size;
+		return stream.str().size();
 	}
 }

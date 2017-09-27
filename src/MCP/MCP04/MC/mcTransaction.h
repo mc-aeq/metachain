@@ -38,6 +38,7 @@ namespace MCP04
 
 			public:
 											mcTransaction();
+				uint256						getHash();
 
 				// overloaded tx vector to reflect our custom data scheme
 				std::vector<mcTxIn>			vecIn;

@@ -43,7 +43,6 @@ namespace MCP03
 			// simple getter & setter
 			virtual bool						isEmpty() { return (m_uint64tValue == (std::numeric_limits<uint64_t>::max)()); };
 			virtual uint64_t					getValue() { return m_uint64tValue; };
-			virtual uint32_t					getSize() { return sizeof(m_uint64tValue) + sizeof(m_strPubKey); };
 			virtual std::string					toString();
 
 			// operators

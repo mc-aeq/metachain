@@ -5,6 +5,7 @@
 **********************************************************************/
 
 #include "Block.h"
+#include <boost/archive/binary_oarchive.hpp>
 #include "../../tinyformat.h"
 #include "../../crypto/sha3.h"
 
@@ -57,12 +58,14 @@ namespace MCP03
 
 	void Block::calcSize()
 	{
-		// general header size
-		uint32tByte = sizeof(uint16tVersion) + sizeof(hashPrevBlock) + sizeof(hashMerkleRoot) + sizeof(nTime);
+		// serialize this block
+		std::stringstream stream(std::ios_base::in | std::ios_base::out | std::ios_base::binary);
+		{
+			boost::archive::binary_oarchive oa(stream, boost::archive::no_header | boost::archive::no_tracking);
+			oa << *this;
+		}
 
-		// add tx
-		for (auto it : vecTx)
-			uint32tByte += it->getTotalSize();
+		uint32tByte = stream.str().size();
 	}
 
 	void Block::calcMerkleRoot()
