@@ -12,6 +12,7 @@
 #include "ChainInterface.h"
 #include "MC/mcTransaction.h"
 #include "MC/mcBlock.h"
+#include "../MCP02/SubChainManager.h"
 
 namespace MCP04
 {
@@ -22,6 +23,7 @@ namespace MCP04
 
 		public:
 			static bool							registerFactory() { return ::MetaChain::getInstance().getStorageManager()->getSubChainManager()->registerFactory(m_strName, &createInstance); };
+			static bool							registerFactory(MCP02::SubChainManager *ptr) { return ptr->registerFactory(m_strName, &createInstance); };
 			static ChainInterface				*createInstance() { return new PoMC(); };
 
 			MCP03::Transaction*					createTXElement() { return new MCP04::MetaChain::mcTransaction; };

@@ -186,6 +186,8 @@
     <ClInclude Include="src\MCP\MCP02\SubChainStruct.h" />
     <ClInclude Include="src\MCP\MCP02\SubChainManager.h" />
     <ClInclude Include="src\MCP\MCP03\Block.h" />
+    <ClInclude Include="src\MCP\MCP03\crBlock.h" />
+    <ClInclude Include="src\MCP\MCP03\crTransaction.h" />
     <ClInclude Include="src\MCP\MCP03\Transaction.h" />
     <ClInclude Include="src\MCP\MCP03\txIn.h" />
     <ClInclude Include="src\MCP\MCP03\txOut.h" />
@@ -250,8 +252,8 @@
     <ClCompile Include="src\MCP\MCP01\Account.cpp" />
     <ClCompile Include="src\MCP\MCP01\base58.cpp" />
     <ClCompile Include="src\MCP\MCP02\SubChainManager.cpp" />
-    <ClCompile Include="src\MCP\MCP03\Block.cpp" />
-    <ClCompile Include="src\MCP\MCP03\Transaction.cpp" />
+    <ClCompile Include="src\MCP\MCP03\crBlock.cpp" />
+    <ClCompile Include="src\MCP\MCP03\crTransaction.cpp" />
     <ClCompile Include="src\MCP\MCP03\txIn.cpp" />
     <ClCompile Include="src\MCP\MCP03\txOut.cpp" />
     <ClCompile Include="src\MCP\MCP03\txOutRef.cpp" />

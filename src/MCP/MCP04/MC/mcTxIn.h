@@ -63,6 +63,7 @@ namespace MCP04
 																mcTxIn(uint16_t Version = CURRENT_MC_TXIN_VERSION);
 																mcTxIn(uint16_t Version, ACTION eAction );
 																~mcTxIn();
+				void											init(ACTION eAction);
 
 
 				// variables

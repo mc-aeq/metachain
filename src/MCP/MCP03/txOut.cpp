@@ -23,7 +23,8 @@ namespace MCP03
 
 	std::string txOut::toString()
 	{
-		return strprintf("txOut(Value=%d.%08d, pubKey=%s)", m_uint64tValue / AMOUNT_COIN, m_uint64tValue % AMOUNT_COIN, m_strPubKey);
+		return "";
+		//return strprintf("txOut(Value=%d.%08d, pubKey=%s)", m_uint64tValue / AMOUNT_COIN, m_uint64tValue % AMOUNT_COIN, m_strPubKey);
 	}
 
 	bool txOut::operator==(const txOut& ref)

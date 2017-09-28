@@ -11,14 +11,20 @@
 
 #include <string>
 #include "../../defines.h"
+#include "../MCP04/ChainInterface.h"
+
+// forward decl
+namespace MCP04 { class ChainInterface; };
 
 namespace MCP02
 {
 	// this is the struct that we store in our vector with information about the subchains
 	struct SubChainStruct
 	{
-		uint16_t		uint16ChainIdentifier;
-		char			caChainName[MAX_CHAINNAME_LENGTH];
+		uint16_t						uint16ChainIdentifier;
+		char							caChainName[MAX_CHAINNAME_LENGTH];
+		char							caPoP[MAX_POP_NAME];
+		MCP04::ChainInterface			*ptr;
 
 		// serialization
 		template <typename Archive>
@@ -28,6 +34,7 @@ namespace MCP02
 			{
 				ar & uint16ChainIdentifier;
 				ar & caChainName;
+				ar & caPoP;
 			}
 		}
 	};

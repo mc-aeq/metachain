@@ -4,7 +4,7 @@
 * contact us before using our code									 *
 **********************************************************************/
 
-#include "Transaction.h"
+#include "crTransaction.h"
 #include <boost/archive/binary_oarchive.hpp>
 #include "../../logger.h"
 #include "../../tinyformat.h"
@@ -14,39 +14,38 @@
 
 namespace MCP03
 {
-	Transaction::Transaction(uint16_t Version)
-		: uint16tVersion(Version),
+	crTransaction::crTransaction(uint16_t Version)
+		: Transaction(Version),
 		uint32tLockTime(0)
 	{
-
 	}
 
-	Transaction::~Transaction()
+	crTransaction::~crTransaction()
 	{
 		vecIn.clear();
 		vecOut.clear();
 	}
 
 
-	std::string Transaction::toString()
+	std::string crTransaction::toString()
 	{
-		std::string str;
-		str += strprintf("Transaction(Hash=%s, Version=%d, vecIn.size=%u, vecOut.size=%u, LockTime=%u)\n",
+		std::stringstream s;
+		s << strprintf("Transaction(Hash=%s, Version=%d, vecIn.size=%u, vecOut.size=%u, LockTime=%u)\n",
 			getHash().ToString().substr(0, 10),
 			uint16tVersion,
 			vecIn.size(),
 			vecOut.size(),
 			uint32tLockTime);
 
-		for( auto &it : vecIn )
-			str += "    " + it.toString() + "\n";
-		for( auto &it : vecOut )
-			str += "    " + it.toString() + "\n";
+		for (auto &it : vecIn)
+			s << "    " + it.toString() + "\n";
+		for (auto &it : vecOut)
+			s << "    " + it.toString() + "\n";
 
-		return str;
+		return s.str();
 	}
 
-	uint256 Transaction::getHash()
+	uint256 crTransaction::getHash()
 	{
 		// serialize this transaction
 		std::stringstream stream(std::ios_base::in | std::ios_base::out | std::ios_base::binary);
@@ -60,10 +59,10 @@ namespace MCP03
 		return crypto.hash256(SHA3::HashType::DEFAULT, (uint8_t *)stream.str().data(), stream.str().size());
 	}
 
-	uint64_t Transaction::getValueOut()
+	uint64_t crTransaction::getValueOut()
 	{
 		uint64_t nValueOut = 0;
-		for( auto &it : vecOut)
+		for (auto &it : vecOut)
 		{
 			nValueOut += it.getValue();
 			if (!validCoinRange(it.getValue()) || !validCoinRange(nValueOut))
@@ -75,7 +74,7 @@ namespace MCP03
 		return nValueOut;
 	}
 
-	uint32_t Transaction::getTotalSize()
+	uint32_t crTransaction::getTotalSize()
 	{
 		// serialize this transaction
 		std::stringstream stream(std::ios_base::in | std::ios_base::out | std::ios_base::binary);

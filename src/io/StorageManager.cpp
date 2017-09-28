@@ -130,7 +130,6 @@ bool StorageManager::initialize(CSimpleIniA* iniFile)
 		}
 		MetaSerialize("SCM", m_pSubChainManager, &csSubChainManager);
 	}
-	m_pSubChainManager->initStandardPoP();
 
 	// check whether the meta db matches our testnet value or not (we don't accept meta DBs without testnet flag for testnet use and vice versa)
 	if (getMetaValue("TestNet", false) != m_pMC->isTestNet())

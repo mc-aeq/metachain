@@ -5,14 +5,22 @@
 **********************************************************************/
 
 #include "mcBlock.h"
+#include <sstream>
+#include <boost/archive/binary_oarchive.hpp>
 #include "../../../crypto/sha3.h"
+#include "../../../logger.h"
+#include "../../../tinyformat.h"
 
 namespace MCP04
 {
 	namespace MetaChain
 	{
-		mcBlock::mcBlock()
-			: Block(CURRENT_MC_BLOCK_VERSION)
+		mcBlock::mcBlock(uint16_t Version)
+			: Block(Version)
+		{
+		}
+
+		mcBlock::~mcBlock()
 		{
 		}
 
@@ -21,21 +29,10 @@ namespace MCP04
 			SHA3 crypto;
 			std::vector< uint256 > leaves, tmp;
 
-			// get all our leaves in place
-			for (auto it : vecTx)
-				leaves.push_back(it->getHash());
-
-			// if we don't have leaves we reset the merkle root
-			if (leaves.size() == 0)
-			{
-				hashMerkleRoot.SetNull();
-				return;
-			}
-
-			// if we have only one tx, we add a second one so that we have atleast one iteration in the merkle root calculation
-			// if we have more than one but an odd number, also add the last one
-			if ((leaves.size() == 1) || (leaves.size() > 1 && !(leaves.size() % 2)))
-				leaves.push_back(leaves.back());
+			// we only have one transaction in a MC block, so we add it twice that we have atleast one iteration
+			// it is also guaranteed that no MC block will be made with no TX, so we skip checks whether the transaction exists
+			leaves.push_back(pTransaction->getHash());
+			leaves.push_back(leaves.back());
 
 			// we continue the hash calculation until we only have one last result - the merkle tree
 			while (leaves.size() != 1)
@@ -66,6 +63,47 @@ namespace MCP04
 
 			// update the merkle root
 			hashMerkleRoot = leaves[0];
+		}
+
+		void mcBlock::calcSize()
+		{
+			// serialize this block
+			std::stringstream stream(std::ios_base::in | std::ios_base::out | std::ios_base::binary);
+			{
+				boost::archive::binary_oarchive oa(stream, boost::archive::no_header | boost::archive::no_tracking);
+				oa << *this;
+			}
+
+			uint32tByte = stream.str().size();
+		}
+
+		void mcBlock::calcHash()
+		{
+			// the hash of this block is the combined headers, plus the hash of our merkle root
+			SHA3 crypto(SHA3::HashType::DEFAULT, SHA3::HashSize::SHA3_256);
+			crypto.absorb(&uint16tVersion, sizeof(uint16_t));
+			crypto.absorb(hashPrevBlock.begin(), hashPrevBlock.size());
+			crypto.absorb(&nTime, sizeof(uint32_t));
+			crypto.absorb(&uint32tByte, sizeof(uint32_t));
+			crypto.absorb(hashMerkleRoot.begin(), hashMerkleRoot.size());
+
+			hash = crypto.digest256();
+		}
+
+		std::string mcBlock::toString()
+		{
+			std::stringstream s;
+			s << strprintf("Block (Hash=%s, Version=0x%08x, hashPrevBlock=%s, hashMerkleRoot=%s, Time=%u, Byte=%08x)\n",
+				hash.ToString(),
+				uint16tVersion,
+				hashPrevBlock.ToString(),
+				hashMerkleRoot.ToString(),
+				nTime,
+				uint32tByte);
+
+			s << "  " << pTransaction->toString() << "\n";
+
+			return s.str();
 		}
 	}
 }

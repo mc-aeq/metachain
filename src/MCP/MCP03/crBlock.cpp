@@ -4,28 +4,24 @@
 * contact us before using our code									 *
 **********************************************************************/
 
-#include "Block.h"
+#include "crBlock.h"
 #include <boost/archive/binary_oarchive.hpp>
 #include "../../tinyformat.h"
 #include "../../crypto/sha3.h"
 
 namespace MCP03
 {
-	Block::Block(uint16_t Version)
-		: uint16tVersion(Version),
-		nTime(0),
-		uint32tByte(0)
+	crBlock::crBlock(uint16_t Version)
+		: Block(Version)
 	{
-		hashPrevBlock.SetNull();
-		hashMerkleRoot.SetNull();
 	}
 
-	Block::~Block()
+	crBlock::~crBlock()
 	{
 		vecTx.clear();
 	}
 
-	void Block::calcHash()
+	void crBlock::calcHash()
 	{
 		// the hash of this block is the combined headers, plus the hash of our merkle root
 		SHA3 crypto(SHA3::HashType::DEFAULT, SHA3::HashSize::SHA3_256);
@@ -38,10 +34,10 @@ namespace MCP03
 		hash = crypto.digest256();
 	}
 
-	std::string Block::toString()
+	std::string crBlock::toString()
 	{
 		std::stringstream s;
-		s << strprintf("Block (Hash=%s, Version=0x%08x, hashPrevBlock=%s, hashMerkleRoot=%s, Time=%u, Byte=%08x, TXs=%u)\n",
+		s << strprintf("crBlock (Hash=%s, Version=0x%08x, hashPrevBlock=%s, hashMerkleRoot=%s, Time=%u, Byte=%08x, TXs=%u)\n",
 			hash.ToString(),
 			uint16tVersion,
 			hashPrevBlock.ToString(),
@@ -50,13 +46,13 @@ namespace MCP03
 			uint32tByte,
 			vecTx.size());
 
-		for( auto &it : vecTx)
+		for (auto &it : vecTx)
 			s << "  " << it->toString() << "\n";
-		
+
 		return s.str();
 	}
 
-	void Block::calcSize()
+	void crBlock::calcSize()
 	{
 		// serialize this block
 		std::stringstream stream(std::ios_base::in | std::ios_base::out | std::ios_base::binary);
@@ -68,7 +64,7 @@ namespace MCP03
 		uint32tByte = stream.str().size();
 	}
 
-	void Block::calcMerkleRoot()
+	void crBlock::calcMerkleRoot()
 	{
 		SHA3 crypto;
 		std::vector< uint256 > leaves, tmp;
@@ -86,7 +82,7 @@ namespace MCP03
 
 		// if we have only one tx, we add a second one so that we have atleast one iteration in the merkle root calculation
 		// if we have more than one but an odd number, also add the last one
-		if ( (leaves.size() == 1) || (leaves.size() > 1 && !(leaves.size() % 2)) )
+		if ((leaves.size() == 1) || (leaves.size() > 1 && !(leaves.size() % 2)))
 			leaves.push_back(leaves.back());
 
 		// we continue the hash calculation until we only have one last result - the merkle tree
@@ -103,7 +99,7 @@ namespace MCP03
 				leaves.pop_back();
 				memcpy(&cmb[31], leaves.back().begin(), 32);
 				leaves.pop_back();
-				
+
 				// calc combined hash and add it
 				tmp.push_back(crypto.hash256(SHA3::HashType::DEFAULT, cmb, 64));
 			}
@@ -114,7 +110,7 @@ namespace MCP03
 
 			// move our tmp data to our leaves vector
 			leaves.swap(tmp);
-		} 
+		}
 
 		// update the merkle root
 		hashMerkleRoot = leaves[0];

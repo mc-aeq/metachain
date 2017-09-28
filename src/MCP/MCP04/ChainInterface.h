@@ -19,8 +19,8 @@ namespace MCP04
 	class ChainInterface
 	{
 		public:
-			MCP03::Transaction*						createTXElement() { return new MCP03::Transaction; };
-			MCP03::Block*							createBlockElement() { return new MCP03::Block; };
+			virtual MCP03::Transaction*						createTXElement() = 0;
+			virtual MCP03::Block*							createBlockElement() = 0;
 	};
 }
 #endif

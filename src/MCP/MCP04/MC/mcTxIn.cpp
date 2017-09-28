@@ -22,17 +22,7 @@ namespace MCP04
 			: uint16tVersion(Version),
 			pPayload(nullptr)
 		{
-			this->eAction = eAction;
-
-			switch (eAction)
-			{
-				case ACTION::CREATE_SUBCHAIN:
-					pPayload = new createSubchain();
-				break;
-
-				default:
-					LOG_ERROR("Unknown Action for mcTxIn", "MCTXIN");
-			}
+			init(eAction);
 		}
 
 		mcTxIn::~mcTxIn()
@@ -41,20 +31,34 @@ namespace MCP04
 				delete pPayload;
 		}
 
-		std::string mcTxIn::toString()
+		void mcTxIn::init(ACTION eAction)
 		{
-			std::string str;
-			str = "mcTxIn(";
-			str += strprintf("Action %u\n", eAction);
-			str += "Params(";
+			this->eAction = eAction;
 
 			switch (eAction)
 			{
-				case ACTION::CREATE_SUBCHAIN:		str += strprintf( "caChainName %s, caPoP %s, uint64tMaxCoins %u", ((createSubchain*)pPayload)->caChainName, ((createSubchain*)pPayload)->caPoP, ((createSubchain*)pPayload)->uint64tMaxCoins );			break;
+			case ACTION::CREATE_SUBCHAIN:
+				pPayload = new createSubchain();
+				break;
+
+			default:
+				LOG_ERROR("Unknown Action for mcTxIn", "MCTXIN");
+			}
+		}
+
+		std::string mcTxIn::toString()
+		{
+			std::stringstream s;
+			s << "mcTxIn(" << strprintf("Action %u\n", eAction) << "Params(";
+
+			switch (eAction)
+			{
+				case ACTION::CREATE_SUBCHAIN:		s << strprintf( "caChainName %s, caPoP %s, uint64tMaxCoins %u", ((createSubchain*)pPayload)->caChainName, ((createSubchain*)pPayload)->caPoP, ((createSubchain*)pPayload)->uint64tMaxCoins );			break;
 			}
 
-			str += ")\n)";
-			return str;
+			s << ")\n)";
+
+			return s.str();
 		}
 
 		uint32_t mcTxIn::getSize()

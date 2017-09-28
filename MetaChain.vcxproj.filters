@@ -324,6 +324,12 @@
     <ClInclude Include="src\MCP\MCP04\MC\mcActions.h">
       <Filter>Headerdateien\MCP\MCP04\MC</Filter>
     </ClInclude>
+    <ClInclude Include="src\MCP\MCP03\crBlock.h">
+      <Filter>Headerdateien\MCP\MCP03</Filter>
+    </ClInclude>
+    <ClInclude Include="src\MCP\MCP03\crTransaction.h">
+      <Filter>Headerdateien\MCP\MCP03</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="node.cpp">
@@ -449,12 +455,6 @@
     <ClCompile Include="src\MCP\MCP02\SubChainManager.cpp">
       <Filter>Quelldateien\MCP\MCP02</Filter>
     </ClCompile>
-    <ClCompile Include="src\MCP\MCP03\Block.cpp">
-      <Filter>Quelldateien\MCP\MCP03</Filter>
-    </ClCompile>
-    <ClCompile Include="src\MCP\MCP03\Transaction.cpp">
-      <Filter>Quelldateien\MCP\MCP03</Filter>
-    </ClCompile>
     <ClCompile Include="src\MCP\MCP03\txOut.cpp">
       <Filter>Quelldateien\MCP\MCP03</Filter>
     </ClCompile>
@@ -481,6 +481,12 @@
     </ClCompile>
     <ClCompile Include="src\MCP\MCP04\MC\mcTxIn.cpp">
       <Filter>Quelldateien\MCP\MCP04\MC</Filter>
+    </ClCompile>
+    <ClCompile Include="src\MCP\MCP03\crBlock.cpp">
+      <Filter>Quelldateien\MCP\MCP03</Filter>
+    </ClCompile>
+    <ClCompile Include="src\MCP\MCP03\crTransaction.cpp">
+      <Filter>Quelldateien\MCP\MCP03</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

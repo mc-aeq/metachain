@@ -35,16 +35,23 @@ namespace MCP04
 				{
 					// note: version is always stored last
 					if (version == 1)
-						ar << uint16tVersion << hashPrevBlock << hashMerkleRoot << hash << nTime << uint32tByte << vecTx;
+						ar << uint16tVersion << hashPrevBlock << hashMerkleRoot << hash << nTime << uint32tByte << pTransaction;
 				}
 
 			public:
-																		mcBlock();
-				
-				 void													calcMerkleRoot();
+																		mcBlock(uint16_t Version = CURRENT_MC_BLOCK_VERSION);
+																		~mcBlock();
 
-				// the tx inside this block
-				std::vector< std::shared_ptr<mcTransaction> >			vecTx;
+				// the tx inside this block. in the metachain only one transaction per block is allowed
+				std::shared_ptr<mcTransaction>							pTransaction;
+
+				// calculation functions
+				void													calcMerkleRoot();
+				void													calcSize();
+				void													calcHash();
+
+				// simple getter and setter
+				std::string												toString();
 		};
 	}
 }

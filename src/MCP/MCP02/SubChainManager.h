@@ -18,6 +18,7 @@
 #include <boost/serialization/split_member.hpp>
 #include "SubChainStruct.h"
 #include "../MCP04/ChainInterface.h"
+#include "../MCP04/MC/mcBlock.h"
 
 // forward decl
 namespace MCP04 { class ChainInterface; };
@@ -49,17 +50,26 @@ namespace MCP02
 			void															load(Archive &ar, const unsigned int version)
 			{
 				if (version == 1)
+				{
 					ar & m_vecSubChains;
+
+					// after loading the SC the instances are nullptr. create instances for the SCs
+					for( auto &it : m_vecSubChains )
+						it.ptr = m_mapProofFactories.at(it.caPoP)();
+				}
 			}
 			BOOST_SERIALIZATION_SPLIT_MEMBER()
+
+			// subchain creation process
+			void															initStandardPoP();
+			uint16_t														addSubChain(MCP04::MetaChain::mcBlock *block);
 
 		public:
 																			SubChainManager();
 																			~SubChainManager();
 			bool															init();
-			void															initStandardPoP();
-			uint16_t														addSubChain(std::string strChainName);
 			bool															registerFactory(std::string strName, MCP04::ChainInterface*(*ptr)(void) );
+			bool															popExists(std::string strName);
 
 			// simple getter and setter
 			uint16_t														getChainIdentifier(std::string strChainName);
