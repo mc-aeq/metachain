@@ -60,6 +60,10 @@ class MetaChain
 		// POPs that shall be loaded
 		std::vector< std::string >	vecPOPs;
 
+		// subchain white and blacklist
+		std::vector< std::string >	vecSC_Whitelist;
+		std::vector< std::string >	vecSC_Blacklist;
+
 		void						incrementNewerVersionTicker();
 
 		// simple getter

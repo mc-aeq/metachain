@@ -106,16 +106,56 @@ namespace MCP02
 
 	}
 
+	bool SubChainManager::isSubChainAllowed(std::string strChainName)
+	{
+		// first check blacklist
+		for (auto &it : MetaChain::getInstance().vecSC_Blacklist)
+		{
+#ifdef _DEBUG
+			LOG_DEBUG("Checking Subchain Blacklist Entry: " + it, "SCM");
+#endif
+			// wildcard blacklist means we don't allow anything
+			if (boost::trim_copy(it) == "*")
+				return false;
+
+			// the chain name was specified in the blacklist
+			if (boost::trim_copy(it) == strChainName)
+				return false;
+		}
+
+		// then check whitelist
+		for (auto &it : MetaChain::getInstance().vecSC_Whitelist)
+		{
+#ifdef _DEBUG
+			LOG_DEBUG("Checking Subchain Whitelist Entry: " + it, "SCM");
+#endif
+			// wildcard whitelist means we allow everything
+			if (boost::trim_copy(it) == "*")
+				return true;
+
+			// the chain name was specified in the whitelist
+			if (boost::trim_copy(it) == strChainName)
+				return true;
+		}
+
+		// if we reached this point it means we didnt match any white or blacklist entries, therefore we're rejecting this subchain per default
+		return false;
+	}
+
 	// returns the uint16_t from the newly added SubChain
 	uint16_t SubChainManager::addSubChain(MCP04::MetaChain::mcBlock *block)
 	{
-		// multithreading locking
-		LOCK(MetaChain::getInstance().getStorageManager()->csSubChainManager);
-
 		// checking if this is really a genesis request block
 		if( block->pTransaction->txIn.eAction != MCP04::MetaChain::mcTxIn::ACTION::CREATE_SUBCHAIN )
 		{
 			LOG_ERROR("A non-genesis creation block was passed into the genesis creation function. Not executing!", "SCM");
+			return (std::numeric_limits<uint16_t>::max)();
+		}
+
+		// check if this subchain is allowed in the config
+		if (!isSubChainAllowed(((MCP04::MetaChain::createSubchain*)block->pTransaction->txIn.pPayload)->caChainName))
+		{
+			LOG_ERROR("SC was not added since the configuration (subchain_whitelist, subchain_blacklist) prohibits this SC.", "SCM");
 			return (std::numeric_limits<uint16_t>::max)();
 		}
 
@@ -133,6 +173,9 @@ namespace MCP02
 			LOG_ERROR("If you wish to proceed participating in this subchain, please load the requested module and resync the MC", "SCM");
 			return (std::numeric_limits<uint16_t>::max)();
 		}
+
+		// multithreading locking
+		LOCK(MetaChain::getInstance().getStorageManager()->csSubChainManager);
 
 		// adding subchain into our vector
 		SubChainStruct tmp;

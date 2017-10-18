@@ -62,6 +62,7 @@ namespace MCP02
 
 			// subchain creation process
 			void															initPoP();
+			bool															isSubChainAllowed(std::string strChainName);
 			uint16_t														addSubChain(MCP04::MetaChain::mcBlock *block);
 
 		public:
