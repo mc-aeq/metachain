@@ -61,7 +61,7 @@ namespace MCP02
 			BOOST_SERIALIZATION_SPLIT_MEMBER()
 
 			// subchain creation process
-			void															initStandardPoP();
+			void															initPoP();
 			uint16_t														addSubChain(MCP04::MetaChain::mcBlock *block);
 
 		public:

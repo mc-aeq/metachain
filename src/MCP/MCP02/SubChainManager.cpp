@@ -19,7 +19,7 @@ namespace MCP02
 {
 	SubChainManager::SubChainManager()
 	{
-		initStandardPoP();
+		initPoP();
 	}
 
 	SubChainManager::~SubChainManager()
@@ -79,12 +79,31 @@ namespace MCP02
 		return true;
 	}
 
-	void SubChainManager::initStandardPoP()
-	{
-		// load our standard proof of process initiators
-		MCP04::PoMC::registerFactory(this);
-		MCP04::PoS::registerFactory(this);
-		MCP04::PoT::registerFactory(this);
+	void SubChainManager::initPoP()
+	{		
+		// load the POPs that are defined in the ini
+		// todo: change this to module (.dll) loading when POPs are encapsulated in modules.
+		// functionality would be: <modulename> load -> instance function
+
+		for (auto &it : MetaChain::getInstance().vecPOPs)
+		{
+#ifdef _DEBUG
+			LOG_DEBUG("Loading PoP: " + it, "SCM");
+#endif
+			if (boost::trim_copy(it) == "*")
+			{
+				MCP04::PoMC::registerFactory(this);
+				MCP04::PoS::registerFactory(this);
+				MCP04::PoT::registerFactory(this);
+			}
+			else if(boost::trim_copy(it) == "PoMC")
+				MCP04::PoMC::registerFactory(this);
+			else if (boost::trim_copy(it) == "PoS")
+				MCP04::PoS::registerFactory(this);
+			else if (boost::trim_copy(it) == "PoT")
+				MCP04::PoT::registerFactory(this);
+		}
+
 	}
 
 	// returns the uint16_t from the newly added SubChain
@@ -128,11 +147,11 @@ namespace MCP02
 
 	uint16_t SubChainManager::getChainIdentifier(std::string strChainName)
 	{
-		// multithreading locking
-		LOCK(MetaChain::getInstance().getStorageManager()->csSubChainManager);
-
 		char cBuffer[MAX_CHAINNAME_LENGTH];
 		strncpy(cBuffer, strChainName.c_str(), MAX_CHAINNAME_LENGTH);
+
+		// multithreading locking
+		LOCK(MetaChain::getInstance().getStorageManager()->csSubChainManager);
 
 		for (std::vector< SubChainStruct>::iterator it = m_vecSubChains.begin(); it != m_vecSubChains.end(); it++)
 		{

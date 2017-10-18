@@ -25,47 +25,50 @@ It's also a singleton to provide direct access to the relevant metachain parts t
 */
 class MetaChain
 {
-private:
-	NetworkManager				*m_pNetworkManager;
-	StorageManager				*m_pStorageManager;
-	boost::thread_group			m_threadGroup;
-	CScheduler					m_scheduler;
+	private:
+		NetworkManager				*m_pNetworkManager;
+		StorageManager				*m_pStorageManager;
+		boost::thread_group			m_threadGroup;
+		CScheduler					m_scheduler;
 
-	// variables and functions for the autoupdate process
-	int							m_iVersionTicksTillUpdate;
-	bool						m_bAutoUpdate;
-	unsigned short				m_usNewerVersionTicker;
-	std::string					m_strCDNUrl;
-	boost::filesystem::path		m_pathExecutable;
-	boost::filesystem::path		m_pathTmp;
-	bool						downloadFile(std::string strFrom, std::string strTo);
-	bool						doAutoUpdate();
+		// variables and functions for the autoupdate process
+		int							m_iVersionTicksTillUpdate;
+		bool						m_bAutoUpdate;
+		unsigned short				m_usNewerVersionTicker;
+		std::string					m_strCDNUrl;
+		boost::filesystem::path		m_pathExecutable;
+		boost::filesystem::path		m_pathTmp;
+		bool						downloadFile(std::string strFrom, std::string strTo);
+		bool						doAutoUpdate();
 
-	// variables that define the functionality of this node
-	bool						m_bModeFN;
-	bool						m_bTestNet;
-	MCP01::Account				m_mcpWallet;
+		// variables that define the functionality of this node
+		bool						m_bModeFN;
+		bool						m_bTestNet;
+		MCP01::Account				m_mcpWallet;
 
-	// constructor and operator
-								MetaChain();
-								MetaChain(MetaChain const& copy);	// not implemented
-	MetaChain&					operator=(MetaChain const& copy);	// not implemented
+		// constructor and operator
+									MetaChain();
+									MetaChain(MetaChain const& copy);	// not implemented
+		MetaChain&					operator=(MetaChain const& copy);	// not implemented
 
-public:
-	static						MetaChain& getInstance();
-	void						shutdown();
-	bool						initialize(CSimpleIniA* iniFile, boost::filesystem::path pathExecutable);
-	void						LicenseInfo();
+	public:
+		static						MetaChain& getInstance();
+		void						shutdown();
+		bool						initialize(CSimpleIniA* iniFile, boost::filesystem::path pathExecutable);
+		void						LicenseInfo();
 
-	void						incrementNewerVersionTicker();
+		// POPs that shall be loaded
+		std::vector< std::string >	vecPOPs;
 
-	// simple getter
-	CScheduler*					getScheduler() { return &m_scheduler; };
-	boost::thread_group*		getThreadGroup() { return &m_threadGroup; };
-	NetworkManager*				getNetworkManager() { return m_pNetworkManager; };
-	StorageManager*				getStorageManager() { return m_pStorageManager; };
-	bool						isFN() { return m_bModeFN; };
-	bool						isTestNet() { return m_bTestNet; };
+		void						incrementNewerVersionTicker();
+
+		// simple getter
+		CScheduler*					getScheduler() { return &m_scheduler; };
+		boost::thread_group*		getThreadGroup() { return &m_threadGroup; };
+		NetworkManager*				getNetworkManager() { return m_pNetworkManager; };
+		StorageManager*				getStorageManager() { return m_pStorageManager; };
+		bool						isFN() { return m_bModeFN; };
+	bool							isTestNet() { return m_bTestNet; };
 };	
 
 #endif

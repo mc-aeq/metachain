@@ -9,6 +9,7 @@
 #include <atomic>
 #include <curl/curl.h>
 #include <boost/filesystem/operations.hpp>
+#include <boost/algorithm/string.hpp>
 
 #include "SimpleIni.h"
 #include "scheduler.h"
@@ -77,6 +78,9 @@ bool MetaChain::initialize(CSimpleIniA* iniFile, boost::filesystem::path pathExe
 
 	// check wether this instance is testnet or not
 	m_bTestNet = iniFile->GetBoolValue("general", "testnet", false);
+
+	// get the POPs that shall be loaded
+	boost::split(vecPOPs, (std::string)iniFile->GetValue("subchains", "pop_load", "*"), boost::is_any_of(","));
 	
 	// create the block storage backends, check their integrity and check if no other instance is running
 	m_pStorageManager = new StorageManager(this);
