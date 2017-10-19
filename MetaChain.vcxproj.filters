@@ -330,6 +330,9 @@
     <ClInclude Include="src\MCP\MCP03\crTransaction.h">
       <Filter>Headerdateien\MCP\MCP03</Filter>
     </ClInclude>
+    <ClInclude Include="src\io\smSC.h">
+      <Filter>Headerdateien\IO</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="node.cpp">

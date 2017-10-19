@@ -13,7 +13,7 @@
 #include <map>
 #include <boost/serialization/access.hpp>
 #include <boost/serialization/string.hpp>
-#include <boost/serialization/vector.hpp>
+#include <boost/serialization/map.hpp>
 #include <boost/serialization/version.hpp>
 #include <boost/serialization/split_member.hpp>
 #include "SubChainStruct.h"
@@ -35,7 +35,7 @@ namespace MCP02
 			friend class ::boost::serialization::access;
 
 			// vector of subchains, map of proof of process creators
-			std::vector< SubChainStruct >									m_vecSubChains;
+			std::map< unsigned short, SubChainStruct >						m_mapSubChains;
 			std::map< std::string, MCP04::ChainInterface*(*)(void) >		m_mapProofFactories;
 			
 			template<class Archive>
@@ -43,7 +43,7 @@ namespace MCP02
 			{
 				// note: version is always stored last
 				if (version == 1)
-					ar & m_vecSubChains;
+					ar & m_mapSubChains;
 			}
 
 			template<class Archive>
@@ -51,11 +51,11 @@ namespace MCP02
 			{
 				if (version == 1)
 				{
-					ar & m_vecSubChains;
+					ar & m_mapSubChains;
 
 					// after loading the SC the instances are nullptr. create instances for the SCs
-					for( auto &it : m_vecSubChains )
-						it.ptr = m_mapProofFactories.at(it.caPoP)();
+					for( auto &it : m_mapSubChains)
+						it.second.ptr = m_mapProofFactories.at(it.second.caPoP)();
 				}
 			}
 			BOOST_SERIALIZATION_SPLIT_MEMBER()
@@ -75,6 +75,7 @@ namespace MCP02
 			// simple getter and setter
 			uint16_t														getChainIdentifier(std::string strChainName);
 			std::string														getChainIdentifier(uint16_t uint16tChainIdentifier);
+			dbEngine*														getDBEngine(unsigned short usChainIdentifier);
 	};	
 }
 

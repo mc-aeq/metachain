@@ -173,6 +173,7 @@
     <ClInclude Include="src\cThreadInterrupt.h" />
     <ClInclude Include="src\endian.h" />
     <ClInclude Include="src\hash.h" />
+    <ClInclude Include="src\io\smSC.h" />
     <ClInclude Include="src\io\zip\crypt.h" />
     <ClInclude Include="src\io\zip\ioapi.h" />
     <ClInclude Include="src\io\zip\unzip.h" />

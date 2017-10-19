@@ -183,7 +183,15 @@ namespace MCP02
 		strncpy(tmp.caChainName, ((MCP04::MetaChain::createSubchain*)block->pTransaction->txIn.pPayload)->caChainName, MAX_CHAINNAME_LENGTH);
 		strncpy(tmp.caPoP, ((MCP04::MetaChain::createSubchain*)block->pTransaction->txIn.pPayload)->caPoP, MAX_POP_NAME);
 		tmp.ptr = m_mapProofFactories.at(((MCP04::MetaChain::createSubchain*)block->pTransaction->txIn.pPayload)->caPoP)();
-		m_vecSubChains.push_back(tmp);
+		tmp.db = MetaChain::getInstance().getStorageManager()->createDBEngine(tmp.uint16ChainIdentifier);
+		m_mapSubChains[ tmp.uint16ChainIdentifier ] = tmp;
+
+		// register this instance at the storage manager
+		if( !MetaChain::getInstance().getStorageManager()->registerSC(tmp.uint16ChainIdentifier) )
+		{
+			LOG_ERROR("Couldn't register this SC at the SM.", "SCM");
+			return (std::numeric_limits<uint16_t>::max)();
+		}
 
 		return tmp.uint16ChainIdentifier;
 	}
@@ -196,10 +204,10 @@ namespace MCP02
 		// multithreading locking
 		LOCK(MetaChain::getInstance().getStorageManager()->csSubChainManager);
 
-		for (std::vector< SubChainStruct>::iterator it = m_vecSubChains.begin(); it != m_vecSubChains.end(); it++)
+		for (auto &it = m_mapSubChains.begin(); it != m_mapSubChains.end(); it++)
 		{
-			if (memcmp(cBuffer, it->caChainName, MAX_CHAINNAME_LENGTH) == 0)
-				return it->uint16ChainIdentifier;
+			if (memcmp(cBuffer, it->second.caChainName, MAX_CHAINNAME_LENGTH) == 0)
+				return it->second.uint16ChainIdentifier;
 		}
 		return (std::numeric_limits<uint16_t>::max)();
 	}
@@ -210,12 +218,10 @@ namespace MCP02
 		// multithreading locking
 		LOCK(MetaChain::getInstance().getStorageManager()->csSubChainManager);
 
-		for (std::vector< SubChainStruct>::iterator it = m_vecSubChains.begin(); it != m_vecSubChains.end(); it++)
-		{
-			if (it->uint16ChainIdentifier == uint16tChainIdentifier)
-				return it->caChainName;
-		}
-		return "";
+		if (m_mapSubChains.count(uint16tChainIdentifier) == 1)
+			return m_mapSubChains[uint16tChainIdentifier].caChainName;
+		else
+			return "";
 	}
 
 	bool SubChainManager::registerFactory(std::string strName, MCP04::ChainInterface*(*ptr)(void))
@@ -248,5 +254,13 @@ namespace MCP02
 		{
 			return false;
 		}
+	}
+
+	dbEngine* SubChainManager::getDBEngine(unsigned short usChainIdentifier)
+	{
+		if (m_mapSubChains.count(usChainIdentifier) == 1)
+			return m_mapSubChains[usChainIdentifier].db;
+		else
+			return nullptr;
 	}
 }

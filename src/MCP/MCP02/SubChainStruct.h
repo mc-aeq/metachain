@@ -12,6 +12,7 @@
 #include <string>
 #include "../../defines.h"
 #include "../MCP04/ChainInterface.h"
+#include "../../io/db/dbEngine.h"
 
 // forward decl
 namespace MCP04 { class ChainInterface; };
@@ -25,6 +26,7 @@ namespace MCP02
 		char							caChainName[MAX_CHAINNAME_LENGTH];
 		char							caPoP[MAX_POP_NAME];
 		MCP04::ChainInterface			*ptr;
+		dbEngine						*db; // todo: move this from the subchain struct into the class that is used for the subchain
 
 		// serialization
 		template <typename Archive>

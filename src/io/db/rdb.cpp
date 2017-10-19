@@ -5,11 +5,13 @@
 **********************************************************************/
 
 #include "rdb.h"
+#include <rocksdb/db.h>
 #include "../../logger.h"
 
 dbEngineRDB::dbEngineRDB()
+	: m_pDB(nullptr),
+	m_pBatch(nullptr)
 {
-
 }
 
 dbEngineRDB::~dbEngineRDB()
@@ -17,8 +19,58 @@ dbEngineRDB::~dbEngineRDB()
 
 }
 
-bool dbEngineRDB::initialize(CSimpleIniA* iniFile, bool *bNew)
+// initialize (open) the rdb engine
+// required parameters in the unordered_map:
+// "path": needs to contain the full path to the rdb folder where the db will be stored
+bool dbEngineRDB::initialize(std::unordered_map<std::string, std::string>* umapSettings)
 {
-	LOG("Initializing RDB Storage Engine", "SE-RDB");
-	return true;
+	try
+	{
+		LOG("Initializing RDB Storage Engine, Path: " + umapSettings->at("path"), "SE-RDB");
+
+		// fireing up the meta db
+		rocksdb::Options dbOptions;
+		dbOptions.create_if_missing = true;
+#ifndef _DEBUG
+		dbOptions.info_log = std::make_shared<RocksDBNullLogger>();
+		dbOptions.keep_log_file_num = 1;
+#endif
+
+		rocksdb::Status dbStatus = rocksdb::DB::Open(dbOptions, umapSettings->at("path"), &m_pDB);
+		if (!dbStatus.ok())
+		{
+			LOG_ERROR("Can't open database: " + dbStatus.ToString(), "SE-RDB");
+			return false;
+		}
+
+		return true;
+	}
+	catch (std::out_of_range &e)
+	{
+		LOG_ERROR("Unable to initialize RDB Engine due to missing configuration params. Error: " + (std::string)e.what(), "RDB-E");
+		return false;
+	}
+}
+
+void dbEngineRDB::batchStart()
+{
+	if (m_pBatch != nullptr)
+		delete m_pBatch;
+
+	m_pBatch = new rocksdb::WriteBatch;
+}
+
+void dbEngineRDB::batchAddStatement(std::string strKey, std::string strValue, std::string strEnv)
+{
+	m_pBatch->Put( strKey, strValue );
+}
+
+void dbEngineRDB::batchFinalize()
+{
+	if (m_pBatch == nullptr)
+		return;
+
+	m_pDB->Write(rocksdb::WriteOptions(), m_pBatch);
+	delete m_pBatch;
+	m_pBatch = nullptr;
 }

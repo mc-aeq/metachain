@@ -74,7 +74,8 @@ const uint32_t g_cuint32tVersion = 1;
 #define LOCK_FILE ".lock"
 #define RAW_FILEENDING ".mbl"
 #define META_DB_FOLDER "meta"
-#define LAST_RAW_FILE "last.raw.file"
+#define MC_META_DB_FOLDER "mc"
+#define LAST_RAW_FILE "_last.raw.file"
 #define MC_HEIGHT "mc.height"
 #define MC_NEXT_CI "mc.next_ci"
 #define MAX_CHAINNAME_LENGTH 4
