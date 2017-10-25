@@ -23,13 +23,12 @@ StorageManager::StorageManager(MetaChain *mc)
 
 StorageManager::~StorageManager()
 {
+	// serialize our loaded subchains
+	MetaSerialize("SCM", m_pSubChainManager, &csSubChainManager);
+	MetaSerialize("smSC", &m_umapSC, &m_csUmapSC);
+
 	// remove the lock file in the data directory
 	remove((m_pathDataDirectory /= LOCK_FILE).string().c_str());
-
-	// close the raw output file
-	// TODO: SYNC unsorted map and close file streams
-	/*if(m_pMC->isFN() )
-		m_streamRaw.close();*/
 
 	// delete the subchain manager
 	if(m_pSubChainManager)
@@ -44,19 +43,46 @@ bool StorageManager::initialize(CSimpleIniA* iniFile)
 	// store the reference to the ini file for later usage
 	m_pINI = iniFile;
 
-	// get the data directory
+	// get the data and raw directory
 	m_pathDataDirectory = iniFile->GetValue("data", "data_dir", "data");
 	if( m_pathDataDirectory.is_relative() )
 		m_pathDataDirectory = boost::filesystem::current_path() / iniFile->GetValue("data", "data_dir", "data");
 
-	// security check if data directory exists, if it doesnt, create one
+	m_pathRawDirectory = iniFile->GetValue("data", "raw_dir", "raw");
+	if (m_pathRawDirectory.is_relative())
+		m_pathRawDirectory = m_pathDataDirectory / m_pathRawDirectory;
+
+	// security check if certain directory exist, if not, create them
 	if (!boost::filesystem::exists(m_pathDataDirectory) || !boost::filesystem::is_directory(m_pathDataDirectory))
 	{
 		LOG_ERROR("Data directory doesn't exist: " + m_pathDataDirectory.string(), "SM");
 		LOG_ERROR("Creating data directory and resuming operation", "SM");
-		if (!boost::filesystem::create_directory(m_pathDataDirectory))
+		if (!boost::filesystem::create_directories(m_pathDataDirectory))
 		{
 			LOG_ERROR("Couldn't create Data directory, exiting.", "SM");
+			return false;
+		}
+	}
+
+	if (!boost::filesystem::exists(m_pathRawDirectory) || !boost::filesystem::is_directory(m_pathRawDirectory))
+	{
+		LOG_ERROR("Raw directory doesn't exist: " + m_pathRawDirectory.string(), "SM");
+		LOG_ERROR("Creating raw directory and resuming operation", "SM");
+		if (!boost::filesystem::create_directories(m_pathRawDirectory))
+		{
+			LOG_ERROR("Couldn't create raw directory, exiting.", "SM");
+			return false;
+		}
+	}
+
+	boost::filesystem::path pathMCMetaInfo = m_pathDataDirectory / META_DB_FOLDER / MC_META_DB_FOLDER;
+	if (!boost::filesystem::exists(pathMCMetaInfo) || !boost::filesystem::is_directory(pathMCMetaInfo))
+	{
+		LOG_ERROR("MC MetaInformation directory doesn't exist: " + pathMCMetaInfo.string(), "SM");
+		LOG_ERROR("Creating MC MetaInformation directory and resuming operation", "SM");
+		if (!boost::filesystem::create_directories(pathMCMetaInfo))
+		{
+			LOG_ERROR("Couldn't create MC MetaInformation directory, exiting.", "SM");
 			return false;
 		}
 	}
@@ -99,7 +125,7 @@ bool StorageManager::initialize(CSimpleIniA* iniFile)
 	dbOptions.keep_log_file_num = 1;
 #endif
 
-	rocksdb::Status dbStatus = rocksdb::DB::Open(dbOptions, (m_pathDataDirectory / META_DB_FOLDER / MC_META_DB_FOLDER).string(), &m_pMetaDB);
+	rocksdb::Status dbStatus = rocksdb::DB::Open(dbOptions, pathMCMetaInfo.string(), &m_pMetaDB);
 	if (!dbStatus.ok())
 	{
 		LOG_ERROR("Can't open the meta information database: " + dbStatus.ToString(), "SM");
@@ -120,9 +146,23 @@ bool StorageManager::initialize(CSimpleIniA* iniFile)
 
 	// initialize the subchain manager & serializing it into our metaDB
 	LOG("Initializing SubChainManager", "SM");
-	if( bInitialized )
+	if (bInitialized)
+	{
 		// get our subchains
 		MetaDeserialize("SCM", &m_pSubChainManager, &csSubChainManager);
+		MetaDeserializeObj("smSC", &m_umapSC, &m_csUmapSC );
+
+		/*std::string strTmp;
+		if (m_pMetaDB->Get(rocksdb::ReadOptions(), "smSC", &strTmp).ok())
+		{
+			std::stringstream stream(strTmp);
+			boost::archive::binary_iarchive ia(stream, boost::archive::no_header | boost::archive::no_tracking);
+			// the >> operator creates a new object and the double pointer updates the reference
+			std::unordered_map<unsigned short, smSC> *tmp;
+			ia >> tmp;
+			m_umapSC = *tmp;
+		}*/
+	}
 	else
 	{
 		m_pSubChainManager = new MCP02::SubChainManager();
@@ -159,13 +199,10 @@ bool StorageManager::openRawFile(unsigned short usChainIdentifier)
 	LOCK(it->second.csAccess);
 	if (it->second.streamRaw.is_open())
 		it->second.streamRaw.close();
-
-	// get the raw file counter from the meta info db
-	unsigned int uiRawFileCounter = getMetaValue(std::to_string(usChainIdentifier) + LAST_RAW_FILE, (unsigned int)0); // TODO: change to SC own meta db
 		
 	// open our fstream for raw output
 	std::ostringstream ssFileName;
-	ssFileName << std::setw(8) << std::setfill('0') << uiRawFileCounter;
+	ssFileName << std::setw(8) << std::setfill('0') << it->second.uiRawFileCounter;
 	it->second.filePath = m_pathRawDirectory / std::to_string(usChainIdentifier) / ssFileName.str();
 
 	// if the file exists we get the size to calculate our splitting. If it doesn't we start with 0
@@ -196,10 +233,21 @@ bool StorageManager::writeRaw(unsigned short usChainIdentifier, unsigned int uiB
 			return false;
 		}
 
+		// check whether we have an open stream or not
+		if (!it->second.streamRaw.is_open())
+		{
+			if (!openRawFile(usChainIdentifier))
+			{
+				LOG_ERROR("Can't open raw stream for output: " + std::to_string(usChainIdentifier), "SM");
+				return false;
+			}
+		}
+
 		// write the output in the file
 		{
 			LOCK(it->second.csAccess);
 			it->second.streamRaw.write((char *)raw, uiLength);
+			it->second.uimRawFileSize += uiLength;
 		}
 
 		// write some meta data
@@ -216,15 +264,11 @@ bool StorageManager::writeRaw(unsigned short usChainIdentifier, unsigned int uiB
 		db->batchAddStatement( "mbl." + std::to_string(uiBlockNumber) + ".length", std::to_string(uiLength));
 		db->batchFinalize();
 
-		it->second.uimRawFileSize += uiLength;
-
 		// if the new file size is bigger than our maximum value, we close this file and open a new one for output
 		if (it->second.uimRawFileSize >= m_uimRawFileSizeMax)
 		{
 			LOCK(it->second.csAccess);
-
-			// increment raw file counter
-			incMetaValue(std::to_string(usChainIdentifier) + LAST_RAW_FILE, (unsigned int)0 ); // TODO: change to SC own meta db
+			it->second.uiRawFileCounter++;
 
 			if (!openRawFile(usChainIdentifier))
 				return false;
@@ -247,6 +291,8 @@ std::string	StorageManager::getChainIdentifier(uint16_t uint16ChainIdentifier)
 
 bool StorageManager::registerSC(unsigned short usChainIdentifier)
 {
+	LOCK(m_csUmapSC);
+
 	// check if the SC already is registered
 	if (m_umapSC.count(usChainIdentifier) != 0)
 	{
@@ -256,6 +302,7 @@ bool StorageManager::registerSC(unsigned short usChainIdentifier)
 
 	// push back the new SC into our map (using [] on not created element will create a new element)
 	m_umapSC[usChainIdentifier].uimRawFileSize = 0;
+	m_umapSC[usChainIdentifier].uiRawFileCounter = 0;
 
 	// check for the raw directory (this is only needed when we're in FN mode)
 	if (m_pMC->isFN())

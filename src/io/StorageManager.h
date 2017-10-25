@@ -14,6 +14,7 @@
 #include <unordered_map>
 #include <rocksdb/db.h>
 #include <boost/filesystem/path.hpp>
+#include <boost/serialization/unordered_map.hpp>
 #include "../MetaChain.h"
 #include "../SimpleIni.h"
 #include "db/dbEngine.h"
@@ -63,7 +64,7 @@ class StorageManager
 			// we delete the object so that the memory is freed
 			if (*ptr)
 				delete *ptr;
-
+				
 			std::string strTmp;
 			if (m_pMetaDB->Get(rocksdb::ReadOptions(), strKey, &strTmp).ok())
 			{
@@ -79,11 +80,35 @@ class StorageManager
 				LOG_ERROR("Unable to deserialize " + strKey, "SM");
 		};
 
+		template<class obj>
+		void MetaDeserializeObj(std::string strKey, obj *ptr, cCriticalSection *cs)
+		{
+			LOCK(cs);
+
+			std::string strTmp;
+			if (m_pMetaDB->Get(rocksdb::ReadOptions(), strKey, &strTmp).ok() )
+			{
+				std::stringstream stream(strTmp);
+				boost::archive::binary_iarchive ia(stream, boost::archive::no_header | boost::archive::no_tracking);
+				// the >> operator creates a new object and the double pointer updates the reference
+				obj *tmp;
+				ia >> tmp;
+				*ptr = *tmp;
+				delete tmp;
+#ifdef _DEBUG
+				LOG_DEBUG("Deserialized " + strKey, "SM");
+#endif
+			}
+			else
+				LOG_ERROR("Unable to deserialize " + strKey, "SM");
+		};
+
 		boost::filesystem::path							m_pathDataDirectory;
 		boost::filesystem::path							m_pathRawDirectory;
 
 		// functions and variables for raw file output
 		std::unordered_map<unsigned short, smSC>		m_umapSC;
+		cCriticalSection								m_csUmapSC;
 		uintmax_t										m_uimRawFileSizeMax;
 		bool											openRawFile(unsigned short usChainIdentifier);
 
