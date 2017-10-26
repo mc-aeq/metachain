@@ -75,6 +75,9 @@ namespace MCP02
 			bool															registerFactory(std::string strName, MCP04::ChainInterface*(*ptr)(void) );
 			bool															popExists(std::string strName);
 
+			void															printSCInfo();
+			void															printPoPInfo();
+
 			// simple getter and setter
 			uint16_t														getChainIdentifier(std::string strChainName);
 			std::string														getChainIdentifier(uint16_t uint16tChainIdentifier);

@@ -12,6 +12,7 @@
 #include "dbEngine.h"
 #include <unordered_map>
 #include <rocksdb/db.h>
+#include <boost/lexical_cast.hpp>
 #include "../../SimpleIni.h"
 
 /*
@@ -21,18 +22,39 @@ storage class for rocks db
 class dbEngineRDB : public dbEngine
 {
 	private:
+		std::unordered_map<std::string, std::string>	m_umapSettings;
 		rocksdb::DB										*m_pDB;
 		rocksdb::WriteBatch								*m_pBatch;
+		rocksdb::Status									m_dbStatus;
+
+		// template for getting values of different type
+		template<typename T>
+		T getT(std::string strKey, T tDefault)
+		{
+			std::string strTmp;
+			m_dbStatus = m_pDB->Get(rocksdb::ReadOptions(), strKey, &strTmp);
+
+			if (m_dbStatus.ok())
+				return boost::lexical_cast<T>(strTmp);
+			else
+				return tDefault;
+		}
 
 	public:
 														dbEngineRDB();
 														~dbEngineRDB();
 		virtual bool									initialize(std::unordered_map<std::string, std::string>* umapSettings);
 
+		// functions for writing, getting single entries
+		virtual bool									write(std::string strKey, std::string strValue, std::string strEnv = "");
+		virtual std::string								get(std::string strKey, std::string strDefault = "", std::string strEnv = "") {	return getT(strKey, strDefault); };
+		virtual unsigned int							get(std::string strKey, unsigned int uiDefault = 0, std::string strEnv = "") { return getT(strKey, uiDefault); };
+
 		// functions for batch writing
 		virtual void									batchStart();
 		virtual void									batchAddStatement(std::string strKey, std::string strValue, std::string strEnv = "");		// strEnv is used for dbEngines that are not key/value based. e.g. mysql where tables can be defined and used
 		virtual void									batchFinalize();
+
 };
 
 #endif

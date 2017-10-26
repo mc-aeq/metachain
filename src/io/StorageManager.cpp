@@ -14,6 +14,7 @@
 #include "rocksdb/db.h"
 #include "db/rdb.h"
 #include "db/mysql.h"
+#include "../tinyformat.h"
 
 StorageManager::StorageManager(MetaChain *mc)
 	: m_pMC(mc),
@@ -138,7 +139,6 @@ bool StorageManager::initialize(CSimpleIniA* iniFile)
 	{
 		rocksdb::WriteBatch batch;
 		batch.Put("initialized", "1");
-		batch.Put(MC_HEIGHT, "0");
 		batch.Put(MC_NEXT_CI, "0");
 		batch.Put("TestNet", m_pMC->isTestNet() ? "1" : "0");
 		m_pMetaDB->Write(rocksdb::WriteOptions(), &batch);		
@@ -151,17 +151,6 @@ bool StorageManager::initialize(CSimpleIniA* iniFile)
 		// get our subchains
 		MetaDeserialize("SCM", &m_pSubChainManager, &csSubChainManager);
 		MetaDeserializeObj("smSC", &m_umapSC, &m_csUmapSC );
-
-		/*std::string strTmp;
-		if (m_pMetaDB->Get(rocksdb::ReadOptions(), "smSC", &strTmp).ok())
-		{
-			std::stringstream stream(strTmp);
-			boost::archive::binary_iarchive ia(stream, boost::archive::no_header | boost::archive::no_tracking);
-			// the >> operator creates a new object and the double pointer updates the reference
-			std::unordered_map<unsigned short, smSC> *tmp;
-			ia >> tmp;
-			m_umapSC = *tmp;
-		}*/
 	}
 	else
 	{
@@ -179,6 +168,20 @@ bool StorageManager::initialize(CSimpleIniA* iniFile)
 	{
 		LOG_ERROR("MetaDB and node.ini configurations about TestNet don't match. Terminating for security reasons", "SM");
 		return false;
+	}
+
+	// print some output about the loaded states of the SCs and PoPs
+	m_pSubChainManager->printSCInfo();
+	m_pSubChainManager->printPoPInfo();
+
+	// print some output about the smSC
+	LOG("Number of loaded smSC: " + std::to_string(m_umapSC.size()), "SM");
+	for (auto &it : m_umapSC)
+	{
+		openRawFile(it.first);
+		LOG(strprintf("#%u - %s", it.first+1, it.second.filePath.string()), "SM");
+		LOG(strprintf("    Raw File Counter: %u", it.second.uiRawFileCounter), "SM");
+		LOG(strprintf("    Current Raw File Size: %u", it.second.uimRawFileSize), "SM");
 	}
 
 	// everything smooth
@@ -203,7 +206,7 @@ bool StorageManager::openRawFile(unsigned short usChainIdentifier)
 	// open our fstream for raw output
 	std::ostringstream ssFileName;
 	ssFileName << std::setw(8) << std::setfill('0') << it->second.uiRawFileCounter;
-	it->second.filePath = m_pathRawDirectory / std::to_string(usChainIdentifier) / ssFileName.str();
+	it->second.filePath = m_pathRawDirectory / std::to_string(usChainIdentifier) / (ssFileName.str() + RAW_FILEENDING);
 
 	// if the file exists we get the size to calculate our splitting. If it doesn't we start with 0
 	if (boost::filesystem::exists(it->second.filePath))
@@ -211,7 +214,7 @@ bool StorageManager::openRawFile(unsigned short usChainIdentifier)
 	else
 		it->second.uimRawFileSize = 0;
 
-	it->second.streamRaw.open(it->second.filePath.string() + RAW_FILEENDING, std::ios_base::app);
+	it->second.streamRaw.open(it->second.filePath.string(), std::ios_base::app);
 	if (!it->second.streamRaw.is_open())
 	{
 		LOG_ERROR("Unable to open raw file: " + it->second.filePath.string(), "SM");
@@ -221,8 +224,19 @@ bool StorageManager::openRawFile(unsigned short usChainIdentifier)
 	return true;
 }
 
-bool StorageManager::writeRaw(unsigned short usChainIdentifier, unsigned int uiBlockNumber, unsigned int uiLength, void *raw)
+bool StorageManager::writeRaw(unsigned short usChainIdentifier, unsigned int uiLength, void *raw)
 {
+	// get the SC dbEngine
+	dbEngine *db = m_pSubChainManager->getDBEngine(usChainIdentifier);
+	if (db == nullptr)
+	{
+		LOG_ERROR("Can't open db for SC to store information: " + std::to_string(usChainIdentifier), "SM");
+		return false;
+	}
+
+	// get the last block number and increment it to our current block
+	unsigned int uiBlockNumber = db->get("last_block", (unsigned int)0) + 1;
+
 	if (m_pMC->isFN())
 	{
 		// get an iterator for faster access
@@ -247,17 +261,11 @@ bool StorageManager::writeRaw(unsigned short usChainIdentifier, unsigned int uiB
 		{
 			LOCK(it->second.csAccess);
 			it->second.streamRaw.write((char *)raw, uiLength);
+			it->second.streamRaw.flush();
 			it->second.uimRawFileSize += uiLength;
 		}
 
 		// write some meta data
-		dbEngine *db = m_pSubChainManager->getDBEngine(usChainIdentifier);
-		if (db == nullptr)
-		{
-			LOG_ERROR("Can't open db for SC to store information: " + std::to_string(usChainIdentifier), "SM");
-			return false;
-		}
-
 		db->batchStart();
 		db->batchAddStatement( "mbl." + std::to_string(uiBlockNumber) + ".file", it->second.filePath.string());
 		db->batchAddStatement( "mbl." + std::to_string(uiBlockNumber) + ".offset", std::to_string(it->second.uimRawFileSize));
@@ -274,6 +282,9 @@ bool StorageManager::writeRaw(unsigned short usChainIdentifier, unsigned int uiB
 				return false;
 		}
 	}
+
+	// write the current block height into the db
+	db->write("last_block", std::to_string(uiBlockNumber));
 
 	return true;
 }

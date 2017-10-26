@@ -41,7 +41,7 @@ struct smSC
 
 		// handle the stream since we can't copy it. if the stream wasn't opened before, we don't open it now either
 		if( a.streamRaw.is_open() )
-			streamRaw.open( filePath.string() + RAW_FILEENDING, std::ios_base::app );
+			streamRaw.open( filePath.string(), std::ios_base::app );
 	}
 
 	// default constructor

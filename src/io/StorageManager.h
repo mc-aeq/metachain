@@ -116,7 +116,7 @@ class StorageManager
 														StorageManager(MetaChain *mc);
 														~StorageManager();
 		bool											initialize(CSimpleIniA* iniFile);
-		bool											writeRaw(unsigned short usChainIdentifier, unsigned int uiBlockNumber, unsigned int uiLength, void *raw);
+		bool											writeRaw(unsigned short usChainIdentifier, unsigned int uiLength, void *raw);
 		bool											registerSC(unsigned short usChainIdentifier);
 
 		// simple getter and setter

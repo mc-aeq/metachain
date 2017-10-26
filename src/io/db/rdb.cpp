@@ -43,11 +43,27 @@ bool dbEngineRDB::initialize(std::unordered_map<std::string, std::string>* umapS
 			return false;
 		}
 
+		// store the umap for later references
+		m_umapSettings = *umapSettings;
+
 		return true;
 	}
 	catch (std::out_of_range &e)
 	{
 		LOG_ERROR("Unable to initialize RDB Engine due to missing configuration params. Error: " + (std::string)e.what(), "RDB-E");
+		return false;
+	}
+}
+
+bool dbEngineRDB::write(std::string strKey, std::string strValue, std::string strEnv)
+{
+	m_dbStatus = m_pDB->Put(rocksdb::WriteOptions(), strKey, strValue);
+
+	if (m_dbStatus.ok())
+		return true;
+	else
+	{
+		LOG_ERROR("Writing to RDB " + m_umapSettings.at("path") + " didn't work: " + m_dbStatus.ToString(), "RDB-E");
 		return false;
 	}
 }
