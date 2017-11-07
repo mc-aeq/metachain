@@ -14,6 +14,7 @@
 #include "../MCP04/MC/mcActions.h"
 #include "../MCP04/PoS.h"
 #include "../MCP04/PoT.h"
+#include "../../tinyformat.h"
 
 namespace MCP02
 {
@@ -74,6 +75,7 @@ namespace MCP02
 
 		// TCT genesis block
 		LOG("Generating TCT genesis block", "SCM");
+		// todo: generate TCT genesis block
 
 		// everything smooth
 		return true;
@@ -193,6 +195,9 @@ namespace MCP02
 			return (std::numeric_limits<uint16_t>::max)();
 		}
 
+		// store this block into our MC
+		MetaChain::getInstance().getStorageManager()->writeRaw(MC_CHAIN_IDENTIFIER, sizeof(MCP04::MetaChain::mcBlock), block);
+
 		return tmp.uint16ChainIdentifier;
 	}
 
@@ -262,5 +267,31 @@ namespace MCP02
 			return m_mapSubChains[usChainIdentifier].db;
 		else
 			return nullptr;
+	}
+
+	void SubChainManager::printSCInfo()
+	{
+		LOG("Number of loaded SubChains: " + std::to_string(m_mapSubChains.size()), "SCM");
+		for (auto &it : m_mapSubChains)
+		{
+			LOG(strprintf("SC #%u - %s", it.first+1, it.second.caChainName), "SCM");
+			LOG(strprintf("   PoP: %s", it.second.caPoP), "SCM");
+			LOG(strprintf("   Height: %u", it.second.db->get("last_block", (unsigned int)0)), "SCM");
+#ifdef _DEBUG
+			LOG_DEBUG(strprintf("   Instance Address: %p", it.second.ptr), "SCM");
+#endif
+		}
+	}
+
+	void SubChainManager::printPoPInfo()
+	{
+		LOG("Number of loaded PoPs: " + std::to_string(m_mapProofFactories.size()), "SCM");
+		for (auto &it : m_mapProofFactories)
+		{
+			LOG(strprintf("PoP: %s", it.first), "SCM");
+#ifdef _DEBUG
+			LOG_DEBUG(strprintf("   Factory Address: %p", it.second), "SCM");
+#endif
+		}
 	}
 }

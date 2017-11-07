@@ -19,6 +19,7 @@ struct smSC
 	std::ofstream					streamRaw;
 	boost::filesystem::path			filePath;
 	uintmax_t						uimRawFileSize;
+	unsigned int					uiRawFileCounter;
 
 	// serialization
 	template <typename Archive>
@@ -26,10 +27,28 @@ struct smSC
 	{
 		if (version == 1)
 		{
-			/*ar & uint16ChainIdentifier;
-			ar & caChainName;
-			ar & caPoP;*/
+			ar & uimRawFileSize;
+			ar & uiRawFileCounter;
 		}
+	}
+
+	// copy constructor
+	smSC(const smSC& a)
+	{
+		filePath = a.filePath;
+		uimRawFileSize = a.uimRawFileSize;
+		uiRawFileCounter = a.uiRawFileCounter;
+
+		// handle the stream since we can't copy it. if the stream wasn't opened before, we don't open it now either
+		if( a.streamRaw.is_open() )
+			streamRaw.open( filePath.string(), std::ios_base::app );
+	}
+
+	// default constructor
+	smSC()
+	{
+		uimRawFileSize = 0;
+		uiRawFileCounter = 0;
 	}
 };
 

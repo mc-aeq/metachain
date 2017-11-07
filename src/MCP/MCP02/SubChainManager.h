@@ -54,8 +54,11 @@ namespace MCP02
 					ar & m_mapSubChains;
 
 					// after loading the SC the instances are nullptr. create instances for the SCs
-					for( auto &it : m_mapSubChains)
+					for (auto &it : m_mapSubChains)
+					{
 						it.second.ptr = m_mapProofFactories.at(it.second.caPoP)();
+						it.second.db = MetaChain::getInstance().getStorageManager()->createDBEngine(it.second.uint16ChainIdentifier);
+					}
 				}
 			}
 			BOOST_SERIALIZATION_SPLIT_MEMBER()
@@ -71,6 +74,9 @@ namespace MCP02
 			bool															init();
 			bool															registerFactory(std::string strName, MCP04::ChainInterface*(*ptr)(void) );
 			bool															popExists(std::string strName);
+
+			void															printSCInfo();
+			void															printPoPInfo();
 
 			// simple getter and setter
 			uint16_t														getChainIdentifier(std::string strChainName);

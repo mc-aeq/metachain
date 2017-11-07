@@ -23,6 +23,11 @@ class dbEngine
 		// this function is for initializing
 		virtual bool									initialize(std::unordered_map<std::string, std::string>* umapSettings) = 0;
 
+		// functions for writing, getting single entries
+		virtual bool									write( std::string strKey, std::string strValue, std::string strEnv = "") = 0;		// strEnv is used for dbEngines that are not key/value based. e.g. mysql where tables can be defined and used
+		virtual std::string								get(std::string strKey, std::string strDefault = "", std::string strEnv = "") = 0;
+		virtual unsigned int							get(std::string strKey, unsigned int uiDefault = 0, std::string strEnv = "") = 0;
+
 		// functions for batch writing
 		virtual void									batchStart() = 0;
 		virtual void									batchAddStatement( std::string strKey, std::string strValue, std::string strEnv = "" ) = 0;		// strEnv is used for dbEngines that are not key/value based. e.g. mysql where tables can be defined and used
