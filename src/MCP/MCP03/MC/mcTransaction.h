@@ -9,18 +9,18 @@
 #ifndef __MCP04_MC_TRANSACTION_H__
 #define __MCP04_MC_TRANSACTION_H__ 1
 
-#include "../../MCP03/Transaction.h"
+#include "../Transaction.h"
 #include <boost/serialization/access.hpp>
 #include <boost/serialization/version.hpp>
 #include "mcTxIn.h"
 
-namespace MCP04
+namespace MCP03
 {
 	namespace MetaChain
 	{
 #define CURRENT_MC_TRANSACTION_VERSION 1
 
-		class mcTransaction : public MCP03::Transaction
+		class mcTransaction : public Transaction
 		{
 			private:
 				// required to have serialization overrides
@@ -54,5 +54,5 @@ namespace MCP04
 	}
 }
 
-BOOST_CLASS_VERSION(MCP04::MetaChain::mcTransaction, CURRENT_MC_TRANSACTION_VERSION)
+BOOST_CLASS_VERSION(MCP03::MetaChain::mcTransaction, CURRENT_MC_TRANSACTION_VERSION)
 #endif

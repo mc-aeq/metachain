@@ -11,7 +11,7 @@
 
 #include "../../../defines.h"
 
-namespace MCP04
+namespace MCP03
 {
 	namespace MetaChain
 	{
@@ -32,6 +32,6 @@ namespace MCP04
 	}
 }
 
-BOOST_CLASS_VERSION(MCP04::MetaChain::createSubchain, 1)
+BOOST_CLASS_VERSION(MCP03::MetaChain::createSubchain, 1)
 
 #endif

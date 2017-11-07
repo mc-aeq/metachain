@@ -13,18 +13,18 @@
 #include <boost/serialization/split_member.hpp>
 #include <boost/serialization/vector.hpp>
 #include <boost/serialization/version.hpp>
-#include "../../MCP03/txIn.h"
-#include "../../MCp03/txOutRef.h"
+#include "../txIn.h"
+#include "../txOutRef.h"
 #include "mcActions.h"
 
-namespace MCP04
+namespace MCP03
 {
 	namespace MetaChain
 	{
 
 #define CURRENT_MC_TXIN_VERSION 1
 
-		class mcTxIn : public MCP03::txIn
+		class mcTxIn : public txIn
 		{
 			private:
 				// required to have serialization overrides
@@ -81,5 +81,5 @@ namespace MCP04
 	}
 }
 
-BOOST_CLASS_VERSION(MCP04::MetaChain::mcTxIn, CURRENT_MC_TXIN_VERSION)
+BOOST_CLASS_VERSION(MCP03::MetaChain::mcTxIn, CURRENT_MC_TXIN_VERSION)
 #endif

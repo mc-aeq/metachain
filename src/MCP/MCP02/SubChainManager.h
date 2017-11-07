@@ -18,15 +18,20 @@
 #include <boost/serialization/split_member.hpp>
 #include "SubChainStruct.h"
 #include "../MCP04/ChainInterface.h"
-#include "../MCP04/MC/mcBlock.h"
+#include "../MCP03/MC/mcBlock.h"
 
 // forward decl
 namespace MCP04 { class ChainInterface; };
 
 namespace MCP02
 {
+#define CI_DEFAULT_INITIATOR	"4yGrKXjLu5utWhhWFb4ymCtxGQ7io11HUnXT5TPZbpGMrTrzXkZ7auvkJAHuBqbjhqHMHthSCE8QYC4P1mkNToip"
 #define CI_DEFAULT_MC_STRING	"MC"
-#define MC_DEFAULT_POP "PoMC"
+#define CI_DEFAULT_TCT_STRING	"TRUST"
+#define CI_DEFAULT_MINE_STRING	"MINE"
+#define CI_DEFAULT_MC_POP		"PoMC"
+#define CI_DEFAULT_TCT_POP		"PoT"
+#define CI_DEFAULT_MINE_POP		"PoS"
 
 	class SubChainManager
 	{
@@ -66,7 +71,7 @@ namespace MCP02
 			// subchain creation process
 			void															initPoP();
 			bool															isSubChainAllowed(std::string strChainName);
-			uint16_t														addSubChain(MCP04::MetaChain::mcBlock *block);
+			uint16_t														addSubChain(MCP03::MetaChain::mcBlock *block);
 
 		public:
 																			SubChainManager();

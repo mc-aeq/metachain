@@ -7,11 +7,12 @@
 #include "mcBlock.h"
 #include <sstream>
 #include <boost/archive/binary_oarchive.hpp>
+#include "../../MCP01/base58.h"
 #include "../../../crypto/sha3.h"
 #include "../../../logger.h"
 #include "../../../tinyformat.h"
 
-namespace MCP04
+namespace MCP03
 {
 	namespace MetaChain
 	{
@@ -93,7 +94,8 @@ namespace MCP04
 		std::string mcBlock::toString()
 		{
 			std::stringstream s;
-			s << strprintf("Block (Hash=%s, Version=0x%08x, hashPrevBlock=%s, hashMerkleRoot=%s, Time=%u, Byte=%08x)\n",
+			s << strprintf("Block (Initiator=%s, Hash=%s, Version=0x%08x, hashPrevBlock=%s, hashMerkleRoot=%s, Time=%u, Byte=%08x)\n",
+				MCP01::base58::encode(initiatorPubKey, 64),
 				hash.ToString(),
 				uint16tVersion,
 				hashPrevBlock.ToString(),

@@ -8,7 +8,7 @@
 #include "../../../logger.h"
 #include "../../../tinyformat.h"
 
-namespace MCP04
+namespace MCP03
 {
 	namespace MetaChain
 	{
@@ -49,11 +49,11 @@ namespace MCP04
 		std::string mcTxIn::toString()
 		{
 			std::stringstream s;
-			s << "mcTxIn(" << strprintf("Action %u\n", eAction) << "Params(";
+			s << "mcTxIn(" << strprintf("Action: %u\n", eAction) << "Params(";
 
 			switch (eAction)
 			{
-				case ACTION::CREATE_SUBCHAIN:		s << strprintf( "caChainName %s, caPoP %s, uint64tMaxCoins %u", ((createSubchain*)pPayload)->caChainName, ((createSubchain*)pPayload)->caPoP, ((createSubchain*)pPayload)->uint64tMaxCoins );			break;
+				case ACTION::CREATE_SUBCHAIN:		s << strprintf( "caChainName '%.4s', caPoP %s, uint64tMaxCoins %u", ((createSubchain*)pPayload)->caChainName, ((createSubchain*)pPayload)->caPoP, ((createSubchain*)pPayload)->uint64tMaxCoins );			break;
 			}
 
 			s << ")\n)";

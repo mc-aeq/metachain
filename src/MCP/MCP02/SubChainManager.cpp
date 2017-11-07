@@ -8,10 +8,13 @@
 #include <boost/archive/binary_oarchive.hpp>
 #include "../../MetaChain.h"
 #include "../../logger.h"
+#include "../MCP01/base58.h"
 #include "../MCP03/Transaction.h"
 #include "../MCP03/Block.h"
+#include "../MCP03/MC/mcActions.h"
+#include "../MCP03/MC/mcTransaction.h"
+#include "../MCP03/MC/mcBlock.h"
 #include "../MCP04/PoMC.h"
-#include "../MCP04/MC/mcActions.h"
 #include "../MCP04/PoS.h"
 #include "../MCP04/PoT.h"
 #include "../../tinyformat.h"
@@ -29,54 +32,156 @@ namespace MCP02
 
 	bool SubChainManager::init()
 	{
-		// MC genesis block
-		LOG("Generating MetaChain genesis block", "SCM");
+		// since we can't control the metachain without the corresponding authorative TCT chain, we need to manually create the genesis block of the MC and the TCT.
+		/*
+		* MC genesis block
+		*/
+		{
+			LOG("Generating MetaChain genesis block", "SCM");
 
-		std::shared_ptr< MCP04::MetaChain::mcTransaction > txGenesis = std::make_shared<MCP04::MetaChain::mcTransaction>();
-		txGenesis->uint16tVersion = 1;
-		txGenesis->txIn.init( MCP04::MetaChain::mcTxIn::ACTION::CREATE_SUBCHAIN );
-		memcpy(((MCP04::MetaChain::createSubchain*)txGenesis->txIn.pPayload)->caChainName, CI_DEFAULT_MC_STRING, sizeof(CI_DEFAULT_MC_STRING));
-		memcpy(((MCP04::MetaChain::createSubchain*)txGenesis->txIn.pPayload)->caPoP, MC_DEFAULT_POP, sizeof(MC_DEFAULT_POP));
-		((MCP04::MetaChain::createSubchain*)txGenesis->txIn.pPayload)->uint64tMaxCoins = 0;
+			std::shared_ptr< MCP03::MetaChain::mcTransaction > txGenesis = std::make_shared<MCP03::MetaChain::mcTransaction>();
+			txGenesis->uint16tVersion = 1;
+			txGenesis->txIn.init(MCP03::MetaChain::mcTxIn::ACTION::CREATE_SUBCHAIN);
+			memcpy(((MCP03::MetaChain::createSubchain*)txGenesis->txIn.pPayload)->caChainName, CI_DEFAULT_MC_STRING, sizeof(CI_DEFAULT_MC_STRING));
+			memcpy(((MCP03::MetaChain::createSubchain*)txGenesis->txIn.pPayload)->caPoP, CI_DEFAULT_MC_POP, sizeof(CI_DEFAULT_MC_POP));
+			((MCP03::MetaChain::createSubchain*)txGenesis->txIn.pPayload)->uint64tMaxCoins = 0;
 
-		MCP04::MetaChain::mcBlock genesis;
-		genesis.nTime = 1506343480;
-		genesis.uint16tVersion = 1;
-		genesis.pTransaction = std::move(txGenesis);
-		genesis.hashPrevBlock.SetNull();
-		genesis.calcAll();
+			MCP03::MetaChain::mcBlock genesis;
+			genesis.nTime = 1506343480;
+			genesis.uint16tVersion = 1;
+			MCP01::base58::decode(CI_DEFAULT_INITIATOR, genesis.initiatorPubKey);
+			genesis.pTransaction = std::move(txGenesis);
+			genesis.hashPrevBlock.SetNull();
+			genesis.calcAll();
 
-		LOG("MetaChain genesis block hash is: " + genesis.hash.ToString(), "SCM");
+			LOG("MetaChain genesis block hash is: " + genesis.hash.ToString(), "SCM");
 
 #ifdef _DEBUG
-		LOG_DEBUG("MetaChain Genesis block contents: " + genesis.toString(), "SCM");
+			LOG_DEBUG("MetaChain Genesis block contents: " + genesis.toString(), "SCM");
 #endif
 
-		// checking consistency of our MC genesis block
-		uint8_t genesisRawBuffer[32] = { 0xdc, 0x03, 0x4e, 0x58, 0xf0, 0xaa, 0xcf, 0x47, 0x0d, 0x96, 0x73, 0x0d, 0x90, 0xb2, 0x69, 0x1f, 0x41, 0x87, 0x86, 0x5b, 0x0f, 0x75, 0x93, 0x6a, 0x49, 0xc6, 0xbf, 0x53, 0xb5, 0x94, 0xfe, 0x70 };
-		const uint256 validMCGenesisHash(&genesisRawBuffer[0], 32);
-		if (genesis.hash != validMCGenesisHash)
-		{
+			// checking consistency of our MC genesis block
+			uint8_t genesisRawBuffer[32] = { 0xdc, 0x03, 0x4e, 0x58, 0xf0, 0xaa, 0xcf, 0x47, 0x0d, 0x96, 0x73, 0x0d, 0x90, 0xb2, 0x69, 0x1f, 0x41, 0x87, 0x86, 0x5b, 0x0f, 0x75, 0x93, 0x6a, 0x49, 0xc6, 0xbf, 0x53, 0xb5, 0x94, 0xfe, 0x70 };
+			const uint256 validMCGenesisHash(&genesisRawBuffer[0], 32);
+			if (genesis.hash != validMCGenesisHash)
+			{
 #ifdef _DEBUG
-			LOG_DEBUG("WARNING!!! Genesis Block Hash doesn't match. Not Exiting", "SCM");
+				LOG_DEBUG("WARNING!!! MetaChain Genesis Block Hash doesn't match. Not Exiting", "SCM");
 #else
-			LOG_ERROR("The MetaChain genesis block hash doesn't match the precomputed safe hash!", "SCM");
-			return false;
+				LOG_ERROR("The MetaChain genesis block hash doesn't match the precomputed safe hash!", "SCM");
+				return false;
 #endif
+			}
+
+			// adding the MC as subchain
+			LOG("Loading MetaChain genesis block", "SCM");
+			if (addSubChain(&genesis) != 0)
+			{
+				LOG_ERROR("Adding of the MetaChain identifier didn't work as expected.", "SCM");
+				return false;
+			}
 		}
 
-		// adding the MC as subchain
-		LOG("Loading MetaChain genesis block", "SCM");
-		if (addSubChain(&genesis) != 0)
+		/*
+		* TCT genesis block
+		*/
 		{
-			LOG_ERROR("Adding of the MetaChain identifier didn't work as expected.", "SCM");
-			return false;
+			LOG("Generating TCT genesis block", "SCM");
+
+			std::shared_ptr< MCP03::MetaChain::mcTransaction > txGenesis = std::make_shared<MCP03::MetaChain::mcTransaction>();
+			txGenesis->uint16tVersion = 1;
+			txGenesis->txIn.init(MCP03::MetaChain::mcTxIn::ACTION::CREATE_SUBCHAIN);
+			memcpy(((MCP03::MetaChain::createSubchain*)txGenesis->txIn.pPayload)->caChainName, CI_DEFAULT_TCT_STRING, sizeof(CI_DEFAULT_TCT_STRING));
+			memcpy(((MCP03::MetaChain::createSubchain*)txGenesis->txIn.pPayload)->caPoP, CI_DEFAULT_TCT_POP, sizeof(CI_DEFAULT_TCT_POP));
+			((MCP03::MetaChain::createSubchain*)txGenesis->txIn.pPayload)->uint64tMaxCoins = 8978156324;
+
+			MCP03::MetaChain::mcBlock genesis;
+			genesis.nTime = 1506343480;
+			genesis.uint16tVersion = 1;
+			MCP01::base58::decode(CI_DEFAULT_INITIATOR, genesis.initiatorPubKey);
+			genesis.pTransaction = std::move(txGenesis);
+			genesis.hashPrevBlock.SetNull();
+			genesis.calcAll();
+
+			LOG("TCT genesis block hash is: " + genesis.hash.ToString(), "SCM");
+
+#ifdef _DEBUG
+			LOG_DEBUG("TCT Genesis block contents: " + genesis.toString(), "SCM");
+#endif
+
+			// checking consistency of our MC genesis block
+			uint8_t genesisRawBuffer[32] = { 0xdc, 0x03, 0x4e, 0x58, 0xf0, 0xaa, 0xcf, 0x47, 0x0d, 0x96, 0x73, 0x0d, 0x90, 0xb2, 0x69, 0x1f, 0x41, 0x87, 0x86, 0x5b, 0x0f, 0x75, 0x93, 0x6a, 0x49, 0xc6, 0xbf, 0x53, 0xb5, 0x94, 0xfe, 0x70 };
+			const uint256 validMCGenesisHash(&genesisRawBuffer[0], 32);
+			if (genesis.hash != validMCGenesisHash)
+			{
+#ifdef _DEBUG
+				LOG_DEBUG("WARNING!!! TCT Genesis Block Hash doesn't match. Not Exiting", "SCM");
+#else
+				LOG_ERROR("The TCT genesis block hash doesn't match the precomputed safe hash!", "SCM");
+				return false;
+#endif
+			}
+
+			// adding the MC as subchain
+			LOG("Loading TCT genesis block", "SCM");
+			if (addSubChain(&genesis) != 1)
+			{
+				LOG_ERROR("Adding of the TCT identifier didn't work as expected.", "SCM");
+				return false;
+			}
 		}
 
-		// TCT genesis block
-		LOG("Generating TCT genesis block", "SCM");
-		// todo: generate TCT genesis block
 
+		// since MINE will be deployed earlier than the TCT, we also have to manually create the genesis block of the MINE. Future SubChains will use regular TCT control sequences to generate MetaChain genesis blocks
+		/*
+		* MINE genesis block
+		*/
+		{
+			LOG("Generating MINE genesis block", "SCM");
+
+			std::shared_ptr< MCP03::MetaChain::mcTransaction > txGenesis = std::make_shared<MCP03::MetaChain::mcTransaction>();
+			txGenesis->uint16tVersion = 1;
+			txGenesis->txIn.init(MCP03::MetaChain::mcTxIn::ACTION::CREATE_SUBCHAIN);
+			memcpy(((MCP03::MetaChain::createSubchain*)txGenesis->txIn.pPayload)->caChainName, CI_DEFAULT_MINE_STRING, sizeof(CI_DEFAULT_MINE_STRING));
+			memcpy(((MCP03::MetaChain::createSubchain*)txGenesis->txIn.pPayload)->caPoP, CI_DEFAULT_MINE_POP, sizeof(CI_DEFAULT_MINE_POP));
+			((MCP03::MetaChain::createSubchain*)txGenesis->txIn.pPayload)->uint64tMaxCoins = 111000000;
+
+			MCP03::MetaChain::mcBlock genesis;
+			genesis.nTime = 1506343480;
+			genesis.uint16tVersion = 1;
+			MCP01::base58::decode(CI_DEFAULT_INITIATOR, genesis.initiatorPubKey);
+			genesis.pTransaction = std::move(txGenesis);
+			genesis.hashPrevBlock.SetNull();
+			genesis.calcAll();
+
+			LOG("MINE genesis block hash is: " + genesis.hash.ToString(), "SCM");
+
+#ifdef _DEBUG
+			LOG_DEBUG("MINE Genesis block contents: " + genesis.toString(), "SCM");
+#endif
+
+			// checking consistency of our MC genesis block
+			uint8_t genesisRawBuffer[32] = { 0xdc, 0x03, 0x4e, 0x58, 0xf0, 0xaa, 0xcf, 0x47, 0x0d, 0x96, 0x73, 0x0d, 0x90, 0xb2, 0x69, 0x1f, 0x41, 0x87, 0x86, 0x5b, 0x0f, 0x75, 0x93, 0x6a, 0x49, 0xc6, 0xbf, 0x53, 0xb5, 0x94, 0xfe, 0x70 };
+			const uint256 validMCGenesisHash(&genesisRawBuffer[0], 32);
+			if (genesis.hash != validMCGenesisHash)
+			{
+#ifdef _DEBUG
+				LOG_DEBUG("WARNING!!! MINE Genesis Block Hash doesn't match. Not Exiting", "SCM");
+#else
+				LOG_ERROR("The MINE genesis block hash doesn't match the precomputed safe hash!", "SCM");
+				return false;
+#endif
+			}
+
+			// adding the MC as subchain
+			LOG("Loading MINE genesis block", "SCM");
+			if (addSubChain(&genesis) != 2)
+			{
+				LOG_ERROR("Adding of the MINE identifier didn't work as expected.", "SCM");
+				return false;
+			}
+		}
+		
 		// everything smooth
 		return true;
 	}
@@ -114,7 +219,7 @@ namespace MCP02
 		for (auto &it : MetaChain::getInstance().vecSC_Blacklist)
 		{
 #ifdef _DEBUG
-			LOG_DEBUG("Checking Subchain Blacklist Entry: " + it, "SCM");
+			LOG_DEBUG("Checking Subchain Blacklist Entry: " + boost::trim_copy(it), "SCM");
 #endif
 			// wildcard blacklist means we don't allow anything
 			if (boost::trim_copy(it) == "*")
@@ -145,33 +250,33 @@ namespace MCP02
 	}
 
 	// returns the uint16_t from the newly added SubChain
-	uint16_t SubChainManager::addSubChain(MCP04::MetaChain::mcBlock *block)
+	uint16_t SubChainManager::addSubChain(MCP03::MetaChain::mcBlock *block)
 	{
 		// checking if this is really a genesis request block
-		if( block->pTransaction->txIn.eAction != MCP04::MetaChain::mcTxIn::ACTION::CREATE_SUBCHAIN )
+		if( block->pTransaction->txIn.eAction != MCP03::MetaChain::mcTxIn::ACTION::CREATE_SUBCHAIN )
 		{
 			LOG_ERROR("A non-genesis creation block was passed into the genesis creation function. Not executing!", "SCM");
 			return (std::numeric_limits<uint16_t>::max)();
 		}
 
 		// check if this subchain is allowed in the config
-		if (!isSubChainAllowed(((MCP04::MetaChain::createSubchain*)block->pTransaction->txIn.pPayload)->caChainName))
+		if (!isSubChainAllowed(((MCP03::MetaChain::createSubchain*)block->pTransaction->txIn.pPayload)->caChainName))
 		{
 			LOG_ERROR("SC was not added since the configuration (subchain_whitelist, subchain_blacklist) prohibits this SC.", "SCM");
 			return (std::numeric_limits<uint16_t>::max)();
 		}
 
 		// check whether this chain name already exists. If so, we don't add it
-		if (getChainIdentifier(((MCP04::MetaChain::createSubchain*)block->pTransaction->txIn.pPayload)->caChainName) != (std::numeric_limits<uint16_t>::max)())
+		if (getChainIdentifier(((MCP03::MetaChain::createSubchain*)block->pTransaction->txIn.pPayload)->caChainName) != (std::numeric_limits<uint16_t>::max)())
 		{
-			LOG_ERROR("SC with the same name '" + std::string(((MCP04::MetaChain::createSubchain*)block->pTransaction->txIn.pPayload)->caChainName) + "' already exists. Not adding!", "SCM");
+			LOG_ERROR("SC with the same name '" + std::string(((MCP03::MetaChain::createSubchain*)block->pTransaction->txIn.pPayload)->caChainName) + "' already exists. Not adding!", "SCM");
 			return (std::numeric_limits<uint16_t>::max)();
 		}
 
 		// now we make sure that we have the requested PoP present.
-		if( !popExists(((MCP04::MetaChain::createSubchain*)block->pTransaction->txIn.pPayload)->caPoP) )
+		if( !popExists(((MCP03::MetaChain::createSubchain*)block->pTransaction->txIn.pPayload)->caPoP) )
 		{
-			LOG_ERROR("The requested PoP '" + std::string(((MCP04::MetaChain::createSubchain*)block->pTransaction->txIn.pPayload)->caPoP) + "' for this SC isn't loaded. This means that this node can't participate in the new SC.", "SCM");
+			LOG_ERROR("The requested PoP '" + std::string(((MCP03::MetaChain::createSubchain*)block->pTransaction->txIn.pPayload)->caPoP) + "' for this SC isn't loaded. This means that this node can't participate in the new SC.", "SCM");
 			LOG_ERROR("If you wish to proceed participating in this subchain, please load the requested module and resync the MC", "SCM");
 			return (std::numeric_limits<uint16_t>::max)();
 		}
@@ -182,9 +287,9 @@ namespace MCP02
 		// adding subchain into our vector
 		SubChainStruct tmp;
 		MetaChain::getInstance().getStorageManager()->incMetaValue(MC_NEXT_CI, (uint16_t)0, &tmp.uint16ChainIdentifier);
-		strncpy(tmp.caChainName, ((MCP04::MetaChain::createSubchain*)block->pTransaction->txIn.pPayload)->caChainName, MAX_CHAINNAME_LENGTH);
-		strncpy(tmp.caPoP, ((MCP04::MetaChain::createSubchain*)block->pTransaction->txIn.pPayload)->caPoP, MAX_POP_NAME);
-		tmp.ptr = m_mapProofFactories.at(((MCP04::MetaChain::createSubchain*)block->pTransaction->txIn.pPayload)->caPoP)();
+		strncpy(tmp.caChainName, ((MCP03::MetaChain::createSubchain*)block->pTransaction->txIn.pPayload)->caChainName, MAX_CHAINNAME_LENGTH);
+		strncpy(tmp.caPoP, ((MCP03::MetaChain::createSubchain*)block->pTransaction->txIn.pPayload)->caPoP, MAX_POP_NAME);
+		tmp.ptr = m_mapProofFactories.at(((MCP03::MetaChain::createSubchain*)block->pTransaction->txIn.pPayload)->caPoP)();
 		tmp.db = MetaChain::getInstance().getStorageManager()->createDBEngine(tmp.uint16ChainIdentifier);
 		m_mapSubChains[ tmp.uint16ChainIdentifier ] = tmp;
 
@@ -196,7 +301,7 @@ namespace MCP02
 		}
 
 		// store this block into our MC
-		MetaChain::getInstance().getStorageManager()->writeRaw(MC_CHAIN_IDENTIFIER, sizeof(MCP04::MetaChain::mcBlock), block);
+		MetaChain::getInstance().getStorageManager()->writeRaw(MC_CHAIN_IDENTIFIER, sizeof(MCP03::MetaChain::mcBlock), block);
 
 		return tmp.uint16ChainIdentifier;
 	}

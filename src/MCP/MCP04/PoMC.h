@@ -10,8 +10,8 @@
 #define __MCP04_POMC_H__ 1
 
 #include "ChainInterface.h"
-#include "MC/mcTransaction.h"
-#include "MC/mcBlock.h"
+#include "../MCP03/MC/mcTransaction.h"
+#include "../MCP03/MC/mcBlock.h"
 #include "../MCP02/SubChainManager.h"
 
 namespace MCP04
@@ -26,8 +26,8 @@ namespace MCP04
 			static bool							registerFactory(MCP02::SubChainManager *ptr) { return ptr->registerFactory(m_strName, &createInstance); };
 			static ChainInterface				*createInstance() { return new PoMC(); };
 
-			MCP03::Transaction*					createTXElement() { return new MCP04::MetaChain::mcTransaction; };
-			MCP03::Block*						createBlockElement() { return new MCP04::MetaChain::mcBlock; };
+			MCP03::Transaction*					createTXElement() { return new MCP03::MetaChain::mcTransaction; };
+			MCP03::Block*						createBlockElement() { return new MCP03::MetaChain::mcBlock; };
 	};
 }
 #endif

@@ -10,7 +10,7 @@
 #include "../../../crypto/sha3.h"
 #include "../../../tinyformat.h"
 
-namespace MCP04
+namespace MCP03
 {
 	namespace MetaChain
 	{

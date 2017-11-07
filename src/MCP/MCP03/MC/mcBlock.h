@@ -15,15 +15,15 @@
 #include <boost/serialization/vector.hpp>
 #include <boost/serialization/shared_ptr.hpp>
 #include "mcTransaction.h"
-#include "../../MCP03/Block.h"
+#include "../Block.h"
 
-namespace MCP04
+namespace MCP03
 {
 	namespace MetaChain
 	{
 #define CURRENT_MC_BLOCK_VERSION 1
 
-		class mcBlock : public MCP03::Block
+		class mcBlock : public Block
 		{
 			private:
 				// required to have serialization overrides
@@ -35,7 +35,7 @@ namespace MCP04
 				{
 					// note: version is always stored last
 					if (version == 1)
-						ar << uint16tVersion << hashPrevBlock << hashMerkleRoot << hash << nTime << uint32tByte << pTransaction;
+						ar << uint16tVersion << initiatorPubKey << hashPrevBlock << hashMerkleRoot << hash << nTime << uint32tByte << pTransaction;
 				}
 
 			public:
@@ -44,6 +44,9 @@ namespace MCP04
 
 				// the tx inside this block. in the metachain only one transaction per block is allowed
 				std::shared_ptr<mcTransaction>							pTransaction;
+
+				// every block in the MC is initiated by one single entity and stored for reference
+				uint8_t													initiatorPubKey[64];
 
 				// calculation functions
 				void													calcMerkleRoot();
@@ -56,5 +59,5 @@ namespace MCP04
 	}
 }
 
-BOOST_CLASS_VERSION(MCP04::MetaChain::mcBlock, CURRENT_MC_BLOCK_VERSION)
+BOOST_CLASS_VERSION(MCP03::MetaChain::mcBlock, CURRENT_MC_BLOCK_VERSION)
 #endif

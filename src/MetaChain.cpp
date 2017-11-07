@@ -83,8 +83,14 @@ bool MetaChain::initialize(CSimpleIniA* iniFile, boost::filesystem::path pathExe
 	boost::split(vecPOPs, (std::string)iniFile->GetValue("subchains", "pop_load", "*"), boost::is_any_of(","));
 
 	// get the SC white and blacklist
-	boost::split(vecSC_Whitelist, (std::string)iniFile->GetValue("subchains", "subchain_whitelist", "*"), boost::is_any_of(","));
-	boost::split(vecSC_Blacklist, (std::string)iniFile->GetValue("subchains", "subchain_blacklist", "*"), boost::is_any_of(","));
+	boost::split(vecSC_Whitelist, (std::string)iniFile->GetValue("subchains", "subchain_whitelist", "*"), boost::is_any_of(","), boost::algorithm::token_compress_on);
+	boost::split(vecSC_Blacklist, (std::string)iniFile->GetValue("subchains", "subchain_blacklist", "*"), boost::is_any_of(","), boost::algorithm::token_compress_on);
+
+	// sanitizing white and blacklist
+	for (auto &it : vecSC_Whitelist)
+		boost::trim(it);
+	for (auto &it : vecSC_Blacklist)
+		boost::trim(it);
 	
 	// create the block storage backends, check their integrity and check if no other instance is running
 	m_pStorageManager = new StorageManager(this);
