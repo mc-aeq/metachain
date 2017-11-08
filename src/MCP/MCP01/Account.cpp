@@ -67,18 +67,20 @@ namespace MCP01
 		if (type == ECDSA::SECP256k1)
 		{
 			secp256k1_context *ctx = secp256k1_context_create(SECP256K1_CONTEXT_SIGN | SECP256K1_CONTEXT_VERIFY);
-			if (secp256k1_ec_seckey_verify(ctx, (unsigned char*)getPrivKeyStr().c_str()) != 1)
-				return false;
-
-			if (secp256k1_ec_pubkey_create(ctx, (secp256k1_pubkey*)m_keyPub, (unsigned char*)getPrivKeyStr().c_str()) == 1)
+			if ((secp256k1_ec_seckey_verify(ctx, (unsigned char*)getPrivKeyStr().c_str()) == 1) && (secp256k1_ec_pubkey_create(ctx, (secp256k1_pubkey*)m_keyPub, (unsigned char*)getPrivKeyStr().c_str()) == 1))
 			{
 				m_ecdsaPubKey = ECDSA::SECP256k1;
+				secp256k1_context_destroy(ctx);
 				return true;
 			}
 			else
+			{
+				m_ecdsaPubKey = ECDSA::not_calculated;
+				secp256k1_context_destroy(ctx);
 				return false;
+			}
 		}
-		else if( type == ECDSA::SECP256r1 )
+		else if (type == ECDSA::SECP256r1)
 		{
 			// SECP256r1 not implemented yet
 			m_ecdsaPubKey = ECDSA::not_calculated;
@@ -138,9 +140,6 @@ namespace MCP01
 		// assemble the result
 		memcpy(walletAddress, C, 4);
 		memcpy(walletAddress + 4, buffer, 66);
-
-		// free some buffers
-		delete C, X, buffer;
 
 		return true;
 	}
@@ -251,13 +250,9 @@ namespace MCP01
 
 		// 6
 		SHA3 crypto;
-		uint8_t* C = crypto.hash(SHA3::HashType::KECCAK, SHA3::HashSize::SHA3_128, crypto.hash(SHA3::HashType::KECCAK, SHA3::HashSize::SHA3_128, (uiAddress+4), 66), 32);
+		uint8_t* C = crypto.hash(SHA3::HashType::KECCAK, SHA3::HashSize::SHA3_128, crypto.hash(SHA3::HashType::KECCAK, SHA3::HashSize::SHA3_128, (uiAddress + 4), 66), 32);
 		if (memcmp(uiChecksum, C, 4) != 0)
-		{
-			delete C;
 			return false;
-		}
-		delete C;
 
 		// if we reached this point, everything went smooth and it's valid
 		return true;

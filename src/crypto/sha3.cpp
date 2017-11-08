@@ -5,6 +5,7 @@
 **********************************************************************/
 
 #include "sha3.h"
+#include <memory>
 #include <iomanip>
 #include <boost/lexical_cast.hpp>
 #include "../endian.h"
@@ -33,7 +34,8 @@ static inline uint64_t rotateRight(uint64_t x, int n)
 }
 
 SHA3::SHA3()
-	:m_pEncBuf(NULL)
+	:m_pEncBuf(nullptr),
+	m_pDigest(nullptr)
 {
 }
 
@@ -51,6 +53,12 @@ SHA3::SHA3(HashType type, HashSize size, unsigned int uiDigestLength)
 
 SHA3::~SHA3()
 {
+	if (m_pDigest)
+		delete m_pDigest;
+	if (m_keccakState.A)
+		delete m_keccakState.A;
+	if (m_keccakState.buffer)
+		delete m_keccakState.buffer;
 	if (m_pEncBuf)
 		delete m_pEncBuf;
 }
@@ -89,21 +97,19 @@ uint8_t* SHA3::hashFile(std::string strFileName, HashType type, HashSize size, u
 	delete[] cBuffer;
 	fclose(fp);
 
-	uint8_t *op;
 	switch (type)
 	{
-	case SHA3::HashType::DEFAULT:
-		op = sha3Digest();
-		break;
 	case SHA3::HashType::KECCAK:
-		op = keccakDigest();
+		return keccakDigest();
 		break;
 	case SHA3::HashType::SHAKE:
-		op = shakeDigest();
+		return shakeDigest();
+		break;
+	case SHA3::HashType::DEFAULT:
+	default:
+		return sha3Digest();
 		break;
 	}
-
-	return op;
 }
 
 uint8_t* SHA3::hash(HashType type, HashSize size, const uint8_t * pBuffer, unsigned int uiLength, unsigned int uiDigestLength)
@@ -115,21 +121,19 @@ uint8_t* SHA3::hash(HashType type, HashSize size, const uint8_t * pBuffer, unsig
 
 	keccakUpdate(pBuffer, 0, uiLength);
 
-	uint8_t *op;
 	switch (type)
 	{
-	case SHA3::HashType::DEFAULT:
-		op = sha3Digest();
-		break;
 	case SHA3::HashType::KECCAK:
-		op = keccakDigest();
+		return keccakDigest();
 		break;
 	case SHA3::HashType::SHAKE:
-		op = shakeDigest();
+		return shakeDigest();
+		break;
+	case SHA3::HashType::DEFAULT:
+	default:
+		return sha3Digest();
 		break;
 	}
-
-	return op;
 }
 
 // wrapper that gets a 256 bit hash and puts it directly in a uint256 for easier handling
@@ -328,13 +332,17 @@ unsigned char *SHA3::sha3Digest()
 	uint64_t *A = m_keccakState.A;
 	sha3AddPadding();
 	keccakProcessBuffer();
-	uint64_t *tmp = new uint64_t[m_keccakState.length];
+
+	if (m_pDigest)
+		delete m_pDigest;
+
+	m_pDigest = new uint64_t[m_keccakState.length];
 	for (int i = 0; i < m_keccakState.length; i += 8)
 	{
-		tmp[i >> 3] = htole64(A[i >> 3]);
+		m_pDigest[i >> 3] = htole64(A[i >> 3]);
 	}
 	keccakReset();
-	return (unsigned char*)tmp;
+	return (unsigned char*)m_pDigest;
 }
 
 // keccakDigest - called once all data has been few to the keccakUpdate functions
@@ -345,13 +353,17 @@ unsigned char *SHA3::keccakDigest()
 	uint64_t *A = m_keccakState.A;
 	keccakAddPadding();
 	keccakProcessBuffer();
-	uint64_t *tmp = new uint64_t[m_keccakState.length];
+
+	if (m_pDigest)
+		delete m_pDigest;
+
+	m_pDigest = new uint64_t[m_keccakState.length];
 	for (unsigned int i = 0; i < m_keccakState.length; i += 8)
 	{
-		tmp[i >> 3] = htole64(A[i >> 3]);
+		m_pDigest[i >> 3] = htole64(A[i >> 3]);
 	}
 	keccakReset();
-	return (unsigned char*)tmp;
+	return (unsigned char*)m_pDigest;
 }
 
 // shakeDigest - called once all data has been few to the keccakUpdate functions
@@ -362,13 +374,17 @@ unsigned char *SHA3::shakeDigest()
 	uint64_t *A = m_keccakState.A;
 	shakeAddPadding();
 	keccakProcessBuffer();
-	uint64_t *tmp = new uint64_t[m_keccakState.d];
+
+	if (m_pDigest)
+		delete m_pDigest;
+
+	m_pDigest = new uint64_t[m_keccakState.d];
 	for (unsigned int i = 0; i < m_keccakState.d; i += 8)
 	{
-		tmp[i >> 3] = htole64(A[i >> 3]);
+		m_pDigest[i >> 3] = htole64(A[i >> 3]);
 	}
 	keccakReset();
-	return (unsigned char*)tmp;
+	return (unsigned char*)m_pDigest;
 }
 
 
