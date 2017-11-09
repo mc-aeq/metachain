@@ -339,6 +339,15 @@
     <ClInclude Include="src\MCP\MCP04\PoPInterface.h">
       <Filter>Headerdateien\MCP\MCP04</Filter>
     </ClInclude>
+    <ClInclude Include="src\MCP\MCP02\Mine.h">
+      <Filter>Headerdateien\MCP\MCP02</Filter>
+    </ClInclude>
+    <ClInclude Include="src\MCP\MCP02\Trust.h">
+      <Filter>Headerdateien\MCP\MCP02</Filter>
+    </ClInclude>
+    <ClInclude Include="src\MCP\MCP02\Stub.h">
+      <Filter>Headerdateien\MCP\MCP02</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="node.cpp">
@@ -498,6 +507,15 @@
       <Filter>Quelldateien\MCP\MCP03\MC</Filter>
     </ClCompile>
     <ClCompile Include="src\MCP\MCP02\SubChain.cpp">
+      <Filter>Quelldateien\MCP\MCP02</Filter>
+    </ClCompile>
+    <ClCompile Include="src\MCP\MCP02\Mine.cpp">
+      <Filter>Quelldateien\MCP\MCP02</Filter>
+    </ClCompile>
+    <ClCompile Include="src\MCP\MCP02\Trust.cpp">
+      <Filter>Quelldateien\MCP\MCP02</Filter>
+    </ClCompile>
+    <ClCompile Include="src\MCP\MCP02\Stub.cpp">
       <Filter>Quelldateien\MCP\MCP02</Filter>
     </ClCompile>
   </ItemGroup>

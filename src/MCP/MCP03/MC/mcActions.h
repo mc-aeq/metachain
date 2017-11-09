@@ -10,6 +10,7 @@
 #define __MCP04_MC_ACTIONS_H__ 1
 
 #include "../../../defines.h"
+#include <boost/serialization/map.hpp>
 
 namespace MCP03
 {
@@ -17,16 +18,18 @@ namespace MCP03
 	{
 		struct createSubchain
 		{
-			char			caChainName[MAX_CHAINNAME_LENGTH];
-			char			caPoP[MAX_POP_NAME];
-			uint64_t		uint64tMaxCoins;
+			char										caChainName[MAX_CHAINNAME_LENGTH];
+			char										caSubChainClassName[MAX_SUBCHAIN_CLASSNAME_LENGTH];
+			char										caPoP[MAX_POP_NAME];
+			uint64_t									uint64tMaxCoins;
+			std::map< std::string, std::string >		mapParams;
 
 			// serialization
 			template <typename Archive>
 			void serialize(Archive& ar, const unsigned int version)
 			{
 				if (version == 1)
-					ar & caChainName & caPoP & uint64tMaxCoins;
+					ar & caChainName & caSubChainClassName & caPoP & uint64tMaxCoins & mapParams;
 			}
 		};
 	}

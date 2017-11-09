@@ -22,8 +22,8 @@ namespace MCP04
 			static const std::string			m_strName;
 
 		public:
-			static bool							registerFactory() { return ::MetaChain::getInstance().getStorageManager()->getSubChainManager()->registerFactory(m_strName, &createInstance); };
-			static bool							registerFactory(MCP02::SubChainManager *ptr) { return ptr->registerFactory(m_strName, &createInstance); };
+			static bool							registerFactory() { return ::MetaChain::getInstance().getStorageManager()->getSubChainManager()->registerPoPFactory(m_strName, &createInstance); };
+			static bool							registerFactory(MCP02::SubChainManager *ptr) { return ptr->registerPoPFactory(m_strName, &createInstance); };
 			static PoPInterface					*createInstance() { return new PoT(); };
 
 			MCP03::Transaction*					createTXElement() { return new MCP03::crTransaction(); };

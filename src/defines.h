@@ -79,6 +79,7 @@ const uint32_t g_cuint32tVersion = 1;
 #define LAST_RAW_FILE "_last.raw.file"
 #define MC_NEXT_CI "mc.next_ci"
 #define MAX_CHAINNAME_LENGTH 5
+#define MAX_SUBCHAIN_CLASSNAME_LENGTH 50
 #define MAX_POP_NAME 5
 
 // autoupdate defines

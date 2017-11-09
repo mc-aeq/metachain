@@ -184,8 +184,11 @@
     <ClInclude Include="src\MCP\base16.h" />
     <ClInclude Include="src\MCP\MCP01\Account.h" />
     <ClInclude Include="src\MCP\MCP01\base58.h" />
+    <ClInclude Include="src\MCP\MCP02\Mine.h" />
+    <ClInclude Include="src\MCP\MCP02\Stub.h" />
     <ClInclude Include="src\MCP\MCP02\SubChain.h" />
     <ClInclude Include="src\MCP\MCP02\SubChainManager.h" />
+    <ClInclude Include="src\MCP\MCP02\Trust.h" />
     <ClInclude Include="src\MCP\MCP03\Block.h" />
     <ClInclude Include="src\MCP\MCP03\crBlock.h" />
     <ClInclude Include="src\MCP\MCP03\crTransaction.h" />
@@ -252,8 +255,11 @@
     <ClCompile Include="src\MCP\base16.cpp" />
     <ClCompile Include="src\MCP\MCP01\Account.cpp" />
     <ClCompile Include="src\MCP\MCP01\base58.cpp" />
+    <ClCompile Include="src\MCP\MCP02\Mine.cpp" />
+    <ClCompile Include="src\MCP\MCP02\Stub.cpp" />
     <ClCompile Include="src\MCP\MCP02\SubChain.cpp" />
     <ClCompile Include="src\MCP\MCP02\SubChainManager.cpp" />
+    <ClCompile Include="src\MCP\MCP02\Trust.cpp" />
     <ClCompile Include="src\MCP\MCP03\crBlock.cpp" />
     <ClCompile Include="src\MCP\MCP03\crTransaction.cpp" />
     <ClCompile Include="src\MCP\MCP03\MC\mcBlock.cpp" />

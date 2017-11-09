@@ -94,7 +94,7 @@ namespace MCP03
 		std::string mcBlock::toString()
 		{
 			std::stringstream s;
-			s << strprintf("Block (Initiator=%s, Hash=%s, Version=0x%08x, hashPrevBlock=%s, hashMerkleRoot=%s, Time=%u, Byte=%08x)\n",
+			s << strprintf("Block (Initiator=%s, Hash=%s, Version=0x%08x, hashPrevBlock=%s, hashMerkleRoot=%s, Time=%u, Byte=%u)\n",
 				MCP01::base58::encode(initiatorPubKey, 64),
 				hash.ToString(),
 				uint16tVersion,

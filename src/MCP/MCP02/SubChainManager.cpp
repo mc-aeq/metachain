@@ -9,6 +9,9 @@
 #include "../../MetaChain.h"
 #include "../../logger.h"
 #include "../MCP01/base58.h"
+#include "../MCP02/Mine.h"
+#include "../MCP02/Trust.h"
+#include "../MCP02/Stub.h"
 #include "../MCP03/Transaction.h"
 #include "../MCP03/Block.h"
 #include "../MCP03/MC/mcActions.h"
@@ -23,7 +26,8 @@ namespace MCP02
 {
 	SubChainManager::SubChainManager()
 	{
-		initPoP();
+		initPoPFactories();
+		initSCFactories();
 	}
 
 	SubChainManager::~SubChainManager()
@@ -43,6 +47,7 @@ namespace MCP02
 			txGenesis->uint16tVersion = 1;
 			txGenesis->txIn.init(MCP03::MetaChain::mcTxIn::ACTION::CREATE_SUBCHAIN);
 			memcpy(((MCP03::MetaChain::createSubchain*)txGenesis->txIn.pPayload)->caChainName, CI_DEFAULT_MC_STRING, sizeof(CI_DEFAULT_MC_STRING));
+			memcpy(((MCP03::MetaChain::createSubchain*)txGenesis->txIn.pPayload)->caSubChainClassName, "Stub", 4);
 			memcpy(((MCP03::MetaChain::createSubchain*)txGenesis->txIn.pPayload)->caPoP, CI_DEFAULT_MC_POP, sizeof(CI_DEFAULT_MC_POP));
 			((MCP03::MetaChain::createSubchain*)txGenesis->txIn.pPayload)->uint64tMaxCoins = 0;
 
@@ -92,6 +97,7 @@ namespace MCP02
 			txGenesis->uint16tVersion = 1;
 			txGenesis->txIn.init(MCP03::MetaChain::mcTxIn::ACTION::CREATE_SUBCHAIN);
 			memcpy(((MCP03::MetaChain::createSubchain*)txGenesis->txIn.pPayload)->caChainName, CI_DEFAULT_TCT_STRING, sizeof(CI_DEFAULT_TCT_STRING));
+			memcpy(((MCP03::MetaChain::createSubchain*)txGenesis->txIn.pPayload)->caSubChainClassName, CI_DEFAULT_TCT_STRING, sizeof(CI_DEFAULT_TCT_STRING));
 			memcpy(((MCP03::MetaChain::createSubchain*)txGenesis->txIn.pPayload)->caPoP, CI_DEFAULT_TCT_POP, sizeof(CI_DEFAULT_TCT_POP));
 			((MCP03::MetaChain::createSubchain*)txGenesis->txIn.pPayload)->uint64tMaxCoins = 8978156324;
 
@@ -143,8 +149,10 @@ namespace MCP02
 			txGenesis->uint16tVersion = 1;
 			txGenesis->txIn.init(MCP03::MetaChain::mcTxIn::ACTION::CREATE_SUBCHAIN);
 			memcpy(((MCP03::MetaChain::createSubchain*)txGenesis->txIn.pPayload)->caChainName, CI_DEFAULT_MINE_STRING, sizeof(CI_DEFAULT_MINE_STRING));
+			memcpy(((MCP03::MetaChain::createSubchain*)txGenesis->txIn.pPayload)->caSubChainClassName, CI_DEFAULT_MINE_STRING, sizeof(CI_DEFAULT_MINE_STRING));
 			memcpy(((MCP03::MetaChain::createSubchain*)txGenesis->txIn.pPayload)->caPoP, CI_DEFAULT_MINE_POP, sizeof(CI_DEFAULT_MINE_POP));
 			((MCP03::MetaChain::createSubchain*)txGenesis->txIn.pPayload)->uint64tMaxCoins = 111000000;
+			((MCP03::MetaChain::createSubchain*)txGenesis->txIn.pPayload)->mapParams["test"] = "test2";
 
 			MCP03::MetaChain::mcBlock genesis;
 			genesis.nTime = 1506343480;
@@ -186,7 +194,7 @@ namespace MCP02
 		return true;
 	}
 
-	void SubChainManager::initPoP()
+	void SubChainManager::initPoPFactories()
 	{		
 		// load the POPs that are defined in the ini
 		// todo: change this to module (.dll) loading when POPs are encapsulated in modules.
@@ -211,6 +219,14 @@ namespace MCP02
 				MCP04::PoT::registerFactory(this);
 		}
 
+	}
+
+	void SubChainManager::initSCFactories()
+	{
+		// todo: currently hard coded loading of SC factories. change this to module (.dll) as in PoPFactories()
+		MCP02::Stub::registerFactory(this);
+		MCP02::Trust::registerFactory(this);
+		MCP02::Mine::registerFactory(this);
 	}
 
 	bool SubChainManager::isSubChainAllowed(std::string strChainName)
@@ -286,7 +302,11 @@ namespace MCP02
 
 		// adding subchain into our map
 		SubChain tmp;
-		uint16_t uint16ChainIdentifier = tmp.init(((MCP03::MetaChain::createSubchain*)block->pTransaction->txIn.pPayload)->caChainName, ((MCP03::MetaChain::createSubchain*)block->pTransaction->txIn.pPayload)->caPoP);
+		uint16_t uint16ChainIdentifier = tmp.init(
+			((MCP03::MetaChain::createSubchain*)block->pTransaction->txIn.pPayload)->caChainName, 
+			((MCP03::MetaChain::createSubchain*)block->pTransaction->txIn.pPayload)->caSubChainClassName,
+			((MCP03::MetaChain::createSubchain*)block->pTransaction->txIn.pPayload)->caPoP, 
+			((MCP03::MetaChain::createSubchain*)block->pTransaction->txIn.pPayload)->mapParams);
 
 		if (uint16ChainIdentifier == (std::numeric_limits<uint16_t>::max)())
 		{
@@ -296,7 +316,12 @@ namespace MCP02
 		m_mapSubChains[uint16ChainIdentifier] = tmp;		
 
 		// store this block into our MC
-		MetaChain::getInstance().getStorageManager()->writeRaw(MC_CHAIN_IDENTIFIER, sizeof(MCP03::MetaChain::mcBlock), block);
+		std::stringstream stream(std::ios_base::in | std::ios_base::out | std::ios_base::binary);
+		{
+			boost::archive::binary_oarchive oa(stream, boost::archive::no_header | boost::archive::no_tracking);
+			oa << block;
+		}
+		MetaChain::getInstance().getStorageManager()->writeRaw(MC_CHAIN_IDENTIFIER, stream.tellp(), (void*)stream.str().data());
 
 		return uint16ChainIdentifier;
 	}
@@ -329,7 +354,7 @@ namespace MCP02
 			return "";
 	}
 
-	bool SubChainManager::registerFactory(std::string strName, MCP04::PoPInterface*(*ptr)(void))
+	bool SubChainManager::registerPoPFactory(std::string strName, MCP04::PoPInterface*(*ptr)(void))
 	{
 		try
 		{
@@ -344,6 +369,25 @@ namespace MCP02
 			// the only thing we care about this exception is, that there is no entry! Now we can safely add this new creator function to our factory
 			LOG("Registering new proof of process: " + strName, "SCM");
 			m_mapPoPFactories.emplace(strName, ptr);
+			return true;
+		}
+	}
+
+	bool SubChainManager::registerSCFactory(std::string strName, MCP02::SubChain*(*ptr)(void))
+	{
+		try
+		{
+			m_mapSCFactories.at(strName);
+
+			// if this doesn't throw an exception it means we already have this entry. So we have to report that and don't add it
+			LOG_ERROR("Already having a module loaded that provides the following SC: " + strName + ", not loading new module!", "SCM");
+			return false;
+		}
+		catch (...)
+		{
+			// the only thing we care about this exception is, that there is no entry! Now we can safely add this new creator function to our factory
+			LOG("Registering new SC: " + strName, "SCM");
+			m_mapSCFactories.emplace(strName, ptr);
 			return true;
 		}
 	}

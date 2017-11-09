@@ -10,8 +10,6 @@
 #define __MCP04_MC_TXIN_H__ 1
 
 #include <boost/serialization/access.hpp>
-#include <boost/serialization/split_member.hpp>
-#include <boost/serialization/vector.hpp>
 #include <boost/serialization/version.hpp>
 #include "../txIn.h"
 #include "../txOutRef.h"
@@ -32,26 +30,18 @@ namespace MCP03
 
 				// serialization
 				template<class Archive>
-				void											save(Archive &ar, const unsigned int version) const
+				void											serialize(Archive& ar, const unsigned int version)
 				{
 					// note: version is always stored last
 					if (version == 1)
 					{
-						//ar << uint16tVersion << eAction;
+						ar << uint16tVersion << eAction;
 						switch (eAction)
 						{
 							case ACTION::CREATE_SUBCHAIN:		ar << *(createSubchain*)pPayload;		break;
 						}
 					}
 				}
-				template<class Archive>
-				void											load(Archive &ar, const unsigned int version) const
-				{
-					// note: version is always stored last
-					if (version == 1)
-						ar << txPrev << strSignature;
-				}
-				BOOST_SERIALIZATION_SPLIT_MEMBER()
 
 			public:
 				// enum that defines the action of this tx

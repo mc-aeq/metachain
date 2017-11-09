@@ -41,6 +41,7 @@ namespace MCP02
 			// vector of subchains, map of proof of process creators
 			std::map< unsigned short, SubChain >							m_mapSubChains;
 			std::map< std::string, MCP04::PoPInterface*(*)(void) >			m_mapPoPFactories;
+			std::map< std::string, MCP02::SubChain*(*)(void) >				m_mapSCFactories;
 			
 			template<class Archive>
 			void															serialize(Archive &ar, const unsigned int version) 
@@ -51,7 +52,8 @@ namespace MCP02
 			}
 
 			// subchain creation process
-			void															initPoP();
+			void															initPoPFactories();
+			void															initSCFactories();
 			bool															isSubChainAllowed(std::string strChainName);
 			uint16_t														addSubChain(MCP03::MetaChain::mcBlock *block);
 
@@ -59,7 +61,8 @@ namespace MCP02
 																			SubChainManager();
 																			~SubChainManager();
 			bool															init();
-			bool															registerFactory(std::string strName, MCP04::PoPInterface*(*ptr)(void) );
+			bool															registerPoPFactory(std::string strName, MCP04::PoPInterface*(*ptr)(void) );
+			bool															registerSCFactory(std::string strName, MCP02::SubChain*(*ptr)(void));
 			bool															popExists(std::string strName);
 
 			void															printSCInfo();
