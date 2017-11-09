@@ -54,7 +54,7 @@ namespace MCP03
 			switch (eAction)
 			{
 				case ACTION::CREATE_SUBCHAIN:
-					s << strprintf( "caChainName '%.5s', caPoP '%.5s', uint64tMaxCoins %u\n", ((createSubchain*)pPayload)->caChainName, ((createSubchain*)pPayload)->caPoP, ((createSubchain*)pPayload)->uint64tMaxCoins );			
+					s << strprintf( "caChainName '%.5s', caPoP '%.5s'\n", ((createSubchain*)pPayload)->caChainName, ((createSubchain*)pPayload)->caPoP );			
 					s << "Params ( ";
 					for (auto it : ((createSubchain*)pPayload)->mapParams)
 						s << it.first << ": " << it.second << "\n";

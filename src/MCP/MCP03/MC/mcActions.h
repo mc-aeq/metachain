@@ -21,7 +21,6 @@ namespace MCP03
 			char										caChainName[MAX_CHAINNAME_LENGTH];
 			char										caSubChainClassName[MAX_SUBCHAIN_CLASSNAME_LENGTH];
 			char										caPoP[MAX_POP_NAME];
-			uint64_t									uint64tMaxCoins;
 			std::map< std::string, std::string >		mapParams;
 
 			// serialization
@@ -29,7 +28,7 @@ namespace MCP03
 			void serialize(Archive& ar, const unsigned int version)
 			{
 				if (version == 1)
-					ar & caChainName & caSubChainClassName & caPoP & uint64tMaxCoins & mapParams;
+					ar & caChainName & caSubChainClassName & caPoP & mapParams;
 			}
 		};
 	}

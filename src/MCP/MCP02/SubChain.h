@@ -71,6 +71,7 @@ namespace MCP02
 
 			// initialization functions
 			uint16_t										init(char caChainName[MAX_CHAINNAME_LENGTH], char caSubChainClassName[MAX_SUBCHAIN_CLASSNAME_LENGTH], char m_caPoP[MAX_POP_NAME], std::map< std::string, std::string > mapParams );
+			//virtual bool									initGenesis(uint8_t initiatorPubKey[64], float) = 0;
 
 			// simple setter & getter
 			std::string										getChainName() { return m_caChainName; };

@@ -49,7 +49,6 @@ namespace MCP02
 			memcpy(((MCP03::MetaChain::createSubchain*)txGenesis->txIn.pPayload)->caChainName, CI_DEFAULT_MC_STRING, sizeof(CI_DEFAULT_MC_STRING));
 			memcpy(((MCP03::MetaChain::createSubchain*)txGenesis->txIn.pPayload)->caSubChainClassName, "Stub", 4);
 			memcpy(((MCP03::MetaChain::createSubchain*)txGenesis->txIn.pPayload)->caPoP, CI_DEFAULT_MC_POP, sizeof(CI_DEFAULT_MC_POP));
-			((MCP03::MetaChain::createSubchain*)txGenesis->txIn.pPayload)->uint64tMaxCoins = 0;
 
 			MCP03::MetaChain::mcBlock genesis;
 			genesis.nTime = 1506343480;
@@ -88,10 +87,10 @@ namespace MCP02
 		}
 
 		/*
-		* TCT genesis block
+		* TCT genesis block 8978156324
 		*/
 		{
-			LOG("Generating TCT genesis block", "SCM");
+			LOG("Generating TCT MetaGenesis block", "SCM");
 
 			std::shared_ptr< MCP03::MetaChain::mcTransaction > txGenesis = std::make_shared<MCP03::MetaChain::mcTransaction>();
 			txGenesis->uint16tVersion = 1;
@@ -99,7 +98,8 @@ namespace MCP02
 			memcpy(((MCP03::MetaChain::createSubchain*)txGenesis->txIn.pPayload)->caChainName, CI_DEFAULT_TCT_STRING, sizeof(CI_DEFAULT_TCT_STRING));
 			memcpy(((MCP03::MetaChain::createSubchain*)txGenesis->txIn.pPayload)->caSubChainClassName, CI_DEFAULT_TCT_STRING, sizeof(CI_DEFAULT_TCT_STRING));
 			memcpy(((MCP03::MetaChain::createSubchain*)txGenesis->txIn.pPayload)->caPoP, CI_DEFAULT_TCT_POP, sizeof(CI_DEFAULT_TCT_POP));
-			((MCP03::MetaChain::createSubchain*)txGenesis->txIn.pPayload)->uint64tMaxCoins = 8978156324;
+			((MCP03::MetaChain::createSubchain*)txGenesis->txIn.pPayload)->mapParams["maxCoins"] = "8978156324";
+			((MCP03::MetaChain::createSubchain*)txGenesis->txIn.pPayload)->mapParams["maxDecimalPlaces"] = "100000000";
 
 			MCP03::MetaChain::mcBlock genesis;
 			genesis.nTime = 1506343480;
@@ -109,10 +109,10 @@ namespace MCP02
 			genesis.hashPrevBlock.SetNull();
 			genesis.calcAll();
 
-			LOG("TCT genesis block hash is: " + genesis.hash.ToString(), "SCM");
+			LOG("TCT MetaGenesis block hash is: " + genesis.hash.ToString(), "SCM");
 
 #ifdef _DEBUG
-			LOG_DEBUG("TCT Genesis block contents: " + genesis.toString(), "SCM");
+			LOG_DEBUG("TCT MetaGenesis block contents: " + genesis.toString(), "SCM");
 #endif
 
 			// checking consistency of our MC genesis block
@@ -121,15 +121,15 @@ namespace MCP02
 			if (genesis.hash != validMCGenesisHash)
 			{
 #ifdef _DEBUG
-				LOG_DEBUG("WARNING!!! TCT Genesis Block Hash doesn't match. Not Exiting", "SCM");
+				LOG_DEBUG("WARNING!!! TCT MetaGenesis Block Hash doesn't match. Not Exiting", "SCM");
 #else
-				LOG_ERROR("The TCT genesis block hash doesn't match the precomputed safe hash!", "SCM");
+				LOG_ERROR("The TCT MetaGenesis block hash doesn't match the precomputed safe hash!", "SCM");
 				return false;
 #endif
 			}
 
 			// adding the MC as subchain
-			LOG("Loading TCT genesis block", "SCM");
+			LOG("Loading TCT MetaGenesis block", "SCM");
 			if (addSubChain(&genesis) != 1)
 			{
 				LOG_ERROR("Adding of the TCT identifier didn't work as expected.", "SCM");
@@ -140,10 +140,10 @@ namespace MCP02
 
 		// since MINE will be deployed earlier than the TCT, we also have to manually create the genesis block of the MINE. Future SubChains will use regular TCT control sequences to generate MetaChain genesis blocks
 		/*
-		* MINE genesis block
+		* MINE genesis block 111000000
 		*/
 		{
-			LOG("Generating MINE genesis block", "SCM");
+			LOG("Generating MINE MetaGenesis block", "SCM");
 
 			std::shared_ptr< MCP03::MetaChain::mcTransaction > txGenesis = std::make_shared<MCP03::MetaChain::mcTransaction>();
 			txGenesis->uint16tVersion = 1;
@@ -151,8 +151,8 @@ namespace MCP02
 			memcpy(((MCP03::MetaChain::createSubchain*)txGenesis->txIn.pPayload)->caChainName, CI_DEFAULT_MINE_STRING, sizeof(CI_DEFAULT_MINE_STRING));
 			memcpy(((MCP03::MetaChain::createSubchain*)txGenesis->txIn.pPayload)->caSubChainClassName, CI_DEFAULT_MINE_STRING, sizeof(CI_DEFAULT_MINE_STRING));
 			memcpy(((MCP03::MetaChain::createSubchain*)txGenesis->txIn.pPayload)->caPoP, CI_DEFAULT_MINE_POP, sizeof(CI_DEFAULT_MINE_POP));
-			((MCP03::MetaChain::createSubchain*)txGenesis->txIn.pPayload)->uint64tMaxCoins = 111000000;
-			((MCP03::MetaChain::createSubchain*)txGenesis->txIn.pPayload)->mapParams["test"] = "test2";
+			((MCP03::MetaChain::createSubchain*)txGenesis->txIn.pPayload)->mapParams["maxCoins"] = "111000000";
+			((MCP03::MetaChain::createSubchain*)txGenesis->txIn.pPayload)->mapParams["maxDecimalPlaces"] = "10000";
 
 			MCP03::MetaChain::mcBlock genesis;
 			genesis.nTime = 1506343480;
@@ -162,10 +162,10 @@ namespace MCP02
 			genesis.hashPrevBlock.SetNull();
 			genesis.calcAll();
 
-			LOG("MINE genesis block hash is: " + genesis.hash.ToString(), "SCM");
+			LOG("MINE MetaGenesis block hash is: " + genesis.hash.ToString(), "SCM");
 
 #ifdef _DEBUG
-			LOG_DEBUG("MINE Genesis block contents: " + genesis.toString(), "SCM");
+			LOG_DEBUG("MINE MetaGenesis block contents: " + genesis.toString(), "SCM");
 #endif
 
 			// checking consistency of our MC genesis block
@@ -174,20 +174,23 @@ namespace MCP02
 			if (genesis.hash != validMCGenesisHash)
 			{
 #ifdef _DEBUG
-				LOG_DEBUG("WARNING!!! MINE Genesis Block Hash doesn't match. Not Exiting", "SCM");
+				LOG_DEBUG("WARNING!!! MINE MetaGenesis Block Hash doesn't match. Not Exiting", "SCM");
 #else
-				LOG_ERROR("The MINE genesis block hash doesn't match the precomputed safe hash!", "SCM");
+				LOG_ERROR("The MINE MetaGenesis block hash doesn't match the precomputed safe hash!", "SCM");
 				return false;
 #endif
 			}
 
 			// adding the MC as subchain
-			LOG("Loading MINE genesis block", "SCM");
+			LOG("Loading MINE MetaGenesis block", "SCM");
 			if (addSubChain(&genesis) != 2)
 			{
 				LOG_ERROR("Adding of the MINE identifier didn't work as expected.", "SCM");
 				return false;
 			}
+
+			// generating the MINE genesis block
+			//m_mapSubChains[2].
 		}
 		
 		// everything smooth
