@@ -8,6 +8,9 @@
 #include <rocksdb/db.h>
 #include "../../logger.h"
 
+// define a RELEASE macro that deletes a pointer if it's set
+#define RELEASE(x) if(x) {delete x; x = nullptr;}
+
 dbEngineRDB::dbEngineRDB()
 	: m_pDB(nullptr),
 	m_pBatch(nullptr)
@@ -70,8 +73,7 @@ bool dbEngineRDB::write(std::string strKey, std::string strValue, std::string st
 
 void dbEngineRDB::batchStart()
 {
-	if (m_pBatch != nullptr)
-		delete m_pBatch;
+	RELEASE(m_pBatch);
 
 	m_pBatch = new rocksdb::WriteBatch;
 }
@@ -87,6 +89,5 @@ void dbEngineRDB::batchFinalize()
 		return;
 
 	m_pDB->Write(rocksdb::WriteOptions(), m_pBatch);
-	delete m_pBatch;
-	m_pBatch = nullptr;
+	RELEASE(m_pBatch);
 }

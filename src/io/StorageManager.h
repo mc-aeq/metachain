@@ -62,8 +62,7 @@ class StorageManager
 		{
 			LOCK(cs);
 			// we delete the object so that the memory is freed
-			if (*ptr)
-				delete *ptr;
+			RELEASE(*ptr);
 				
 			std::string strTmp;
 			if (m_pMetaDB->Get(rocksdb::ReadOptions(), strKey, &strTmp).ok())

@@ -32,11 +32,10 @@ StorageManager::~StorageManager()
 	remove((m_pathDataDirectory /= LOCK_FILE).string().c_str());
 
 	// delete the subchain manager
-	if(m_pSubChainManager)
-		delete m_pSubChainManager;
+	RELEASE(m_pSubChainManager);
 
 	// close the meta info db
-	delete m_pMetaDB;
+	RELEASE(m_pMetaDB);
 }
 
 bool StorageManager::initialize(CSimpleIniA* iniFile)
@@ -171,8 +170,8 @@ bool StorageManager::initialize(CSimpleIniA* iniFile)
 	}
 
 	// print some output about the loaded states of the SCs and PoPs
-	m_pSubChainManager->printSCInfo();
 	m_pSubChainManager->printPoPInfo();
+	m_pSubChainManager->printSCInfo();
 
 	// print some output about the smSC
 	LOG("Number of loaded smSC: " + std::to_string(m_umapSC.size()), "SM");

@@ -12,16 +12,15 @@
 #include <vector>
 #include <map>
 #include <boost/serialization/access.hpp>
-#include <boost/serialization/string.hpp>
 #include <boost/serialization/map.hpp>
 #include <boost/serialization/version.hpp>
-#include <boost/serialization/split_member.hpp>
-#include "SubChainStruct.h"
-#include "../MCP04/ChainInterface.h"
+#include "SubChain.h"
+#include "../MCP04/PoPInterface.h"
 #include "../MCP03/MC/mcBlock.h"
 
 // forward decl
-namespace MCP04 { class ChainInterface; };
+namespace MCP04 { class PoPInterface; };
+namespace MCP02 { class SubChain; };
 
 namespace MCP02
 {
@@ -40,33 +39,16 @@ namespace MCP02
 			friend class ::boost::serialization::access;
 
 			// vector of subchains, map of proof of process creators
-			std::map< unsigned short, SubChainStruct >						m_mapSubChains;
-			std::map< std::string, MCP04::ChainInterface*(*)(void) >		m_mapProofFactories;
+			std::map< unsigned short, SubChain >							m_mapSubChains;
+			std::map< std::string, MCP04::PoPInterface*(*)(void) >			m_mapPoPFactories;
 			
 			template<class Archive>
-			void															save(Archive &ar, const unsigned int version) const
+			void															serialize(Archive &ar, const unsigned int version) 
 			{
 				// note: version is always stored last
 				if (version == 1)
 					ar & m_mapSubChains;
 			}
-
-			template<class Archive>
-			void															load(Archive &ar, const unsigned int version)
-			{
-				if (version == 1)
-				{
-					ar & m_mapSubChains;
-
-					// after loading the SC the instances are nullptr. create instances for the SCs
-					for (auto &it : m_mapSubChains)
-					{
-						it.second.ptr = m_mapProofFactories.at(it.second.caPoP)();
-						it.second.db = MetaChain::getInstance().getStorageManager()->createDBEngine(it.second.uint16ChainIdentifier);
-					}
-				}
-			}
-			BOOST_SERIALIZATION_SPLIT_MEMBER()
 
 			// subchain creation process
 			void															initPoP();
@@ -77,7 +59,7 @@ namespace MCP02
 																			SubChainManager();
 																			~SubChainManager();
 			bool															init();
-			bool															registerFactory(std::string strName, MCP04::ChainInterface*(*ptr)(void) );
+			bool															registerFactory(std::string strName, MCP04::PoPInterface*(*ptr)(void) );
 			bool															popExists(std::string strName);
 
 			void															printSCInfo();
@@ -87,6 +69,7 @@ namespace MCP02
 			uint16_t														getChainIdentifier(std::string strChainName);
 			std::string														getChainIdentifier(uint16_t uint16tChainIdentifier);
 			dbEngine*														getDBEngine(unsigned short usChainIdentifier);
+			MCP04::PoPInterface*											getPoPInstance(std::string strPoPFactory) { return m_mapPoPFactories[strPoPFactory](); };
 	};	
 }
 

@@ -284,26 +284,21 @@ namespace MCP02
 		// multithreading locking
 		LOCK(MetaChain::getInstance().getStorageManager()->csSubChainManager);
 
-		// adding subchain into our vector
-		SubChainStruct tmp;
-		MetaChain::getInstance().getStorageManager()->incMetaValue(MC_NEXT_CI, (uint16_t)0, &tmp.uint16ChainIdentifier);
-		strncpy(tmp.caChainName, ((MCP03::MetaChain::createSubchain*)block->pTransaction->txIn.pPayload)->caChainName, MAX_CHAINNAME_LENGTH);
-		strncpy(tmp.caPoP, ((MCP03::MetaChain::createSubchain*)block->pTransaction->txIn.pPayload)->caPoP, MAX_POP_NAME);
-		tmp.ptr = m_mapProofFactories.at(((MCP03::MetaChain::createSubchain*)block->pTransaction->txIn.pPayload)->caPoP)();
-		tmp.db = MetaChain::getInstance().getStorageManager()->createDBEngine(tmp.uint16ChainIdentifier);
-		m_mapSubChains[ tmp.uint16ChainIdentifier ] = tmp;
+		// adding subchain into our map
+		SubChain tmp;
+		uint16_t uint16ChainIdentifier = tmp.init(((MCP03::MetaChain::createSubchain*)block->pTransaction->txIn.pPayload)->caChainName, ((MCP03::MetaChain::createSubchain*)block->pTransaction->txIn.pPayload)->caPoP);
 
-		// register this instance at the storage manager
-		if( !MetaChain::getInstance().getStorageManager()->registerSC(tmp.uint16ChainIdentifier) )
+		if (uint16ChainIdentifier == (std::numeric_limits<uint16_t>::max)())
 		{
-			LOG_ERROR("Couldn't register this SC at the SM.", "SCM");
+			LOG_ERROR("Couldn't initialize SC, aborting.", "SCM");
 			return (std::numeric_limits<uint16_t>::max)();
 		}
+		m_mapSubChains[uint16ChainIdentifier] = tmp;		
 
 		// store this block into our MC
 		MetaChain::getInstance().getStorageManager()->writeRaw(MC_CHAIN_IDENTIFIER, sizeof(MCP03::MetaChain::mcBlock), block);
 
-		return tmp.uint16ChainIdentifier;
+		return uint16ChainIdentifier;
 	}
 
 	uint16_t SubChainManager::getChainIdentifier(std::string strChainName)
@@ -316,8 +311,8 @@ namespace MCP02
 
 		for (auto &it = m_mapSubChains.begin(); it != m_mapSubChains.end(); it++)
 		{
-			if (memcmp(cBuffer, it->second.caChainName, MAX_CHAINNAME_LENGTH) == 0)
-				return it->second.uint16ChainIdentifier;
+			if ( it->second.getChainName() == strChainName )
+				return it->second.getChainIdentifier();
 		}
 		return (std::numeric_limits<uint16_t>::max)();
 	}
@@ -329,16 +324,16 @@ namespace MCP02
 		LOCK(MetaChain::getInstance().getStorageManager()->csSubChainManager);
 
 		if (m_mapSubChains.count(uint16tChainIdentifier) == 1)
-			return m_mapSubChains[uint16tChainIdentifier].caChainName;
+			return m_mapSubChains[uint16tChainIdentifier].getChainName();
 		else
 			return "";
 	}
 
-	bool SubChainManager::registerFactory(std::string strName, MCP04::ChainInterface*(*ptr)(void))
+	bool SubChainManager::registerFactory(std::string strName, MCP04::PoPInterface*(*ptr)(void))
 	{
 		try
 		{
-			m_mapProofFactories.at(strName);
+			m_mapPoPFactories.at(strName);
 
 			// if this doesn't throw an exception it means we already have this entry. So we have to report that and don't add it
 			LOG_ERROR("Already having a module loaded that provides the following proof of process: " + strName + ", not loading new module!", "SCM");
@@ -348,7 +343,7 @@ namespace MCP02
 		{
 			// the only thing we care about this exception is, that there is no entry! Now we can safely add this new creator function to our factory
 			LOG("Registering new proof of process: " + strName, "SCM");
-			m_mapProofFactories.emplace(strName, ptr);
+			m_mapPoPFactories.emplace(strName, ptr);
 			return true;
 		}
 	}
@@ -357,7 +352,7 @@ namespace MCP02
 	{
 		try
 		{
-			m_mapProofFactories.at(strName);
+			m_mapPoPFactories.at(strName);
 			return true;
 		}
 		catch (...)
@@ -369,7 +364,7 @@ namespace MCP02
 	dbEngine* SubChainManager::getDBEngine(unsigned short usChainIdentifier)
 	{
 		if (m_mapSubChains.count(usChainIdentifier) == 1)
-			return m_mapSubChains[usChainIdentifier].db;
+			return m_mapSubChains[usChainIdentifier].getDBEngine();
 		else
 			return nullptr;
 	}
@@ -378,20 +373,13 @@ namespace MCP02
 	{
 		LOG("Number of loaded SubChains: " + std::to_string(m_mapSubChains.size()), "SCM");
 		for (auto &it : m_mapSubChains)
-		{
-			LOG(strprintf("SC #%u - %s", it.first+1, it.second.caChainName), "SCM");
-			LOG(strprintf("   PoP: %s", it.second.caPoP), "SCM");
-			LOG(strprintf("   Height: %u", it.second.db->get("last_block", (unsigned int)0)), "SCM");
-#ifdef _DEBUG
-			LOG_DEBUG(strprintf("   Instance Address: %p", it.second.ptr), "SCM");
-#endif
-		}
+			LOG( it.second.toString(), "SCM");
 	}
 
 	void SubChainManager::printPoPInfo()
 	{
-		LOG("Number of loaded PoPs: " + std::to_string(m_mapProofFactories.size()), "SCM");
-		for (auto &it : m_mapProofFactories)
+		LOG("Number of loaded PoPs: " + std::to_string(m_mapPoPFactories.size()), "SCM");
+		for (auto &it : m_mapPoPFactories)
 		{
 			LOG(strprintf("PoP: %s", it.first), "SCM");
 #ifdef _DEBUG

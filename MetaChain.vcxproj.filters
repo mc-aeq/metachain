@@ -282,9 +282,6 @@
     <ClInclude Include="src\MCP\base16.h">
       <Filter>Headerdateien\MCP</Filter>
     </ClInclude>
-    <ClInclude Include="src\MCP\MCP02\SubChainStruct.h">
-      <Filter>Headerdateien\MCP\MCP02</Filter>
-    </ClInclude>
     <ClInclude Include="src\MCP\MCP02\SubChainManager.h">
       <Filter>Headerdateien\MCP\MCP02</Filter>
     </ClInclude>
@@ -302,9 +299,6 @@
     </ClInclude>
     <ClInclude Include="src\MCP\MCP03\txOutRef.h">
       <Filter>Headerdateien\MCP\MCP03</Filter>
-    </ClInclude>
-    <ClInclude Include="src\MCP\MCP04\ChainInterface.h">
-      <Filter>Headerdateien\MCP\MCP04</Filter>
     </ClInclude>
     <ClInclude Include="src\MCP\MCP04\PoMC.h">
       <Filter>Headerdateien\MCP\MCP04</Filter>
@@ -338,6 +332,12 @@
     </ClInclude>
     <ClInclude Include="src\MCP\MCP03\MC\mcTxIn.h">
       <Filter>Headerdateien\MCP\MCP03\MC</Filter>
+    </ClInclude>
+    <ClInclude Include="src\MCP\MCP02\SubChain.h">
+      <Filter>Headerdateien\MCP\MCP02</Filter>
+    </ClInclude>
+    <ClInclude Include="src\MCP\MCP04\PoPInterface.h">
+      <Filter>Headerdateien\MCP\MCP04</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -496,6 +496,9 @@
     </ClCompile>
     <ClCompile Include="src\MCP\MCP03\MC\mcTxIn.cpp">
       <Filter>Quelldateien\MCP\MCP03\MC</Filter>
+    </ClCompile>
+    <ClCompile Include="src\MCP\MCP02\SubChain.cpp">
+      <Filter>Quelldateien\MCP\MCP02</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

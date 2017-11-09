@@ -43,9 +43,9 @@ class SHA3
 		// State structure
 		struct keccakState
 		{
-			uint64_t *A;
+			uint64_t *A = nullptr;
 			unsigned int blockLen;
-			uint8_t *buffer;
+			uint8_t *buffer = nullptr;
 			unsigned int bufferLen;
 			int length;
 			unsigned int d;

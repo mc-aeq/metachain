@@ -5,6 +5,7 @@
 **********************************************************************/
 
 #include "sha3.h"
+#include "../defines.h"
 #include <memory>
 #include <iomanip>
 #include <boost/lexical_cast.hpp>
@@ -40,7 +41,8 @@ SHA3::SHA3()
 }
 
 SHA3::SHA3(HashType type, HashSize size, unsigned int uiDigestLength)
-	: m_pEncBuf(NULL),
+	: m_pEncBuf(nullptr),
+	m_pDigest(nullptr),
 	m_HashType(type),
 	m_HashSize(size),
 	m_uiDigestLength(uiDigestLength)
@@ -53,14 +55,10 @@ SHA3::SHA3(HashType type, HashSize size, unsigned int uiDigestLength)
 
 SHA3::~SHA3()
 {
-	if (m_pDigest)
-		delete m_pDigest;
-	if (m_keccakState.A)
-		delete m_keccakState.A;
-	if (m_keccakState.buffer)
-		delete m_keccakState.buffer;
-	if (m_pEncBuf)
-		delete m_pEncBuf;
+	RELEASE(m_pDigest);
+	RELEASE(m_keccakState.A);
+	RELEASE(m_keccakState.buffer);
+	RELEASE(m_pEncBuf);
 }
 
 std::string	SHA3::to_string(uint8_t *input, unsigned int uiSize)
@@ -101,14 +99,11 @@ uint8_t* SHA3::hashFile(std::string strFileName, HashType type, HashSize size, u
 	{
 	case SHA3::HashType::KECCAK:
 		return keccakDigest();
-		break;
 	case SHA3::HashType::SHAKE:
 		return shakeDigest();
-		break;
 	case SHA3::HashType::DEFAULT:
 	default:
 		return sha3Digest();
-		break;
 	}
 }
 
@@ -125,46 +120,32 @@ uint8_t* SHA3::hash(HashType type, HashSize size, const uint8_t * pBuffer, unsig
 	{
 	case SHA3::HashType::KECCAK:
 		return keccakDigest();
-		break;
 	case SHA3::HashType::SHAKE:
 		return shakeDigest();
-		break;
 	case SHA3::HashType::DEFAULT:
 	default:
 		return sha3Digest();
-		break;
 	}
 }
 
 // wrapper that gets a 256 bit hash and puts it directly in a uint256 for easier handling
 uint256	SHA3::hash256(HashType type, const uint8_t *pBuffer, unsigned int uiLength, unsigned int uiDigestLength)
 {
-	uint8_t *ptr = hash(type, HashSize::SHA3_256, pBuffer, uiLength, uiDigestLength);
-	uint256 tmp(ptr, 32);
-	delete ptr;
-	return tmp;
+	return uint256(hash(type, HashSize::SHA3_256, pBuffer, uiLength, uiDigestLength), 32);
 }
 
 uint256 SHA3::digest256()
 {
-	uint8_t *op;
 	switch (m_HashType)
 	{
-		case SHA3::HashType::DEFAULT:
-			op = sha3Digest();
-			break;
 		case SHA3::HashType::KECCAK:
-			op = keccakDigest();
-			break;
+			return uint256(keccakDigest(), 32);
 		case SHA3::HashType::SHAKE:
-			op = shakeDigest();
-			break;
+			return uint256(shakeDigest(), 32);
+		case SHA3::HashType::DEFAULT:
+		default:
+			return uint256(sha3Digest(), 32);
 	}
-
-	uint256 tmp(op, 32);
-	delete op;
-
-	return tmp;
 }
 
 uint8_t* SHA3::cShake(HashSize size, const uint8_t *pBuffer, unsigned int uiLength, unsigned int uiDigestLength, std::string strFunctionName, std::string strCustomization)
@@ -333,8 +314,7 @@ unsigned char *SHA3::sha3Digest()
 	sha3AddPadding();
 	keccakProcessBuffer();
 
-	if (m_pDigest)
-		delete m_pDigest;
+	RELEASE(m_pDigest);
 
 	m_pDigest = new uint64_t[m_keccakState.length];
 	for (int i = 0; i < m_keccakState.length; i += 8)
@@ -354,8 +334,7 @@ unsigned char *SHA3::keccakDigest()
 	keccakAddPadding();
 	keccakProcessBuffer();
 
-	if (m_pDigest)
-		delete m_pDigest;
+	RELEASE(m_pDigest);
 
 	m_pDigest = new uint64_t[m_keccakState.length];
 	for (unsigned int i = 0; i < m_keccakState.length; i += 8)
@@ -375,8 +354,7 @@ unsigned char *SHA3::shakeDigest()
 	shakeAddPadding();
 	keccakProcessBuffer();
 
-	if (m_pDigest)
-		delete m_pDigest;
+	RELEASE(m_pDigest);
 
 	m_pDigest = new uint64_t[m_keccakState.d];
 	for (unsigned int i = 0; i < m_keccakState.d; i += 8)
