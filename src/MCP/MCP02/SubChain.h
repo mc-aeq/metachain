@@ -77,7 +77,7 @@ namespace MCP02
 			std::string										getChainName() { return m_caChainName; };
 			uint16_t										getChainIdentifier() { return m_uint16ChainIdentifier; };
 			dbEngine*										getDBEngine() { return m_pDB; };
-			std::string										toString();
+			virtual std::string								toString();
 	};
 }
 

@@ -32,6 +32,9 @@ namespace MCP02
 
 	SubChainManager::~SubChainManager()
 	{
+		// destroy subchain instances
+		for (auto &it : m_mapSubChains)
+			delete it.second;
 	}
 
 	bool SubChainManager::init()
@@ -85,9 +88,9 @@ namespace MCP02
 				return false;
 			}
 		}
-
+	
 		/*
-		* TCT genesis block 8978156324
+		* TCT genesis block
 		*/
 		{
 			LOG("Generating TCT MetaGenesis block", "SCM");
@@ -140,7 +143,7 @@ namespace MCP02
 
 		// since MINE will be deployed earlier than the TCT, we also have to manually create the genesis block of the MINE. Future SubChains will use regular TCT control sequences to generate MetaChain genesis blocks
 		/*
-		* MINE genesis block 111000000
+		* MINE genesis block
 		*/
 		{
 			LOG("Generating MINE MetaGenesis block", "SCM");
@@ -292,6 +295,14 @@ namespace MCP02
 			return (std::numeric_limits<uint16_t>::max)();
 		}
 
+		// we also need to check whether the class for this SC exists.
+		if( !scExists(((MCP03::MetaChain::createSubchain*)block->pTransaction->txIn.pPayload)->caSubChainClassName) )
+		{
+			LOG_ERROR("The requested SC class '" + std::string(((MCP03::MetaChain::createSubchain*)block->pTransaction->txIn.pPayload)->caSubChainClassName) + "' isn't loaded. This means that this node can't participate in the new SC.", "SCM");
+			LOG_ERROR("If you wish to proceed participating in this subchain, please load the requested module and resync the MC", "SCM");
+			return (std::numeric_limits<uint16_t>::max)();
+		}
+
 		// now we make sure that we have the requested PoP present.
 		if( !popExists(((MCP03::MetaChain::createSubchain*)block->pTransaction->txIn.pPayload)->caPoP) )
 		{
@@ -304,8 +315,8 @@ namespace MCP02
 		LOCK(MetaChain::getInstance().getStorageManager()->csSubChainManager);
 
 		// adding subchain into our map
-		SubChain tmp;
-		uint16_t uint16ChainIdentifier = tmp.init(
+		SubChain *tmp = m_mapSCFactories[((MCP03::MetaChain::createSubchain*)block->pTransaction->txIn.pPayload)->caSubChainClassName]();
+		uint16_t uint16ChainIdentifier = tmp->init(
 			((MCP03::MetaChain::createSubchain*)block->pTransaction->txIn.pPayload)->caChainName, 
 			((MCP03::MetaChain::createSubchain*)block->pTransaction->txIn.pPayload)->caSubChainClassName,
 			((MCP03::MetaChain::createSubchain*)block->pTransaction->txIn.pPayload)->caPoP, 
@@ -339,8 +350,8 @@ namespace MCP02
 
 		for (auto &it = m_mapSubChains.begin(); it != m_mapSubChains.end(); it++)
 		{
-			if ( it->second.getChainName() == strChainName )
-				return it->second.getChainIdentifier();
+			if ( it->second->getChainName() == strChainName )
+				return it->second->getChainIdentifier();
 		}
 		return (std::numeric_limits<uint16_t>::max)();
 	}
@@ -352,7 +363,7 @@ namespace MCP02
 		LOCK(MetaChain::getInstance().getStorageManager()->csSubChainManager);
 
 		if (m_mapSubChains.count(uint16tChainIdentifier) == 1)
-			return m_mapSubChains[uint16tChainIdentifier].getChainName();
+			return m_mapSubChains[uint16tChainIdentifier]->getChainName();
 		else
 			return "";
 	}
@@ -408,10 +419,23 @@ namespace MCP02
 		}
 	}
 
+	bool SubChainManager::scExists(std::string strName)
+	{
+		try
+		{
+			m_mapSCFactories.at(strName);
+			return true;
+		}
+		catch (...)
+		{
+			return false;
+		}
+	}
+
 	dbEngine* SubChainManager::getDBEngine(unsigned short usChainIdentifier)
 	{
 		if (m_mapSubChains.count(usChainIdentifier) == 1)
-			return m_mapSubChains[usChainIdentifier].getDBEngine();
+			return m_mapSubChains[usChainIdentifier]->getDBEngine();
 		else
 			return nullptr;
 	}
@@ -420,7 +444,7 @@ namespace MCP02
 	{
 		LOG("Number of loaded SubChains: " + std::to_string(m_mapSubChains.size()), "SCM");
 		for (auto &it : m_mapSubChains)
-			LOG( it.second.toString(), "SCM");
+			LOG( it.second->toString(), "SCM");
 	}
 
 	void SubChainManager::printPoPInfo()

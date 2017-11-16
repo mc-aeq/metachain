@@ -9,8 +9,6 @@
 #ifndef __MCP02_SUBCHAINS_H__
 #define __MCP02_SUBCHAINS_H__ 1
 
-#include <vector>
-#include <map>
 #include <boost/serialization/access.hpp>
 #include <boost/serialization/map.hpp>
 #include <boost/serialization/version.hpp>
@@ -39,7 +37,7 @@ namespace MCP02
 			friend class ::boost::serialization::access;
 
 			// vector of subchains, map of proof of process creators
-			std::map< unsigned short, SubChain >							m_mapSubChains;
+			std::map< unsigned short, MCP02::SubChain* >					m_mapSubChains;
 			std::map< std::string, MCP04::PoPInterface*(*)(void) >			m_mapPoPFactories;
 			std::map< std::string, MCP02::SubChain*(*)(void) >				m_mapSCFactories;
 			
@@ -64,6 +62,7 @@ namespace MCP02
 			bool															registerPoPFactory(std::string strName, MCP04::PoPInterface*(*ptr)(void) );
 			bool															registerSCFactory(std::string strName, MCP02::SubChain*(*ptr)(void));
 			bool															popExists(std::string strName);
+			bool															scExists(std::string strName);
 
 			void															printSCInfo();
 			void															printPoPInfo();
