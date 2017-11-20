@@ -20,6 +20,7 @@ namespace MCP02
 
 		protected:
 			static const std::string			m_strName;
+			virtual void						postInit();
 
 		private:
 			// serialization
@@ -34,6 +35,8 @@ namespace MCP02
 			static bool							registerFactory() { return ::MetaChain::getInstance().getStorageManager()->getSubChainManager()->registerSCFactory(m_strName, &createInstance); };
 			static bool							registerFactory(MCP02::SubChainManager *ptr) { return ptr->registerSCFactory(m_strName, &createInstance); };
 			static SubChain						*createInstance() { return new Trust(); };
+
+			virtual bool						initGenesis(uint8_t initiatorPubKey[64], uint64_t uint64tGenesisCoins);
 	};
 }
 

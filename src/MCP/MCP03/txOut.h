@@ -29,20 +29,18 @@ namespace MCP03
 			{
 				// note: version is always stored last
 				if (version == 1)
-					ar << m_uint64tValue << m_strPubKey;
+					ar << uint64tValue << uint8tPubKey;
 			}
-
-		protected:
-			uint64_t							m_uint64tValue;
-			std::string							m_strPubKey;
 
 		public:
 												txOut();
 												~txOut();		
 
+			uint64_t							uint64tValue;
+			uint8_t								uint8tPubKey[64];
+
 			// simple getter & setter
-			virtual bool						isEmpty() { return (m_uint64tValue == (std::numeric_limits<uint64_t>::max)()); };
-			virtual uint64_t					getValue() { return m_uint64tValue; };
+			virtual bool						isEmpty() { return (uint64tValue == (std::numeric_limits<uint64_t>::max)()); };
 			virtual std::string					toString();
 
 			// operators

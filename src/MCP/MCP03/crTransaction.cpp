@@ -63,14 +63,7 @@ namespace MCP03
 	{
 		uint64_t nValueOut = 0;
 		for (auto &it : vecOut)
-		{
-			nValueOut += it.getValue();
-			if (!validCoinRange(it.getValue()) || !validCoinRange(nValueOut))
-			{
-				LOG_ERROR("Coin Amount out of range: " + it.toString(), "TX");
-				return (std::numeric_limits<uint64_t>::max)();
-			}
-		}
+			nValueOut += it.uint64tValue;
 		return nValueOut;
 	}
 

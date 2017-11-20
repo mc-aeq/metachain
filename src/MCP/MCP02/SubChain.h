@@ -30,14 +30,6 @@ namespace MCP02
 		friend class ::boost::serialization::access;
 
 		private:
-			uint16_t										m_uint16ChainIdentifier;
-			char											m_caChainName[MAX_CHAINNAME_LENGTH];
-			char											m_caSubChainClassName[MAX_SUBCHAIN_CLASSNAME_LENGTH];
-			char											m_caPoP[MAX_POP_NAME];
-			std::map< std::string, std::string >			m_mapParams;
-			MCP04::PoPInterface								*m_pPoP;
-			dbEngine										*m_pDB;
-
 			// CC function
 			void											makeDeepCopy(SubChain & obj);
 
@@ -46,7 +38,7 @@ namespace MCP02
 			void											save(Archive &ar, const unsigned int version) const
 			{
 				if (version == 1)
-					ar & m_uint16ChainIdentifier & m_caChainName & m_caSubChainClassName & m_caPoP & m_mapParams;
+					ar & m_bGenesis & m_uint32GenesisTimestamp & m_uint16ChainIdentifier & m_caChainName & m_caSubChainClassName & m_caPoP & m_mapParams;
 			}
 
 			template<class Archive>
@@ -54,14 +46,31 @@ namespace MCP02
 			{
 				if (version == 1)
 				{
-					ar & m_uint16ChainIdentifier & m_caChainName & m_caSubChainClassName & m_caPoP & m_mapParams;
+					ar & m_bGenesis & m_uint32GenesisTimestamp & m_uint16ChainIdentifier & m_caChainName & m_caSubChainClassName & m_caPoP & m_mapParams;
 
 					m_pPoP = MetaChain::getInstance().getStorageManager()->getSubChainManager()->getPoPInstance(m_caPoP);
 					m_pDB = MetaChain::getInstance().getStorageManager()->createDBEngine(m_uint16ChainIdentifier);
+
+					postInit();
 				}
 			}
 
 			BOOST_SERIALIZATION_SPLIT_MEMBER()
+
+		protected:
+			bool											m_bGenesis; // only set to false before a genesis block was created.
+			uint16_t										m_uint16ChainIdentifier;
+			uint32_t										m_uint32GenesisTimestamp;
+			char											m_caChainName[MAX_CHAINNAME_LENGTH];
+			char											m_caSubChainClassName[MAX_SUBCHAIN_CLASSNAME_LENGTH];
+			char											m_caPoP[MAX_POP_NAME];
+			std::map< std::string, std::string >			m_mapParams;
+			MCP04::PoPInterface								*m_pPoP;
+			dbEngine										*m_pDB;
+
+			// this function gets called after the init Function gets called.
+			// private variables or precalculations can be done in this function. the function gets called after first initialization and after each serialization loading
+			virtual void									postInit() = 0;
 
 		public:
 															SubChain();
@@ -71,7 +80,7 @@ namespace MCP02
 
 			// initialization functions
 			uint16_t										init(char caChainName[MAX_CHAINNAME_LENGTH], char caSubChainClassName[MAX_SUBCHAIN_CLASSNAME_LENGTH], char m_caPoP[MAX_POP_NAME], std::map< std::string, std::string > mapParams );
-			//virtual bool									initGenesis(uint8_t initiatorPubKey[64], float) = 0;
+			virtual bool									initGenesis( uint8_t initiatorPubKey[64], uint64_t uint64tGenesisCoins ) = 0;
 
 			// simple setter & getter
 			std::string										getChainName() { return m_caChainName; };

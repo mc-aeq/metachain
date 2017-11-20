@@ -20,8 +20,14 @@ namespace MCP02
 
 		protected:
 			static const std::string			m_strName;
+			virtual void						postInit();
 
 		private:
+			uint64_t							m_uint64tMaxCoins;
+			unsigned int						m_uiMaxDecimalPlaces;
+			uint64_t							m_uint64tMaxAmountCoins;
+			inline bool							validCoinRange(const uint64_t& nValue) { return (nValue >= 0 && nValue <= m_uint64tMaxAmountCoins); }
+
 			// serialization
 			template<class Archive>
 			void								serialize(Archive &ar, const unsigned int version)
@@ -34,6 +40,8 @@ namespace MCP02
 			static bool							registerFactory() { return ::MetaChain::getInstance().getStorageManager()->getSubChainManager()->registerSCFactory(m_strName, &createInstance); };
 			static bool							registerFactory(MCP02::SubChainManager *ptr) { return ptr->registerSCFactory(m_strName, &createInstance); };
 			static SubChain						*createInstance() { return new Mine(); };
+
+			virtual bool						initGenesis(uint8_t initiatorPubKey[64], uint64_t uint64tGenesisCoins);
 	};
 }
 

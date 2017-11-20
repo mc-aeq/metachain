@@ -11,7 +11,7 @@
 namespace MCP03
 {
 	txOut::txOut()
-		: m_uint64tValue( std::numeric_limits<uint64_t>::max() )
+		: uint64tValue( std::numeric_limits<uint64_t>::max() )
 	{
 
 	}
@@ -23,14 +23,13 @@ namespace MCP03
 
 	std::string txOut::toString()
 	{
-		return "";
-		//return strprintf("txOut(Value=%d.%08d, pubKey=%s)", m_uint64tValue / AMOUNT_COIN, m_uint64tValue % AMOUNT_COIN, m_strPubKey);
+		return strprintf("txOut(Value=%d, pubKey=%x)", uint64tValue, uint8tPubKey);
 	}
 
 	bool txOut::operator==(const txOut& ref)
 	{
-		return (m_uint64tValue == ref.m_uint64tValue &&
-			m_strPubKey == ref.m_strPubKey);
+		return (uint64tValue == ref.uint64tValue &&
+			(memcmp(uint8tPubKey, ref.uint8tPubKey, 64) == 0));
 	}
 
 	bool txOut::operator!=(const txOut& ref)

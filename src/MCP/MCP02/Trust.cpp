@@ -17,4 +17,19 @@ BOOST_CLASS_EXPORT_GUID(MCP02::Trust, "MCP02::Trust")
 
 namespace MCP02
 {
+	void Trust::postInit()
+	{
+	}
+
+	bool Trust::initGenesis(uint8_t initiatorPubKey[64], uint64_t uint64tGenesisCoins)
+	{
+		if (m_bGenesis)
+		{
+			LOG_ERROR("Trying to create a genesis block even though one was already created. Aborting for security reasons", "TRUST");
+			return false;
+		}
+
+		m_bGenesis = true;
+		return true;
+	}
 }

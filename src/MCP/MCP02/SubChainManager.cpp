@@ -193,7 +193,7 @@ namespace MCP02
 			}
 
 			// generating the MINE genesis block
-			//m_mapSubChains[2].
+			m_mapSubChains[2]->initGenesis(genesis.initiatorPubKey, 100000);
 		}
 		
 		// everything smooth

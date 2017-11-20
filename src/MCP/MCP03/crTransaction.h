@@ -21,10 +21,7 @@
 
 namespace MCP03
 {
-
 #define CURRENT_CRTRANSACTION_VERSION 1
-#define	AMOUNT_COIN 100000000
-#define MAX_AMOUNT_COIN 21000000*AMOUNT_COIN
 
 	class crTransaction : public Transaction
 	{
@@ -60,8 +57,6 @@ namespace MCP03
 		bool												isCoinBase() { return (vecIn.size() == 1 && vecIn[0].txPrev->isEmpty()); };
 		std::string											toString();
 	};
-
-	inline bool validCoinRange(const uint64_t& nValue) { return (nValue >= 0 && nValue <= MAX_AMOUNT_COIN); }
 }
 
 BOOST_CLASS_VERSION(MCP03::crTransaction, CURRENT_CRTRANSACTION_VERSION)

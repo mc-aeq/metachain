@@ -11,7 +11,9 @@ namespace MCP02
 {
 	SubChain::SubChain()
 		:m_pPoP(nullptr),
-		m_pDB(nullptr)
+		m_pDB(nullptr),
+		m_bGenesis(false),
+		m_uint32GenesisTimestamp(0)
 	{
 	}
 
@@ -34,6 +36,8 @@ namespace MCP02
 
 	void SubChain::makeDeepCopy(SubChain & obj)
 	{
+		m_bGenesis = obj.m_bGenesis;
+		m_uint32GenesisTimestamp = obj.m_uint32GenesisTimestamp;
 		m_uint16ChainIdentifier = obj.m_uint16ChainIdentifier;
 		strncpy(m_caChainName, obj.m_caChainName, MAX_CHAINNAME_LENGTH);
 		strncpy(m_caSubChainClassName, obj.m_caSubChainClassName, MAX_SUBCHAIN_CLASSNAME_LENGTH);
@@ -67,6 +71,7 @@ namespace MCP02
 			return (std::numeric_limits<uint16_t>::max)();
 		}
 
+		postInit();
 		return m_uint16ChainIdentifier;
 	}
 
