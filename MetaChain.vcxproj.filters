@@ -109,6 +109,12 @@
     <Filter Include="Headerdateien\MCP\MCP03\MC">
       <UniqueIdentifier>{96c4b986-304e-4238-ba50-47a878583080}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Headerdateien\MCP\MCP06">
+      <UniqueIdentifier>{62d3a22f-4bdc-44c2-bee6-5abc0eefeb09}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Quelldateien\MCP\MCP06">
+      <UniqueIdentifier>{2402a4c6-2412-407c-9081-a561f2d5d204}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="targetver.h">
@@ -348,6 +354,12 @@
     <ClInclude Include="src\MCP\MCP02\Stub.h">
       <Filter>Headerdateien\MCP\MCP02</Filter>
     </ClInclude>
+    <ClInclude Include="src\MCP\MCP06\script.h">
+      <Filter>Headerdateien\MCP\MCP06</Filter>
+    </ClInclude>
+    <ClInclude Include="src\MCP\MCP06\script_error.h">
+      <Filter>Headerdateien\MCP\MCP06</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="node.cpp">
@@ -517,6 +529,12 @@
     </ClCompile>
     <ClCompile Include="src\MCP\MCP02\Stub.cpp">
       <Filter>Quelldateien\MCP\MCP02</Filter>
+    </ClCompile>
+    <ClCompile Include="src\MCP\MCP06\script.cpp">
+      <Filter>Quelldateien\MCP\MCP06</Filter>
+    </ClCompile>
+    <ClCompile Include="src\MCP\MCP06\script_error.cpp">
+      <Filter>Quelldateien\MCP\MCP06</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

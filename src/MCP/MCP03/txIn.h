@@ -15,6 +15,7 @@
 #include <boost/serialization/version.hpp>
 #include <boost/serialization/shared_ptr.hpp>
 #include "txOutRef.h"
+#include "../MCP06/script.h"
 
 namespace MCP03
 {
@@ -40,6 +41,7 @@ namespace MCP03
 			
 			std::shared_ptr<txOutRef>					txPrev;
 			std::string									strSignature;
+			MCP06::CScript								scriptSignature;
 
 			virtual std::string							toString();
 

@@ -7,6 +7,9 @@
 #ifndef __PREVECTOR_H__
 #define __PREVECTOR_H__ 1
 
+#include <iterator>
+#include <assert.h>
+
 #pragma pack(push, 1)
 /** Implements a drop-in replacement for std::vector<T> which stores up to N
  *  elements directly (without heap allocation). The types Size and Diff are

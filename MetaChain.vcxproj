@@ -205,6 +205,8 @@
     <ClInclude Include="src\MCP\MCP04\PoS.h" />
     <ClInclude Include="src\MCP\MCP04\PoT.h" />
     <ClInclude Include="src\MCP\MCP04\stub.h" />
+    <ClInclude Include="src\MCP\MCP06\script.h" />
+    <ClInclude Include="src\MCP\MCP06\script_error.h" />
     <ClInclude Include="src\MCP\MCP39\dictionairy.h" />
     <ClInclude Include="src\MCP\MCP39\Mnemonic.h" />
     <ClInclude Include="src\prevector.h" />
@@ -271,6 +273,8 @@
     <ClCompile Include="src\MCP\MCP04\PoMC.cpp" />
     <ClCompile Include="src\MCP\MCP04\PoS.cpp" />
     <ClCompile Include="src\MCP\MCP04\PoT.cpp" />
+    <ClCompile Include="src\MCP\MCP06\script.cpp" />
+    <ClCompile Include="src\MCP\MCP06\script_error.cpp" />
     <ClCompile Include="src\MCP\MCP39\dictionairy.cpp" />
     <ClCompile Include="src\MCP\MCP39\Mnemonic.cpp" />
     <ClCompile Include="src\random.cpp" />

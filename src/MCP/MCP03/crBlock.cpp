@@ -37,7 +37,7 @@ namespace MCP03
 	std::string crBlock::toString()
 	{
 		std::stringstream s;
-		s << strprintf("crBlock (Hash=%s, Version=0x%08x, hashPrevBlock=%s, hashMerkleRoot=%s, Time=%u, Byte=%08x, TXs=%u)\n",
+		s << strprintf("crBlock (Hash=%s, Version=0x%08x, hashPrevBlock=%s, hashMerkleRoot=%s, Time=%u, Byte=%u, TXs=%u)\n",
 			hash.ToString(),
 			uint16tVersion,
 			hashPrevBlock.ToString(),
