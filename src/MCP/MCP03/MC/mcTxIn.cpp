@@ -5,22 +5,26 @@
 **********************************************************************/
 
 #include "mcTxIn.h"
+#include <boost/serialization/export.hpp>
+#include <boost/archive/binary_iarchive.hpp>
+#include <boost/archive/binary_oarchive.hpp>
 #include "../../../logger.h"
 #include "../../../tinyformat.h"
+
+// register this class for polymorphic exporting
+BOOST_CLASS_EXPORT_GUID(MCP03::MetaChain::mcTxIn, "MCP03::MetaChain::mcTxIn")
 
 namespace MCP03
 {
 	namespace MetaChain
 	{
-		mcTxIn::mcTxIn(uint16_t Version)
-			: uint16tVersion(Version),
-			pPayload(nullptr)
+		mcTxIn::mcTxIn()
+			: pPayload(nullptr)
 		{
 		}
 
-		mcTxIn::mcTxIn(uint16_t Version, ACTION eAction)
-			: uint16tVersion(Version),
-			pPayload(nullptr)
+		mcTxIn::mcTxIn(ACTION eAction)
+			: pPayload(nullptr)
 		{
 			init(eAction);
 		}

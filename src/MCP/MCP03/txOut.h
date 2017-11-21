@@ -17,6 +17,9 @@
 
 namespace MCP03
 {
+	
+#define	CURRENT_TXOUT_VERSION 1
+
 	class txOut
 	{
 		private:
@@ -25,11 +28,11 @@ namespace MCP03
 
 			// serialization
 			template<class Archive>
-			void								serialize(Archive &ar, const unsigned int version) const
+			void								serialize(Archive &ar, const unsigned int version)
 			{
 				// note: version is always stored last
 				if (version == 1)
-					ar << uint64tValue << uint8tPubKey;
+					ar & uint64tValue & uint8tPubKey;
 			}
 
 		public:
@@ -49,5 +52,5 @@ namespace MCP03
 	};
 }
 
-BOOST_CLASS_VERSION(MCP03::txOut, 1)
+BOOST_CLASS_VERSION(MCP03::txOut, CURRENT_TXOUT_VERSION)
 #endif

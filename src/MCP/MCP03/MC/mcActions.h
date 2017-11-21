@@ -16,6 +16,9 @@ namespace MCP03
 {
 	namespace MetaChain
 	{
+
+#define CURRENT_MC_ACTION_VERSION 1
+
 		struct createSubchain
 		{
 			char										caChainName[MAX_CHAINNAME_LENGTH];
@@ -25,7 +28,7 @@ namespace MCP03
 
 			// serialization
 			template <typename Archive>
-			void serialize(Archive& ar, const unsigned int version)
+			void										serialize(Archive& ar, const unsigned int version)
 			{
 				if (version == 1)
 					ar & caChainName & caSubChainClassName & caPoP & mapParams;
@@ -34,6 +37,6 @@ namespace MCP03
 	}
 }
 
-BOOST_CLASS_VERSION(MCP03::MetaChain::createSubchain, 1)
+BOOST_CLASS_VERSION(MCP03::MetaChain::createSubchain, CURRENT_MC_ACTION_VERSION)
 
 #endif

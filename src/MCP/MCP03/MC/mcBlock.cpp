@@ -6,11 +6,16 @@
 
 #include "mcBlock.h"
 #include <sstream>
+#include <boost/serialization/export.hpp>
+#include <boost/archive/binary_iarchive.hpp>
 #include <boost/archive/binary_oarchive.hpp>
 #include "../../MCP01/base58.h"
 #include "../../../crypto/sha3.h"
 #include "../../../logger.h"
 #include "../../../tinyformat.h"
+
+// register this class for polymorphic exporting
+BOOST_CLASS_EXPORT_GUID(MCP03::MetaChain::mcBlock, "MCP03::MetaChain::mcBlock")
 
 namespace MCP03
 {
@@ -66,7 +71,7 @@ namespace MCP03
 			hashMerkleRoot = leaves[0];
 		}
 
-		void mcBlock::calcSize()
+		uint32_t mcBlock::calcSize()
 		{
 			// serialize this block
 			std::stringstream stream(std::ios_base::in | std::ios_base::out | std::ios_base::binary);
@@ -75,10 +80,10 @@ namespace MCP03
 				oa << *this;
 			}
 
-			uint32tByte = stream.str().size();
+			return stream.str().size();
 		}
 
-		void mcBlock::calcHash()
+		uint256 mcBlock::calcHash()
 		{
 			// the hash of this block is the combined headers, plus the hash of our merkle root
 			SHA3 crypto(SHA3::HashType::DEFAULT, SHA3::HashSize::SHA3_256);
@@ -88,7 +93,7 @@ namespace MCP03
 			crypto.absorb(&uint32tByte, sizeof(uint32_t));
 			crypto.absorb(hashMerkleRoot.begin(), hashMerkleRoot.size());
 
-			hash = crypto.digest256();
+			return crypto.digest256();
 		}
 
 		std::string mcBlock::toString()

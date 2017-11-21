@@ -6,9 +6,14 @@
 
 #include "mcTransaction.h"
 #include <sstream>
+#include <boost/serialization/export.hpp>
+#include <boost/archive/binary_iarchive.hpp>
 #include <boost/archive/binary_oarchive.hpp>
 #include "../../../crypto/sha3.h"
 #include "../../../tinyformat.h"
+
+// register this class for polymorphic exporting
+BOOST_CLASS_EXPORT_GUID(MCP03::MetaChain::mcTransaction, "MCP03::MetaChain::mcTransaction")
 
 namespace MCP03
 {
@@ -23,7 +28,7 @@ namespace MCP03
 		{
 		}
 
-		uint256 mcTransaction::getHash()
+		void mcTransaction::calcHash()
 		{
 			// serialize this transaction
 			std::stringstream stream(std::ios_base::in | std::ios_base::out | std::ios_base::binary);
@@ -34,7 +39,7 @@ namespace MCP03
 
 			// return the calculated hash
 			SHA3 crypto;
-			return crypto.hash256(SHA3::HashType::DEFAULT, (uint8_t *)stream.str().data(), stream.str().size());
+			m_Hash = crypto.hash256(SHA3::HashType::DEFAULT, (uint8_t *)stream.str().data(), stream.str().size());
 		}
 
 		uint32_t mcTransaction::getTotalSize()

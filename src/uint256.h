@@ -103,11 +103,11 @@ public:
 
 	// serialization
 	template<class Archive>
-	void serialize(Archive &ar, const unsigned int version) const
+	void serialize(Archive &ar, const unsigned int version)
 	{
 		// note: version is always stored last
 		if (version == 1)
-			ar << data;
+			ar & data;
 	}
 };
 

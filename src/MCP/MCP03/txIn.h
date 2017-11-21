@@ -19,6 +19,9 @@
 
 namespace MCP03
 {
+
+#define CURRENT_TXIN_VERSION 1
+
 	class txIn
 	{
 		private:
@@ -27,11 +30,11 @@ namespace MCP03
 
 			// serialization
 			template<class Archive>
-			void												serialize(Archive &ar, const unsigned int version) const
+			void										serialize(Archive &ar, const unsigned int version)
 			{
 				// note: version is always stored last
 				if (version == 1)
-					ar << txPrev << strSignature;
+					ar & txPrev & strSignature & scriptSignature;
 			}
 
 		public:
@@ -51,5 +54,5 @@ namespace MCP03
 	};
 }
 
-BOOST_CLASS_VERSION(MCP03::txIn, 1)
+BOOST_CLASS_VERSION(MCP03::txIn, CURRENT_TXIN_VERSION)
 #endif

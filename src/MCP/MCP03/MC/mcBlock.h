@@ -25,17 +25,16 @@ namespace MCP03
 
 		class mcBlock : public Block
 		{
-			private:
-				// required to have serialization overrides
-				friend class ::boost::serialization::access;
+			friend class ::boost::serialization::access;
 
+			private:
 				// serialization
 				template<class Archive>
-				void													serialize(Archive &ar, const unsigned int version) const
+				void													serialize(Archive &ar, const unsigned int version)
 				{
-					// note: version is always stored last
+					// call base object serialization, then add the initiator and the transaction
 					if (version == 1)
-						ar << uint16tVersion << initiatorPubKey << hashPrevBlock << hashMerkleRoot << hash << nTime << uint32tByte << pTransaction;
+						ar & boost::serialization::base_object<Block>(*this) & initiatorPubKey & pTransaction;
 				}
 
 			public:
@@ -49,9 +48,9 @@ namespace MCP03
 				uint8_t													initiatorPubKey[64];
 
 				// calculation functions
-				void													calcMerkleRoot();
-				void													calcSize();
-				void													calcHash();
+				virtual void											calcMerkleRoot();
+				virtual uint32_t										calcSize();
+				virtual uint256											calcHash();
 
 				// simple getter and setter
 				std::string												toString();

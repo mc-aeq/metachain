@@ -7,6 +7,7 @@
 #include "txOut.h"
 #include "Transaction.h"
 #include "../../tinyformat.h"
+#include "../MCP01/base58.h"
 
 namespace MCP03
 {
@@ -23,7 +24,7 @@ namespace MCP03
 
 	std::string txOut::toString()
 	{
-		return strprintf("txOut(Value=%d, pubKey=%x)", uint64tValue, uint8tPubKey);
+		return strprintf("txOut(Value=%d, pubKey=%x)", uint64tValue, MCP01::base58::encode(uint8tPubKey, 64) );
 	}
 
 	bool txOut::operator==(const txOut& ref)

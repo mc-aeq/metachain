@@ -21,6 +21,7 @@
 
 namespace MCP03
 {
+
 #define CURRENT_CRTRANSACTION_VERSION 1
 
 	class crTransaction : public Transaction
@@ -31,11 +32,11 @@ namespace MCP03
 
 		// serialization
 		template<class Archive>
-		void												serialize(Archive &ar, const unsigned int version) const
+		void												serialize(Archive &ar, const unsigned int version)
 		{
-			// note: version is always stored last
+			// serialize the transaction, then add the hash of this tx, locktime, incoming and outgoing tx
 			if (version == 1)
-				ar << uint16tVersion << uint32tLockTime << vecIn << vecOut;
+				ar & boost::serialization::base_object<Transaction>(*this) & uint32tLockTime & vecIn & vecOut;
 		}
 
 	public:
@@ -50,7 +51,7 @@ namespace MCP03
 		std::vector<txOut>									vecOut;
 
 		// simple getter and setter
-		uint256												getHash();
+		void												calcHash();
 		bool												isEmpty() { return vecIn.empty() && vecOut.empty(); };
 		uint64_t											getValueOut();
 		uint32_t											getTotalSize();

@@ -5,9 +5,14 @@
 **********************************************************************/
 
 #include "crBlock.h"
+#include <boost/serialization/export.hpp>
+#include <boost/archive/binary_iarchive.hpp>
 #include <boost/archive/binary_oarchive.hpp>
 #include "../../tinyformat.h"
 #include "../../crypto/sha3.h"
+
+// register this class for polymorphic exporting
+BOOST_CLASS_EXPORT_GUID(MCP03::crBlock, "MCP03::crBlock")
 
 namespace MCP03
 {
@@ -21,7 +26,7 @@ namespace MCP03
 		vecTx.clear();
 	}
 
-	void crBlock::calcHash()
+	uint256 crBlock::calcHash()
 	{
 		// the hash of this block is the combined headers, plus the hash of our merkle root
 		SHA3 crypto(SHA3::HashType::DEFAULT, SHA3::HashSize::SHA3_256);
@@ -31,7 +36,7 @@ namespace MCP03
 		crypto.absorb(&uint32tByte, sizeof(uint32_t));
 		crypto.absorb(hashMerkleRoot.begin(), hashMerkleRoot.size());
 
-		hash = crypto.digest256();
+		return crypto.digest256();
 	}
 
 	std::string crBlock::toString()
@@ -52,7 +57,7 @@ namespace MCP03
 		return s.str();
 	}
 
-	void crBlock::calcSize()
+	uint32_t crBlock::calcSize()
 	{
 		// serialize this block
 		std::stringstream stream(std::ios_base::in | std::ios_base::out | std::ios_base::binary);
@@ -61,7 +66,7 @@ namespace MCP03
 			oa << *this;
 		}
 
-		uint32tByte = stream.str().size();
+		return stream.str().size();
 	}
 
 	void crBlock::calcMerkleRoot()
@@ -71,7 +76,10 @@ namespace MCP03
 
 		// get all our leaves in place
 		for (auto it : vecTx)
+		{
+			it->calcHash();
 			leaves.push_back(it->getHash());
+		}
 
 		// if we don't have leaves we reset the merkle root
 		if (leaves.size() == 0)

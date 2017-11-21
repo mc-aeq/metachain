@@ -18,6 +18,7 @@ namespace MCP03
 {
 	namespace MetaChain
 	{
+
 #define CURRENT_MC_TRANSACTION_VERSION 1
 
 		class mcTransaction : public Transaction
@@ -28,11 +29,11 @@ namespace MCP03
 
 				// serialization
 				template<class Archive>
-				void												serialize(Archive &ar, const unsigned int version) const
+				void												serialize(Archive &ar, const unsigned int version)
 				{
-					// note: version is always stored last
+					// serialize transaction, then add the incoming tx
 					if (version == 1)
-						ar << uint16tVersion << txIn;
+						ar & boost::serialization::base_object<Transaction>(*this) & txIn;
 				}
 
 			public:
@@ -45,7 +46,7 @@ namespace MCP03
 				mcTxIn												txIn;
 
 				// simple getter and setter
-				uint256												getHash();
+				void												calcHash();
 				bool												isEmpty() { return (txIn.pPayload == nullptr); };
 				uint64_t											getValueOut() { return 0; };
 				uint32_t											getTotalSize();

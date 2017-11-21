@@ -35,10 +35,10 @@ namespace MCP03
 					// note: version is always stored last
 					if (version == 1)
 					{
-						ar << uint16tVersion << eAction;
+						ar & boost::serialization::base_object<txIn>(*this) & eAction;
 						switch (eAction)
 						{
-							case ACTION::CREATE_SUBCHAIN:		ar << *(createSubchain*)pPayload;		break;
+							case ACTION::CREATE_SUBCHAIN:		ar & *(createSubchain*)pPayload;		break;
 						}
 					}
 				}
@@ -50,14 +50,13 @@ namespace MCP03
 					CREATE_SUBCHAIN = 1
 				};
 
-																mcTxIn(uint16_t Version = CURRENT_MC_TXIN_VERSION);
-																mcTxIn(uint16_t Version, ACTION eAction );
+																mcTxIn();
+																mcTxIn(ACTION eAction );
 																~mcTxIn();
 				void											init(ACTION eAction);
 
 
 				// variables
-				uint16_t										uint16tVersion;
 				ACTION											eAction;
 				void *											pPayload;
 

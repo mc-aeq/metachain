@@ -27,17 +27,16 @@ namespace MCP03
 
 	class crBlock : public Block
 	{
-		private:
-			// required to have serialization overrides
-			friend class ::boost::serialization::access;
+		friend class ::boost::serialization::access;
 
+		private:
 			// serialization
 			template<class Archive>
-			void												serialize(Archive &ar, const unsigned int version) const
+			void												serialize(Archive &ar, const unsigned int version)
 			{
-				// note: version is always stored last
+				// call base object serialization, then add the vector data
 				if (version == 1)
-					ar << uint16tVersion << hashPrevBlock << hashMerkleRoot << hash << nTime << uint32tByte << vecTx;
+					ar & boost::serialization::base_object<Block>(*this) & vecTx;
 			}
 
 		public:
@@ -48,9 +47,9 @@ namespace MCP03
 			std::vector< std::shared_ptr<crTransaction> >		vecTx;
 
 			// calculation functions
-			void												calcMerkleRoot();
-			void												calcSize();
-			void												calcHash();
+			virtual void										calcMerkleRoot();
+			virtual uint32_t									calcSize();
+			virtual uint256										calcHash();
 
 			// simple getter and setter
 			std::string											toString();
