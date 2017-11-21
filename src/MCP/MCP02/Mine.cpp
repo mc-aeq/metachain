@@ -72,7 +72,29 @@ namespace MCP02
 #endif
 		}
 
+		// the genesis block is created, now process it
+		processBlock(genesis);
+
+		// free the memory
+		RELEASE(genesis);
+
 		m_bGenesis = true;
 		return true;
+	}
+
+	void Mine::processBlock(MCP03::Block* Block)
+	{
+		// security checks
+		if (!checkBlock(Block))
+			return;
+
+		// go through each tx and process it
+		for (auto &it : ((MCP03::crBlock*)Block)->vecTx )
+		{
+			// todo: handle tx
+		}
+
+		// store the block with our storagemanager
+		saveBlock(Block);
 	}
 }

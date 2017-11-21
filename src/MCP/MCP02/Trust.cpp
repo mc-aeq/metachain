@@ -32,4 +32,9 @@ namespace MCP02
 		m_bGenesis = true;
 		return true;
 	}
+
+	void Trust::processBlock(MCP03::Block* Block)
+	{
+
+	}
 }

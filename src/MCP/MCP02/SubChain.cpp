@@ -5,6 +5,7 @@
 **********************************************************************/
 
 #include "SubChain.h"
+#include <boost/archive/binary_oarchive.hpp>
 #include "../../tinyformat.h"
 
 namespace MCP02
@@ -54,6 +55,9 @@ namespace MCP02
 
 	uint16_t SubChain::init( char caChainName[MAX_CHAINNAME_LENGTH], char caSubChainClassName[MAX_SUBCHAIN_CLASSNAME_LENGTH], char caPoP[MAX_POP_NAME], std::map< std::string, std::string > mapParams)
 	{
+		// set the pointer to the storage manager
+		m_pStorageManager = MetaChain::getInstance().getStorageManager();
+
 		MetaChain::getInstance().getStorageManager()->incMetaValue(MC_NEXT_CI, (uint16_t)0, &m_uint16ChainIdentifier);
 		strncpy(m_caChainName, caChainName, MAX_CHAINNAME_LENGTH);
 		strncpy(m_caSubChainClassName, caSubChainClassName, MAX_SUBCHAIN_CLASSNAME_LENGTH);
@@ -89,5 +93,32 @@ namespace MCP02
 		strBuffer += strprintf("   PoP Address: %p\n", m_pPoP);
 #endif
 		return strBuffer;
+	}
+
+	bool SubChain::checkBlock(MCP03::Block *Block)
+	{
+		if (!Block->checkSize())
+		{
+			LOG_ERROR("The calculated size and the provided size in the block is not consistent. Dismissing block!", "SC");
+			return false;
+		}
+		if (!Block->checkHash())
+		{
+			LOG_ERROR("The calculated hash and the provided hash in the block is not consistent. Dismissing block!", "SC");
+			return false;
+		}
+
+		// all smooth
+		return true;
+	}
+
+	void SubChain::saveBlock(MCP03::Block *Block)
+	{
+		std::stringstream stream(std::ios_base::in | std::ios_base::out | std::ios_base::binary);
+		{
+			boost::archive::binary_oarchive oa(stream, boost::archive::no_header | boost::archive::no_tracking);
+			oa << Block;
+		}
+		m_pStorageManager->writeRaw(m_uint16ChainIdentifier, stream.tellp(), (void*)stream.str().data());
 	}
 }

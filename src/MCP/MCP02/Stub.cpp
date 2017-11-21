@@ -35,4 +35,8 @@ namespace MCP02
 		m_bGenesis = true;
 		return true;
 	}
+
+	void Stub::processBlock(MCP03::Block* Block)
+	{
+	}
 }

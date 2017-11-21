@@ -15,23 +15,28 @@
 #include <boost/serialization/map.hpp>
 #include <boost/serialization/split_member.hpp>
 #include "../../defines.h"
+#include "../MCP03/Block.h"
 #include "../MCP04/PoPInterface.h"
 #include "SubChainManager.h"
 #include "../../io/db/dbEngine.h"
+#include "../../io/StorageManager.h"
 
 // forward decl
 namespace MCP04 { class PoPInterface; };
+class StorageManager;
 
 namespace MCP02
 {
 	class SubChain
 	{
-		// todo: add workflows to the base subchain class
 		friend class ::boost::serialization::access;
 
 		private:
 			// CC function
 			void											makeDeepCopy(SubChain & obj);
+
+			// pointers for faster processing. don't need to be released, initialized in init function
+			StorageManager									*m_pStorageManager;
 
 			// serialization
 			template<class Archive>
@@ -72,6 +77,10 @@ namespace MCP02
 			// private variables or precalculations can be done in this function. the function gets called after first initialization and after each serialization loading
 			virtual void									postInit() = 0;
 
+			// block handling
+			bool											checkBlock(MCP03::Block *Block);
+			void											saveBlock(MCP03::Block *Block);
+
 		public:
 															SubChain();
 															~SubChain();
@@ -81,6 +90,9 @@ namespace MCP02
 			// initialization functions
 			uint16_t										init(char caChainName[MAX_CHAINNAME_LENGTH], char caSubChainClassName[MAX_SUBCHAIN_CLASSNAME_LENGTH], char m_caPoP[MAX_POP_NAME], std::map< std::string, std::string > mapParams );
 			virtual bool									initGenesis( uint8_t initiatorPubKey[64], uint64_t uint64tGenesisCoins ) = 0;
+
+			// block handling
+			virtual void									processBlock(MCP03::Block* Block) = 0;
 
 			// simple setter & getter
 			std::string										getChainName() { return m_caChainName; };
