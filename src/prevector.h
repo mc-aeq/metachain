@@ -9,6 +9,7 @@
 
 #include <iterator>
 #include <assert.h>
+#include <boost/serialization/split_member.hpp>
 
 #pragma pack(push, 1)
 /** Implements a drop-in replacement for std::vector<T> which stores up to N
@@ -31,6 +32,31 @@
  */
 template<unsigned int N, typename T, typename Size = uint32_t, typename Diff = int32_t>
 class prevector {
+
+friend class ::boost::serialization::access;
+private:
+	// serialization
+	template<class Archive>
+	void save(Archive &ar, const unsigned int version) const
+	{
+		ar << size();
+		for (size_type i = 0; i < size(); i++)
+			ar << *item_ptr(i);
+	}
+
+	template<class Archive>
+	void load(Archive &ar, const unsigned int version)
+	{
+		size_type size = 0;
+		ar >> size;
+		resize(size);
+
+		for (size_type i = 0; i < size; i++)
+			ar >> *item_ptr(i);
+	}
+
+	BOOST_SERIALIZATION_SPLIT_MEMBER()
+
 public:
     typedef Size size_type;
     typedef Diff difference_type;
