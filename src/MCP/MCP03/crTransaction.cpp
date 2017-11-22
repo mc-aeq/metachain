@@ -26,7 +26,7 @@ namespace MCP03
 		vecOut.clear();
 	}
 
-	void crTransaction::calcHash()
+	uint256 crTransaction::calcHash()
 	{
 		// serialize this transaction
 		std::stringstream stream(std::ios_base::in | std::ios_base::out | std::ios_base::binary);
@@ -37,14 +37,14 @@ namespace MCP03
 
 		// return the calculated hash
 		SHA3 crypto;
-		m_Hash = crypto.hash256(SHA3::HashType::DEFAULT, (uint8_t *)stream.str().data(), stream.str().size());
+		return crypto.hash256(SHA3::HashType::DEFAULT, (uint8_t *)stream.str().data(), stream.str().size());
 	}
 
 	std::string crTransaction::toString()
 	{
 		std::stringstream s;
 		s << strprintf("Transaction(Hash=%s, Version=%d, vecIn.size=%u, vecOut.size=%u, LockTime=%u)\n",
-			getHash().ToString().substr(0, 10),
+			hash.ToString().substr(0, 10),
 			uint16tVersion,
 			vecIn.size(),
 			vecOut.size(),

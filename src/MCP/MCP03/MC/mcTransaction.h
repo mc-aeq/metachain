@@ -46,7 +46,7 @@ namespace MCP03
 				mcTxIn												txIn;
 
 				// simple getter and setter
-				void												calcHash();
+				uint256												calcHash();
 				bool												isEmpty() { return (txIn.pPayload == nullptr); };
 				uint64_t											getValueOut() { return 0; };
 				uint32_t											getTotalSize();

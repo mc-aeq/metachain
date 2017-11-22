@@ -33,8 +33,8 @@ namespace MCP02
 		return true;
 	}
 
-	void Trust::processBlock(MCP03::Block* Block)
+	bool Trust::processBlock(MCP03::Block* Block)
 	{
-
+		return false;
 	}
 }

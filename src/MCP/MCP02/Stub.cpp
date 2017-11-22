@@ -36,7 +36,8 @@ namespace MCP02
 		return true;
 	}
 
-	void Stub::processBlock(MCP03::Block* Block)
+	bool Stub::processBlock(MCP03::Block* Block)
 	{
+		return false;
 	}
 }

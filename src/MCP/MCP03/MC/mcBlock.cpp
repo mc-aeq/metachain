@@ -37,7 +37,8 @@ namespace MCP03
 
 			// we only have one transaction in a MC block, so we add it twice that we have atleast one iteration
 			// it is also guaranteed that no MC block will be made with no TX, so we skip checks whether the transaction exists
-			leaves.push_back(pTransaction->getHash());
+			pTransaction->hash = pTransaction->calcHash();
+			leaves.push_back(pTransaction->hash);
 			leaves.push_back(leaves.back());
 
 			// we continue the hash calculation until we only have one last result - the merkle tree

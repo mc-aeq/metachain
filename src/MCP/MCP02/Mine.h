@@ -42,7 +42,7 @@ namespace MCP02
 			static SubChain						*createInstance() { return new Mine(); };
 
 			virtual bool						initGenesis(uint8_t initiatorPubKey[64], uint64_t uint64tGenesisCoins);
-			virtual void						processBlock(MCP03::Block* Block);
+			virtual bool						processBlock(MCP03::Block* Block);
 	};
 }
 

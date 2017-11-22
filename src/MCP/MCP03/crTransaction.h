@@ -51,7 +51,7 @@ namespace MCP03
 		std::vector<txOut>									vecOut;
 
 		// simple getter and setter
-		void												calcHash();
+		uint256												calcHash();
 		bool												isEmpty() { return vecIn.empty() && vecOut.empty(); };
 		uint64_t											getValueOut();
 		uint32_t											getTotalSize();

@@ -28,7 +28,7 @@ namespace MCP03
 		{
 		}
 
-		void mcTransaction::calcHash()
+		uint256 mcTransaction::calcHash()
 		{
 			// serialize this transaction
 			std::stringstream stream(std::ios_base::in | std::ios_base::out | std::ios_base::binary);
@@ -39,7 +39,7 @@ namespace MCP03
 
 			// return the calculated hash
 			SHA3 crypto;
-			m_Hash = crypto.hash256(SHA3::HashType::DEFAULT, (uint8_t *)stream.str().data(), stream.str().size());
+			return crypto.hash256(SHA3::HashType::DEFAULT, (uint8_t *)stream.str().data(), stream.str().size());
 		}
 
 		uint32_t mcTransaction::getTotalSize()
@@ -58,7 +58,7 @@ namespace MCP03
 		{
 			std::stringstream s;
 			s << strprintf("mcTransaction(Hash=%s, Version=%d)\n",
-				getHash().ToString().substr(0, 10),
+				hash.ToString().substr(0, 10),
 				uint16tVersion
 			);
 			s << "    " + txIn.toString() + "\n";

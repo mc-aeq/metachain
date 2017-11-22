@@ -77,8 +77,8 @@ namespace MCP03
 		// get all our leaves in place
 		for (auto it : vecTx)
 		{
-			it->calcHash();
-			leaves.push_back(it->getHash());
+			it->hash = it->calcHash();
+			leaves.push_back(it->hash);
 		}
 
 		// if we don't have leaves we reset the merkle root

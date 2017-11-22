@@ -92,7 +92,7 @@ namespace MCP02
 			virtual bool									initGenesis( uint8_t initiatorPubKey[64], uint64_t uint64tGenesisCoins ) = 0;
 
 			// block handling
-			virtual void									processBlock(MCP03::Block* Block) = 0;
+			virtual bool									processBlock(MCP03::Block* Block) = 0;
 
 			// simple setter & getter
 			std::string										getChainName() { return m_caChainName; };

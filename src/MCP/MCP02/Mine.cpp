@@ -82,19 +82,34 @@ namespace MCP02
 		return true;
 	}
 
-	void Mine::processBlock(MCP03::Block* Block)
+	bool Mine::processBlock(MCP03::Block* Block)
 	{
 		// security checks
 		if (!checkBlock(Block))
-			return;
+			return false;
+
+		// security check for each tx
+		for (auto &it : ((MCP03::crBlock*)Block)->vecTx)
+		{
+			// check consistency of tx hash
+			if (!it->checkHash())
+			{
+				LOG_ERROR("The calculated hash and the provided hash in this tx is not consistent. Dismissing Block!", "MINE");
+				return false;
+			}
+		}
 
 		// go through each tx and process it
 		for (auto &it : ((MCP03::crBlock*)Block)->vecTx )
 		{
-			// todo: handle tx
+			// todo: differentiate different types of transactions. right now hardcoded: only currency transactions
+
 		}
 
 		// store the block with our storagemanager
 		saveBlock(Block);
+
+		// block successfully processed
+		return true;
 	}
 }

@@ -31,21 +31,19 @@ namespace MCP03
 			{
 				// note: version is always stored last
 				if (version == 1)
-					ar & uint16tVersion & m_Hash;
+					ar & uint16tVersion & hash;
 			}
-
-		protected:
-			uint256								m_Hash;
 
 		public:
 												Transaction(uint16_t Version) { uint16tVersion = Version; };
 
 			// general settings for this transaction
 			uint16_t							uint16tVersion;
+			uint256								hash;
 
 			// simple getter and setter
-			virtual void						calcHash() = 0;
-			uint256								getHash() { return m_Hash; };
+			virtual uint256						calcHash() = 0;
+			bool								checkHash() { return hash == calcHash(); };
 			virtual bool						isEmpty() = 0;
 			virtual uint64_t					getValueOut() = 0;
 			virtual uint32_t					getTotalSize() = 0;
