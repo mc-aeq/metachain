@@ -10,6 +10,7 @@
 #define __DB_ENGINE_H__ 1
 
 #include <unordered_map>
+#include "../../cCriticalSection.h"
 #include "../../SimpleIni.h"
 
 /*
@@ -27,11 +28,13 @@ class dbEngine
 		virtual bool									write( std::string strKey, std::string strValue, std::string strEnv = "") = 0;		// strEnv is used for dbEngines that are not key/value based. e.g. mysql where tables can be defined and used
 		virtual std::string								get(std::string strKey, std::string strDefault = "", std::string strEnv = "") = 0;
 		virtual unsigned int							get(std::string strKey, unsigned int uiDefault = 0, std::string strEnv = "") = 0;
+		virtual bool									get(std::string strKey, bool bDefault = false, std::string strEnv = "") = 0;
 
 		// functions for batch writing
 		virtual void									batchStart() = 0;
 		virtual void									batchAddStatement( std::string strKey, std::string strValue, std::string strEnv = "" ) = 0;		// strEnv is used for dbEngines that are not key/value based. e.g. mysql where tables can be defined and used
 		virtual void									batchFinalize() = 0;
+		cCriticalSection								batchCriticalSection;
 };
 
 #endif

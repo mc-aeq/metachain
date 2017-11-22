@@ -100,10 +100,75 @@ namespace MCP02
 		}
 
 		// go through each tx and process it
-		for (auto &it : ((MCP03::crBlock*)Block)->vecTx )
+		for (auto &it : ((MCP03::crBlock*)Block)->vecTx)
 		{
 			// todo: differentiate different types of transactions. right now hardcoded: only currency transactions
+			// workflow:
+			// 1: check incoming if valid to spend and exist.
+			// 2: check if incoming val >= outgoing val
+			// 3: remove incoming from spend list
+			// 4: add outgoing to spend list 
 
+			uint64_t uiValIncoming = 0, uiValOutgoing = 0;
+			unsigned int uiPosition = 0;
+
+			// step1
+				// todo: check if spendable with script signature
+				// todo: check txprev nullptr
+				// todo: add MCP01::Account serialization with array of unspent tx. add or remove those tx, save it as txU.pubkey<array>
+				for (auto &incoming : it->vecIn)
+				{
+					std::string strIdent = "txO." + incoming.txPrev.get()->hash.GetHex() + "." + std::to_string(uiPosition);
+					if (m_pDB->get(strIdent + ".spent", true))
+					{
+						// the incoming TX was either not found or it was already spent. in any way, we can't accept this as incoming tx
+						LOG_ERROR("Incoming TX in this TX was either not found or already spent. Dismissing TX!", "MINE");
+						goto next;
+					}
+					uiValIncoming += m_pDB->get(strIdent + ".val", (unsigned int)0);
+
+					uiPosition++;
+				}
+
+			// step2
+				for (auto &outgoing : it->vecOut)
+					uiValOutgoing += outgoing.uint64tValue;
+
+				if (uiValOutgoing > uiValIncoming)
+				{
+					LOG_ERROR("Outgoing amount is bigger than incoming TXs. Dismissing TX!", "MINE");
+					goto next;
+				}
+
+			{
+				// step3
+					uiPosition = 0;
+					// we're using a batch statment for step3 and 4. this allows safety for the data in case of interruptions. the incoming TX will not get flagged as spent without the outgoing TX being generated
+					LOCK(m_pDB->batchCriticalSection);
+					m_pDB->batchStart();
+
+					for (auto &incoming : it->vecIn)
+					{
+						m_pDB->batchAddStatement("txO." + incoming.txPrev.get()->hash.GetHex() + "." + std::to_string(uiPosition) + ".spent", "1");
+						uiPosition++;
+					}
+
+				// step4
+					uiPosition = 0;
+					for (auto &outgoing : it->vecOut)
+					{
+						std::string strIdent = "txO." + it->hash.GetHex() + "." + std::to_string(uiPosition);
+						m_pDB->batchAddStatement(strIdent + ".spent", "0");
+						m_pDB->batchAddStatement(strIdent + ".val", std::to_string(outgoing.uint64tValue));
+						uiPosition++;
+					}
+
+				// now we can execute our batch statement
+				m_pDB->batchFinalize();
+			}
+
+			// goto label used for ignoring a certain transaction
+			next:;
 		}
 
 		// store the block with our storagemanager

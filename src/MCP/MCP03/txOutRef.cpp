@@ -10,7 +10,7 @@
 namespace MCP03
 {
 	txOutRef::txOutRef()
-		: m_uint16tPos(std::numeric_limits<uint16_t>::max())
+		: uint16tPos(std::numeric_limits<uint16_t>::max())
 	{
 
 	}
@@ -22,18 +22,18 @@ namespace MCP03
 
 	std::string txOutRef::toString()
 	{
-		return strprintf("txOutRef(%s, %u)", m_Hash.ToString(), m_uint16tPos);
+		return strprintf("txOutRef(%s, %u)", hash.ToString(), uint16tPos);
 	}
 
 	bool txOutRef::operator<(const txOutRef& ref)
 	{
-		int cmp = m_Hash.Compare(ref.m_Hash);
-		return cmp < 0 || (cmp == 0 && m_uint16tPos < ref.m_uint16tPos);
+		int cmp = hash.Compare(ref.hash);
+		return cmp < 0 || (cmp == 0 && uint16tPos < ref.uint16tPos);
 	}
 
 	bool txOutRef::operator==(const txOutRef& ref)
 	{
-		return (m_Hash == ref.m_Hash && m_uint16tPos == ref.m_uint16tPos);
+		return (hash == ref.hash && uint16tPos == ref.uint16tPos);
 	}
 
 	bool txOutRef::operator!=(const txOutRef& ref)

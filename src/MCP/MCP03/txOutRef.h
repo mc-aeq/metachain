@@ -33,21 +33,20 @@ namespace MCP03
 			{
 				// note: version is always stored last
 				if (version == 1)
-					ar & m_Hash & m_uint16tPos;
+					ar & hash & uint16tPos;
 			}
-
-		protected:
-			uint256							m_Hash;
-			uint16_t						m_uint16tPos;
 	
 		public:
 											txOutRef();
 											~txOutRef();
 
+			uint256							hash;
+			uint16_t						uint16tPos;
+
 			// simple getter and setter
-			virtual bool					isEmpty() { return (m_Hash.IsNull() && m_uint16tPos == (std::numeric_limits<uint16_t>::max)()); }
+			virtual bool					isEmpty() { return (hash.IsNull() && uint16tPos == (std::numeric_limits<uint16_t>::max)()); }
 			virtual std::string				toString();
-			virtual uint32_t				getSize() { return sizeof(m_Hash) + sizeof(m_uint16tPos); };
+			virtual uint32_t				getSize() { return sizeof(hash) + sizeof(uint16tPos); };
 
 			// operators
 			virtual bool					operator<(const txOutRef& ref);
