@@ -29,6 +29,7 @@ currently not supported
 - [curl] curl is used for fast and easy access of files stored in the internet. Version 7.55.1 is used
 - [zlib] zlib is used for automatic decompression for autoupdating die node. Version 1.2.11 is used
 - [SECP256K1] ECDSA secp256k1 library for signing
+- [microsoft/cpprestsdk] used for our REST Server API framework
 - C++ compiler needs to have C++11 compability. As soon as C++17.2 is available, changes will be made to use the C++17.2 standard as dependency!
 We provide forks of all the needed dependencies in our github organization account. These are the tested versions and those forks will be updated frequently. You can rely on those forks in terms of building the MetaChain.
 #### Building for source on windows
@@ -56,6 +57,8 @@ $ ./make
 [general]
 daemonize = true    ; use daemonize if OS supports it
 mode = fn			; defines the running mode (FN = Full Node, CL = Client) 
+testnet = false		; start in testnet mode; CAUTION: when [testnet] is true, the port from [network].[listening_port] will be increased by 100 to ensure a different port from the mainnet
+wallet = 			; wallet which is connected to this node / client. This needs to be a base wallet (subchain identifier = MC). All Po* (PoS, PoT etc.) will work with this address and send the rewards to this wallet
 
 ; logging configuration
 [logging]
@@ -74,15 +77,39 @@ max_outgoing_connections = 1000             ; number of maximum outgoing connect
 max_incoming_connections = 1000             ; number of maximum incoming connections
 time_between_unsuccessfull_connects = 30    ; delay between two connects to the same node
 
+; REST server configuration
+[rest]
+enable = true								; enable REST server
+port = 10016								; port to listen on
+ip = 127.0.0.1								; ip to bind listening server
+enable_ssl = false							; enable SSL encryption for api
+
 ; autoupdate configuration
 [autoupdate]
 ticks_until_update_triggered = 10           ; how many nodes need to have a newer version to trigger update
 do_autoupdate = true                        ; autoupdate? if false, node exits automatically
+enable = true								; enable or disable in general
+cdn_url	= https://cdn.tct.io/				; when enabled, where to download binary packages from
+tmp_dir = tmp 								; relative or absolute path to a temporary directory used for extraction
+
+[subchains]
+; the pop_load defines what proof of process modules will be loaded and thus provided service for (using * as wildcard, comma seperated value, PoMC must always be loaded!)
+pop_load = PoMC, PoS, PoT, *
+
+; subchain_* defines what subchains are allowed in this node. use * as wildcard, comma seperated values, MC must be allowed, TCT should be allowed, case sensitive!
+; all entries in _whitelist are allowed, all entries in _blacklist are forbidden
+; use _whitelist * to allow all subchains and new subchains to be worked with.
+; use _whitelist *, _blacklist <name> to allow all except <name>
+; use _whitelist <name>, _blacklist "" to allow only <name>
+; _blacklist overrides _whitelist! -> _blacklist_ * means no subchains will work.
+subchain_whitelist = MC, TCT, *
+subchain_blacklist = 
 
 ; data configuration
 [data]
 data_dir = data				; directory where the data is stored
 raw_dir = raw				; directory for raw metachain data in [general].[mode] = fn
+raw_filesplit = 100			; split raw files after X mb
 storage_engine = rdb		; db engine used for processed data. rdb = rocks db, mysql = mysql db
 
 ; the following is only needed for [data].[storage_engine] = rdb
@@ -131,3 +158,4 @@ GPLv3
    [curl]: <https://curl.haxx.se/>
    [zlib]: <http://zlib.net/>
    [SECP256K1]: <https://github.com/libbitcoin/secp256k1>
+   [microsoft/cpprestsdk]: <https://github.com/Microsoft/cpprestsdk>
