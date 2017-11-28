@@ -9,6 +9,8 @@
 #define __STDC_WANT_LIB_EXT1__ 1
 #include <time.h>
 #include <iostream>
+#include <codecvt>
+#include <locale>
 
 Logger::Logger() :
 	m_bLogToStdout(true),
@@ -78,6 +80,14 @@ void Logger::log( std::string strLogLine, facility logFacility, std::string strM
 	// output to file if configured
 	if (this->m_bLogToFile)
 		m_streamLogFile << this->m_caTimeBuf << m_strFacility << strModule << strLogLine << std::endl;
+}
+
+void Logger::log(std::wstring strLogLine, facility logFacility, std::string strModule)
+{
+	using convert_typeX = std::codecvt_utf8<wchar_t>;
+	std::wstring_convert<convert_typeX, wchar_t> converterX;
+
+	log(converterX.to_bytes(strLogLine), logFacility, strModule);
 }
 
 void Logger::initialize(CSimpleIniA* iniFile)

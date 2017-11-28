@@ -15,6 +15,7 @@
 #include "io/StorageManager.h"
 #include "scheduler.h"
 #include "MCP/MCP01/Account.h"
+#include "io/rest/restManager.h"
 
 class NetworkManager;
 class StorageManager;
@@ -28,6 +29,7 @@ class MetaChain
 	private:
 		NetworkManager				*m_pNetworkManager;
 		StorageManager				*m_pStorageManager;
+		restManager					*m_pRestManager;
 		boost::thread_group			m_threadGroup;
 		CScheduler					m_scheduler;
 

@@ -115,6 +115,12 @@
     <Filter Include="Quelldateien\MCP\MCP06">
       <UniqueIdentifier>{2402a4c6-2412-407c-9081-a561f2d5d204}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Headerdateien\IO\rest">
+      <UniqueIdentifier>{19514d74-8540-4782-b7d4-ed6aa1299020}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Quelldateien\IO\rest">
+      <UniqueIdentifier>{12281834-d131-4515-afeb-6f85a5113e92}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="targetver.h">
@@ -360,6 +366,9 @@
     <ClInclude Include="src\MCP\MCP06\script_error.h">
       <Filter>Headerdateien\MCP\MCP06</Filter>
     </ClInclude>
+    <ClInclude Include="src\io\rest\restManager.h">
+      <Filter>Headerdateien\IO\rest</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="node.cpp">
@@ -535,6 +544,9 @@
     </ClCompile>
     <ClCompile Include="src\MCP\MCP06\script_error.cpp">
       <Filter>Quelldateien\MCP\MCP06</Filter>
+    </ClCompile>
+    <ClCompile Include="src\io\rest\restManager.cpp">
+      <Filter>Quelldateien\IO\rest</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

@@ -27,7 +27,8 @@ MetaChain::MetaChain() :
 	m_iVersionTicksTillUpdate(0),
 	m_bAutoUpdate(true),
 	m_bModeFN(false),
-	m_bTestNet(false)
+	m_bTestNet(false),
+	m_pRestManager(nullptr)
 {
 }
 
@@ -39,16 +40,9 @@ MetaChain& MetaChain::getInstance()
 
 void MetaChain::shutdown()
 {
-	if (m_pStorageManager)
-	{
-		delete m_pStorageManager;
-		m_pStorageManager = NULL;
-	}
-	if (m_pNetworkManager)
-	{
-		delete m_pNetworkManager;
-		m_pNetworkManager = NULL;
-	}
+	RELEASE(m_pStorageManager);
+	RELEASE(m_pNetworkManager);
+	RELEASE(m_pRestManager);
 }
 
 bool MetaChain::initialize(CSimpleIniA* iniFile, boost::filesystem::path pathExecutable)
@@ -131,6 +125,13 @@ bool MetaChain::initialize(CSimpleIniA* iniFile, boost::filesystem::path pathExe
 	// initializing the network manager
 	if (!m_pNetworkManager->initialize(iniFile))
 		return false;
+
+	// initialize a rest API if configured
+	if (iniFile->GetBoolValue("rest", "enable", true))
+	{
+		m_pRestManager = new restManager( CService(iniFile->GetValue("rest", "ip", "127.0.0.1"), iniFile->GetLongValue("rest", "port", 10016)), iniFile->GetBoolValue("rest", "enable_ssl", false) );
+		m_pRestManager->init();
+	}
 
 	// finally everything is initialized and we print our copyright info
 	LicenseInfo();

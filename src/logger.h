@@ -55,6 +55,7 @@ class Logger
 		static						Logger& getInstance();
 									~Logger();
 		void						log(std::string strLogLine, facility logFacility = facility::info, std::string strModule = "");
+		void						log(std::wstring strLogLine, facility logFacility = facility::info, std::string strModule = "");
 		void						initialize(CSimpleIniA* iniFile);
 };
 
