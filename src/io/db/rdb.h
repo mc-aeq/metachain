@@ -57,4 +57,14 @@ class dbEngineRDB : public dbEngine
 		virtual void									batchFinalize();
 };
 
+#ifndef _DEBUG
+// NullLogger class for rocksdb on release
+class RocksDBNullLogger : public rocksdb::Logger {
+public:
+	using rocksdb::Logger::Logv;
+	virtual void Logv(const char* format, va_list hap) override {}
+	virtual size_t GetLogFileSize() const override { return 0; }
+};
+#endif
+
 #endif
