@@ -12,6 +12,7 @@
 #include "../MCP01/base58.h"
 #include "../MCP03/crBlock.h"
 #include "../MCP03/crTransaction.h"
+#include "../MCP03/txOutRef.h"
 #include "../MCP06/script.h"
 
 // declare the name
@@ -47,6 +48,7 @@ namespace MCP02
 		txNew->vecIn.resize(1);
 		txNew->vecOut.resize(1);
 		txNew->vecIn[0].scriptSignature = MCP06::CScript() << 486604799 << MCP06::CScriptNum(4) << std::vector<unsigned char>((const unsigned char*)pszTimestamp, (const unsigned char*)pszTimestamp + strlen(pszTimestamp));
+		txNew->vecIn[0].txPrev = std::shared_ptr< MCP03::txOutRef >(new MCP03::txOutRef() );
 		txNew->vecOut[0].uint64tValue = uint64tGenesisCoins;
 		memcpy(txNew->vecOut[0].uint8tPubKey, initiatorPubKey, sizeof(uint8_t)*64 );
 
@@ -105,6 +107,8 @@ namespace MCP02
 		LOCK(m_pDB->batchCriticalSection);
 		m_pDB->batchStart();
 
+		bool bCoinbase = false;
+
 		// go through each tx and process it
 		for (auto &it : ((MCP03::crBlock*)Block)->vecTx)
 		{
@@ -119,9 +123,12 @@ namespace MCP02
 			uint64_t uiValIncoming = 0, uiValOutgoing = 0;
 			unsigned int uiPosition = 0;
 
+			// when it's a coinbase tx, we don't check for incoming tx or mark the incoming as spent, we only check if the value of the coinbase tx is correct.
+			// we also only allow one coinbase tx per block, otherwise we dismiss the block
+			if (!it->isCoinBase())
+			{
 			// step1
 				// todo: check if spendable with script signature
-				// todo: check txprev nullptr
 				for (auto &incoming : it->vecIn)
 				{
 					std::string strIdent = "txO." + incoming.txPrev.get()->hash.GetHex() + "." + std::to_string(uiPosition);
@@ -136,7 +143,7 @@ namespace MCP02
 					uiPosition++;
 				}
 
-			// step2
+				// step2
 				for (auto &outgoing : it->vecOut)
 					uiValOutgoing += outgoing.uint64tValue;
 
@@ -146,7 +153,7 @@ namespace MCP02
 					goto next;
 				}
 
-			// step3
+				// step3
 				uiPosition = 0;
 				for (auto &incoming : it->vecIn)
 				{
@@ -154,6 +161,17 @@ namespace MCP02
 					m_pDB->batchDeleteEntry("txO." + incoming.txPrev.get()->hash.GetHex() + "." + std::to_string(uiPosition) + ".spent");
 					uiPosition++;
 				}
+			}
+			else
+			{
+				if (bCoinbase)
+				{
+					LOG_ERROR("The block includes two coinbase tx. Dismissing Block!", "MINE");
+					return false;
+				}
+				// todo: check coinbase value
+				bCoinbase = true;
+			}
 
 			// step4
 				uiPosition = 0;
@@ -169,27 +187,30 @@ namespace MCP02
 			{
 					std::unordered_map< std::string, MCP01::Account > umapAccounts;
 
-					// remove incoming TX from spendable list
-					for (auto &incoming : it->vecIn)
+					// remove incoming TX from spendable list, except when it's a coinbase
+					if( !it->isCoinBase() )
 					{
-						// check if we have the account already in our list, if not add it
-						if (umapAccounts.count(incoming.strSignature) != 1)
+						for (auto &incoming : it->vecIn)
 						{
-							std::string strTmp = m_pDB->get("txU." + incoming.strSignature, (std::string)"");
-							if (strTmp != "")
+							// check if we have the account already in our list, if not add it
+							if (umapAccounts.count(incoming.strSignature) != 1)
 							{
-								std::stringstream stream(strTmp);
-								boost::archive::binary_iarchive ia(stream, boost::archive::no_header | boost::archive::no_tracking);
-								MCP01::Account tmp;
-								ia >> tmp;
-								umapAccounts[incoming.strSignature] = tmp;
+								std::string strTmp = m_pDB->get("txU." + incoming.strSignature, (std::string)"");
+								if (strTmp != "")
+								{
+									std::stringstream stream(strTmp);
+									boost::archive::binary_iarchive ia(stream, boost::archive::no_header | boost::archive::no_tracking);
+									MCP01::Account tmp;
+									ia >> tmp;
+									umapAccounts[incoming.strSignature] = tmp;
+								}
+								else
+									umapAccounts[incoming.strSignature] = MCP01::Account();
 							}
-							else
-								umapAccounts[incoming.strSignature] = MCP01::Account();
-						}
 
-						// since it's an incoming TX, we have to remove the entry from the spendable list
-						umapAccounts[incoming.strSignature].umapUnspentTX.erase(incoming.txPrev.get()->hash.GetHex());
+							// since it's an incoming TX, we have to remove the entry from the spendable list
+							umapAccounts[incoming.strSignature].umapUnspentTX.erase(incoming.txPrev.get()->hash.GetHex());
+						}
 					}
 
 					// add outgoing TX to spenable list

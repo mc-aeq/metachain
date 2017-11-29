@@ -10,8 +10,8 @@
 namespace MCP03
 {
 	txIn::txIn()
+		:txPrev(nullptr)
 	{
-
 	}
 
 	txIn::txIn(std::shared_ptr<txOutRef> ref, std::string sig)
