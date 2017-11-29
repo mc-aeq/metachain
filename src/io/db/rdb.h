@@ -50,10 +50,12 @@ class dbEngineRDB : public dbEngine
 		virtual std::string								get(std::string strKey, std::string strDefault = "", std::string strEnv = "") {	return getT(strKey, strDefault); };
 		virtual unsigned int							get(std::string strKey, unsigned int uiDefault = 0, std::string strEnv = "") { return getT(strKey, uiDefault); };
 		virtual bool									get(std::string strKey, bool bDefault = false, std::string strEnv = "") { return getT(strKey, bDefault); };
+		virtual bool									deleteEntry(std::string strKey, std::string strEnv = "");
 
 		// functions for batch writing
 		virtual void									batchStart();
 		virtual void									batchAddStatement(std::string strKey, std::string strValue, std::string strEnv = "");		// strEnv is used for dbEngines that are not key/value based. e.g. mysql where tables can be defined and used
+		virtual void									batchDeleteEntry(std::string strKey, std::string strEnv = "");
 		virtual void									batchFinalize();
 };
 

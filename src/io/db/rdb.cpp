@@ -71,6 +71,19 @@ bool dbEngineRDB::write(std::string strKey, std::string strValue, std::string st
 	}
 }
 
+bool dbEngineRDB::deleteEntry(std::string strKey, std::string strEnv)
+{
+	m_dbStatus = m_pDB->Delete(rocksdb::WriteOptions(), strKey);
+
+	if (m_dbStatus.ok())
+		return true;
+	else
+	{
+		LOG_ERROR("Deleting in RDB " + m_umapSettings.at("path") + " didn't work: " + m_dbStatus.ToString(), "RDB-E");
+		return false;
+	}
+}
+
 void dbEngineRDB::batchStart()
 {
 	RELEASE(m_pBatch);
@@ -81,6 +94,11 @@ void dbEngineRDB::batchStart()
 void dbEngineRDB::batchAddStatement(std::string strKey, std::string strValue, std::string strEnv)
 {
 	m_pBatch->Put( strKey, strValue );
+}
+
+void dbEngineRDB::batchDeleteEntry(std::string strKey, std::string strEnv)
+{
+	m_pBatch->Delete(strKey);
 }
 
 void dbEngineRDB::batchFinalize()

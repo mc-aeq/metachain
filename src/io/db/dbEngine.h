@@ -29,10 +29,12 @@ class dbEngine
 		virtual std::string								get(std::string strKey, std::string strDefault = "", std::string strEnv = "") = 0;
 		virtual unsigned int							get(std::string strKey, unsigned int uiDefault = 0, std::string strEnv = "") = 0;
 		virtual bool									get(std::string strKey, bool bDefault = false, std::string strEnv = "") = 0;
+		virtual bool									deleteEntry(std::string strKey, std::string strEnv = "") = 0;
 
 		// functions for batch writing
 		virtual void									batchStart() = 0;
 		virtual void									batchAddStatement( std::string strKey, std::string strValue, std::string strEnv = "" ) = 0;		// strEnv is used for dbEngines that are not key/value based. e.g. mysql where tables can be defined and used
+		virtual void									batchDeleteEntry(std::string strKey, std::string strEnv = "") = 0;
 		virtual void									batchFinalize() = 0;
 		cCriticalSection								batchCriticalSection;
 };
