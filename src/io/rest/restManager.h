@@ -45,6 +45,10 @@ class restManager
 		// single command handlers _POST
 		void													processPostExample(web::http::http_request req);
 
+		// don't allow copy constructors
+																restManager(restManager const& copy);	// not implemented
+		restManager&											operator=(restManager const& copy);		// not implemented
+
 	public:
 																restManager( CService IP, bool bSSL );
 																~restManager();

@@ -6,7 +6,6 @@
 
 #include "restManager.h"
 #include "../../logger.h"
-#include "../../tinyformat.h"
 
 restManager::restManager(CService IP, bool bSSL)
 		: m_bInitialized(false),
@@ -65,7 +64,7 @@ bool restManager::init()
 	LOG("REST API initialized - listening at " + strURI, "REST");
 
 	m_bInitialized = true;
-		return true;
+	return true;
 }
 
 void restManager::handleRequest(web::http::http_request req)
@@ -171,5 +170,6 @@ void restManager::processPostExample(web::http::http_request req)
 		return;
 	}).then([](pplx::task<void> t) { handleError(t); }).wait();
 
+	// fallback with error message. we reach this line only when the json can't be decoded and the handleError(t) function was called
 	req.reply(web::http::status_codes::UnprocessableEntity, U("Unable to extract JSON data from POST request"));
 }
