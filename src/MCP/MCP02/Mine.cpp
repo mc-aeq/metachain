@@ -8,6 +8,8 @@
 #include <boost/serialization/export.hpp>
 #include <boost/archive/binary_iarchive.hpp>
 #include <boost/archive/binary_oarchive.hpp>
+#include "../MCP01/Account.h"
+#include "../MCP01/base58.h"
 #include "../MCP03/crBlock.h"
 #include "../MCP03/crTransaction.h"
 #include "../MCP06/script.h"
@@ -99,6 +101,10 @@ namespace MCP02
 			}
 		}
 
+		// we're using a batch statment for the block. this allows safety for the data in case of interruptions. the incoming TX will not get flagged as spent without the outgoing TX being generated
+		LOCK(m_pDB->batchCriticalSection);
+		m_pDB->batchStart();
+
 		// go through each tx and process it
 		for (auto &it : ((MCP03::crBlock*)Block)->vecTx)
 		{
@@ -108,6 +114,7 @@ namespace MCP02
 			// 2: check if incoming val >= outgoing val
 			// 3: remove incoming from spend list
 			// 4: add outgoing to spend list 
+			// 5: update MCP01::Account array of spenable tx
 
 			uint64_t uiValIncoming = 0, uiValOutgoing = 0;
 			unsigned int uiPosition = 0;
@@ -115,7 +122,6 @@ namespace MCP02
 			// step1
 				// todo: check if spendable with script signature
 				// todo: check txprev nullptr
-				// todo: add MCP01::Account serialization with array of unspent tx. add or remove those tx, save it as txU.pubkey<array>
 				for (auto &incoming : it->vecIn)
 				{
 					std::string strIdent = "txO." + incoming.txPrev.get()->hash.GetHex() + "." + std::to_string(uiPosition);
@@ -140,36 +146,96 @@ namespace MCP02
 					goto next;
 				}
 
-			{
-				// step3
-					uiPosition = 0;
-					// we're using a batch statment for step3 and 4. this allows safety for the data in case of interruptions. the incoming TX will not get flagged as spent without the outgoing TX being generated
-					LOCK(m_pDB->batchCriticalSection);
-					m_pDB->batchStart();
+			// step3
+				uiPosition = 0;
+				for (auto &incoming : it->vecIn)
+				{
+					// we delete the entry from the DB. Since we're retrieving it with a default of "spent" = true, it doesn't matter if we update it to be "spent"=true or delete the entry. so we delete it to save storage space
+					m_pDB->batchDeleteEntry("txO." + incoming.txPrev.get()->hash.GetHex() + "." + std::to_string(uiPosition) + ".spent");
+					uiPosition++;
+				}
 
+			// step4
+				uiPosition = 0;
+				for (auto &outgoing : it->vecOut)
+				{
+					std::string strIdent = "txO." + it->hash.GetHex() + "." + std::to_string(uiPosition);
+					m_pDB->batchAddStatement(strIdent + ".spent", "0");
+					m_pDB->batchAddStatement(strIdent + ".val", std::to_string(outgoing.uint64tValue));
+					uiPosition++;
+				}
+
+			// step5
+			{
+					std::unordered_map< std::string, MCP01::Account > umapAccounts;
+
+					// remove incoming TX from spendable list
 					for (auto &incoming : it->vecIn)
 					{
-						m_pDB->batchAddStatement("txO." + incoming.txPrev.get()->hash.GetHex() + "." + std::to_string(uiPosition) + ".spent", "1");
-						uiPosition++;
+						// check if we have the account already in our list, if not add it
+						if (umapAccounts.count(incoming.strSignature) != 1)
+						{
+							std::string strTmp = m_pDB->get("txU." + incoming.strSignature, (std::string)"");
+							if (strTmp != "")
+							{
+								std::stringstream stream(strTmp);
+								boost::archive::binary_iarchive ia(stream, boost::archive::no_header | boost::archive::no_tracking);
+								MCP01::Account tmp;
+								ia >> tmp;
+								umapAccounts[incoming.strSignature] = tmp;
+							}
+							else
+								umapAccounts[incoming.strSignature] = MCP01::Account();
+						}
+
+						// since it's an incoming TX, we have to remove the entry from the spendable list
+						umapAccounts[incoming.strSignature].umapUnspentTX.erase(incoming.txPrev.get()->hash.GetHex());
 					}
 
-				// step4
+					// add outgoing TX to spenable list
 					uiPosition = 0;
 					for (auto &outgoing : it->vecOut)
 					{
-						std::string strIdent = "txO." + it->hash.GetHex() + "." + std::to_string(uiPosition);
-						m_pDB->batchAddStatement(strIdent + ".spent", "0");
-						m_pDB->batchAddStatement(strIdent + ".val", std::to_string(outgoing.uint64tValue));
+						std::string strPubKey = MCP01::base58::encode(outgoing.uint8tPubKey, 64);
+
+						// check if we have the account already in our list, if not add it
+						if (umapAccounts.count(strPubKey) != 1)
+						{
+							std::string strTmp = m_pDB->get("txU." + strPubKey, (std::string)"");
+							if (strTmp != "")
+							{
+								std::stringstream stream(strTmp);
+								boost::archive::binary_iarchive ia(stream, boost::archive::no_header | boost::archive::no_tracking);
+								MCP01::Account tmp;
+								ia >> tmp;
+								umapAccounts[strPubKey] = tmp;
+							}
+							else
+								umapAccounts[strPubKey] = MCP01::Account();
+						}
+
+						// since it's an outgoing TX, we have to add the entry to the spendable list
+						umapAccounts[strPubKey].umapUnspentTX.emplace(it->hash.GetHex(), uiPosition);
+
 						uiPosition++;
 					}
 
-				// now we can execute our batch statement
-				m_pDB->batchFinalize();
+					// since we now updated all spenable lists, we sync them back into our db
+					for (auto &account : umapAccounts)
+					{
+						std::stringstream stream(std::ios_base::in | std::ios_base::out | std::ios_base::binary);
+						boost::archive::binary_oarchive oa(stream, boost::archive::no_header | boost::archive::no_tracking);
+						oa << account.second;
+						m_pDB->batchAddStatement("txU." + account.first, rocksdb::Slice(stream.str().data(), stream.tellp()).ToString());
+					}
 			}
 
 			// goto label used for ignoring a certain transaction
 			next:;
 		}
+
+		// now we can execute our batch statement
+		m_pDB->batchFinalize();
 
 		// store the block with our storagemanager
 		saveBlock(Block);
