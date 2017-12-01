@@ -5,6 +5,7 @@
 **********************************************************************/
 
 #include "Mine.h"
+#include <unordered_set>
 #include <boost/serialization/export.hpp>
 #include <boost/archive/binary_iarchive.hpp>
 #include <boost/archive/binary_oarchive.hpp>
@@ -107,7 +108,11 @@ namespace MCP02
 		LOCK(m_pDB->batchCriticalSection);
 		m_pDB->batchStart();
 
+		// variable that tracks if we have only one coinbase tx in this block
 		bool bCoinbase = false;
+
+		// a list of txin outrefs to check double spending within a single block
+		std::unordered_set< std::string > usetSpendings;
 
 		// go through each tx and process it
 		for (auto &it : ((MCP03::crBlock*)Block)->vecTx)
@@ -132,6 +137,16 @@ namespace MCP02
 				for (auto &incoming : it->vecIn)
 				{
 					std::string strIdent = "txO." + incoming.txPrev.get()->hash.GetHex() + "." + std::to_string(uiPosition);
+
+					// check wether this ident was already spent in this block. If so, it's a double spending and we dismiss this TX
+					if (usetSpendings.count(strIdent) == 1)
+					{
+						LOG_ERROR("Double spending in this block detected. Dismissing TX!", "MINE");
+						goto next;
+					}
+					else
+						usetSpendings.emplace(strIdent);
+
 					if (m_pDB->get(strIdent + ".spent", true))
 					{
 						// the incoming TX was either not found or it was already spent. in any way, we can't accept this as incoming tx
