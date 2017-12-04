@@ -1,0 +1,5 @@
+<map id="MCP02::SubChain" name="MCP02::SubChain">
+<area shape="rect" id="node2" href="$class_m_c_p02_1_1_mine.html" title="MCP02::Mine" alt="" coords="5,80,107,107"/>
+<area shape="rect" id="node3" href="$class_m_c_p02_1_1_stub.html" title="MCP02::Stub" alt="" coords="131,80,231,107"/>
+<area shape="rect" id="node4" href="$class_m_c_p02_1_1_trust.html" title="MCP02::Trust" alt="" coords="255,80,358,107"/>
+</map>

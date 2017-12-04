@@ -1,0 +1,6 @@
+<map id="MCP03::MetaChain::mcTxIn" name="MCP03::MetaChain::mcTxIn">
+<area shape="rect" id="node2" href="$class_m_c_p03_1_1tx_in.html" title="MCP03::txIn" alt="" coords="51,275,145,301"/>
+<area shape="rect" id="node3" href="$class_m_c_p06_1_1_c_script.html" title="MCP06::CScript" alt="" coords="40,185,156,212"/>
+<area shape="rect" id="node4" href="$classprevector.html" title="CScriptBase" alt="" coords="51,109,145,136"/>
+<area shape="rect" id="node5" href="$unionprevector_1_1direct__or__indirect.html" title="prevector\&lt; N, T, Size,\l Diff \&gt;::direct_or_indirect" alt="" coords="17,5,179,47"/>
+</map>

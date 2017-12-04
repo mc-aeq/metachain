@@ -1,0 +1,6 @@
+<map id="fopen_file_func" name="fopen_file_func">
+<area shape="rect" id="node2" href="$ioapi_8h.html#a0c90747a8b732158bc3666411776affe" title="fill_zlib_filefunc64\l_32_def_from_filefunc32" alt="" coords="160,23,320,65"/>
+<area shape="rect" id="node5" href="$ioapi_8c.html#ab44f1d585b26ce7f9447a91ada432727" title="fill_fopen_filefunc" alt="" coords="181,89,299,116"/>
+<area shape="rect" id="node3" href="$zlib__unzip_8c.html#a920361c17f591352b947778d75249d5d" title="unzOpen2" alt="" coords="368,5,449,32"/>
+<area shape="rect" id="node4" href="$zlib__zip_8c.html#a07449509c0da16867d0a8ec94a4d50ae" title="zipOpen2" alt="" coords="370,56,447,83"/>
+</map>

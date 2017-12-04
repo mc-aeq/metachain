@@ -1,0 +1,5 @@
+<map id="FastRandomContext::randbits" name="FastRandomContext::randbits">
+<area shape="rect" id="node2" href="$class_fast_random_context.html#aa000c668f222d36db387034f6bf98f8f" title="FastRandomContext::\lrandrange" alt="" coords="203,5,352,47"/>
+<area shape="rect" id="node3" href="$class_fast_random_context.html#a8ea3fd2c7b2961aa1ee93ca5dc6ad6cf" title="FastRandomContext::\lrand32" alt="" coords="203,71,352,112"/>
+<area shape="rect" id="node4" href="$class_fast_random_context.html#a721778ad4418922703ac4b7c14ab4722" title="FastRandomContext::\lrandbool" alt="" coords="203,136,352,177"/>
+</map>

@@ -1,0 +1,9 @@
+<map id="MCP02::Mine::initGenesis" name="MCP02::Mine::initGenesis">
+<area shape="rect" id="node2" href="$classbase__blob.html#aa340be5328d911272eded433d03f30a3" title="base_blob::SetNull" alt="" coords="248,5,379,32"/>
+<area shape="rect" id="node3" href="$class_m_c_p03_1_1_block.html#a94beb15ec42d54e08099086ec3fdcd44" title="MCP03::Block::calcAll" alt="" coords="237,56,390,83"/>
+<area shape="rect" id="node7" href="$classbase__blob.html#a7a0d25782830d8b087c4da839f3ccdeb" title="base_blob::ToString" alt="" coords="480,157,617,184"/>
+<area shape="rect" id="node8" href="$class_m_c_p03_1_1cr_block.html#aa3e61453a26d5f6aa5d437974029f74c" title="MCP03::crBlock::toString" alt="" coords="228,157,399,184"/>
+<area shape="rect" id="node4" href="$class_m_c_p03_1_1_block.html#ad193ed52359c1b1b911caea9f984811f" title="MCP03::Block::calcSize" alt="" coords="467,5,631,32"/>
+<area shape="rect" id="node5" href="$class_m_c_p03_1_1_block.html#a0581b80b7e3926fc62a7618cf4aa1a0d" title="MCP03::Block::calcMerkleRoot" alt="" coords="447,56,651,83"/>
+<area shape="rect" id="node6" href="$class_m_c_p03_1_1_block.html#a7fcd930135688ffea446c07fdf72d776" title="MCP03::Block::calcHash" alt="" coords="465,107,633,133"/>
+</map>

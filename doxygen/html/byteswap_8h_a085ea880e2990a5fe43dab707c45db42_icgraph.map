@@ -1,0 +1,4 @@
+<map id="bswap_16" name="bswap_16">
+<area shape="rect" id="node2" href="$endian_8h.html#a2a7867e242f08a0b90f7e143b3084c8c" title="htobe16" alt="" coords="133,5,201,32"/>
+<area shape="rect" id="node3" href="$endian_8h.html#a14a66ea10b9e007a9ef51822f940a9d0" title="be16toh" alt="" coords="133,56,201,83"/>
+</map>

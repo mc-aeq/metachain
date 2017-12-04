@@ -1,0 +1,5 @@
+<map id="decode_base16" name="decode_base16">
+<area shape="rect" id="node2" href="$base16_8h.html#a99d30dcb2b9347b62dd01d1cafc42cc0" title="decode_base16_private" alt="" coords="167,31,324,57"/>
+<area shape="rect" id="node3" href="$base16_8cpp.html#adc5fe6fe91a5232bf575b1f308248c84" title="is_base16" alt="" coords="372,5,453,32"/>
+<area shape="rect" id="node4" href="$base16_8cpp.html#adf4886c6fa7908a46623d8e17926fc16" title="from_hex" alt="" coords="375,56,450,83"/>
+</map>

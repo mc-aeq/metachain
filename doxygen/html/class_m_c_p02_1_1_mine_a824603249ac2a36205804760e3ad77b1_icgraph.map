@@ -1,0 +1,6 @@
+<map id="MCP02::Mine::processBlock" name="MCP02::Mine::processBlock">
+<area shape="rect" id="node2" href="$class_m_c_p02_1_1_mine.html#ac08f96c0ca77120d0a8b63c46d39e152" title="MCP02::Mine::createInstance" alt="" coords="241,13,436,39"/>
+<area shape="rect" id="node3" href="$class_m_c_p02_1_1_mine.html#a39ce2c01275596ef6ac84e21cff09634" title="MCP02::Mine::registerFactory" alt="" coords="484,13,680,39"/>
+<area shape="rect" id="node4" href="$class_m_c_p02_1_1_sub_chain_manager.html#ae22abe1fa36cb97a60485ceedf62d7a8" title="MCP02::SubChainManager\l::initSCFactories" alt="" coords="728,5,907,47"/>
+<area shape="rect" id="node5" href="$class_m_c_p02_1_1_sub_chain_manager.html#a77066505435ab10bf052ce71266afb50" title="MCP02::SubChainManager\l::SubChainManager" alt="" coords="955,5,1133,47"/>
+</map>

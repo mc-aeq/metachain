@@ -1,0 +1,14 @@
+<map id="netPeers::validConnection" name="netPeers::validConnection">
+<area shape="rect" id="node2" href="$classnet_peers.html#a11ba7334d520efd46d8329ae1e4b9cf9" title="netPeers::toString" alt="" coords="225,107,352,133"/>
+<area shape="rect" id="node3" href="$classnet_peers.html#a981fffdd6bbf75c244bb3d4cdc1525e4" title="netPeers::isFN" alt="" coords="409,5,518,32"/>
+<area shape="rect" id="node4" href="$class_c_net_addr.html#a7021b79e9a33c342b68db09dbb6c2293" title="CNetAddr::IsIPv4" alt="" coords="1389,183,1509,209"/>
+<area shape="rect" id="node5" href="$class_c_net_addr.html#a09168d1f3620bcb0ef396359d5764e54" title="CNetAddr::toStringIP" alt="" coords="789,208,932,235"/>
+<area shape="rect" id="node11" href="$class_c_service.html#a27dd2cf9191d05c1b1d870d64b42388c" title="CService::toString" alt="" coords="400,259,527,285"/>
+<area shape="rect" id="node6" href="$class_c_service.html#ac4c6d655fab3af40937f0b0c65581745" title="CService::GetSockAddr" alt="" coords="984,208,1143,235"/>
+<area shape="rect" id="node10" href="$class_c_net_addr.html#a626b15adc4a6921e63756f1c1be16990" title="CNetAddr::GetByte" alt="" coords="996,259,1131,285"/>
+<area shape="rect" id="node7" href="$class_c_net_addr.html#a4f73432c55d4acb6b9e4c54833eefea6" title="CNetAddr::GetInAddr" alt="" coords="1194,208,1338,235"/>
+<area shape="rect" id="node8" href="$class_c_net_addr.html#aad5f7a372c56ccf4d773f728b6b46e18" title="CNetAddr::IsIPv6" alt="" coords="1206,259,1326,285"/>
+<area shape="rect" id="node9" href="$class_c_net_addr.html#a3616012f94b27148e5b8e27d943d4884" title="CNetAddr::GetIn6Addr" alt="" coords="1191,309,1341,336"/>
+<area shape="rect" id="node12" href="$class_c_service.html#aef6822cc9563ffcf40e18093f388f0dd" title="CService::toStringIPPort" alt="" coords="575,335,737,361"/>
+<area shape="rect" id="node13" href="$class_c_service.html#a89f0e1697fcea8b56d73828d55029cc8" title="CService::toStringPort" alt="" coords="785,411,936,437"/>
+</map>

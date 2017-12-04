@@ -1,0 +1,8 @@
+<map id="netMessage" name="netMessage">
+<area shape="rect" id="node2" href="$classuint256.html" title="uint256" alt="" coords="37,95,101,121"/>
+<area shape="rect" id="node3" href="$classbase__blob.html" title="base_blob\&lt; 256 \&gt;" alt="" coords="5,5,132,32"/>
+<area shape="rect" id="node4" href="$classc_data_stream.html" title="cDataStream" alt="" coords="158,95,257,121"/>
+<area shape="rect" id="node5" href="$classc_hash256.html" title="cHash256" alt="" coords="281,95,361,121"/>
+<area shape="rect" id="node6" href="$class_c_s_h_a256.html" title="CSHA256" alt="" coords="281,5,360,32"/>
+<area shape="rect" id="node7" href="$structs_header.html" title="sHeader" alt="" coords="385,95,456,121"/>
+</map>

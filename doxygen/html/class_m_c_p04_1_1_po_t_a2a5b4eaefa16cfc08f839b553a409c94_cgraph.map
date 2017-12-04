@@ -1,0 +1,4 @@
+<map id="MCP04::PoT::registerFactory" name="MCP04::PoT::registerFactory">
+<area shape="rect" id="node2" href="$class_m_c_p02_1_1_sub_chain_manager.html#a02f73b789e4a2ab5eeceb4f5c950d228" title="MCP02::SubChainManager\l::registerPoPFactory" alt="" coords="249,5,428,47"/>
+<area shape="rect" id="node3" href="$class_m_c_p04_1_1_po_t.html#af757403221ad8f3fb52315ff87b6f1f5" title="MCP04::PoT::createInstance" alt="" coords="244,71,433,98"/>
+</map>

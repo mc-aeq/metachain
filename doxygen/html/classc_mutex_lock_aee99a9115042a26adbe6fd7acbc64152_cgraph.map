@@ -1,0 +1,4 @@
+<map id="cMutexLock::TryEnter" name="cMutexLock::TryEnter">
+<area shape="rect" id="node2" href="$c_critical_section_8h.html#afc02589835b058cee9b180e89ee234c9" title="EnterCritical" alt="" coords="205,5,298,32"/>
+<area shape="rect" id="node3" href="$c_critical_section_8h.html#a222f17e7a4e1fb9bb5a36fe9aca460b8" title="LeaveCritical" alt="" coords="204,56,299,83"/>
+</map>

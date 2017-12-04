@@ -1,0 +1,4 @@
+<map id="EnterCritical" name="EnterCritical">
+<area shape="rect" id="node2" href="$classc_mutex_lock.html#ac8e6c9ea9077fd7def523f74a72991d4" title="cMutexLock::Enter" alt="" coords="156,5,288,32"/>
+<area shape="rect" id="node3" href="$classc_mutex_lock.html#aee99a9115042a26adbe6fd7acbc64152" title="cMutexLock::TryEnter" alt="" coords="147,56,297,83"/>
+</map>

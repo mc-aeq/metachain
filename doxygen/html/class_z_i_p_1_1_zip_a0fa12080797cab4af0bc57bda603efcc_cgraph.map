@@ -1,0 +1,22 @@
+<map id="ZIP::Zip::~Zip" name="ZIP::Zip::~Zip">
+<area shape="rect" id="node2" href="$class_z_i_p_1_1_zip.html#aea19e6b65f285d3788f6c2823e1fdafd" title="ZIP::Zip::close" alt="" coords="152,299,257,325"/>
+<area shape="rect" id="node3" href="$class_z_i_p_1_1_zip.html#aec6d27ba176197d42464911b7e1d5b87" title="ZIP::Zip::closeEntry" alt="" coords="305,248,441,275"/>
+<area shape="rect" id="node15" href="$zlib__zip_8c.html#a4fda7a41fa2f57d105ffc7d1cbcf53cc" title="zipClose" alt="" coords="337,349,409,376"/>
+<area shape="rect" id="node4" href="$zlib__zip_8c.html#ae470f753aef4cffe4f77a5ec2bcfbde1" title="zipCloseFileInZip" alt="" coords="489,223,609,249"/>
+<area shape="rect" id="node5" href="$zlib__zip_8c.html#a43fe6f36cef62c7f34c0fdb4c8288b87" title="zipCloseFileInZipRaw" alt="" coords="657,177,803,204"/>
+<area shape="rect" id="node6" href="$zlib__zip_8c.html#a3bed1cfe7ae981d2a433a1dbdb2cc436" title="zipCloseFileInZipRaw64" alt="" coords="851,132,1009,159"/>
+<area shape="rect" id="node7" href="$ioapi_8h.html#a50e9e9d5c30e481de822ad68fe537986" title="uLong" alt="" coords="1574,340,1631,367"/>
+<area shape="rect" id="node8" href="$zlib__zip_8c.html#aacb39e685c358a284a9162e579793469" title="zip64FlushWriteBuffer" alt="" coords="1093,56,1242,83"/>
+<area shape="rect" id="node9" href="$zlib__zip_8c.html#a472dc2ba2bf1d51a41e87cd97dbdb18b" title="zip64local_putValue\l_inmemory" alt="" coords="1533,27,1672,69"/>
+<area shape="rect" id="node10" href="$zlib__zip_8c.html#af411f447b40db1fad258dee3b786ccc1" title="add_data_in_datablock" alt="" coords="1090,107,1245,133"/>
+<area shape="rect" id="node12" href="$zlib__zip_8c.html#a5aeb27e162442455a221eb365c68f8d2" title="zip64local_putValue" alt="" coords="1336,239,1475,265"/>
+<area shape="rect" id="node11" href="$zlib__zip_8c.html#a86c6b1ea8228286351584adc3d47b07c" title="allocate_new_datablock" alt="" coords="1325,36,1485,63"/>
+<area shape="rect" id="node13" href="$zlib__zip_8c.html#aeceecbdb8a6daac5791ebba72d0bf346" title="OF" alt="" coords="1583,191,1623,217"/>
+<area shape="rect" id="node14" href="$ioapi_8h.html#a39ab6d73c1cd44bc17064c2dcbb3e753" title="voidpf" alt="" coords="1378,87,1433,113"/>
+<area shape="rect" id="node16" href="$zlib__zip_8c.html#a828b9b8e64fa414a46c5b9420c522caf" title="free_linkedlist" alt="" coords="499,476,600,503"/>
+<area shape="rect" id="node18" href="$zlib__zip_8c.html#a3e803b9de3378b55508de949f9725480" title="Write_Zip64EndOfCentralDirectory\lRecord" alt="" coords="1057,442,1277,483"/>
+<area shape="rect" id="node19" href="$zlib__zip_8c.html#a9c440209ccea3275591d82ef1170caec" title="Write_Zip64EndOfCentralDirectory\lLocator" alt="" coords="1057,259,1277,301"/>
+<area shape="rect" id="node20" href="$zlib__zip_8c.html#a26acf4764f6b8c19f0feb18ac5315438" title="Write_EndOfCentralDirectory\lRecord" alt="" coords="1073,325,1262,366"/>
+<area shape="rect" id="node21" href="$zlib__zip_8c.html#afe52628c128fa6397329f43e60420142" title="Write_GlobalComment" alt="" coords="1091,391,1244,417"/>
+<area shape="rect" id="node17" href="$zlib__zip_8c.html#abef16e3f609c5691bab782908095af3b" title="free_datablock" alt="" coords="677,476,783,503"/>
+</map>

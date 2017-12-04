@@ -1,0 +1,5 @@
+<map id="Logger::initialize" name="Logger::initialize">
+<area shape="rect" id="node2" href="$class_c_simple_ini_templ.html#a76b3165ce01224f82daee5ef63b3c96d" title="CSimpleIniTempl::GetBool\lValue" alt="" coords="169,5,344,47"/>
+<area shape="rect" id="node3" href="$class_c_simple_ini_templ.html#a74e3f5d22f50b70b2a20c89ec7e2c737" title="CSimpleIniTempl::GetValue" alt="" coords="392,42,573,69"/>
+<area shape="rect" id="node4" href="$class_c_simple_ini_templ.html#a705eaa8e6c0fb8c1ce2648e71ad681f7" title="CSimpleIniTempl::IsLess" alt="" coords="621,42,787,69"/>
+</map>

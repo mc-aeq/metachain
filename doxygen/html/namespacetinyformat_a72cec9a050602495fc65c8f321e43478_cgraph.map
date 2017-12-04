@@ -1,0 +1,12 @@
+<map id="tinyformat::printf" name="tinyformat::printf">
+<area shape="rect" id="node2" href="$namespacetinyformat.html#a05144619d8b16e2b31b2594ca9c6bf1d" title="Format list of arguments to the stream according to given format string. " alt="" coords="168,103,291,130"/>
+<area shape="rect" id="node3" href="$namespacetinyformat.html#a86ed74eb3ed66a662e96220d877da964" title="tinyformat::vformat" alt="" coords="365,78,493,105"/>
+<area shape="rect" id="node11" href="$namespacetinyformat.html#a37afaa5249c69dacd619269358f06f69" title="tinyformat::makeFormatList" alt="" coords="339,129,520,155"/>
+<area shape="rect" id="node4" href="$namespacetinyformat_1_1detail.html#a079a316938c0e8693efbeb0183b1390d" title="tinyformat::detail\l::formatImpl" alt="" coords="568,71,687,112"/>
+<area shape="rect" id="node5" href="$namespacetinyformat_1_1detail.html#ad3d636b9f85202b515c8940b7fcb62a6" title="tinyformat::detail\l::printFormatStringLiteral" alt="" coords="738,5,903,47"/>
+<area shape="rect" id="node6" href="$namespacetinyformat_1_1detail.html#a681e8ceb825485cc5e3b057c11e4b1b5" title="tinyformat::detail\l::streamStateFromFormat" alt="" coords="735,71,907,112"/>
+<area shape="rect" id="node10" href="$classtinyformat_1_1detail_1_1_format_arg.html#acbf435711bbe4a4da7fc81758d7108a9" title="tinyformat::detail\l::FormatArg::format" alt="" coords="753,136,888,177"/>
+<area shape="rect" id="node7" href="$namespaceanonymous__namespace_02sha1_8cpp_03_1_1sha1.html#a93562907f2d08ce67265145363baad79" title="anonymous_namespace\l\{sha1::cpp\}::sha1::left" alt="" coords="955,5,1117,47"/>
+<area shape="rect" id="node8" href="$namespacetinyformat_1_1detail.html#a67285e0adb9f4164f9fc30a3eb11c771" title="tinyformat::detail\l::parseIntAndAdvance" alt="" coords="962,71,1110,112"/>
+<area shape="rect" id="node9" href="$classtinyformat_1_1detail_1_1_format_arg.html#a91b69f66ce9dc8ca2914dce8985d7a1a" title="tinyformat::detail\l::FormatArg::toInt" alt="" coords="974,136,1098,177"/>
+</map>

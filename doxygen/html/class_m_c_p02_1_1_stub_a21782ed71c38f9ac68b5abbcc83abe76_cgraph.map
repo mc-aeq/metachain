@@ -1,0 +1,6 @@
+<map id="MCP02::Stub::registerFactory" name="MCP02::Stub::registerFactory">
+<area shape="rect" id="node2" href="$class_m_c_p02_1_1_sub_chain_manager.html#a79e0e1b3120cbba8a56a06f3217f88f0" title="MCP02::SubChainManager\l::registerSCFactory" alt="" coords="255,5,434,47"/>
+<area shape="rect" id="node3" href="$class_m_c_p02_1_1_stub.html#a9ba8b78131ec1eb488c6e18dbd832d44" title="MCP02::Stub::createInstance" alt="" coords="248,71,441,98"/>
+<area shape="rect" id="node4" href="$class_m_c_p02_1_1_stub.html#aa8bba86a6511f2a66a93f9f910a10f6f" title="MCP02::Stub::initGenesis" alt="" coords="496,46,669,73"/>
+<area shape="rect" id="node5" href="$class_m_c_p02_1_1_stub.html#a8072f9b6e566a34ff028003ad9cccefc" title="MCP02::Stub::processBlock" alt="" coords="489,97,676,123"/>
+</map>

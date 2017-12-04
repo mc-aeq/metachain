@@ -1,0 +1,13 @@
+<map id="CNetAddr::IsLocal" name="CNetAddr::IsLocal">
+<area shape="rect" id="node2" href="$class_c_net_addr.html#a4e3b2fea2a6151c76684b3812df4a5c3" title="CNetAddr::IsRoutable" alt="" coords="221,56,367,83"/>
+<area shape="rect" id="node7" href="$class_network_manager.html#a88daa7015845740fa1fb510fc9b04e11" title="NetworkManager::ProcessMessage" alt="" coords="180,111,408,137"/>
+<area shape="rect" id="node3" href="$class_c_net_addr.html#ad0162f2629f552a65acf934e1629c1db" title="CNetAddr::GetNetwork" alt="" coords="488,5,643,32"/>
+<area shape="rect" id="node5" href="$class_c_net_addr.html#aa68c7d6112b22759dcd280ddad30808f" title="CNetAddr::GetReachabilityFrom" alt="" coords="989,31,1197,57"/>
+<area shape="rect" id="node4" href="$_c_net_addr_8cpp.html#a41643eb4f91cec29059acd8ef44d4bde" title="GetExtNetwork" alt="" coords="777,5,887,32"/>
+<area shape="rect" id="node6" href="$class_c_net_addr.html#ac394b27d03f9fb5053e0d771e6270495" title="CNetAddr::GetBytes" alt="" coords="1262,31,1403,57"/>
+<area shape="rect" id="node8" href="$class_network_manager.html#a278ce13b8d97b651bafcdd1835e08b16" title="NetworkManager::handleMessage" alt="" coords="456,112,675,139"/>
+<area shape="rect" id="node9" href="$class_network_manager.html#af5e6b64265dc0147775f524a01e6d6f1" title="NetworkManager::ThreadMessage\lHandler" alt="" coords="723,107,941,149"/>
+<area shape="rect" id="node10" href="$class_network_manager.html#af7326c9d0cefa365670eb3f9ec6d0e27" title="NetworkManager::startThreads" alt="" coords="994,115,1193,141"/>
+<area shape="rect" id="node11" href="$class_network_manager.html#af06f1b25c87391d423a243f1bd2cbc3d" title="NetworkManager::initialize" alt="" coords="1245,115,1420,141"/>
+<area shape="rect" id="node12" href="$class_meta_chain.html#afc0194a2093aa570c4f9512a14892c3c" title="MetaChain::initialize" alt="" coords="1468,115,1607,141"/>
+</map>

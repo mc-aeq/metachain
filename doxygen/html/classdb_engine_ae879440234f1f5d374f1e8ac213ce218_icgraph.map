@@ -1,0 +1,8 @@
+<map id="dbEngine::batchFinalize" name="dbEngine::batchFinalize">
+<area shape="rect" id="node2" href="$class_storage_manager.html#a1831e5fef59166da082c9a943a33b6a2" title="StorageManager::writeRaw" alt="" coords="215,35,392,61"/>
+<area shape="rect" id="node3" href="$class_m_c_p02_1_1_sub_chain.html#a52dc4fe5784f13fee32c7440267ecae2" title="MCP02::SubChain::saveBlock" alt="" coords="440,5,636,32"/>
+<area shape="rect" id="node4" href="$class_m_c_p02_1_1_sub_chain_manager.html#a487bebb83517483fc30da6fd39ad279d" title="MCP02::SubChainManager\l::addSubChain" alt="" coords="449,57,627,98"/>
+<area shape="rect" id="node5" href="$class_m_c_p02_1_1_sub_chain_manager.html#a1da8de089d4a240c31b2f1f7c9c52866" title="MCP02::SubChainManager\l::init" alt="" coords="684,57,863,98"/>
+<area shape="rect" id="node6" href="$class_storage_manager.html#a84456aa2441fafccadc3d4db9f850413" title="StorageManager::initialize" alt="" coords="911,64,1083,91"/>
+<area shape="rect" id="node7" href="$class_meta_chain.html#afc0194a2093aa570c4f9512a14892c3c" title="MetaChain::initialize" alt="" coords="1131,64,1269,91"/>
+</map>

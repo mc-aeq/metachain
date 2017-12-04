@@ -1,0 +1,6 @@
+<map id="MCP02::SubChainManager::scExists" name="MCP02::SubChainManager::scExists">
+<area shape="rect" id="node2" href="$class_m_c_p02_1_1_sub_chain_manager.html#a487bebb83517483fc30da6fd39ad279d" title="MCP02::SubChainManager\l::addSubChain" alt="" coords="232,5,411,47"/>
+<area shape="rect" id="node3" href="$class_m_c_p02_1_1_sub_chain_manager.html#a1da8de089d4a240c31b2f1f7c9c52866" title="MCP02::SubChainManager\l::init" alt="" coords="459,5,637,47"/>
+<area shape="rect" id="node4" href="$class_storage_manager.html#a84456aa2441fafccadc3d4db9f850413" title="StorageManager::initialize" alt="" coords="685,13,857,39"/>
+<area shape="rect" id="node5" href="$class_meta_chain.html#afc0194a2093aa570c4f9512a14892c3c" title="MetaChain::initialize" alt="" coords="905,13,1044,39"/>
+</map>

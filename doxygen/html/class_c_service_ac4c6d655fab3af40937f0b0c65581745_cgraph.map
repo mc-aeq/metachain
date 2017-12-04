@@ -1,0 +1,6 @@
+<map id="CService::GetSockAddr" name="CService::GetSockAddr">
+<area shape="rect" id="node2" href="$class_c_net_addr.html#a7021b79e9a33c342b68db09dbb6c2293" title="CNetAddr::IsIPv4" alt="" coords="411,25,531,52"/>
+<area shape="rect" id="node3" href="$class_c_net_addr.html#a4f73432c55d4acb6b9e4c54833eefea6" title="CNetAddr::GetInAddr" alt="" coords="215,25,359,52"/>
+<area shape="rect" id="node4" href="$class_c_net_addr.html#aad5f7a372c56ccf4d773f728b6b46e18" title="CNetAddr::IsIPv6" alt="" coords="227,76,347,103"/>
+<area shape="rect" id="node5" href="$class_c_net_addr.html#a3616012f94b27148e5b8e27d943d4884" title="CNetAddr::GetIn6Addr" alt="" coords="212,127,363,153"/>
+</map>

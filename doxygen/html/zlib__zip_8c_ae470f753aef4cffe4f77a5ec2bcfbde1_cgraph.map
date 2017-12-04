@@ -1,0 +1,12 @@
+<map id="zipCloseFileInZip" name="zipCloseFileInZip">
+<area shape="rect" id="node2" href="$zlib__zip_8c.html#a43fe6f36cef62c7f34c0fdb4c8288b87" title="zipCloseFileInZipRaw" alt="" coords="173,101,319,128"/>
+<area shape="rect" id="node3" href="$zlib__zip_8c.html#a3bed1cfe7ae981d2a433a1dbdb2cc436" title="zipCloseFileInZipRaw64" alt="" coords="367,101,525,128"/>
+<area shape="rect" id="node4" href="$ioapi_8h.html#a50e9e9d5c30e481de822ad68fe537986" title="uLong" alt="" coords="1025,5,1082,32"/>
+<area shape="rect" id="node5" href="$zlib__zip_8c.html#aacb39e685c358a284a9162e579793469" title="zip64FlushWriteBuffer" alt="" coords="576,203,725,229"/>
+<area shape="rect" id="node6" href="$zlib__zip_8c.html#a472dc2ba2bf1d51a41e87cd97dbdb18b" title="zip64local_putValue\l_inmemory" alt="" coords="984,61,1123,102"/>
+<area shape="rect" id="node7" href="$zlib__zip_8c.html#af411f447b40db1fad258dee3b786ccc1" title="add_data_in_datablock" alt="" coords="573,152,728,179"/>
+<area shape="rect" id="node9" href="$zlib__zip_8c.html#a5aeb27e162442455a221eb365c68f8d2" title="zip64local_putValue" alt="" coords="787,101,925,128"/>
+<area shape="rect" id="node8" href="$zlib__zip_8c.html#a86c6b1ea8228286351584adc3d47b07c" title="allocate_new_datablock" alt="" coords="776,203,936,229"/>
+<area shape="rect" id="node10" href="$zlib__zip_8c.html#aeceecbdb8a6daac5791ebba72d0bf346" title="OF" alt="" coords="1033,135,1073,161"/>
+<area shape="rect" id="node11" href="$ioapi_8h.html#a39ab6d73c1cd44bc17064c2dcbb3e753" title="voidpf" alt="" coords="829,253,883,280"/>
+</map>

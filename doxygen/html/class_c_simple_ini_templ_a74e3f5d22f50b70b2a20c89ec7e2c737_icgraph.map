@@ -1,0 +1,15 @@
+<map id="CSimpleIniTempl::GetValue" name="CSimpleIniTempl::GetValue">
+<area shape="rect" id="node2" href="$class_storage_manager.html#a84456aa2441fafccadc3d4db9f850413" title="StorageManager::initialize" alt="" coords="1207,145,1379,172"/>
+<area shape="rect" id="node3" href="$class_meta_chain.html#afc0194a2093aa570c4f9512a14892c3c" title="MetaChain::initialize" alt="" coords="1427,198,1565,225"/>
+<area shape="rect" id="node4" href="$class_storage_manager.html#af2a8164645d17507f6db936eebe18440" title="StorageManager::createDBEngine" alt="" coords="235,94,453,121"/>
+<area shape="rect" id="node9" href="$class_logger.html#aeb35e9b920054fa621fc61101f30dd59" title="Logger::initialize" alt="" coords="545,476,661,502"/>
+<area shape="rect" id="node10" href="$class_network_manager.html#af06f1b25c87391d423a243f1bd2cbc3d" title="NetworkManager::initialize" alt="" coords="516,198,691,225"/>
+<area shape="rect" id="node11" href="$class_c_simple_ini_templ.html#a92203e0c21f8d71e5d1621a18ee0be50" title="CSimpleIniTempl::UsingSpaces" alt="" coords="501,330,705,357"/>
+<area shape="rect" id="node12" href="$class_c_simple_ini_templ.html#a7fa211c1c768497520eab7f2014ae786" title="CSimpleIniTempl::GetLong\lValue" alt="" coords="256,247,432,288"/>
+<area shape="rect" id="node13" href="$class_c_simple_ini_templ.html#aab58a949481926cf1d42fcbf9552d77b" title="CSimpleIniTempl::GetDouble\lValue" alt="" coords="250,312,438,354"/>
+<area shape="rect" id="node14" href="$class_c_simple_ini_templ.html#a76b3165ce01224f82daee5ef63b3c96d" title="CSimpleIniTempl::GetBool\lValue" alt="" coords="257,430,431,471"/>
+<area shape="rect" id="node5" href="$class_m_c_p02_1_1_sub_chain.html#a9bb76d47d586f4a5e17c991aa9b6d6e9" title="MCP02::SubChain::init" alt="" coords="526,44,681,70"/>
+<area shape="rect" id="node8" href="$class_m_c_p02_1_1_sub_chain.html#a10ade0b50e25b8411c7a3b038d37a386" title="MCP02::SubChain::load" alt="" coords="523,94,684,121"/>
+<area shape="rect" id="node6" href="$class_m_c_p02_1_1_sub_chain_manager.html#a487bebb83517483fc30da6fd39ad279d" title="MCP02::SubChainManager\l::addSubChain" alt="" coords="753,62,932,103"/>
+<area shape="rect" id="node7" href="$class_m_c_p02_1_1_sub_chain_manager.html#a1da8de089d4a240c31b2f1f7c9c52866" title="MCP02::SubChainManager\l::init" alt="" coords="980,71,1159,112"/>
+</map>

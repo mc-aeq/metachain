@@ -1,0 +1,12 @@
+<map id="fill_zlib_filefunc64_32_def_from_filefunc32" name="fill_zlib_filefunc64_32_def_from_filefunc32">
+<area shape="rect" id="node2" href="$ioapi_8h.html#a39ab6d73c1cd44bc17064c2dcbb3e753" title="voidpf" alt="" coords="247,5,301,32"/>
+<area shape="rect" id="node3" href="$ioapi_8c.html#aed02c9f309fbe8fa9ecbf9b3e7e746cf" title="fopen_file_func" alt="" coords="221,56,327,83"/>
+<area shape="rect" id="node4" href="$ioapi_8c.html#a2f5556626b4d14c8083b30ae93c16c07" title="OF" alt="" coords="254,107,294,133"/>
+<area shape="rect" id="node5" href="$ioapi_8h.html#a50e9e9d5c30e481de822ad68fe537986" title="uLong" alt="" coords="383,208,440,235"/>
+<area shape="rect" id="node6" href="$ioapi_8c.html#af6fb57d5dc750e2583a440acd4f2d13a" title="fread_file_func" alt="" coords="222,208,326,235"/>
+<area shape="rect" id="node7" href="$ioapi_8c.html#a8ef76475abb40e42450cc9117c50d9f3" title="fwrite_file_func" alt="" coords="221,259,327,285"/>
+<area shape="rect" id="node8" href="$ioapi_8c.html#a0a0b418f733f73f7a3f2856f9cdb8ef4" title="ftell64_file_func" alt="" coords="219,309,329,336"/>
+<area shape="rect" id="node9" href="$ioapi_8c.html#a12efe8a77998c3c45d3025442ac0a4e4" title="fseek64_file_func" alt="" coords="213,360,335,387"/>
+<area shape="rect" id="node10" href="$ioapi_8c.html#afafa291651579b4e9a86fd2dd0be77a0" title="fclose_file_func" alt="" coords="219,411,329,437"/>
+<area shape="rect" id="node11" href="$ioapi_8c.html#a3aa4c3f5fe3a24948eabef9f7bbaa2b3" title="ferror_file_func" alt="" coords="221,461,327,488"/>
+</map>

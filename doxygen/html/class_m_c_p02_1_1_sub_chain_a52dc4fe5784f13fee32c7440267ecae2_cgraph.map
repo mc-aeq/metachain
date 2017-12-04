@@ -1,0 +1,11 @@
+<map id="MCP02::SubChain::saveBlock" name="MCP02::SubChain::saveBlock">
+<area shape="rect" id="node2" href="$class_storage_manager.html#a1831e5fef59166da082c9a943a33b6a2" title="StorageManager::writeRaw" alt="" coords="249,198,427,225"/>
+<area shape="rect" id="node3" href="$class_m_c_p02_1_1_sub_chain_manager.html#a9a6705cfcb8fba0866c30bfddad1ba1a" title="MCP02::SubChainManager\l::getDBEngine" alt="" coords="485,5,663,47"/>
+<area shape="rect" id="node4" href="$classdb_engine.html#aefb2429cf942ee16b63dc1173b352d9d" title="dbEngine::get" alt="" coords="523,71,625,98"/>
+<area shape="rect" id="node5" href="$class_meta_chain.html#a421a4eede44c6a594e6ea406f0d506a4" title="MetaChain::isFN" alt="" coords="515,122,633,149"/>
+<area shape="rect" id="node6" href="$class_storage_manager.html#a2c862266a6059c2dcdbad2b8e740f30b" title="StorageManager::openRawFile" alt="" coords="475,173,673,199"/>
+<area shape="rect" id="node7" href="$classdb_engine.html#a8a0c29457ed1b6855059d60ef1c41d4a" title="dbEngine::batchStart" alt="" coords="502,223,646,250"/>
+<area shape="rect" id="node8" href="$classdb_engine.html#aad14da0661095bdd1484a0a99c8f1087" title="dbEngine::batchAddStatement" alt="" coords="475,274,673,301"/>
+<area shape="rect" id="node9" href="$classdb_engine.html#ae879440234f1f5d374f1e8ac213ce218" title="dbEngine::batchFinalize" alt="" coords="493,325,655,351"/>
+<area shape="rect" id="node10" href="$classdb_engine.html#a14c73664770a90697fa2b99bf9a0f8ba" title="dbEngine::write" alt="" coords="519,375,629,402"/>
+</map>

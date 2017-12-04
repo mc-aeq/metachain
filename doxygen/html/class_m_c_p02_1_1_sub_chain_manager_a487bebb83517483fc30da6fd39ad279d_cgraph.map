@@ -1,0 +1,26 @@
+<map id="MCP02::SubChainManager::addSubChain" name="MCP02::SubChainManager::addSubChain">
+<area shape="rect" id="node2" href="$class_m_c_p02_1_1_sub_chain_manager.html#a7feeaa07a78591fbac106cbbf985600b" title="MCP02::SubChainManager\l::isSubChainAllowed" alt="" coords="232,40,411,82"/>
+<area shape="rect" id="node3" href="$class_meta_chain.html#a9c97062a7a5fc71592e9bdcf4a07d3ba" title="MetaChain::getInstance" alt="" coords="489,54,647,81"/>
+<area shape="rect" id="node4" href="$class_m_c_p02_1_1_sub_chain_manager.html#ac44a2cd624e01a130a2d6fe282ca9d6f" title="MCP02::SubChainManager\l::getChainIdentifier" alt="" coords="232,106,411,147"/>
+<area shape="rect" id="node5" href="$class_m_c_p02_1_1_sub_chain_manager.html#a036a6fcb3190d0f039c90a7674c1c79b" title="MCP02::SubChainManager\l::scExists" alt="" coords="232,274,411,315"/>
+<area shape="rect" id="node6" href="$class_m_c_p02_1_1_sub_chain_manager.html#a184d503db667a4fc7c97218d19f5b80e" title="MCP02::SubChainManager\l::popExists" alt="" coords="232,339,411,380"/>
+<area shape="rect" id="node7" href="$class_m_c_p02_1_1_sub_chain.html#a9bb76d47d586f4a5e17c991aa9b6d6e9" title="MCP02::SubChain::init" alt="" coords="244,222,399,249"/>
+<area shape="rect" id="node8" href="$class_meta_chain.html#a2ec6af2ac8278861450cf3d405cf9ec2" title="MetaChain::getStorageManager" alt="" coords="465,109,671,136"/>
+<area shape="rect" id="node17" href="$class_storage_manager.html#a1831e5fef59166da082c9a943a33b6a2" title="StorageManager::writeRaw" alt="" coords="233,596,410,622"/>
+<area shape="rect" id="node9" href="$class_storage_manager.html#acf671c8b0eb5bfa35b02c35cfe4501a2" title="StorageManager::incMetaValue" alt="" coords="466,160,670,186"/>
+<area shape="rect" id="node10" href="$class_storage_manager.html#a4eb0353a611a9954ceb6b545f9a1f740" title="StorageManager::getSubChain\lManager" alt="" coords="469,211,667,252"/>
+<area shape="rect" id="node11" href="$class_m_c_p02_1_1_sub_chain_manager.html#a34293cc1d817cfae236ee9fcb17a5514" title="MCP02::SubChainManager\l::getPoPInstance" alt="" coords="479,276,657,318"/>
+<area shape="rect" id="node12" href="$class_storage_manager.html#af2a8164645d17507f6db936eebe18440" title="StorageManager::createDBEngine" alt="" coords="459,342,677,369"/>
+<area shape="rect" id="node16" href="$class_m_c_p02_1_1_sub_chain.html#a2727decc0850702286ccc478d75d04f2" title="MCP02::SubChain::postInit" alt="" coords="479,393,657,420"/>
+<area shape="rect" id="node13" href="$class_c_simple_ini_templ.html#a74e3f5d22f50b70b2a20c89ec7e2c737" title="CSimpleIniTempl::GetValue" alt="" coords="725,317,907,344"/>
+<area shape="rect" id="node15" href="$classdb_engine_r_d_b.html#aa48713c296c8fa7d43fdb3c38e48b9d3" title="dbEngineRDB::initialize" alt="" coords="737,368,895,394"/>
+<area shape="rect" id="node14" href="$class_c_simple_ini_templ.html#a705eaa8e6c0fb8c1ce2648e71ad681f7" title="CSimpleIniTempl::IsLess" alt="" coords="955,317,1120,344"/>
+<area shape="rect" id="node18" href="$class_m_c_p02_1_1_sub_chain_manager.html#a9a6705cfcb8fba0866c30bfddad1ba1a" title="MCP02::SubChainManager\l::getDBEngine" alt="" coords="479,698,657,739"/>
+<area shape="rect" id="node19" href="$classdb_engine.html#aefb2429cf942ee16b63dc1173b352d9d" title="dbEngine::get" alt="" coords="517,764,619,790"/>
+<area shape="rect" id="node20" href="$class_meta_chain.html#a421a4eede44c6a594e6ea406f0d506a4" title="MetaChain::isFN" alt="" coords="509,814,627,841"/>
+<area shape="rect" id="node21" href="$class_storage_manager.html#a2c862266a6059c2dcdbad2b8e740f30b" title="StorageManager::openRawFile" alt="" coords="469,444,667,470"/>
+<area shape="rect" id="node22" href="$classdb_engine.html#a8a0c29457ed1b6855059d60ef1c41d4a" title="dbEngine::batchStart" alt="" coords="496,494,640,521"/>
+<area shape="rect" id="node23" href="$classdb_engine.html#aad14da0661095bdd1484a0a99c8f1087" title="dbEngine::batchAddStatement" alt="" coords="469,545,667,572"/>
+<area shape="rect" id="node24" href="$classdb_engine.html#ae879440234f1f5d374f1e8ac213ce218" title="dbEngine::batchFinalize" alt="" coords="487,596,649,622"/>
+<area shape="rect" id="node25" href="$classdb_engine.html#a14c73664770a90697fa2b99bf9a0f8ba" title="dbEngine::write" alt="" coords="513,646,623,673"/>
+</map>

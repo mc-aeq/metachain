@@ -1,0 +1,12 @@
+<map id="src/MCP/MCP03/MC/mcTxIn.h" name="src/MCP/MCP03/MC/mcTxIn.h">
+<area shape="rect" id="node4" href="$tx_in_8h.html" title="../txIn.h" alt="" coords="275,80,342,107"/>
+<area shape="rect" id="node8" href="$tx_out_ref_8h.html" title="txOutRef.h" alt="" coords="136,162,220,189"/>
+<area shape="rect" id="node26" href="$mc_actions_8h.html" title="mcActions.h" alt="" coords="1372,80,1467,107"/>
+<area shape="rect" id="node18" href="$script_8h.html" title="../MCP06/script.h" alt="" coords="620,251,744,278"/>
+<area shape="rect" id="node11" href="$uint256_8h.html" title="../../uint256.h" alt="" coords="295,251,394,278"/>
+<area shape="rect" id="node13" href="$common_8h.html" title="crypto/common.h" alt="" coords="365,341,487,367"/>
+<area shape="rect" id="node14" href="$endian_8h.html" title="../endian.h" alt="" coords="385,430,467,457"/>
+<area shape="rect" id="node16" href="$byteswap_8h.html" title="byteswap.h" alt="" coords="382,512,470,539"/>
+<area shape="rect" id="node19" href="$prevector_8h.html" title="../../prevector.h" alt="" coords="966,341,1075,367"/>
+<area shape="rect" id="node27" href="$defines_8h.html" title="../../../defines.h" alt="" coords="1364,162,1475,189"/>
+</map>

@@ -1,0 +1,13 @@
+<map id="CSimpleIniTempl::Save" name="CSimpleIniTempl::Save">
+<area shape="rect" id="node2" href="$class_c_simple_ini_templ_1_1_output_writer.html#a48e5905a9defbe96d14f3068a383463d" title="CSimpleIniTempl::OutputWriter\l::Write" alt="" coords="477,5,678,47"/>
+<area shape="rect" id="node3" href="$class_c_simple_ini_templ.html#a7fe8a8b70b0ef000c591011a8332ebd5" title="CSimpleIniTempl::GetAllSections" alt="" coords="208,226,423,253"/>
+<area shape="rect" id="node4" href="$class_c_simple_ini_templ.html#ad0f8c41fd7c3a79d408142c90043acdf" title="CSimpleIniTempl::OutputMulti\lLineText" alt="" coords="218,59,413,100"/>
+<area shape="rect" id="node5" href="$class_c_simple_ini_templ_1_1_converter.html#a4e4186867214b54326cf622e323c9f2f" title="CSimpleIniTempl::Converter\l::ConvertToStore" alt="" coords="487,80,668,121"/>
+<area shape="rect" id="node6" href="$class_c_simple_ini_templ_1_1_converter.html#a918bbd4f861a2872e148bc9481ac80bb" title="CSimpleIniTempl::Converter\l::Data" alt="" coords="487,164,668,205"/>
+<area shape="rect" id="node7" href="$class_c_simple_ini_templ.html#a08cadb6624a6c459703efaadb25d31c9" title="CSimpleIniTempl::GetAllKeys" alt="" coords="219,277,412,303"/>
+<area shape="rect" id="node9" href="$class_c_simple_ini_templ.html#adda5ee7f422695f7e67be2d066e303bf" title="CSimpleIniTempl::GetAllValues" alt="" coords="214,327,417,354"/>
+<area shape="rect" id="node10" href="$class_c_simple_ini_templ.html#a66ad366aeddd171cd8ea23da34a6eea6" title="CSimpleIniTempl::IsMulti\lLineData" alt="" coords="233,379,398,420"/>
+<area shape="rect" id="node8" href="$class_c_simple_ini_templ.html#a705eaa8e6c0fb8c1ce2648e71ad681f7" title="CSimpleIniTempl::IsLess" alt="" coords="495,293,660,319"/>
+<area shape="rect" id="node11" href="$class_c_simple_ini_templ.html#af0a5aaa704f7ec691aaf95510bcaae8a" title="CSimpleIniTempl::IsSpace" alt="" coords="490,361,665,387"/>
+<area shape="rect" id="node12" href="$class_c_simple_ini_templ.html#a87968c003e871f8158bdf622ca6f0c7d" title="CSimpleIniTempl::IsNewLineChar" alt="" coords="471,411,684,438"/>
+</map>

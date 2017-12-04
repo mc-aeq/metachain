@@ -1,0 +1,37 @@
+var _simple_ini_8h =
+[
+    [ "CSimpleIniTempl", "class_c_simple_ini_templ.html", "class_c_simple_ini_templ" ],
+    [ "Entry", "struct_c_simple_ini_templ_1_1_entry.html", "struct_c_simple_ini_templ_1_1_entry" ],
+    [ "KeyOrder", "struct_c_simple_ini_templ_1_1_entry_1_1_key_order.html", "struct_c_simple_ini_templ_1_1_entry_1_1_key_order" ],
+    [ "LoadOrder", "struct_c_simple_ini_templ_1_1_entry_1_1_load_order.html", "struct_c_simple_ini_templ_1_1_entry_1_1_load_order" ],
+    [ "OutputWriter", "class_c_simple_ini_templ_1_1_output_writer.html", "class_c_simple_ini_templ_1_1_output_writer" ],
+    [ "FileWriter", "class_c_simple_ini_templ_1_1_file_writer.html", "class_c_simple_ini_templ_1_1_file_writer" ],
+    [ "StringWriter", "class_c_simple_ini_templ_1_1_string_writer.html", "class_c_simple_ini_templ_1_1_string_writer" ],
+    [ "Converter", "class_c_simple_ini_templ_1_1_converter.html", "class_c_simple_ini_templ_1_1_converter" ],
+    [ "SI_GenericCase", "struct_s_i___generic_case.html", "struct_s_i___generic_case" ],
+    [ "SI_GenericNoCase", "struct_s_i___generic_no_case.html", "struct_s_i___generic_no_case" ],
+    [ "SI_ConvertA", "class_s_i___convert_a.html", "class_s_i___convert_a" ],
+    [ "SI_ConvertW", "class_s_i___convert_w.html", "class_s_i___convert_w" ],
+    [ "CSimpleIni", "_simple_ini_8h.html#a7d6444ead3a7e870acdb77aaffb8f9d2", null ],
+    [ "CSimpleIniCase", "_simple_ini_8h.html#ae287c82d088c035d6176a7b5cf91e473", null ],
+    [ "SI_ASSERT", "_simple_ini_8h.html#aa1c86fe2eaf27ba2cc163372f32a9106", null ],
+    [ "SI_Case", "_simple_ini_8h.html#a5c2bfc13fd1603a3236d11093ffc9ae0", null ],
+    [ "SI_CONVERT_GENERIC", "_simple_ini_8h.html#aff631184b835a493cc23e8d5780005a8", null ],
+    [ "SI_NEWLINE", "_simple_ini_8h.html#a3864eb3c1be64f869c66e8b2c87088c4", null ],
+    [ "SI_NEWLINE_A", "_simple_ini_8h.html#a37c74ba148bf76a7ef3437655c29be1a", null ],
+    [ "SI_NEWLINE_W", "_simple_ini_8h.html#aad85e3fb9ce0ed8112a00bdc493a1184", null ],
+    [ "SI_NoCase", "_simple_ini_8h.html#ad75e6dec39f5fa62f12364e434a155da", null ],
+    [ "SI_UTF8_SIGNATURE", "_simple_ini_8h.html#affde7f4680e7419f0e4a480a3e67ca98", null ],
+    [ "CSimpleIniA", "_simple_ini_8h.html#a3c7dce678048c0ee90aea570c1bee16a", null ],
+    [ "CSimpleIniCaseA", "_simple_ini_8h.html#aad6c75c1d7a6c491eee9a057b07482ca", null ],
+    [ "CSimpleIniCaseW", "_simple_ini_8h.html#aaf36d4d8b043926881acb03e1d9fa360", null ],
+    [ "CSimpleIniW", "_simple_ini_8h.html#a3f2a85929946a32994b1ccf6c1e2fa15", null ],
+    [ "SI_Error", "_simple_ini_8h.html#ab2cfc992d7167f89ed0e93299e5d9584", [
+      [ "SI_OK", "_simple_ini_8h.html#ab2cfc992d7167f89ed0e93299e5d9584af34a76c7d8e20d8927c1a1da5c741a36", null ],
+      [ "SI_UPDATED", "_simple_ini_8h.html#ab2cfc992d7167f89ed0e93299e5d9584acf2eb74fda307fb6ea886fb724dc7fa9", null ],
+      [ "SI_INSERTED", "_simple_ini_8h.html#ab2cfc992d7167f89ed0e93299e5d9584a2a4a3f40386a609046a926c9e4998f4d", null ],
+      [ "SI_FAIL", "_simple_ini_8h.html#ab2cfc992d7167f89ed0e93299e5d9584afe85febbb7dc65af6808b0706fff0b98", null ],
+      [ "SI_NOMEM", "_simple_ini_8h.html#ab2cfc992d7167f89ed0e93299e5d9584a5a450356146943fff767f4aa8940ada0", null ],
+      [ "SI_FILE", "_simple_ini_8h.html#ab2cfc992d7167f89ed0e93299e5d9584a3bfc5846d71a8ba5d0e5b4105f69bcab", null ]
+    ] ]
+];

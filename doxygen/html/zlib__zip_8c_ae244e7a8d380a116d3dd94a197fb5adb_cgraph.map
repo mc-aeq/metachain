@@ -1,0 +1,9 @@
+<map id="zip64local_getLong" name="zip64local_getLong">
+<area shape="rect" id="node2" href="$ioapi_8h.html#a50e9e9d5c30e481de822ad68fe537986" title="uLong" alt="" coords="745,56,803,83"/>
+<area shape="rect" id="node3" href="$zlib__zip_8c.html#a20f347793909851b9e203b1689f27f4e" title="zip64local_getByte" alt="" coords="381,107,513,133"/>
+<area shape="rect" id="node6" href="$zlib__zip_8c.html#aeceecbdb8a6daac5791ebba72d0bf346" title="OF" alt="" coords="754,5,794,32"/>
+<area shape="rect" id="node7" href="$ioapi_8h.html#a39ab6d73c1cd44bc17064c2dcbb3e753" title="voidpf" alt="" coords="747,208,801,235"/>
+<area shape="rect" id="node8" href="$zlib__zip_8c.html#a8f469d2f6ea68fbacf9f10d88f00b425" title="zip64local_getLong64" alt="" coords="187,107,333,133"/>
+<area shape="rect" id="node4" href="$ioapi_8h.html#a787fa3cf048117ba7123753c1e74fcd6" title="int" alt="" coords="610,107,649,133"/>
+<area shape="rect" id="node5" href="$zlib__zip_8c.html#a15321a6e2fcae4715b3874a1ce5576e0" title="zip64local_getShort" alt="" coords="561,157,697,184"/>
+</map>

@@ -1,0 +1,4 @@
+<map id="netPeers::tooManyTriesOutbound" name="netPeers::tooManyTriesOutbound">
+<area shape="rect" id="node2" href="$classnet_peers.html#aab5231b77c63002db381aaa50cff280f" title="netPeers::tryConnectOutbound" alt="" coords="269,5,471,32"/>
+<area shape="rect" id="node3" href="$classnet_peers.html#a1609b4f0b11992449f2eb0dcfcfa6207" title="netPeers::validConnection" alt="" coords="519,5,691,32"/>
+</map>

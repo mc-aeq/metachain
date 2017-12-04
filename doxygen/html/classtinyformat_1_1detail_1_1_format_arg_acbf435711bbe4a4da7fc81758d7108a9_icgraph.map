@@ -1,0 +1,9 @@
+<map id="tinyformat::detail::FormatArg::format" name="tinyformat::detail::FormatArg::format">
+<area shape="rect" id="node2" href="$namespacetinyformat_1_1detail.html#a079a316938c0e8693efbeb0183b1390d" title="tinyformat::detail\l::formatImpl" alt="" coords="188,74,307,115"/>
+<area shape="rect" id="node3" href="$namespacetinyformat.html#a86ed74eb3ed66a662e96220d877da964" title="tinyformat::vformat" alt="" coords="355,81,483,108"/>
+<area shape="rect" id="node4" href="$classtinyformat_1_1_format_list.html#a4dc93948fa7b945665800b5c147037c3" title="tinyformat::FormatList\l::FormatList" alt="" coords="531,15,680,57"/>
+<area shape="rect" id="node5" href="$namespacetinyformat.html#a05144619d8b16e2b31b2594ca9c6bf1d" title="Format list of arguments to the stream according to given format string. " alt="" coords="544,81,667,108"/>
+<area shape="rect" id="node8" href="$namespacetinyformat.html#a3621ecff051629bf09d87813104568eb" title="tinyformat::printfln" alt="" coords="899,107,1024,133"/>
+<area shape="rect" id="node6" href="$namespacetinyformat.html#aa2768ebf94f6989dfcea052b3d3f9b9f" title="tinyformat::format" alt="" coords="728,5,851,32"/>
+<area shape="rect" id="node7" href="$namespacetinyformat.html#a72cec9a050602495fc65c8f321e43478" title="Format list of arguments to std::cout, according to the given format string. " alt="" coords="732,56,847,83"/>
+</map>

@@ -1,0 +1,11 @@
+<map id="GetRandHash" name="GetRandHash">
+<area shape="rect" id="node2" href="$class_fast_random_context.html#a7fa6ad2737010ee65ee38c9a0fdcf727" title="FastRandomContext::\lRandomSeed" alt="" coords="156,40,305,81"/>
+<area shape="rect" id="node3" href="$class_fast_random_context.html#afe719582d74b5ce1dd61042ee27fc2c5" title="FastRandomContext::\lFillByteBuffer" alt="" coords="353,40,503,81"/>
+<area shape="rect" id="node4" href="$class_fast_random_context.html#aaa7592f37a6e2b0ea2ce38f0b0ef0474" title="FastRandomContext::\lrand256" alt="" coords="748,5,897,47"/>
+<area shape="rect" id="node6" href="$class_fast_random_context.html#a59cd586d02fb2b0fd4014a437166c62a" title="FastRandomContext::\lrand64" alt="" coords="551,71,700,112"/>
+<area shape="rect" id="node5" href="$class_fast_random_context.html#a8ea3fd2c7b2961aa1ee93ca5dc6ad6cf" title="FastRandomContext::\lrand32" alt="" coords="1143,5,1292,47"/>
+<area shape="rect" id="node7" href="$class_fast_random_context.html#a39c2ce180d58c55e663ec2ba05593a37" title="FastRandomContext::\lFillBitBuffer" alt="" coords="748,71,897,112"/>
+<area shape="rect" id="node8" href="$class_fast_random_context.html#a95c5189461e49a34f9a9c9127f409481" title="FastRandomContext::\lrandbits" alt="" coords="945,71,1095,112"/>
+<area shape="rect" id="node9" href="$class_fast_random_context.html#aa000c668f222d36db387034f6bf98f8f" title="FastRandomContext::\lrandrange" alt="" coords="1143,71,1292,112"/>
+<area shape="rect" id="node10" href="$class_fast_random_context.html#a721778ad4418922703ac4b7c14ab4722" title="FastRandomContext::\lrandbool" alt="" coords="1143,136,1292,177"/>
+</map>

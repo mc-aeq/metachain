@@ -1,0 +1,10 @@
+<map id="tinyformat::detail::FormatArg::toInt" name="tinyformat::detail::FormatArg::toInt">
+<area shape="rect" id="node2" href="$namespacetinyformat_1_1detail.html#a079a316938c0e8693efbeb0183b1390d" title="tinyformat::detail\l::formatImpl" alt="" coords="196,72,315,113"/>
+<area shape="rect" id="node7" href="$namespacetinyformat.html#a875b4e4f642b74394598804a1b012f9d" title="tinyformat::formatValue" alt="" coords="177,242,333,269"/>
+<area shape="rect" id="node9" href="$ioapi_8h.html#a787fa3cf048117ba7123753c1e74fcd6" title="int" alt="" coords="236,191,275,218"/>
+<area shape="rect" id="node3" href="$namespacetinyformat_1_1detail.html#ad3d636b9f85202b515c8940b7fcb62a6" title="tinyformat::detail\l::printFormatStringLiteral" alt="" coords="385,5,550,47"/>
+<area shape="rect" id="node4" href="$namespacetinyformat_1_1detail.html#a681e8ceb825485cc5e3b057c11e4b1b5" title="tinyformat::detail\l::streamStateFromFormat" alt="" coords="381,136,553,177"/>
+<area shape="rect" id="node6" href="$classtinyformat_1_1detail_1_1_format_arg.html#acbf435711bbe4a4da7fc81758d7108a9" title="tinyformat::detail\l::FormatArg::format" alt="" coords="400,71,535,112"/>
+<area shape="rect" id="node5" href="$namespacetinyformat_1_1detail.html#a67285e0adb9f4164f9fc30a3eb11c771" title="tinyformat::detail\l::parseIntAndAdvance" alt="" coords="601,136,749,177"/>
+<area shape="rect" id="node8" href="$namespacetinyformat_1_1detail.html#a0a1c25572ad934e2db1c7baa69ae2856" title="tinyformat::detail\l::formatTruncated" alt="" coords="406,235,529,276"/>
+</map>

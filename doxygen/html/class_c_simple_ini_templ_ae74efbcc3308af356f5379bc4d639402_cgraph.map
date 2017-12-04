@@ -1,0 +1,15 @@
+<map id="CSimpleIniTempl::SkipNewLine" name="CSimpleIniTempl::SkipNewLine">
+<area shape="rect" id="node2" href="$class_c_simple_ini_templ.html#ac34744773856c5a50ece49f70c2ea110" title="CSimpleIniTempl::CopyString" alt="" coords="260,5,451,32"/>
+<area shape="rect" id="node3" href="$class_c_simple_ini_templ.html#aeb846a531063a0b71d8784672c3d2dc8" title="CSimpleIniTempl::DeleteString" alt="" coords="256,56,455,83"/>
+<area shape="rect" id="node4" href="$class_c_simple_ini_templ.html#a705eaa8e6c0fb8c1ce2648e71ad681f7" title="CSimpleIniTempl::IsLess" alt="" coords="527,109,692,136"/>
+<area shape="rect" id="node5" href="$class_c_simple_ini_templ.html#aa065dc3ef06f6f002d7a1348413f8423" title="CSimpleIniTempl::IsMulti\lLineTag" alt="" coords="273,341,438,382"/>
+<area shape="rect" id="node6" href="$class_c_simple_ini_templ.html#a66ad366aeddd171cd8ea23da34a6eea6" title="CSimpleIniTempl::IsMulti\lLineData" alt="" coords="273,223,438,265"/>
+<area shape="rect" id="node8" href="$class_c_simple_ini_templ.html#a87968c003e871f8158bdf622ca6f0c7d" title="CSimpleIniTempl::IsNewLineChar" alt="" coords="503,263,716,289"/>
+<area shape="rect" id="node9" href="$class_c_simple_ini_templ.html#ac8b9627e8318354a235b6398340481ff" title="CSimpleIniTempl::LoadMulti\lLineText" alt="" coords="264,158,447,199"/>
+<area shape="rect" id="node11" href="$class_c_simple_ini_templ.html#ad0f8c41fd7c3a79d408142c90043acdf" title="CSimpleIniTempl::OutputMulti\lLineText" alt="" coords="258,406,453,447"/>
+<area shape="rect" id="node7" href="$class_c_simple_ini_templ.html#af0a5aaa704f7ec691aaf95510bcaae8a" title="CSimpleIniTempl::IsSpace" alt="" coords="522,212,697,239"/>
+<area shape="rect" id="node10" href="$class_c_simple_ini_templ.html#a9b2282a0371907316ab4e9300dac0cac" title="CSimpleIniTempl::IsComment" alt="" coords="513,161,706,188"/>
+<area shape="rect" id="node12" href="$class_c_simple_ini_templ_1_1_converter.html#a4e4186867214b54326cf622e323c9f2f" title="CSimpleIniTempl::Converter\l::ConvertToStore" alt="" coords="519,341,700,382"/>
+<area shape="rect" id="node13" href="$class_c_simple_ini_templ_1_1_output_writer.html#a48e5905a9defbe96d14f3068a383463d" title="CSimpleIniTempl::OutputWriter\l::Write" alt="" coords="509,406,710,447"/>
+<area shape="rect" id="node14" href="$class_c_simple_ini_templ_1_1_converter.html#a918bbd4f861a2872e148bc9481ac80bb" title="CSimpleIniTempl::Converter\l::Data" alt="" coords="519,471,700,513"/>
+</map>

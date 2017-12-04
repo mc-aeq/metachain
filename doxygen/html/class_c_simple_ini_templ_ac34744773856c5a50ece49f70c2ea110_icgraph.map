@@ -1,0 +1,12 @@
+<map id="CSimpleIniTempl::CopyString" name="CSimpleIniTempl::CopyString">
+<area shape="rect" id="node2" href="$class_c_simple_ini_templ.html#ae74efbcc3308af356f5379bc4d639402" title="CSimpleIniTempl::SkipNewLine" alt="" coords="244,64,447,91"/>
+<area shape="rect" id="node7" href="$class_c_simple_ini_templ.html#a7b78cf79ffd9a5ba57a3bdae6b7d5a8f" title="CSimpleIniTempl::FindFile\lComment" alt="" coords="732,57,905,98"/>
+<area shape="rect" id="node8" href="$class_c_simple_ini_templ.html#a8c2b8c3e6f6811321a8258182c61f629" title="CSimpleIniTempl::AddEntry" alt="" coords="495,215,677,241"/>
+<area shape="rect" id="node3" href="$class_c_simple_ini_templ.html#a7d34f731a698340384ba6c6f2f306270" title="CSimpleIniTempl::FindEntry" alt="" coords="727,5,910,32"/>
+<area shape="rect" id="node6" href="$class_c_simple_ini_templ.html#ac8b9627e8318354a235b6398340481ff" title="CSimpleIniTempl::LoadMulti\lLineText" alt="" coords="495,57,677,98"/>
+<area shape="rect" id="node4" href="$class_c_simple_ini_templ.html#a92203e0c21f8d71e5d1621a18ee0be50" title="CSimpleIniTempl::UsingSpaces" alt="" coords="960,215,1164,241"/>
+<area shape="rect" id="node5" href="$class_c_simple_ini_templ.html#aa797cf47cec05906f07d5065882af4d3" title="CSimpleIniTempl::LoadData" alt="" coords="971,64,1153,91"/>
+<area shape="rect" id="node9" href="$class_c_simple_ini_templ.html#ab2238be407232e4bba0f1343e4793e4e" title="CSimpleIniTempl::SetLong\lValue" alt="" coords="731,174,906,215"/>
+<area shape="rect" id="node10" href="$class_c_simple_ini_templ.html#af92ba0b8067553ab693c62a370de6534" title="CSimpleIniTempl::SetDouble\lValue" alt="" coords="725,239,912,281"/>
+<area shape="rect" id="node11" href="$class_c_simple_ini_templ.html#a48ae136fa20c5d7eb7ab0b75342b27cf" title="CSimpleIniTempl::SetBool\lValue" alt="" coords="732,305,905,346"/>
+</map>
