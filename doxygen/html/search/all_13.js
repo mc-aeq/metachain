@@ -68,6 +68,7 @@ var searchData=
   ['restmanager',['restManager',['../classrest_manager.html',1,'restManager'],['../classrest_manager.html#a77178fc9cff19577b3531044fe1a4dd3',1,'restManager::restManager(restManager const &amp;copy)'],['../classrest_manager.html#ab1e353bceb95217c26fdb1d6972fb3d7',1,'restManager::restManager(CService IP, bool bSSL)']]],
   ['restmanager_2ecpp',['restManager.cpp',['../rest_manager_8cpp.html',1,'']]],
   ['restmanager_2eh',['restManager.h',['../rest_manager_8h.html',1,'']]],
+  ['return',['RETURN',['../namespace_m_c_p06.html#af26c6b159344fe2a13464ff253c088f2af749afeb68a3db10c77f13fa1147f9b1',1,'MCP06']]],
   ['reverse_5fiterator',['reverse_iterator',['../classprevector_1_1reverse__iterator.html',1,'prevector&lt; N, T, Size, Diff &gt;::reverse_iterator'],['../classc_data_stream.html#a7829318f46f7f1ec9cc25882d81ab5fa',1,'cDataStream::reverse_iterator()'],['../classprevector_1_1reverse__iterator.html#adcb8cb50c73bf5712bb8a2b66d744e4c',1,'prevector::reverse_iterator::reverse_iterator()']]],
   ['reverse_5flock',['reverse_lock',['../classreverse__lock.html',1,'reverse_lock&lt; Lock &gt;'],['../classreverse__lock.html#ad5d75a5e08de1ce33a5a59c4a4dcc458',1,'reverse_lock::reverse_lock(Lock &amp;_lock)'],['../classreverse__lock.html#a28150c909bbb044879563627b3207a43',1,'reverse_lock::reverse_lock(reverse_lock const &amp;)']]],
   ['reverselock_2eh',['reverselock.h',['../reverselock_8h.html',1,'']]],

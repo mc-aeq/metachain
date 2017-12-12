@@ -58,7 +58,6 @@ var hierarchy =
     [ "CRIPEMD160", "class_c_r_i_p_e_m_d160.html", null ],
     [ "CScheduler", "class_c_scheduler.html", null ],
     [ "MCP06::CScriptNum", "class_m_c_p06_1_1_c_script_num.html", null ],
-    [ "MCP06::CScriptWitness", "struct_m_c_p06_1_1_c_script_witness.html", null ],
     [ "cSemaphore", "classc_semaphore.html", null ],
     [ "cSemaphoreGrant", "classc_semaphore_grant.html", null ],
     [ "CSHA1", "class_c_s_h_a1.html", null ],
@@ -133,6 +132,7 @@ var hierarchy =
       [ "MCP06::scriptnum_error", "class_m_c_p06_1_1scriptnum__error.html", null ],
       [ "tinyformat::format_error", "classtinyformat_1_1format__error.html", null ]
     ] ],
+    [ "MCP06::scriptInterpreter", "class_m_c_p06_1_1script_interpreter.html", null ],
     [ "SHA3", "class_s_h_a3.html", null ],
     [ "sHeader", "structs_header.html", null ],
     [ "SI_ConvertA< SI_CHAR >", "class_s_i___convert_a.html", null ],
@@ -142,6 +142,7 @@ var hierarchy =
     [ "SI_ConvertW< SI_CHAR >", "class_s_i___convert_w.html", null ],
     [ "SI_GenericCase< SI_CHAR >", "struct_s_i___generic_case.html", null ],
     [ "SI_GenericNoCase< SI_CHAR >", "struct_s_i___generic_no_case.html", null ],
+    [ "MCP06::signatureChecker", "class_m_c_p06_1_1signature_checker.html", null ],
     [ "smSC", "structsm_s_c.html", null ],
     [ "StorageManager", "class_storage_manager.html", null ],
     [ "MCP02::SubChain", "class_m_c_p02_1_1_sub_chain.html", [

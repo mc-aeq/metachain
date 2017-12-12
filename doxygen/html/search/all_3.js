@@ -2,6 +2,7 @@ var searchData=
 [
   ['b',['B',['../struct_s_h_a3_1_1keccakf_state.html#a14aa44fadbe26649f9afe3e23d24bff6',1,'SHA3::keccakfState']]],
   ['back',['back',['../classprevector.html#a9ff352b7b4f87eb70f0e79547d6f5314',1,'prevector::back()'],['../classprevector.html#a5ae4f96ce4f204e135ffd88f2028c128',1,'prevector::back() const']]],
+  ['bad_5fopcode',['BAD_OPCODE',['../namespace_m_c_p06.html#af26c6b159344fe2a13464ff253c088f2a941d79ce3bf84cbfc72f9b7654c8c230',1,'MCP06']]],
   ['base',['base',['../structzero__after__free__allocator.html#aab907d58a45f5bf4baeaefb373f00987',1,'zero_after_free_allocator']]],
   ['base16',['base16',['../classbase16.html',1,'base16'],['../classbase16.html#ade7e30fe97c631f096e167e5e14507cf',1,'base16::base16()'],['../classbase16.html#ac963cdc0d77b93cef79dd6027715fe3e',1,'base16::base16(const std::string &amp;hexcode)'],['../classbase16.html#a4e6921a9820d0ec5f2d91a6faafc630f',1,'base16::base16(const data_chunk &amp;value)'],['../classbase16.html#af506fede872f7125404850fa2b5792db',1,'base16::base16(const byte_array&lt; Size &gt; &amp;value)'],['../classbase16.html#add7914d81f11e4edef018f0888b9c998',1,'base16::base16(const base16 &amp;other)']]],
   ['base16_2ecpp',['base16.cpp',['../base16_8cpp.html',1,'']]],

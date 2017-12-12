@@ -181,7 +181,7 @@ Private Attributes</h2></td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock">
-<p class="definition">Definition at line <a class="el" href="script_8h_source.html#l00206">206</a> of file <a class="el" href="script_8h_source.html">script.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="script_8h_source.html#l00214">214</a> of file <a class="el" href="script_8h_source.html">script.h</a>.</p>
 </div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
 <a id="a9d6f4905444cc544aeb0e9d703852a19"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a9d6f4905444cc544aeb0e9d703852a19">&#9670;&nbsp;</a></span>CScriptNum() <span class="overload">[1/2]</span></h2>
@@ -208,7 +208,7 @@ Private Attributes</h2></td></tr>
 </div><div class="memdoc">
 <p>Numeric opcodes (OP_1ADD, etc) are restricted to operating on 4-byte integers. The semantics are subtle, though: operands must be in the range [-2^31 +1...2^31 -1], but results may overflow (and are valid as long as they are not used in a subsequent numeric operation). <a class="el" href="class_m_c_p06_1_1_c_script_num.html">CScriptNum</a> enforces those semantics by storing results as an int64 and allowing out-of-range values to be returned as a vector of bytes but throwing an exception if arithmetic is done or the result is interpreted as an integer. </p>
 
-<p class="definition">Definition at line <a class="el" href="script_8h_source.html#l00218">218</a> of file <a class="el" href="script_8h_source.html">script.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="script_8h_source.html#l00226">226</a> of file <a class="el" href="script_8h_source.html">script.h</a>.</p>
 
 </div>
 </div>
@@ -252,7 +252,7 @@ Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="script_8h_source.html#l00225">225</a> of file <a class="el" href="script_8h_source.html">script.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="script_8h_source.html#l00233">233</a> of file <a class="el" href="script_8h_source.html">script.h</a>.</p>
 <div class="dynheader">
 Here is the call graph for this function:</div>
 <div class="dyncontent">
@@ -288,7 +288,16 @@ Here is the call graph for this function:</div>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="script_8h_source.html#l00313">313</a> of file <a class="el" href="script_8h_source.html">script.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="script_8h_source.html#l00321">321</a> of file <a class="el" href="script_8h_source.html">script.h</a>.</p>
+<div class="dynheader">
+Here is the caller graph for this function:</div>
+<div class="dyncontent">
+<div class="center"><img src="class_m_c_p06_1_1_c_script_num_acba1c50b3bdcca06dd7f2be6efa48b84_icgraph.png" border="0" usemap="#class_m_c_p06_1_1_c_script_num_acba1c50b3bdcca06dd7f2be6efa48b84_icgraph" alt=""/></div>
+<map name="class_m_c_p06_1_1_c_script_num_acba1c50b3bdcca06dd7f2be6efa48b84_icgraph" id="class_m_c_p06_1_1_c_script_num_acba1c50b3bdcca06dd7f2be6efa48b84_icgraph">
+<area shape="rect" id="node2" href="class_m_c_p06_1_1script_interpreter.html#a3eafe91afef52589c930523a3622ceff" title="MCP06::scriptInterpreter\l::evalScript" alt="" coords="204,5,367,47"/>
+<area shape="rect" id="node3" href="class_m_c_p06_1_1script_interpreter.html#ad5ba77a236bf73c6c07789ce4caa64d9" title="MCP06::scriptInterpreter\l::verifyScript" alt="" coords="415,5,577,47"/>
+</map>
+</div>
 
 </div>
 </div>
@@ -315,13 +324,15 @@ Here is the call graph for this function:</div>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="script_8h_source.html#l00322">322</a> of file <a class="el" href="script_8h_source.html">script.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="script_8h_source.html#l00330">330</a> of file <a class="el" href="script_8h_source.html">script.h</a>.</p>
 <div class="dynheader">
 Here is the caller graph for this function:</div>
 <div class="dyncontent">
 <div class="center"><img src="class_m_c_p06_1_1_c_script_num_ae94ef0652f4f84a3f1c532c662dfd5ce_icgraph.png" border="0" usemap="#class_m_c_p06_1_1_c_script_num_ae94ef0652f4f84a3f1c532c662dfd5ce_icgraph" alt=""/></div>
 <map name="class_m_c_p06_1_1_c_script_num_ae94ef0652f4f84a3f1c532c662dfd5ce_icgraph" id="class_m_c_p06_1_1_c_script_num_ae94ef0652f4f84a3f1c532c662dfd5ce_icgraph">
-<area shape="rect" id="node2" href="class_m_c_p06_1_1_c_script.html#af9a7ee652939908d4da45422fbaec23e" title="MCP06::CScript::operator\&lt;\&lt;" alt="" coords="204,13,391,39"/>
+<area shape="rect" id="node2" href="class_m_c_p06_1_1_c_script.html#af9a7ee652939908d4da45422fbaec23e" title="MCP06::CScript::operator\&lt;\&lt;" alt="" coords="204,5,391,32"/>
+<area shape="rect" id="node3" href="class_m_c_p06_1_1script_interpreter.html#a3eafe91afef52589c930523a3622ceff" title="MCP06::scriptInterpreter\l::evalScript" alt="" coords="216,57,379,98"/>
+<area shape="rect" id="node4" href="class_m_c_p06_1_1script_interpreter.html#ad5ba77a236bf73c6c07789ce4caa64d9" title="MCP06::scriptInterpreter\l::verifyScript" alt="" coords="439,57,601,98"/>
 </map>
 </div>
 
@@ -351,7 +362,7 @@ Here is the caller graph for this function:</div>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="script_8h_source.html#l00274">274</a> of file <a class="el" href="script_8h_source.html">script.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="script_8h_source.html#l00282">282</a> of file <a class="el" href="script_8h_source.html">script.h</a>.</p>
 
 </div>
 </div>
@@ -379,7 +390,7 @@ Here is the caller graph for this function:</div>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="script_8h_source.html#l00275">275</a> of file <a class="el" href="script_8h_source.html">script.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="script_8h_source.html#l00283">283</a> of file <a class="el" href="script_8h_source.html">script.h</a>.</p>
 
 </div>
 </div>
@@ -407,7 +418,7 @@ Here is the caller graph for this function:</div>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="script_8h_source.html#l00277">277</a> of file <a class="el" href="script_8h_source.html">script.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="script_8h_source.html#l00285">285</a> of file <a class="el" href="script_8h_source.html">script.h</a>.</p>
 
 </div>
 </div>
@@ -435,7 +446,7 @@ Here is the caller graph for this function:</div>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="script_8h_source.html#l00307">307</a> of file <a class="el" href="script_8h_source.html">script.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="script_8h_source.html#l00315">315</a> of file <a class="el" href="script_8h_source.html">script.h</a>.</p>
 
 </div>
 </div>
@@ -463,7 +474,7 @@ Here is the caller graph for this function:</div>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="script_8h_source.html#l00253">253</a> of file <a class="el" href="script_8h_source.html">script.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="script_8h_source.html#l00261">261</a> of file <a class="el" href="script_8h_source.html">script.h</a>.</p>
 
 </div>
 </div>
@@ -491,16 +502,20 @@ Here is the caller graph for this function:</div>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="script_8h_source.html#l00260">260</a> of file <a class="el" href="script_8h_source.html">script.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="script_8h_source.html#l00268">268</a> of file <a class="el" href="script_8h_source.html">script.h</a>.</p>
 <div class="dynheader">
 Here is the call graph for this function:</div>
 <div class="dyncontent">
 <div class="center"><img src="class_m_c_p06_1_1_c_script_num_a0c899e152e30f791e7410922436e4816_cgraph.png" border="0" usemap="#class_m_c_p06_1_1_c_script_num_a0c899e152e30f791e7410922436e4816_cgraph" alt=""/></div>
+<map name="class_m_c_p06_1_1_c_script_num_a0c899e152e30f791e7410922436e4816_cgraph" id="class_m_c_p06_1_1_c_script_num_a0c899e152e30f791e7410922436e4816_cgraph">
+</map>
 </div>
 <div class="dynheader">
 Here is the caller graph for this function:</div>
 <div class="dyncontent">
 <div class="center"><img src="class_m_c_p06_1_1_c_script_num_a0c899e152e30f791e7410922436e4816_icgraph.png" border="0" usemap="#class_m_c_p06_1_1_c_script_num_a0c899e152e30f791e7410922436e4816_icgraph" alt=""/></div>
+<map name="class_m_c_p06_1_1_c_script_num_a0c899e152e30f791e7410922436e4816_icgraph" id="class_m_c_p06_1_1_c_script_num_a0c899e152e30f791e7410922436e4816_icgraph">
+</map>
 </div>
 
 </div>
@@ -529,7 +544,7 @@ Here is the caller graph for this function:</div>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="script_8h_source.html#l00266">266</a> of file <a class="el" href="script_8h_source.html">script.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="script_8h_source.html#l00274">274</a> of file <a class="el" href="script_8h_source.html">script.h</a>.</p>
 
 </div>
 </div>
@@ -557,16 +572,20 @@ Here is the caller graph for this function:</div>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="script_8h_source.html#l00268">268</a> of file <a class="el" href="script_8h_source.html">script.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="script_8h_source.html#l00276">276</a> of file <a class="el" href="script_8h_source.html">script.h</a>.</p>
 <div class="dynheader">
 Here is the call graph for this function:</div>
 <div class="dyncontent">
 <div class="center"><img src="class_m_c_p06_1_1_c_script_num_a5a14631b9c3044536f2bd3071d622126_cgraph.png" border="0" usemap="#class_m_c_p06_1_1_c_script_num_a5a14631b9c3044536f2bd3071d622126_cgraph" alt=""/></div>
+<map name="class_m_c_p06_1_1_c_script_num_a5a14631b9c3044536f2bd3071d622126_cgraph" id="class_m_c_p06_1_1_c_script_num_a5a14631b9c3044536f2bd3071d622126_cgraph">
+</map>
 </div>
 <div class="dynheader">
 Here is the caller graph for this function:</div>
 <div class="dyncontent">
 <div class="center"><img src="class_m_c_p06_1_1_c_script_num_a5a14631b9c3044536f2bd3071d622126_icgraph.png" border="0" usemap="#class_m_c_p06_1_1_c_script_num_a5a14631b9c3044536f2bd3071d622126_icgraph" alt=""/></div>
+<map name="class_m_c_p06_1_1_c_script_num_a5a14631b9c3044536f2bd3071d622126_icgraph" id="class_m_c_p06_1_1_c_script_num_a5a14631b9c3044536f2bd3071d622126_icgraph">
+</map>
 </div>
 
 </div>
@@ -595,16 +614,20 @@ Here is the caller graph for this function:</div>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="script_8h_source.html#l00271">271</a> of file <a class="el" href="script_8h_source.html">script.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="script_8h_source.html#l00279">279</a> of file <a class="el" href="script_8h_source.html">script.h</a>.</p>
 <div class="dynheader">
 Here is the call graph for this function:</div>
 <div class="dyncontent">
 <div class="center"><img src="class_m_c_p06_1_1_c_script_num_a4aeb77591526b3c54f8d420bce61f262_cgraph.png" border="0" usemap="#class_m_c_p06_1_1_c_script_num_a4aeb77591526b3c54f8d420bce61f262_cgraph" alt=""/></div>
+<map name="class_m_c_p06_1_1_c_script_num_a4aeb77591526b3c54f8d420bce61f262_cgraph" id="class_m_c_p06_1_1_c_script_num_a4aeb77591526b3c54f8d420bce61f262_cgraph">
+</map>
 </div>
 <div class="dynheader">
 Here is the caller graph for this function:</div>
 <div class="dyncontent">
 <div class="center"><img src="class_m_c_p06_1_1_c_script_num_a4aeb77591526b3c54f8d420bce61f262_icgraph.png" border="0" usemap="#class_m_c_p06_1_1_c_script_num_a4aeb77591526b3c54f8d420bce61f262_icgraph" alt=""/></div>
+<map name="class_m_c_p06_1_1_c_script_num_a4aeb77591526b3c54f8d420bce61f262_icgraph" id="class_m_c_p06_1_1_c_script_num_a4aeb77591526b3c54f8d420bce61f262_icgraph">
+</map>
 </div>
 
 </div>
@@ -633,7 +656,7 @@ Here is the caller graph for this function:</div>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="script_8h_source.html#l00291">291</a> of file <a class="el" href="script_8h_source.html">script.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="script_8h_source.html#l00299">299</a> of file <a class="el" href="script_8h_source.html">script.h</a>.</p>
 
 </div>
 </div>
@@ -661,7 +684,7 @@ Here is the caller graph for this function:</div>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="script_8h_source.html#l00267">267</a> of file <a class="el" href="script_8h_source.html">script.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="script_8h_source.html#l00275">275</a> of file <a class="el" href="script_8h_source.html">script.h</a>.</p>
 
 </div>
 </div>
@@ -689,16 +712,20 @@ Here is the caller graph for this function:</div>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="script_8h_source.html#l00269">269</a> of file <a class="el" href="script_8h_source.html">script.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="script_8h_source.html#l00277">277</a> of file <a class="el" href="script_8h_source.html">script.h</a>.</p>
 <div class="dynheader">
 Here is the call graph for this function:</div>
 <div class="dyncontent">
 <div class="center"><img src="class_m_c_p06_1_1_c_script_num_a4c3d697e49afeb9d2efd419e9728ea50_cgraph.png" border="0" usemap="#class_m_c_p06_1_1_c_script_num_a4c3d697e49afeb9d2efd419e9728ea50_cgraph" alt=""/></div>
+<map name="class_m_c_p06_1_1_c_script_num_a4c3d697e49afeb9d2efd419e9728ea50_cgraph" id="class_m_c_p06_1_1_c_script_num_a4c3d697e49afeb9d2efd419e9728ea50_cgraph">
+</map>
 </div>
 <div class="dynheader">
 Here is the caller graph for this function:</div>
 <div class="dyncontent">
 <div class="center"><img src="class_m_c_p06_1_1_c_script_num_a4c3d697e49afeb9d2efd419e9728ea50_icgraph.png" border="0" usemap="#class_m_c_p06_1_1_c_script_num_a4c3d697e49afeb9d2efd419e9728ea50_icgraph" alt=""/></div>
+<map name="class_m_c_p06_1_1_c_script_num_a4c3d697e49afeb9d2efd419e9728ea50_icgraph" id="class_m_c_p06_1_1_c_script_num_a4c3d697e49afeb9d2efd419e9728ea50_icgraph">
+</map>
 </div>
 
 </div>
@@ -726,7 +753,7 @@ Here is the caller graph for this function:</div>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="script_8h_source.html#l00279">279</a> of file <a class="el" href="script_8h_source.html">script.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="script_8h_source.html#l00287">287</a> of file <a class="el" href="script_8h_source.html">script.h</a>.</p>
 
 </div>
 </div>
@@ -754,16 +781,20 @@ Here is the caller graph for this function:</div>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="script_8h_source.html#l00272">272</a> of file <a class="el" href="script_8h_source.html">script.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="script_8h_source.html#l00280">280</a> of file <a class="el" href="script_8h_source.html">script.h</a>.</p>
 <div class="dynheader">
 Here is the call graph for this function:</div>
 <div class="dyncontent">
 <div class="center"><img src="class_m_c_p06_1_1_c_script_num_a43f1b36a97918349268a481e2a0c278e_cgraph.png" border="0" usemap="#class_m_c_p06_1_1_c_script_num_a43f1b36a97918349268a481e2a0c278e_cgraph" alt=""/></div>
+<map name="class_m_c_p06_1_1_c_script_num_a43f1b36a97918349268a481e2a0c278e_cgraph" id="class_m_c_p06_1_1_c_script_num_a43f1b36a97918349268a481e2a0c278e_cgraph">
+</map>
 </div>
 <div class="dynheader">
 Here is the caller graph for this function:</div>
 <div class="dyncontent">
 <div class="center"><img src="class_m_c_p06_1_1_c_script_num_a43f1b36a97918349268a481e2a0c278e_icgraph.png" border="0" usemap="#class_m_c_p06_1_1_c_script_num_a43f1b36a97918349268a481e2a0c278e_icgraph" alt=""/></div>
+<map name="class_m_c_p06_1_1_c_script_num_a43f1b36a97918349268a481e2a0c278e_icgraph" id="class_m_c_p06_1_1_c_script_num_a43f1b36a97918349268a481e2a0c278e_icgraph">
+</map>
 </div>
 
 </div>
@@ -792,7 +823,7 @@ Here is the caller graph for this function:</div>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="script_8h_source.html#l00299">299</a> of file <a class="el" href="script_8h_source.html">script.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="script_8h_source.html#l00307">307</a> of file <a class="el" href="script_8h_source.html">script.h</a>.</p>
 
 </div>
 </div>
@@ -820,7 +851,7 @@ Here is the caller graph for this function:</div>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="script_8h_source.html#l00255">255</a> of file <a class="el" href="script_8h_source.html">script.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="script_8h_source.html#l00263">263</a> of file <a class="el" href="script_8h_source.html">script.h</a>.</p>
 
 </div>
 </div>
@@ -848,7 +879,7 @@ Here is the caller graph for this function:</div>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="script_8h_source.html#l00262">262</a> of file <a class="el" href="script_8h_source.html">script.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="script_8h_source.html#l00270">270</a> of file <a class="el" href="script_8h_source.html">script.h</a>.</p>
 <div class="dynheader">
 Here is the call graph for this function:</div>
 <div class="dyncontent">
@@ -884,7 +915,7 @@ Here is the call graph for this function:</div>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="script_8h_source.html#l00254">254</a> of file <a class="el" href="script_8h_source.html">script.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="script_8h_source.html#l00262">262</a> of file <a class="el" href="script_8h_source.html">script.h</a>.</p>
 
 </div>
 </div>
@@ -912,16 +943,20 @@ Here is the call graph for this function:</div>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="script_8h_source.html#l00261">261</a> of file <a class="el" href="script_8h_source.html">script.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="script_8h_source.html#l00269">269</a> of file <a class="el" href="script_8h_source.html">script.h</a>.</p>
 <div class="dynheader">
 Here is the call graph for this function:</div>
 <div class="dyncontent">
 <div class="center"><img src="class_m_c_p06_1_1_c_script_num_ab78eaf1d227af8177e2a6b7c1a942175_cgraph.png" border="0" usemap="#class_m_c_p06_1_1_c_script_num_ab78eaf1d227af8177e2a6b7c1a942175_cgraph" alt=""/></div>
+<map name="class_m_c_p06_1_1_c_script_num_ab78eaf1d227af8177e2a6b7c1a942175_cgraph" id="class_m_c_p06_1_1_c_script_num_ab78eaf1d227af8177e2a6b7c1a942175_cgraph">
+</map>
 </div>
 <div class="dynheader">
 Here is the caller graph for this function:</div>
 <div class="dyncontent">
 <div class="center"><img src="class_m_c_p06_1_1_c_script_num_ab78eaf1d227af8177e2a6b7c1a942175_icgraph.png" border="0" usemap="#class_m_c_p06_1_1_c_script_num_ab78eaf1d227af8177e2a6b7c1a942175_icgraph" alt=""/></div>
+<map name="class_m_c_p06_1_1_c_script_num_ab78eaf1d227af8177e2a6b7c1a942175_icgraph" id="class_m_c_p06_1_1_c_script_num_ab78eaf1d227af8177e2a6b7c1a942175_icgraph">
+</map>
 </div>
 
 </div>
@@ -950,7 +985,7 @@ Here is the caller graph for this function:</div>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="script_8h_source.html#l00285">285</a> of file <a class="el" href="script_8h_source.html">script.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="script_8h_source.html#l00293">293</a> of file <a class="el" href="script_8h_source.html">script.h</a>.</p>
 
 </div>
 </div>
@@ -978,7 +1013,7 @@ Here is the caller graph for this function:</div>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="script_8h_source.html#l00252">252</a> of file <a class="el" href="script_8h_source.html">script.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="script_8h_source.html#l00260">260</a> of file <a class="el" href="script_8h_source.html">script.h</a>.</p>
 
 </div>
 </div>
@@ -1006,16 +1041,20 @@ Here is the caller graph for this function:</div>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="script_8h_source.html#l00259">259</a> of file <a class="el" href="script_8h_source.html">script.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="script_8h_source.html#l00267">267</a> of file <a class="el" href="script_8h_source.html">script.h</a>.</p>
 <div class="dynheader">
 Here is the call graph for this function:</div>
 <div class="dyncontent">
 <div class="center"><img src="class_m_c_p06_1_1_c_script_num_af4ec4a54d4a63202f636ee8cc03f9e4e_cgraph.png" border="0" usemap="#class_m_c_p06_1_1_c_script_num_af4ec4a54d4a63202f636ee8cc03f9e4e_cgraph" alt=""/></div>
+<map name="class_m_c_p06_1_1_c_script_num_af4ec4a54d4a63202f636ee8cc03f9e4e_cgraph" id="class_m_c_p06_1_1_c_script_num_af4ec4a54d4a63202f636ee8cc03f9e4e_cgraph">
+</map>
 </div>
 <div class="dynheader">
 Here is the caller graph for this function:</div>
 <div class="dyncontent">
 <div class="center"><img src="class_m_c_p06_1_1_c_script_num_af4ec4a54d4a63202f636ee8cc03f9e4e_icgraph.png" border="0" usemap="#class_m_c_p06_1_1_c_script_num_af4ec4a54d4a63202f636ee8cc03f9e4e_icgraph" alt=""/></div>
+<map name="class_m_c_p06_1_1_c_script_num_af4ec4a54d4a63202f636ee8cc03f9e4e_icgraph" id="class_m_c_p06_1_1_c_script_num_af4ec4a54d4a63202f636ee8cc03f9e4e_icgraph">
+</map>
 </div>
 
 </div>
@@ -1044,7 +1083,7 @@ Here is the caller graph for this function:</div>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="script_8h_source.html#l00257">257</a> of file <a class="el" href="script_8h_source.html">script.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="script_8h_source.html#l00265">265</a> of file <a class="el" href="script_8h_source.html">script.h</a>.</p>
 
 </div>
 </div>
@@ -1072,7 +1111,7 @@ Here is the caller graph for this function:</div>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="script_8h_source.html#l00264">264</a> of file <a class="el" href="script_8h_source.html">script.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="script_8h_source.html#l00272">272</a> of file <a class="el" href="script_8h_source.html">script.h</a>.</p>
 
 </div>
 </div>
@@ -1100,7 +1139,7 @@ Here is the caller graph for this function:</div>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="script_8h_source.html#l00256">256</a> of file <a class="el" href="script_8h_source.html">script.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="script_8h_source.html#l00264">264</a> of file <a class="el" href="script_8h_source.html">script.h</a>.</p>
 
 </div>
 </div>
@@ -1128,16 +1167,20 @@ Here is the caller graph for this function:</div>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="script_8h_source.html#l00263">263</a> of file <a class="el" href="script_8h_source.html">script.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="script_8h_source.html#l00271">271</a> of file <a class="el" href="script_8h_source.html">script.h</a>.</p>
 <div class="dynheader">
 Here is the call graph for this function:</div>
 <div class="dyncontent">
 <div class="center"><img src="class_m_c_p06_1_1_c_script_num_a75cdd57299db2dac6a6628c10f4c4211_cgraph.png" border="0" usemap="#class_m_c_p06_1_1_c_script_num_a75cdd57299db2dac6a6628c10f4c4211_cgraph" alt=""/></div>
+<map name="class_m_c_p06_1_1_c_script_num_a75cdd57299db2dac6a6628c10f4c4211_cgraph" id="class_m_c_p06_1_1_c_script_num_a75cdd57299db2dac6a6628c10f4c4211_cgraph">
+</map>
 </div>
 <div class="dynheader">
 Here is the caller graph for this function:</div>
 <div class="dyncontent">
 <div class="center"><img src="class_m_c_p06_1_1_c_script_num_a75cdd57299db2dac6a6628c10f4c4211_icgraph.png" border="0" usemap="#class_m_c_p06_1_1_c_script_num_a75cdd57299db2dac6a6628c10f4c4211_icgraph" alt=""/></div>
+<map name="class_m_c_p06_1_1_c_script_num_a75cdd57299db2dac6a6628c10f4c4211_icgraph" id="class_m_c_p06_1_1_c_script_num_a75cdd57299db2dac6a6628c10f4c4211_icgraph">
+</map>
 </div>
 
 </div>
@@ -1166,7 +1209,7 @@ Here is the caller graph for this function:</div>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="script_8h_source.html#l00327">327</a> of file <a class="el" href="script_8h_source.html">script.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="script_8h_source.html#l00335">335</a> of file <a class="el" href="script_8h_source.html">script.h</a>.</p>
 <div class="dynheader">
 Here is the caller graph for this function:</div>
 <div class="dyncontent">
@@ -1202,7 +1245,7 @@ Here is the caller graph for this function:</div>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="script_8h_source.html#l00361">361</a> of file <a class="el" href="script_8h_source.html">script.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="script_8h_source.html#l00369">369</a> of file <a class="el" href="script_8h_source.html">script.h</a>.</p>
 
 </div>
 </div>
@@ -1227,7 +1270,7 @@ Here is the caller graph for this function:</div>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="script_8h_source.html#l00378">378</a> of file <a class="el" href="script_8h_source.html">script.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="script_8h_source.html#l00386">386</a> of file <a class="el" href="script_8h_source.html">script.h</a>.</p>
 
 </div>
 </div>
@@ -1251,12 +1294,12 @@ Here is the caller graph for this function:</div>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="script_8h_source.html#l00223">223</a> of file <a class="el" href="script_8h_source.html">script.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="script_8h_source.html#l00231">231</a> of file <a class="el" href="script_8h_source.html">script.h</a>.</p>
 
 </div>
 </div>
 <hr/>The documentation for this class was generated from the following file:<ul>
-<li>src/MCP/MCP06/<a class="el" href="script_8h_source.html">script.h</a></li>
+<li>D:/Office/metachain/src/MCP/MCP06/<a class="el" href="script_8h_source.html">script.h</a></li>
 </ul>
 </div><!-- contents -->
 </div><!-- doc-content -->

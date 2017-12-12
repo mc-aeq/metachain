@@ -101,17 +101,19 @@ Classes</h2></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_m_c_p06_1_1_c_script_num.html">CScriptNum</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_m_c_p06_1_1_c_script_witness.html">CScriptWitness</a></td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_m_c_p06_1_1script_interpreter.html">scriptInterpreter</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_m_c_p06_1_1scriptnum__error.html">scriptnum_error</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_m_c_p06_1_1signature_checker.html">signatureChecker</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="typedef-members"></a>
 Typedefs</h2></td></tr>
 <tr class="memitem:a4c66a67a6a6233950cc65f61fcc1ec48"><td class="memItemLeft" align="right" valign="top">typedef <a class="el" href="classprevector.html">prevector</a>&lt; 28, unsigned char &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespace_m_c_p06.html#a4c66a67a6a6233950cc65f61fcc1ec48">CScriptBase</a></td></tr>
 <tr class="separator:a4c66a67a6a6233950cc65f61fcc1ec48"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a21d699c8b29cd0a58ec16824378c4a19"><td class="memItemLeft" align="right" valign="top">typedef enum <a class="el" href="namespace_m_c_p06.html#a6fd2acd3c3a25b0f4ab87c650045232f">MCP06::ScriptError_t</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespace_m_c_p06.html#a21d699c8b29cd0a58ec16824378c4a19">ScriptError</a></td></tr>
-<tr class="separator:a21d699c8b29cd0a58ec16824378c4a19"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa3a3f1f0ff9a6f0c68cbc7401abd0dfd"><td class="memItemLeft" align="right" valign="top">typedef std::vector&lt; unsigned char &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespace_m_c_p06.html#aa3a3f1f0ff9a6f0c68cbc7401abd0dfd">valtype</a></td></tr>
+<tr class="separator:aa3a3f1f0ff9a6f0c68cbc7401abd0dfd"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="enum-members"></a>
 Enumerations</h2></td></tr>
@@ -236,94 +238,110 @@ Enumerations</h2></td></tr>
 <a class="el" href="namespace_m_c_p06.html#a4f2e4f5ded453433a8f5a534f622cf55a9d9df27d09e4b7087c53f97bcad873a6">OP_SHA1</a> = 0xa7, 
 <a class="el" href="namespace_m_c_p06.html#a4f2e4f5ded453433a8f5a534f622cf55abde128c309e36adcb84511472bb826dd">OP_SHA256</a> = 0xa8, 
 <br />
-&#160;&#160;<a class="el" href="namespace_m_c_p06.html#a4f2e4f5ded453433a8f5a534f622cf55a94643c7cd0678a049dd2b148a15ce627">OP_HASH160</a> = 0xa9, 
-<a class="el" href="namespace_m_c_p06.html#a4f2e4f5ded453433a8f5a534f622cf55a3cc7c187ed2eedb3f21d342eb7d6e36f">OP_HASH256</a> = 0xaa, 
-<a class="el" href="namespace_m_c_p06.html#a4f2e4f5ded453433a8f5a534f622cf55a17a8ec28de2ba407b61fef3796469066">OP_CODESEPARATOR</a> = 0xab, 
+&#160;&#160;<a class="el" href="namespace_m_c_p06.html#a4f2e4f5ded453433a8f5a534f622cf55a3cc7c187ed2eedb3f21d342eb7d6e36f">OP_HASH256</a> = 0xaa, 
+<a class="el" href="namespace_m_c_p06.html#a4f2e4f5ded453433a8f5a534f622cf55a5d673f81375b8f90de75ef4b5bf6b505">OP_SHA3_256</a> = 0xba, 
+<a class="el" href="namespace_m_c_p06.html#a4f2e4f5ded453433a8f5a534f622cf55a53f39b208203a6efc46a41b328c18c27">OP_SHA3_512</a> = 0xbb, 
+<a class="el" href="namespace_m_c_p06.html#a4f2e4f5ded453433a8f5a534f622cf55a39eda8e2dc3afe9755b2f237f144c135">OP_SHA3_CSHAKE</a> = 0xbc, 
+<br />
+&#160;&#160;<a class="el" href="namespace_m_c_p06.html#a4f2e4f5ded453433a8f5a534f622cf55a17a8ec28de2ba407b61fef3796469066">OP_CODESEPARATOR</a> = 0xab, 
 <a class="el" href="namespace_m_c_p06.html#a4f2e4f5ded453433a8f5a534f622cf55adb33c621f608f61f27e616bd912d8c2d">OP_CHECKSIG</a> = 0xac, 
-<br />
-&#160;&#160;<a class="el" href="namespace_m_c_p06.html#a4f2e4f5ded453433a8f5a534f622cf55af6d891c59cca383a45d987439a9dc5c3">OP_CHECKSIGVERIFY</a> = 0xad, 
+<a class="el" href="namespace_m_c_p06.html#a4f2e4f5ded453433a8f5a534f622cf55af6d891c59cca383a45d987439a9dc5c3">OP_CHECKSIGVERIFY</a> = 0xad, 
 <a class="el" href="namespace_m_c_p06.html#a4f2e4f5ded453433a8f5a534f622cf55a526d92e795689e26f2ac1eec9b3b2a41">OP_CHECKMULTISIG</a> = 0xae, 
-<a class="el" href="namespace_m_c_p06.html#a4f2e4f5ded453433a8f5a534f622cf55ac7c611d8e1ba39b9825bc3a71ce26e9f">OP_CHECKMULTISIGVERIFY</a> = 0xaf, 
+<br />
+&#160;&#160;<a class="el" href="namespace_m_c_p06.html#a4f2e4f5ded453433a8f5a534f622cf55ac7c611d8e1ba39b9825bc3a71ce26e9f">OP_CHECKMULTISIGVERIFY</a> = 0xaf, 
 <a class="el" href="namespace_m_c_p06.html#a4f2e4f5ded453433a8f5a534f622cf55a5ce1d43e095e65ad1058364128ddd3ee">OP_NOP1</a> = 0xb0, 
-<br />
-&#160;&#160;<a class="el" href="namespace_m_c_p06.html#a4f2e4f5ded453433a8f5a534f622cf55ac9d46c9d5e7b86f3bbaa66c5e14be980">OP_CHECKLOCKTIMEVERIFY</a> = 0xb1, 
+<a class="el" href="namespace_m_c_p06.html#a4f2e4f5ded453433a8f5a534f622cf55ac9d46c9d5e7b86f3bbaa66c5e14be980">OP_CHECKLOCKTIMEVERIFY</a> = 0xb1, 
 <a class="el" href="namespace_m_c_p06.html#a4f2e4f5ded453433a8f5a534f622cf55a9464edddd951a47964e783508675c6b5">OP_NOP2</a> = OP_CHECKLOCKTIMEVERIFY, 
-<a class="el" href="namespace_m_c_p06.html#a4f2e4f5ded453433a8f5a534f622cf55a8276b4e81f4af0391105b52fd021f212">OP_CHECKSEQUENCEVERIFY</a> = 0xb2, 
+<br />
+&#160;&#160;<a class="el" href="namespace_m_c_p06.html#a4f2e4f5ded453433a8f5a534f622cf55a8276b4e81f4af0391105b52fd021f212">OP_CHECKSEQUENCEVERIFY</a> = 0xb2, 
 <a class="el" href="namespace_m_c_p06.html#a4f2e4f5ded453433a8f5a534f622cf55a195bc992e0e039b4cd8161cc6fc379e9">OP_NOP3</a> = OP_CHECKSEQUENCEVERIFY, 
-<br />
-&#160;&#160;<a class="el" href="namespace_m_c_p06.html#a4f2e4f5ded453433a8f5a534f622cf55ab9014253a7646161c3fe8049f1d37364">OP_NOP4</a> = 0xb3, 
+<a class="el" href="namespace_m_c_p06.html#a4f2e4f5ded453433a8f5a534f622cf55ab9014253a7646161c3fe8049f1d37364">OP_NOP4</a> = 0xb3, 
 <a class="el" href="namespace_m_c_p06.html#a4f2e4f5ded453433a8f5a534f622cf55a97331b4bb315f6a479126218b5ebed82">OP_NOP5</a> = 0xb4, 
-<a class="el" href="namespace_m_c_p06.html#a4f2e4f5ded453433a8f5a534f622cf55a78edbc559ab92bcf08a71ced2011e526">OP_NOP6</a> = 0xb5, 
+<br />
+&#160;&#160;<a class="el" href="namespace_m_c_p06.html#a4f2e4f5ded453433a8f5a534f622cf55a78edbc559ab92bcf08a71ced2011e526">OP_NOP6</a> = 0xb5, 
 <a class="el" href="namespace_m_c_p06.html#a4f2e4f5ded453433a8f5a534f622cf55add0b2f39adb510d64d00daa193e64d6f">OP_NOP7</a> = 0xb6, 
-<br />
-&#160;&#160;<a class="el" href="namespace_m_c_p06.html#a4f2e4f5ded453433a8f5a534f622cf55a2d236bcb90a4ba43cd6385021ad31b80">OP_NOP8</a> = 0xb7, 
+<a class="el" href="namespace_m_c_p06.html#a4f2e4f5ded453433a8f5a534f622cf55a2d236bcb90a4ba43cd6385021ad31b80">OP_NOP8</a> = 0xb7, 
 <a class="el" href="namespace_m_c_p06.html#a4f2e4f5ded453433a8f5a534f622cf55abf072b8696121b8b61382ecf5e848d37">OP_NOP9</a> = 0xb8, 
-<a class="el" href="namespace_m_c_p06.html#a4f2e4f5ded453433a8f5a534f622cf55a413a8d60c0142580d7fe882e6e30bd7d">OP_NOP10</a> = 0xb9, 
-<a class="el" href="namespace_m_c_p06.html#a4f2e4f5ded453433a8f5a534f622cf55af4bd294d699a43edba7b2237058ff7e7">OP_SMALLINTEGER</a> = 0xfa, 
 <br />
-&#160;&#160;<a class="el" href="namespace_m_c_p06.html#a4f2e4f5ded453433a8f5a534f622cf55a9b47c07fecdc8ae4542cfb7c7789140d">OP_PUBKEYS</a> = 0xfb, 
+&#160;&#160;<a class="el" href="namespace_m_c_p06.html#a4f2e4f5ded453433a8f5a534f622cf55a413a8d60c0142580d7fe882e6e30bd7d">OP_NOP10</a> = 0xb9, 
+<a class="el" href="namespace_m_c_p06.html#a4f2e4f5ded453433a8f5a534f622cf55af4bd294d699a43edba7b2237058ff7e7">OP_SMALLINTEGER</a> = 0xfa, 
+<a class="el" href="namespace_m_c_p06.html#a4f2e4f5ded453433a8f5a534f622cf55a9b47c07fecdc8ae4542cfb7c7789140d">OP_PUBKEYS</a> = 0xfb, 
 <a class="el" href="namespace_m_c_p06.html#a4f2e4f5ded453433a8f5a534f622cf55a3bfceb62026b3f462ddecf3daf24a0b8">OP_PUBKEYHASH</a> = 0xfd, 
-<a class="el" href="namespace_m_c_p06.html#a4f2e4f5ded453433a8f5a534f622cf55a9e87501be72fd78f737d2d495f66f7f8">OP_PUBKEY</a> = 0xfe, 
+<br />
+&#160;&#160;<a class="el" href="namespace_m_c_p06.html#a4f2e4f5ded453433a8f5a534f622cf55a9e87501be72fd78f737d2d495f66f7f8">OP_PUBKEY</a> = 0xfe, 
 <a class="el" href="namespace_m_c_p06.html#a4f2e4f5ded453433a8f5a534f622cf55ad76ccbc36f2971c4d1ccb52f694e946a">OP_INVALIDOPCODE</a> = 0xff
 <br />
  }</td></tr>
 <tr class="separator:a4f2e4f5ded453433a8f5a534f622cf55"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a6fd2acd3c3a25b0f4ab87c650045232f"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespace_m_c_p06.html#a6fd2acd3c3a25b0f4ab87c650045232f">ScriptError_t</a> { <br />
-&#160;&#160;<a class="el" href="namespace_m_c_p06.html#a6fd2acd3c3a25b0f4ab87c650045232fa5391ba49bece6db2b03b30d52678f3d2">SCRIPT_ERR_OK</a> = 0, 
-<a class="el" href="namespace_m_c_p06.html#a6fd2acd3c3a25b0f4ab87c650045232fa75ef943609b76183c201bcd34797dec1">SCRIPT_ERR_UNKNOWN_ERROR</a>, 
-<a class="el" href="namespace_m_c_p06.html#a6fd2acd3c3a25b0f4ab87c650045232fa2dce8b6baac12398cbaa24db83e61a32">SCRIPT_ERR_EVAL_FALSE</a>, 
-<a class="el" href="namespace_m_c_p06.html#a6fd2acd3c3a25b0f4ab87c650045232fae8e7972e295bc322705f523b8d52b743">SCRIPT_ERR_OP_RETURN</a>, 
+<tr class="memitem:af26c6b159344fe2a13464ff253c088f2"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespace_m_c_p06.html#af26c6b159344fe2a13464ff253c088f2">scriptError</a> { <br />
+&#160;&#160;<a class="el" href="namespace_m_c_p06.html#af26c6b159344fe2a13464ff253c088f2a56c70fc401a0508c39282826f16d7441">OK</a>, 
+<a class="el" href="namespace_m_c_p06.html#af26c6b159344fe2a13464ff253c088f2a17a7c9093ce087994e3b03d26d477363">UNKNOWN_ERROR</a>, 
+<a class="el" href="namespace_m_c_p06.html#af26c6b159344fe2a13464ff253c088f2aecb1b6ef749ae306bb9011eee35984a5">EVAL_FALSE</a>, 
+<a class="el" href="namespace_m_c_p06.html#af26c6b159344fe2a13464ff253c088f2af749afeb68a3db10c77f13fa1147f9b1">RETURN</a>, 
 <br />
-&#160;&#160;<a class="el" href="namespace_m_c_p06.html#a6fd2acd3c3a25b0f4ab87c650045232faed95eb306348d4ac57a6fd35904b6dac">SCRIPT_ERR_SCRIPT_SIZE</a>, 
-<a class="el" href="namespace_m_c_p06.html#a6fd2acd3c3a25b0f4ab87c650045232fa3e2110374c03a7425b0562d92050be3b">SCRIPT_ERR_PUSH_SIZE</a>, 
-<a class="el" href="namespace_m_c_p06.html#a6fd2acd3c3a25b0f4ab87c650045232faea6ad8f5ed4117c39acaacd13b46ff88">SCRIPT_ERR_OP_COUNT</a>, 
-<a class="el" href="namespace_m_c_p06.html#a6fd2acd3c3a25b0f4ab87c650045232fad424fd8c36b3e9ac011e3a1104a095b1">SCRIPT_ERR_STACK_SIZE</a>, 
+&#160;&#160;<a class="el" href="namespace_m_c_p06.html#af26c6b159344fe2a13464ff253c088f2ae240d5cf78b1e2e89c2e909fe79113f7">SCRIPT_SIZE</a>, 
+<a class="el" href="namespace_m_c_p06.html#af26c6b159344fe2a13464ff253c088f2aea05c5e32b9adcfb7bd538c0f72d450b">PUSH_SIZE</a>, 
+<a class="el" href="namespace_m_c_p06.html#af26c6b159344fe2a13464ff253c088f2adf381308780803c807f8229ad1cd8f20">OP_COUNT</a>, 
+<a class="el" href="namespace_m_c_p06.html#af26c6b159344fe2a13464ff253c088f2a5fc7ad519990dd4c0817f8d6befdd89f">STACK_SIZE</a>, 
 <br />
-&#160;&#160;<a class="el" href="namespace_m_c_p06.html#a6fd2acd3c3a25b0f4ab87c650045232fa77b79f59fb9e339a6a89c6b7c28a32ba">SCRIPT_ERR_SIG_COUNT</a>, 
-<a class="el" href="namespace_m_c_p06.html#a6fd2acd3c3a25b0f4ab87c650045232fa277f2b5361ce97fee2a4241372834986">SCRIPT_ERR_PUBKEY_COUNT</a>, 
-<a class="el" href="namespace_m_c_p06.html#a6fd2acd3c3a25b0f4ab87c650045232fa47ded1fbb54d99a81b88810ed89d3233">SCRIPT_ERR_VERIFY</a>, 
-<a class="el" href="namespace_m_c_p06.html#a6fd2acd3c3a25b0f4ab87c650045232fa7a57adfbadd24595062aa53b17f1266b">SCRIPT_ERR_EQUALVERIFY</a>, 
+&#160;&#160;<a class="el" href="namespace_m_c_p06.html#af26c6b159344fe2a13464ff253c088f2a90d0ba83c8721ee1c5a0464f58870f83">SIG_COUNT</a>, 
+<a class="el" href="namespace_m_c_p06.html#af26c6b159344fe2a13464ff253c088f2af1ddc9f1ba3491105a2d4a3b0e7fa439">PUBKEY_COUNT</a>, 
+<a class="el" href="namespace_m_c_p06.html#af26c6b159344fe2a13464ff253c088f2acaafe761bf6278544eb6f46d04418f4e">VERIFY</a>, 
+<a class="el" href="namespace_m_c_p06.html#af26c6b159344fe2a13464ff253c088f2ac1ee9541f04c8e2fea6b67ae1937f2f6">EQUALVERIFY</a>, 
 <br />
-&#160;&#160;<a class="el" href="namespace_m_c_p06.html#a6fd2acd3c3a25b0f4ab87c650045232fa607ec421b1af8667d03abc16822872b0">SCRIPT_ERR_CHECKMULTISIGVERIFY</a>, 
-<a class="el" href="namespace_m_c_p06.html#a6fd2acd3c3a25b0f4ab87c650045232fad125576ab794cc65bc17ea7bc27ee006">SCRIPT_ERR_CHECKSIGVERIFY</a>, 
-<a class="el" href="namespace_m_c_p06.html#a6fd2acd3c3a25b0f4ab87c650045232fa8e93e04913ae7f6034d13e4090aeb7a4">SCRIPT_ERR_NUMEQUALVERIFY</a>, 
-<a class="el" href="namespace_m_c_p06.html#a6fd2acd3c3a25b0f4ab87c650045232fa7cfcd7d8cc901bbd1818179103ec8dde">SCRIPT_ERR_BAD_OPCODE</a>, 
+&#160;&#160;<a class="el" href="namespace_m_c_p06.html#af26c6b159344fe2a13464ff253c088f2af4bab165ad35d328a4506e782dc3a725">CHECKMULTISIGVERIFY</a>, 
+<a class="el" href="namespace_m_c_p06.html#af26c6b159344fe2a13464ff253c088f2a512b83108c209956499bc5369cdcc5cb">CHECKSIGVERIFY</a>, 
+<a class="el" href="namespace_m_c_p06.html#af26c6b159344fe2a13464ff253c088f2a4fdcb957001bf4f4a175e668722c543f">NUMEQUALVERIFY</a>, 
+<a class="el" href="namespace_m_c_p06.html#af26c6b159344fe2a13464ff253c088f2a941d79ce3bf84cbfc72f9b7654c8c230">BAD_OPCODE</a>, 
 <br />
-&#160;&#160;<a class="el" href="namespace_m_c_p06.html#a6fd2acd3c3a25b0f4ab87c650045232fa79f7bedeed5ea0874ea2c04f9a294b8e">SCRIPT_ERR_DISABLED_OPCODE</a>, 
-<a class="el" href="namespace_m_c_p06.html#a6fd2acd3c3a25b0f4ab87c650045232fab1ba5dd83b2efbaf1318e20ae93c7308">SCRIPT_ERR_INVALID_STACK_OPERATION</a>, 
-<a class="el" href="namespace_m_c_p06.html#a6fd2acd3c3a25b0f4ab87c650045232fa0f71f79b4aaf43a20f83e5ce5923e2c0">SCRIPT_ERR_INVALID_ALTSTACK_OPERATION</a>, 
-<a class="el" href="namespace_m_c_p06.html#a6fd2acd3c3a25b0f4ab87c650045232fa5f566bf7bc6b4281e8a170f15beb5f20">SCRIPT_ERR_UNBALANCED_CONDITIONAL</a>, 
+&#160;&#160;<a class="el" href="namespace_m_c_p06.html#af26c6b159344fe2a13464ff253c088f2ab8ab53df2e02fadaf3cc1ce2332dd5ed">DISABLED_OPCODE</a>, 
+<a class="el" href="namespace_m_c_p06.html#af26c6b159344fe2a13464ff253c088f2a8ebb91b707351542baa95415a84e6200">INVALID_STACK_OPERATION</a>, 
+<a class="el" href="namespace_m_c_p06.html#af26c6b159344fe2a13464ff253c088f2ab046f40eecb296fd058ac9bda69db410">INVALID_ALTSTACK_OPERATION</a>, 
+<a class="el" href="namespace_m_c_p06.html#af26c6b159344fe2a13464ff253c088f2aed1e12cf5f552689d9a8e175d7364b97">UNBALANCED_CONDITIONAL</a>, 
 <br />
-&#160;&#160;<a class="el" href="namespace_m_c_p06.html#a6fd2acd3c3a25b0f4ab87c650045232faca4bb776144ca23ee11f09ac27bbf7c5">SCRIPT_ERR_NEGATIVE_LOCKTIME</a>, 
-<a class="el" href="namespace_m_c_p06.html#a6fd2acd3c3a25b0f4ab87c650045232fa1db0732cfc1823ed2d0509a13271416e">SCRIPT_ERR_UNSATISFIED_LOCKTIME</a>, 
-<a class="el" href="namespace_m_c_p06.html#a6fd2acd3c3a25b0f4ab87c650045232fae295f75594625519139f460bc076a86e">SCRIPT_ERR_SIG_HASHTYPE</a>, 
-<a class="el" href="namespace_m_c_p06.html#a6fd2acd3c3a25b0f4ab87c650045232fadc2c14273c9600432caf3d395365fd25">SCRIPT_ERR_SIG_DER</a>, 
+&#160;&#160;<a class="el" href="namespace_m_c_p06.html#af26c6b159344fe2a13464ff253c088f2a11ea06a5afa6a33e12f5dbd5d2d038f6">NEGATIVE_LOCKTIME</a>, 
+<a class="el" href="namespace_m_c_p06.html#af26c6b159344fe2a13464ff253c088f2a3535cc5a2b94f214091ba82ef69dfdc5">UNSATISFIED_LOCKTIME</a>, 
+<a class="el" href="namespace_m_c_p06.html#af26c6b159344fe2a13464ff253c088f2a4a51bcd071f7196b94822009ef33c2e6">SIG_HASHTYPE</a>, 
+<a class="el" href="namespace_m_c_p06.html#af26c6b159344fe2a13464ff253c088f2ac34ec6713dbfccfe7f17f4188ff9fcf8">SIG_DER</a>, 
 <br />
-&#160;&#160;<a class="el" href="namespace_m_c_p06.html#a6fd2acd3c3a25b0f4ab87c650045232fa7de8f7f3771ea6a192c5f0486851c372">SCRIPT_ERR_MINIMALDATA</a>, 
-<a class="el" href="namespace_m_c_p06.html#a6fd2acd3c3a25b0f4ab87c650045232fa4adc4ae975bcc1931375a42b947d1afa">SCRIPT_ERR_SIG_PUSHONLY</a>, 
-<a class="el" href="namespace_m_c_p06.html#a6fd2acd3c3a25b0f4ab87c650045232fa9493d8b15736b52fae1e19165bee8ca5">SCRIPT_ERR_SIG_HIGH_S</a>, 
-<a class="el" href="namespace_m_c_p06.html#a6fd2acd3c3a25b0f4ab87c650045232fa5dff0a09d902084bcecd4ff07d80e7b3">SCRIPT_ERR_SIG_NULLDUMMY</a>, 
+&#160;&#160;<a class="el" href="namespace_m_c_p06.html#af26c6b159344fe2a13464ff253c088f2a31466c95c93cbf8432602f00cc18ea0e">ERR_MINIMALDATA</a>, 
+<a class="el" href="namespace_m_c_p06.html#af26c6b159344fe2a13464ff253c088f2af1a95ad975768bb0ceab12e900186a8e">SIG_PUSHONLY</a>, 
+<a class="el" href="namespace_m_c_p06.html#af26c6b159344fe2a13464ff253c088f2a8fc97cb4ce99128e659c351273337813">SIG_HIGH_S</a>, 
+<a class="el" href="namespace_m_c_p06.html#af26c6b159344fe2a13464ff253c088f2a9f5e61709bf9840e28ecbde5f2044a30">SIG_NULLDUMMY</a>, 
 <br />
-&#160;&#160;<a class="el" href="namespace_m_c_p06.html#a6fd2acd3c3a25b0f4ab87c650045232fae60b0dfa85034bc917b2d503ea6a6f7d">SCRIPT_ERR_PUBKEYTYPE</a>, 
-<a class="el" href="namespace_m_c_p06.html#a6fd2acd3c3a25b0f4ab87c650045232fa44aeb1247efd9e3ec6f7a2a02235b359">SCRIPT_ERR_CLEANSTACK</a>, 
-<a class="el" href="namespace_m_c_p06.html#a6fd2acd3c3a25b0f4ab87c650045232fa090026e736e1855bd1d8753a0d65aec2">SCRIPT_ERR_MINIMALIF</a>, 
-<a class="el" href="namespace_m_c_p06.html#a6fd2acd3c3a25b0f4ab87c650045232fa7a1e9555d1bfc8f9c9ccdef3c5073da5">SCRIPT_ERR_SIG_NULLFAIL</a>, 
+&#160;&#160;<a class="el" href="namespace_m_c_p06.html#af26c6b159344fe2a13464ff253c088f2a895f19b727bf1d4e47048d78313cc1e5">PUBKEYTYPE</a>, 
+<a class="el" href="namespace_m_c_p06.html#af26c6b159344fe2a13464ff253c088f2a14b4094978ee238cf28872412251ad01">ERR_CLEANSTACK</a>, 
+<a class="el" href="namespace_m_c_p06.html#af26c6b159344fe2a13464ff253c088f2ac794bababbb85c3be60ac223192bd9c4">MINIMALIF</a>, 
+<a class="el" href="namespace_m_c_p06.html#af26c6b159344fe2a13464ff253c088f2ab20556a529d38ce53947339e2e7efcbc">SIG_NULLFAIL</a>, 
 <br />
-&#160;&#160;<a class="el" href="namespace_m_c_p06.html#a6fd2acd3c3a25b0f4ab87c650045232fa6d03dea93f574338d55bf0bf14a7ea7a">SCRIPT_ERR_DISCOURAGE_UPGRADABLE_NOPS</a>, 
-<a class="el" href="namespace_m_c_p06.html#a6fd2acd3c3a25b0f4ab87c650045232fa6320a47c50e3912a82ef7a4d5857304f">SCRIPT_ERR_DISCOURAGE_UPGRADABLE_WITNESS_PROGRAM</a>, 
-<a class="el" href="namespace_m_c_p06.html#a6fd2acd3c3a25b0f4ab87c650045232fa33ba9ba7b90410d13dbe0c1ba7e53fec">SCRIPT_ERR_WITNESS_PROGRAM_WRONG_LENGTH</a>, 
-<a class="el" href="namespace_m_c_p06.html#a6fd2acd3c3a25b0f4ab87c650045232fa85e4e1b69f628526e45bd0c3f9e70f4f">SCRIPT_ERR_WITNESS_PROGRAM_WITNESS_EMPTY</a>, 
-<br />
-&#160;&#160;<a class="el" href="namespace_m_c_p06.html#a6fd2acd3c3a25b0f4ab87c650045232fa0663066a8a512cfc3940573b7e54f6ae">SCRIPT_ERR_WITNESS_PROGRAM_MISMATCH</a>, 
-<a class="el" href="namespace_m_c_p06.html#a6fd2acd3c3a25b0f4ab87c650045232facf81ef5ee2ca153aa823d70b237a9d16">SCRIPT_ERR_WITNESS_MALLEATED</a>, 
-<a class="el" href="namespace_m_c_p06.html#a6fd2acd3c3a25b0f4ab87c650045232faaaefc3858b53c2b1923de33291e09cf3">SCRIPT_ERR_WITNESS_MALLEATED_P2SH</a>, 
-<a class="el" href="namespace_m_c_p06.html#a6fd2acd3c3a25b0f4ab87c650045232fa0c202287e47c016458c60d56c392033e">SCRIPT_ERR_WITNESS_UNEXPECTED</a>, 
-<br />
-&#160;&#160;<a class="el" href="namespace_m_c_p06.html#a6fd2acd3c3a25b0f4ab87c650045232fa90f9084109ca13d71a978060c412dc68">SCRIPT_ERR_WITNESS_PUBKEYTYPE</a>, 
-<a class="el" href="namespace_m_c_p06.html#a6fd2acd3c3a25b0f4ab87c650045232fae6a4f4530c2154a3dbadfded100333b0">SCRIPT_ERR_ERROR_COUNT</a>
+&#160;&#160;<a class="el" href="namespace_m_c_p06.html#af26c6b159344fe2a13464ff253c088f2a31ac177fc12cd435e0a556f2c8f653df">ERR_DISCOURAGE_UPGRADABLE_NOPS</a>, 
+<a class="el" href="namespace_m_c_p06.html#af26c6b159344fe2a13464ff253c088f2acc52912c0c11f16f5a5f069a307e8b21">ERROR_COUNT</a>
 <br />
  }</td></tr>
-<tr class="separator:a6fd2acd3c3a25b0f4ab87c650045232f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="separator:af26c6b159344fe2a13464ff253c088f2"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4eafe67d553c03d359498268a4c9a5ba"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespace_m_c_p06.html#a4eafe67d553c03d359498268a4c9a5ba">SCRIPT_VERIFY</a> { <br />
+&#160;&#160;<a class="el" href="namespace_m_c_p06.html#a4eafe67d553c03d359498268a4c9a5baa0a6930e690d05baeebc0d8e013b53e0b">NONE</a> = 0, 
+<a class="el" href="namespace_m_c_p06.html#a4eafe67d553c03d359498268a4c9a5baaa826fd43a781c88ef35644279aeffb05">P2SH</a> = (1U &lt;&lt; 0), 
+<a class="el" href="namespace_m_c_p06.html#a4eafe67d553c03d359498268a4c9a5baaa4a92cab2c1a24389a61aa2659483821">STRICTENC</a> = (1U &lt;&lt; 1), 
+<a class="el" href="namespace_m_c_p06.html#a4eafe67d553c03d359498268a4c9a5baa06d583edea8e4b633b10994ecdac10f5">DERSIG</a> = (1U &lt;&lt; 2), 
+<br />
+&#160;&#160;<a class="el" href="namespace_m_c_p06.html#a4eafe67d553c03d359498268a4c9a5baad0a3bcd87b5b13899f0743132cc03016">LOW_S</a> = (1U &lt;&lt; 3), 
+<a class="el" href="namespace_m_c_p06.html#a4eafe67d553c03d359498268a4c9a5baa017cd3ec2b6937e09436e21c128ea1f5">NULLDUMMY</a> = (1U &lt;&lt; 4), 
+<a class="el" href="namespace_m_c_p06.html#a4eafe67d553c03d359498268a4c9a5baa44a083663eb41809ae959e4db30d21c0">SIGPUSHONLY</a> = (1U &lt;&lt; 5), 
+<a class="el" href="namespace_m_c_p06.html#a4eafe67d553c03d359498268a4c9a5baae8ac7908e9a76f2bc6b1167696b820e8">MINIMALDATA</a> = (1U &lt;&lt; 6), 
+<br />
+&#160;&#160;<a class="el" href="namespace_m_c_p06.html#a4eafe67d553c03d359498268a4c9a5baac905235d0d51d434d4cf222a6032dd49">DISCOURAGE_UPGRADABLE_NOPS</a> = (1U &lt;&lt; 7), 
+<a class="el" href="namespace_m_c_p06.html#a4eafe67d553c03d359498268a4c9a5baa8a6f03a7e1dbdd414c5aa0dbb65a035b">CLEANSTACK</a> = (1U &lt;&lt; 8), 
+<a class="el" href="namespace_m_c_p06.html#a4eafe67d553c03d359498268a4c9a5baa27a5c8372c0dbdee63b715e01ffd22b8">NULLFAIL</a> = (1U &lt;&lt; 14)
+<br />
+ }</td></tr>
+<tr class="separator:a4eafe67d553c03d359498268a4c9a5ba"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a76530c82c43adf0b89e49462f6dc1a3d"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespace_m_c_p06.html#a76530c82c43adf0b89e49462f6dc1a3d">SIGHASH</a> { <a class="el" href="namespace_m_c_p06.html#a76530c82c43adf0b89e49462f6dc1a3daed26d7569dd10c368ea23d65bc54d41c">HASH_ALL</a> = 1, 
+<a class="el" href="namespace_m_c_p06.html#a76530c82c43adf0b89e49462f6dc1a3dae508ac810bfe1ac48bbe8d9a3d515bec">HASH_NONE</a> = 2, 
+<a class="el" href="namespace_m_c_p06.html#a76530c82c43adf0b89e49462f6dc1a3dac10c3199885b0f4ab2de7b9a4cbe32e1">HASH_SINGLE</a> = 3, 
+<a class="el" href="namespace_m_c_p06.html#a76530c82c43adf0b89e49462f6dc1a3dac117f26de2a81e6696de2daf28a458d9">HASH_ANYONECANPAY</a> = 0x80
+ }</td></tr>
+<tr class="separator:a76530c82c43adf0b89e49462f6dc1a3d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
 Functions</h2></td></tr>
@@ -332,8 +350,32 @@ Functions</h2></td></tr>
 <tr class="memitem:a61db929874dd9f1211b594093e86a533"><td class="memTemplParams" colspan="2">template&lt;typename T &gt; </td></tr>
 <tr class="memitem:a61db929874dd9f1211b594093e86a533"><td class="memTemplItemLeft" align="right" valign="top">std::vector&lt; unsigned char &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespace_m_c_p06.html#a61db929874dd9f1211b594093e86a533">ToByteVector</a> (const T &amp;in)</td></tr>
 <tr class="separator:a61db929874dd9f1211b594093e86a533"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:adc529cc0d5ca4ccdf2c9ce5962036539"><td class="memItemLeft" align="right" valign="top">const char *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespace_m_c_p06.html#adc529cc0d5ca4ccdf2c9ce5962036539">ScriptErrorString</a> (const <a class="el" href="namespace_m_c_p06.html#a21d699c8b29cd0a58ec16824378c4a19">ScriptError</a> serror)</td></tr>
-<tr class="separator:adc529cc0d5ca4ccdf2c9ce5962036539"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a22bdcf198c2bdec05c91ea1ac39514a9"><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespace_m_c_p06.html#a22bdcf198c2bdec05c91ea1ac39514a9">scriptErrorString</a> (<a class="el" href="namespace_m_c_p06.html#af26c6b159344fe2a13464ff253c088f2">scriptError</a> err)</td></tr>
+<tr class="separator:a22bdcf198c2bdec05c91ea1ac39514a9"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad0e26ee774d2f0f1aa149009e2639c8a"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespace_m_c_p06.html#ad0e26ee774d2f0f1aa149009e2639c8a">CastToBool</a> (const <a class="el" href="namespace_m_c_p06.html#aa3a3f1f0ff9a6f0c68cbc7401abd0dfd">valtype</a> &amp;vch)</td></tr>
+<tr class="separator:ad0e26ee774d2f0f1aa149009e2639c8a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8f6f47053b9a9a2da5611d97476aa4ad"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespace_m_c_p06.html#a8f6f47053b9a9a2da5611d97476aa4ad">CheckSignatureEncoding</a> (const std::vector&lt; unsigned char &gt; &amp;vchSig, unsigned <a class="el" href="ioapi_8h.html#a787fa3cf048117ba7123753c1e74fcd6">int</a> flags, <a class="el" href="namespace_m_c_p06.html#af26c6b159344fe2a13464ff253c088f2">scriptError</a> *serror)</td></tr>
+<tr class="separator:a8f6f47053b9a9a2da5611d97476aa4ad"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab7e18c570bf486524a2559808767ea28"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespace_m_c_p06.html#ab7e18c570bf486524a2559808767ea28">IsLowDERSignature</a> (const <a class="el" href="namespace_m_c_p06.html#aa3a3f1f0ff9a6f0c68cbc7401abd0dfd">valtype</a> &amp;vchSig, <a class="el" href="namespace_m_c_p06.html#af26c6b159344fe2a13464ff253c088f2">scriptError</a> *serror)</td></tr>
+<tr class="separator:ab7e18c570bf486524a2559808767ea28"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2d608b9b2395b6737872f77525e4fec2"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespace_m_c_p06.html#a2d608b9b2395b6737872f77525e4fec2">IsValidSignatureEncoding</a> (const std::vector&lt; unsigned char &gt; &amp;sig)</td></tr>
+<tr class="separator:a2d608b9b2395b6737872f77525e4fec2"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a808e9f68fd0767b1fea80d97dbbb0e41"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespace_m_c_p06.html#a808e9f68fd0767b1fea80d97dbbb0e41">IsCompressedOrUncompressedPubKey</a> (const <a class="el" href="namespace_m_c_p06.html#aa3a3f1f0ff9a6f0c68cbc7401abd0dfd">valtype</a> &amp;vchPubKey)</td></tr>
+<tr class="separator:a808e9f68fd0767b1fea80d97dbbb0e41"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5838467c749ff2d4a3e313885879de4a"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespace_m_c_p06.html#a5838467c749ff2d4a3e313885879de4a">IsCompressedPubKey</a> (const <a class="el" href="namespace_m_c_p06.html#aa3a3f1f0ff9a6f0c68cbc7401abd0dfd">valtype</a> &amp;vchPubKey)</td></tr>
+<tr class="separator:a5838467c749ff2d4a3e313885879de4a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a130afa47660cdb19760167ff8b7ec735"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespace_m_c_p06.html#a130afa47660cdb19760167ff8b7ec735">IsDefinedHashtypeSignature</a> (const <a class="el" href="namespace_m_c_p06.html#aa3a3f1f0ff9a6f0c68cbc7401abd0dfd">valtype</a> &amp;vchSig)</td></tr>
+<tr class="separator:a130afa47660cdb19760167ff8b7ec735"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9550da66e839ff2ba87cfa1fd10329c6"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespace_m_c_p06.html#a9550da66e839ff2ba87cfa1fd10329c6">CheckPubKeyEncoding</a> (const <a class="el" href="namespace_m_c_p06.html#aa3a3f1f0ff9a6f0c68cbc7401abd0dfd">valtype</a> &amp;vchPubKey, unsigned <a class="el" href="ioapi_8h.html#a787fa3cf048117ba7123753c1e74fcd6">int</a> flags, <a class="el" href="namespace_m_c_p06.html#af26c6b159344fe2a13464ff253c088f2">scriptError</a> *serror)</td></tr>
+<tr class="separator:a9550da66e839ff2ba87cfa1fd10329c6"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad9b2d4d53f86c27fc8255da6ec3afca9"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespace_m_c_p06.html#ad9b2d4d53f86c27fc8255da6ec3afca9">CheckMinimalPush</a> (const <a class="el" href="namespace_m_c_p06.html#aa3a3f1f0ff9a6f0c68cbc7401abd0dfd">valtype</a> &amp;data, <a class="el" href="namespace_m_c_p06.html#a4f2e4f5ded453433a8f5a534f622cf55">opcodetype</a> opcode)</td></tr>
+<tr class="separator:ad9b2d4d53f86c27fc8255da6ec3afca9"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa9fd34ce6b1659d69d5697dfb941c361"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classuint256.html">uint256</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespace_m_c_p06.html#aa9fd34ce6b1659d69d5697dfb941c361">signatureHash</a> (const <a class="el" href="class_m_c_p06_1_1_c_script.html">CScript</a> &amp;scriptCode, const <a class="el" href="class_m_c_p03_1_1cr_transaction.html">MCP03::crTransaction</a> &amp;txTo, unsigned <a class="el" href="ioapi_8h.html#a787fa3cf048117ba7123753c1e74fcd6">int</a> nIn, <a class="el" href="ioapi_8h.html#a787fa3cf048117ba7123753c1e74fcd6">int</a> nHashType)</td></tr>
+<tr class="separator:aa9fd34ce6b1659d69d5697dfb941c361"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a56eda09246d69ce8440d635b797102f6"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespace_m_c_p06.html#a56eda09246d69ce8440d635b797102f6">set_success</a> (<a class="el" href="namespace_m_c_p06.html#af26c6b159344fe2a13464ff253c088f2">scriptError</a> *ret)</td></tr>
+<tr class="separator:a56eda09246d69ce8440d635b797102f6"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9b85506415dacda93990e22407a5ebad"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespace_m_c_p06.html#a9b85506415dacda93990e22407a5ebad">set_error</a> (<a class="el" href="namespace_m_c_p06.html#af26c6b159344fe2a13464ff253c088f2">scriptError</a> *ret, const <a class="el" href="namespace_m_c_p06.html#af26c6b159344fe2a13464ff253c088f2">scriptError</a> serror)</td></tr>
+<tr class="separator:a9b85506415dacda93990e22407a5ebad"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="var-members"></a>
 Variables</h2></td></tr>
@@ -365,21 +407,23 @@ Variables</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="script_8h_source.html#l00381">381</a> of file <a class="el" href="script_8h_source.html">script.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="script_8h_source.html#l00389">389</a> of file <a class="el" href="script_8h_source.html">script.h</a>.</p>
 
 </div>
 </div>
-<a id="a21d699c8b29cd0a58ec16824378c4a19"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a21d699c8b29cd0a58ec16824378c4a19">&#9670;&nbsp;</a></span>ScriptError</h2>
+<a id="aa3a3f1f0ff9a6f0c68cbc7401abd0dfd"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa3a3f1f0ff9a6f0c68cbc7401abd0dfd">&#9670;&nbsp;</a></span>valtype</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">typedef enum <a class="el" href="namespace_m_c_p06.html#a6fd2acd3c3a25b0f4ab87c650045232f">MCP06::ScriptError_t</a>  <a class="el" href="namespace_m_c_p06.html#a21d699c8b29cd0a58ec16824378c4a19">MCP06::ScriptError</a></td>
+          <td class="memname">typedef std::vector&lt;unsigned char&gt; <a class="el" href="namespace_m_c_p06.html#aa3a3f1f0ff9a6f0c68cbc7401abd0dfd">MCP06::valtype</a></td>
         </tr>
       </table>
 </div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="script_functions_8h_source.html#l00027">27</a> of file <a class="el" href="script_functions_8h_source.html">scriptFunctions.h</a>.</p>
 
 </div>
 </div>
@@ -493,8 +537,10 @@ Variables</h2></td></tr>
 <tr><td class="fieldname"><a id="a4f2e4f5ded453433a8f5a534f622cf55a879f7b93408f9b0be9623d4a4a233e27"></a>OP_RIPEMD160&#160;</td><td class="fielddoc"></td></tr>
 <tr><td class="fieldname"><a id="a4f2e4f5ded453433a8f5a534f622cf55a9d9df27d09e4b7087c53f97bcad873a6"></a>OP_SHA1&#160;</td><td class="fielddoc"></td></tr>
 <tr><td class="fieldname"><a id="a4f2e4f5ded453433a8f5a534f622cf55abde128c309e36adcb84511472bb826dd"></a>OP_SHA256&#160;</td><td class="fielddoc"></td></tr>
-<tr><td class="fieldname"><a id="a4f2e4f5ded453433a8f5a534f622cf55a94643c7cd0678a049dd2b148a15ce627"></a>OP_HASH160&#160;</td><td class="fielddoc"></td></tr>
 <tr><td class="fieldname"><a id="a4f2e4f5ded453433a8f5a534f622cf55a3cc7c187ed2eedb3f21d342eb7d6e36f"></a>OP_HASH256&#160;</td><td class="fielddoc"></td></tr>
+<tr><td class="fieldname"><a id="a4f2e4f5ded453433a8f5a534f622cf55a5d673f81375b8f90de75ef4b5bf6b505"></a>OP_SHA3_256&#160;</td><td class="fielddoc"></td></tr>
+<tr><td class="fieldname"><a id="a4f2e4f5ded453433a8f5a534f622cf55a53f39b208203a6efc46a41b328c18c27"></a>OP_SHA3_512&#160;</td><td class="fielddoc"></td></tr>
+<tr><td class="fieldname"><a id="a4f2e4f5ded453433a8f5a534f622cf55a39eda8e2dc3afe9755b2f237f144c135"></a>OP_SHA3_CSHAKE&#160;</td><td class="fielddoc"></td></tr>
 <tr><td class="fieldname"><a id="a4f2e4f5ded453433a8f5a534f622cf55a17a8ec28de2ba407b61fef3796469066"></a>OP_CODESEPARATOR&#160;</td><td class="fielddoc"></td></tr>
 <tr><td class="fieldname"><a id="a4f2e4f5ded453433a8f5a534f622cf55adb33c621f608f61f27e616bd912d8c2d"></a>OP_CHECKSIG&#160;</td><td class="fielddoc"></td></tr>
 <tr><td class="fieldname"><a id="a4f2e4f5ded453433a8f5a534f622cf55af6d891c59cca383a45d987439a9dc5c3"></a>OP_CHECKSIGVERIFY&#160;</td><td class="fielddoc"></td></tr>
@@ -519,71 +565,364 @@ Variables</h2></td></tr>
 <tr><td class="fieldname"><a id="a4f2e4f5ded453433a8f5a534f622cf55ad76ccbc36f2971c4d1ccb52f694e946a"></a>OP_INVALIDOPCODE&#160;</td><td class="fielddoc"></td></tr>
 </table>
 
-<p class="definition">Definition at line <a class="el" href="script_8h_source.html#l00049">49</a> of file <a class="el" href="script_8h_source.html">script.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="script_8h_source.html#l00055">55</a> of file <a class="el" href="script_8h_source.html">script.h</a>.</p>
 
 </div>
 </div>
-<a id="a6fd2acd3c3a25b0f4ab87c650045232f"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a6fd2acd3c3a25b0f4ab87c650045232f">&#9670;&nbsp;</a></span>ScriptError_t</h2>
+<a id="a4eafe67d553c03d359498268a4c9a5ba"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a4eafe67d553c03d359498268a4c9a5ba">&#9670;&nbsp;</a></span>SCRIPT_VERIFY</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">enum <a class="el" href="namespace_m_c_p06.html#a6fd2acd3c3a25b0f4ab87c650045232f">MCP06::ScriptError_t</a></td>
+          <td class="memname">enum <a class="el" href="namespace_m_c_p06.html#a4eafe67d553c03d359498268a4c9a5ba">MCP06::SCRIPT_VERIFY</a></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Script verification flags </p>
+<table class="fieldtable">
+<tr><th colspan="2">Enumerator</th></tr><tr><td class="fieldname"><a id="a4eafe67d553c03d359498268a4c9a5baa0a6930e690d05baeebc0d8e013b53e0b"></a>NONE&#160;</td><td class="fielddoc"></td></tr>
+<tr><td class="fieldname"><a id="a4eafe67d553c03d359498268a4c9a5baaa826fd43a781c88ef35644279aeffb05"></a>P2SH&#160;</td><td class="fielddoc"></td></tr>
+<tr><td class="fieldname"><a id="a4eafe67d553c03d359498268a4c9a5baaa4a92cab2c1a24389a61aa2659483821"></a>STRICTENC&#160;</td><td class="fielddoc"></td></tr>
+<tr><td class="fieldname"><a id="a4eafe67d553c03d359498268a4c9a5baa06d583edea8e4b633b10994ecdac10f5"></a>DERSIG&#160;</td><td class="fielddoc"></td></tr>
+<tr><td class="fieldname"><a id="a4eafe67d553c03d359498268a4c9a5baad0a3bcd87b5b13899f0743132cc03016"></a>LOW_S&#160;</td><td class="fielddoc"></td></tr>
+<tr><td class="fieldname"><a id="a4eafe67d553c03d359498268a4c9a5baa017cd3ec2b6937e09436e21c128ea1f5"></a>NULLDUMMY&#160;</td><td class="fielddoc"></td></tr>
+<tr><td class="fieldname"><a id="a4eafe67d553c03d359498268a4c9a5baa44a083663eb41809ae959e4db30d21c0"></a>SIGPUSHONLY&#160;</td><td class="fielddoc"></td></tr>
+<tr><td class="fieldname"><a id="a4eafe67d553c03d359498268a4c9a5baae8ac7908e9a76f2bc6b1167696b820e8"></a>MINIMALDATA&#160;</td><td class="fielddoc"></td></tr>
+<tr><td class="fieldname"><a id="a4eafe67d553c03d359498268a4c9a5baac905235d0d51d434d4cf222a6032dd49"></a>DISCOURAGE_UPGRADABLE_NOPS&#160;</td><td class="fielddoc"></td></tr>
+<tr><td class="fieldname"><a id="a4eafe67d553c03d359498268a4c9a5baa8a6f03a7e1dbdd414c5aa0dbb65a035b"></a>CLEANSTACK&#160;</td><td class="fielddoc"></td></tr>
+<tr><td class="fieldname"><a id="a4eafe67d553c03d359498268a4c9a5baa27a5c8372c0dbdee63b715e01ffd22b8"></a>NULLFAIL&#160;</td><td class="fielddoc"></td></tr>
+</table>
+
+<p class="definition">Definition at line <a class="el" href="script_interpreter_8h_source.html#l00027">27</a> of file <a class="el" href="script_interpreter_8h_source.html">scriptInterpreter.h</a>.</p>
+
+</div>
+</div>
+<a id="af26c6b159344fe2a13464ff253c088f2"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af26c6b159344fe2a13464ff253c088f2">&#9670;&nbsp;</a></span>scriptError</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">enum <a class="el" href="namespace_m_c_p06.html#af26c6b159344fe2a13464ff253c088f2">MCP06::scriptError</a></td>
         </tr>
       </table>
 </div><div class="memdoc">
 <table class="fieldtable">
-<tr><th colspan="2">Enumerator</th></tr><tr><td class="fieldname"><a id="a6fd2acd3c3a25b0f4ab87c650045232fa5391ba49bece6db2b03b30d52678f3d2"></a>SCRIPT_ERR_OK&#160;</td><td class="fielddoc"></td></tr>
-<tr><td class="fieldname"><a id="a6fd2acd3c3a25b0f4ab87c650045232fa75ef943609b76183c201bcd34797dec1"></a>SCRIPT_ERR_UNKNOWN_ERROR&#160;</td><td class="fielddoc"></td></tr>
-<tr><td class="fieldname"><a id="a6fd2acd3c3a25b0f4ab87c650045232fa2dce8b6baac12398cbaa24db83e61a32"></a>SCRIPT_ERR_EVAL_FALSE&#160;</td><td class="fielddoc"></td></tr>
-<tr><td class="fieldname"><a id="a6fd2acd3c3a25b0f4ab87c650045232fae8e7972e295bc322705f523b8d52b743"></a>SCRIPT_ERR_OP_RETURN&#160;</td><td class="fielddoc"></td></tr>
-<tr><td class="fieldname"><a id="a6fd2acd3c3a25b0f4ab87c650045232faed95eb306348d4ac57a6fd35904b6dac"></a>SCRIPT_ERR_SCRIPT_SIZE&#160;</td><td class="fielddoc"></td></tr>
-<tr><td class="fieldname"><a id="a6fd2acd3c3a25b0f4ab87c650045232fa3e2110374c03a7425b0562d92050be3b"></a>SCRIPT_ERR_PUSH_SIZE&#160;</td><td class="fielddoc"></td></tr>
-<tr><td class="fieldname"><a id="a6fd2acd3c3a25b0f4ab87c650045232faea6ad8f5ed4117c39acaacd13b46ff88"></a>SCRIPT_ERR_OP_COUNT&#160;</td><td class="fielddoc"></td></tr>
-<tr><td class="fieldname"><a id="a6fd2acd3c3a25b0f4ab87c650045232fad424fd8c36b3e9ac011e3a1104a095b1"></a>SCRIPT_ERR_STACK_SIZE&#160;</td><td class="fielddoc"></td></tr>
-<tr><td class="fieldname"><a id="a6fd2acd3c3a25b0f4ab87c650045232fa77b79f59fb9e339a6a89c6b7c28a32ba"></a>SCRIPT_ERR_SIG_COUNT&#160;</td><td class="fielddoc"></td></tr>
-<tr><td class="fieldname"><a id="a6fd2acd3c3a25b0f4ab87c650045232fa277f2b5361ce97fee2a4241372834986"></a>SCRIPT_ERR_PUBKEY_COUNT&#160;</td><td class="fielddoc"></td></tr>
-<tr><td class="fieldname"><a id="a6fd2acd3c3a25b0f4ab87c650045232fa47ded1fbb54d99a81b88810ed89d3233"></a>SCRIPT_ERR_VERIFY&#160;</td><td class="fielddoc"></td></tr>
-<tr><td class="fieldname"><a id="a6fd2acd3c3a25b0f4ab87c650045232fa7a57adfbadd24595062aa53b17f1266b"></a>SCRIPT_ERR_EQUALVERIFY&#160;</td><td class="fielddoc"></td></tr>
-<tr><td class="fieldname"><a id="a6fd2acd3c3a25b0f4ab87c650045232fa607ec421b1af8667d03abc16822872b0"></a>SCRIPT_ERR_CHECKMULTISIGVERIFY&#160;</td><td class="fielddoc"></td></tr>
-<tr><td class="fieldname"><a id="a6fd2acd3c3a25b0f4ab87c650045232fad125576ab794cc65bc17ea7bc27ee006"></a>SCRIPT_ERR_CHECKSIGVERIFY&#160;</td><td class="fielddoc"></td></tr>
-<tr><td class="fieldname"><a id="a6fd2acd3c3a25b0f4ab87c650045232fa8e93e04913ae7f6034d13e4090aeb7a4"></a>SCRIPT_ERR_NUMEQUALVERIFY&#160;</td><td class="fielddoc"></td></tr>
-<tr><td class="fieldname"><a id="a6fd2acd3c3a25b0f4ab87c650045232fa7cfcd7d8cc901bbd1818179103ec8dde"></a>SCRIPT_ERR_BAD_OPCODE&#160;</td><td class="fielddoc"></td></tr>
-<tr><td class="fieldname"><a id="a6fd2acd3c3a25b0f4ab87c650045232fa79f7bedeed5ea0874ea2c04f9a294b8e"></a>SCRIPT_ERR_DISABLED_OPCODE&#160;</td><td class="fielddoc"></td></tr>
-<tr><td class="fieldname"><a id="a6fd2acd3c3a25b0f4ab87c650045232fab1ba5dd83b2efbaf1318e20ae93c7308"></a>SCRIPT_ERR_INVALID_STACK_OPERATION&#160;</td><td class="fielddoc"></td></tr>
-<tr><td class="fieldname"><a id="a6fd2acd3c3a25b0f4ab87c650045232fa0f71f79b4aaf43a20f83e5ce5923e2c0"></a>SCRIPT_ERR_INVALID_ALTSTACK_OPERATION&#160;</td><td class="fielddoc"></td></tr>
-<tr><td class="fieldname"><a id="a6fd2acd3c3a25b0f4ab87c650045232fa5f566bf7bc6b4281e8a170f15beb5f20"></a>SCRIPT_ERR_UNBALANCED_CONDITIONAL&#160;</td><td class="fielddoc"></td></tr>
-<tr><td class="fieldname"><a id="a6fd2acd3c3a25b0f4ab87c650045232faca4bb776144ca23ee11f09ac27bbf7c5"></a>SCRIPT_ERR_NEGATIVE_LOCKTIME&#160;</td><td class="fielddoc"></td></tr>
-<tr><td class="fieldname"><a id="a6fd2acd3c3a25b0f4ab87c650045232fa1db0732cfc1823ed2d0509a13271416e"></a>SCRIPT_ERR_UNSATISFIED_LOCKTIME&#160;</td><td class="fielddoc"></td></tr>
-<tr><td class="fieldname"><a id="a6fd2acd3c3a25b0f4ab87c650045232fae295f75594625519139f460bc076a86e"></a>SCRIPT_ERR_SIG_HASHTYPE&#160;</td><td class="fielddoc"></td></tr>
-<tr><td class="fieldname"><a id="a6fd2acd3c3a25b0f4ab87c650045232fadc2c14273c9600432caf3d395365fd25"></a>SCRIPT_ERR_SIG_DER&#160;</td><td class="fielddoc"></td></tr>
-<tr><td class="fieldname"><a id="a6fd2acd3c3a25b0f4ab87c650045232fa7de8f7f3771ea6a192c5f0486851c372"></a>SCRIPT_ERR_MINIMALDATA&#160;</td><td class="fielddoc"></td></tr>
-<tr><td class="fieldname"><a id="a6fd2acd3c3a25b0f4ab87c650045232fa4adc4ae975bcc1931375a42b947d1afa"></a>SCRIPT_ERR_SIG_PUSHONLY&#160;</td><td class="fielddoc"></td></tr>
-<tr><td class="fieldname"><a id="a6fd2acd3c3a25b0f4ab87c650045232fa9493d8b15736b52fae1e19165bee8ca5"></a>SCRIPT_ERR_SIG_HIGH_S&#160;</td><td class="fielddoc"></td></tr>
-<tr><td class="fieldname"><a id="a6fd2acd3c3a25b0f4ab87c650045232fa5dff0a09d902084bcecd4ff07d80e7b3"></a>SCRIPT_ERR_SIG_NULLDUMMY&#160;</td><td class="fielddoc"></td></tr>
-<tr><td class="fieldname"><a id="a6fd2acd3c3a25b0f4ab87c650045232fae60b0dfa85034bc917b2d503ea6a6f7d"></a>SCRIPT_ERR_PUBKEYTYPE&#160;</td><td class="fielddoc"></td></tr>
-<tr><td class="fieldname"><a id="a6fd2acd3c3a25b0f4ab87c650045232fa44aeb1247efd9e3ec6f7a2a02235b359"></a>SCRIPT_ERR_CLEANSTACK&#160;</td><td class="fielddoc"></td></tr>
-<tr><td class="fieldname"><a id="a6fd2acd3c3a25b0f4ab87c650045232fa090026e736e1855bd1d8753a0d65aec2"></a>SCRIPT_ERR_MINIMALIF&#160;</td><td class="fielddoc"></td></tr>
-<tr><td class="fieldname"><a id="a6fd2acd3c3a25b0f4ab87c650045232fa7a1e9555d1bfc8f9c9ccdef3c5073da5"></a>SCRIPT_ERR_SIG_NULLFAIL&#160;</td><td class="fielddoc"></td></tr>
-<tr><td class="fieldname"><a id="a6fd2acd3c3a25b0f4ab87c650045232fa6d03dea93f574338d55bf0bf14a7ea7a"></a>SCRIPT_ERR_DISCOURAGE_UPGRADABLE_NOPS&#160;</td><td class="fielddoc"></td></tr>
-<tr><td class="fieldname"><a id="a6fd2acd3c3a25b0f4ab87c650045232fa6320a47c50e3912a82ef7a4d5857304f"></a>SCRIPT_ERR_DISCOURAGE_UPGRADABLE_WITNESS_PROGRAM&#160;</td><td class="fielddoc"></td></tr>
-<tr><td class="fieldname"><a id="a6fd2acd3c3a25b0f4ab87c650045232fa33ba9ba7b90410d13dbe0c1ba7e53fec"></a>SCRIPT_ERR_WITNESS_PROGRAM_WRONG_LENGTH&#160;</td><td class="fielddoc"></td></tr>
-<tr><td class="fieldname"><a id="a6fd2acd3c3a25b0f4ab87c650045232fa85e4e1b69f628526e45bd0c3f9e70f4f"></a>SCRIPT_ERR_WITNESS_PROGRAM_WITNESS_EMPTY&#160;</td><td class="fielddoc"></td></tr>
-<tr><td class="fieldname"><a id="a6fd2acd3c3a25b0f4ab87c650045232fa0663066a8a512cfc3940573b7e54f6ae"></a>SCRIPT_ERR_WITNESS_PROGRAM_MISMATCH&#160;</td><td class="fielddoc"></td></tr>
-<tr><td class="fieldname"><a id="a6fd2acd3c3a25b0f4ab87c650045232facf81ef5ee2ca153aa823d70b237a9d16"></a>SCRIPT_ERR_WITNESS_MALLEATED&#160;</td><td class="fielddoc"></td></tr>
-<tr><td class="fieldname"><a id="a6fd2acd3c3a25b0f4ab87c650045232faaaefc3858b53c2b1923de33291e09cf3"></a>SCRIPT_ERR_WITNESS_MALLEATED_P2SH&#160;</td><td class="fielddoc"></td></tr>
-<tr><td class="fieldname"><a id="a6fd2acd3c3a25b0f4ab87c650045232fa0c202287e47c016458c60d56c392033e"></a>SCRIPT_ERR_WITNESS_UNEXPECTED&#160;</td><td class="fielddoc"></td></tr>
-<tr><td class="fieldname"><a id="a6fd2acd3c3a25b0f4ab87c650045232fa90f9084109ca13d71a978060c412dc68"></a>SCRIPT_ERR_WITNESS_PUBKEYTYPE&#160;</td><td class="fielddoc"></td></tr>
-<tr><td class="fieldname"><a id="a6fd2acd3c3a25b0f4ab87c650045232fae6a4f4530c2154a3dbadfded100333b0"></a>SCRIPT_ERR_ERROR_COUNT&#160;</td><td class="fielddoc"></td></tr>
+<tr><th colspan="2">Enumerator</th></tr><tr><td class="fieldname"><a id="af26c6b159344fe2a13464ff253c088f2a56c70fc401a0508c39282826f16d7441"></a>OK&#160;</td><td class="fielddoc"></td></tr>
+<tr><td class="fieldname"><a id="af26c6b159344fe2a13464ff253c088f2a17a7c9093ce087994e3b03d26d477363"></a>UNKNOWN_ERROR&#160;</td><td class="fielddoc"></td></tr>
+<tr><td class="fieldname"><a id="af26c6b159344fe2a13464ff253c088f2aecb1b6ef749ae306bb9011eee35984a5"></a>EVAL_FALSE&#160;</td><td class="fielddoc"></td></tr>
+<tr><td class="fieldname"><a id="af26c6b159344fe2a13464ff253c088f2af749afeb68a3db10c77f13fa1147f9b1"></a>RETURN&#160;</td><td class="fielddoc"></td></tr>
+<tr><td class="fieldname"><a id="af26c6b159344fe2a13464ff253c088f2ae240d5cf78b1e2e89c2e909fe79113f7"></a>SCRIPT_SIZE&#160;</td><td class="fielddoc"></td></tr>
+<tr><td class="fieldname"><a id="af26c6b159344fe2a13464ff253c088f2aea05c5e32b9adcfb7bd538c0f72d450b"></a>PUSH_SIZE&#160;</td><td class="fielddoc"></td></tr>
+<tr><td class="fieldname"><a id="af26c6b159344fe2a13464ff253c088f2adf381308780803c807f8229ad1cd8f20"></a>OP_COUNT&#160;</td><td class="fielddoc"></td></tr>
+<tr><td class="fieldname"><a id="af26c6b159344fe2a13464ff253c088f2a5fc7ad519990dd4c0817f8d6befdd89f"></a>STACK_SIZE&#160;</td><td class="fielddoc"></td></tr>
+<tr><td class="fieldname"><a id="af26c6b159344fe2a13464ff253c088f2a90d0ba83c8721ee1c5a0464f58870f83"></a>SIG_COUNT&#160;</td><td class="fielddoc"></td></tr>
+<tr><td class="fieldname"><a id="af26c6b159344fe2a13464ff253c088f2af1ddc9f1ba3491105a2d4a3b0e7fa439"></a>PUBKEY_COUNT&#160;</td><td class="fielddoc"></td></tr>
+<tr><td class="fieldname"><a id="af26c6b159344fe2a13464ff253c088f2acaafe761bf6278544eb6f46d04418f4e"></a>VERIFY&#160;</td><td class="fielddoc"></td></tr>
+<tr><td class="fieldname"><a id="af26c6b159344fe2a13464ff253c088f2ac1ee9541f04c8e2fea6b67ae1937f2f6"></a>EQUALVERIFY&#160;</td><td class="fielddoc"></td></tr>
+<tr><td class="fieldname"><a id="af26c6b159344fe2a13464ff253c088f2af4bab165ad35d328a4506e782dc3a725"></a>CHECKMULTISIGVERIFY&#160;</td><td class="fielddoc"></td></tr>
+<tr><td class="fieldname"><a id="af26c6b159344fe2a13464ff253c088f2a512b83108c209956499bc5369cdcc5cb"></a>CHECKSIGVERIFY&#160;</td><td class="fielddoc"></td></tr>
+<tr><td class="fieldname"><a id="af26c6b159344fe2a13464ff253c088f2a4fdcb957001bf4f4a175e668722c543f"></a>NUMEQUALVERIFY&#160;</td><td class="fielddoc"></td></tr>
+<tr><td class="fieldname"><a id="af26c6b159344fe2a13464ff253c088f2a941d79ce3bf84cbfc72f9b7654c8c230"></a>BAD_OPCODE&#160;</td><td class="fielddoc"></td></tr>
+<tr><td class="fieldname"><a id="af26c6b159344fe2a13464ff253c088f2ab8ab53df2e02fadaf3cc1ce2332dd5ed"></a>DISABLED_OPCODE&#160;</td><td class="fielddoc"></td></tr>
+<tr><td class="fieldname"><a id="af26c6b159344fe2a13464ff253c088f2a8ebb91b707351542baa95415a84e6200"></a>INVALID_STACK_OPERATION&#160;</td><td class="fielddoc"></td></tr>
+<tr><td class="fieldname"><a id="af26c6b159344fe2a13464ff253c088f2ab046f40eecb296fd058ac9bda69db410"></a>INVALID_ALTSTACK_OPERATION&#160;</td><td class="fielddoc"></td></tr>
+<tr><td class="fieldname"><a id="af26c6b159344fe2a13464ff253c088f2aed1e12cf5f552689d9a8e175d7364b97"></a>UNBALANCED_CONDITIONAL&#160;</td><td class="fielddoc"></td></tr>
+<tr><td class="fieldname"><a id="af26c6b159344fe2a13464ff253c088f2a11ea06a5afa6a33e12f5dbd5d2d038f6"></a>NEGATIVE_LOCKTIME&#160;</td><td class="fielddoc"></td></tr>
+<tr><td class="fieldname"><a id="af26c6b159344fe2a13464ff253c088f2a3535cc5a2b94f214091ba82ef69dfdc5"></a>UNSATISFIED_LOCKTIME&#160;</td><td class="fielddoc"></td></tr>
+<tr><td class="fieldname"><a id="af26c6b159344fe2a13464ff253c088f2a4a51bcd071f7196b94822009ef33c2e6"></a>SIG_HASHTYPE&#160;</td><td class="fielddoc"></td></tr>
+<tr><td class="fieldname"><a id="af26c6b159344fe2a13464ff253c088f2ac34ec6713dbfccfe7f17f4188ff9fcf8"></a>SIG_DER&#160;</td><td class="fielddoc"></td></tr>
+<tr><td class="fieldname"><a id="af26c6b159344fe2a13464ff253c088f2a31466c95c93cbf8432602f00cc18ea0e"></a>ERR_MINIMALDATA&#160;</td><td class="fielddoc"></td></tr>
+<tr><td class="fieldname"><a id="af26c6b159344fe2a13464ff253c088f2af1a95ad975768bb0ceab12e900186a8e"></a>SIG_PUSHONLY&#160;</td><td class="fielddoc"></td></tr>
+<tr><td class="fieldname"><a id="af26c6b159344fe2a13464ff253c088f2a8fc97cb4ce99128e659c351273337813"></a>SIG_HIGH_S&#160;</td><td class="fielddoc"></td></tr>
+<tr><td class="fieldname"><a id="af26c6b159344fe2a13464ff253c088f2a9f5e61709bf9840e28ecbde5f2044a30"></a>SIG_NULLDUMMY&#160;</td><td class="fielddoc"></td></tr>
+<tr><td class="fieldname"><a id="af26c6b159344fe2a13464ff253c088f2a895f19b727bf1d4e47048d78313cc1e5"></a>PUBKEYTYPE&#160;</td><td class="fielddoc"></td></tr>
+<tr><td class="fieldname"><a id="af26c6b159344fe2a13464ff253c088f2a14b4094978ee238cf28872412251ad01"></a>ERR_CLEANSTACK&#160;</td><td class="fielddoc"></td></tr>
+<tr><td class="fieldname"><a id="af26c6b159344fe2a13464ff253c088f2ac794bababbb85c3be60ac223192bd9c4"></a>MINIMALIF&#160;</td><td class="fielddoc"></td></tr>
+<tr><td class="fieldname"><a id="af26c6b159344fe2a13464ff253c088f2ab20556a529d38ce53947339e2e7efcbc"></a>SIG_NULLFAIL&#160;</td><td class="fielddoc"></td></tr>
+<tr><td class="fieldname"><a id="af26c6b159344fe2a13464ff253c088f2a31ac177fc12cd435e0a556f2c8f653df"></a>ERR_DISCOURAGE_UPGRADABLE_NOPS&#160;</td><td class="fielddoc"></td></tr>
+<tr><td class="fieldname"><a id="af26c6b159344fe2a13464ff253c088f2acc52912c0c11f16f5a5f069a307e8b21"></a>ERROR_COUNT&#160;</td><td class="fielddoc"></td></tr>
 </table>
 
-<p class="definition">Definition at line <a class="el" href="script__error_8h_source.html#l00011">11</a> of file <a class="el" href="script__error_8h_source.html">script_error.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="script_error_8h_source.html#l00021">21</a> of file <a class="el" href="script_error_8h_source.html">scriptError.h</a>.</p>
+
+</div>
+</div>
+<a id="a76530c82c43adf0b89e49462f6dc1a3d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a76530c82c43adf0b89e49462f6dc1a3d">&#9670;&nbsp;</a></span>SIGHASH</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">enum <a class="el" href="namespace_m_c_p06.html#a76530c82c43adf0b89e49462f6dc1a3d">MCP06::SIGHASH</a></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Signature hash types/flags </p>
+<table class="fieldtable">
+<tr><th colspan="2">Enumerator</th></tr><tr><td class="fieldname"><a id="a76530c82c43adf0b89e49462f6dc1a3daed26d7569dd10c368ea23d65bc54d41c"></a>HASH_ALL&#160;</td><td class="fielddoc"></td></tr>
+<tr><td class="fieldname"><a id="a76530c82c43adf0b89e49462f6dc1a3dae508ac810bfe1ac48bbe8d9a3d515bec"></a>HASH_NONE&#160;</td><td class="fielddoc"></td></tr>
+<tr><td class="fieldname"><a id="a76530c82c43adf0b89e49462f6dc1a3dac10c3199885b0f4ab2de7b9a4cbe32e1"></a>HASH_SINGLE&#160;</td><td class="fielddoc"></td></tr>
+<tr><td class="fieldname"><a id="a76530c82c43adf0b89e49462f6dc1a3dac117f26de2a81e6696de2daf28a458d9"></a>HASH_ANYONECANPAY&#160;</td><td class="fielddoc"></td></tr>
+</table>
+
+<p class="definition">Definition at line <a class="el" href="signature_checker_8h_source.html#l00028">28</a> of file <a class="el" href="signature_checker_8h_source.html">signatureChecker.h</a>.</p>
 
 </div>
 </div>
 <h2 class="groupheader">Function Documentation</h2>
+<a id="ad0e26ee774d2f0f1aa149009e2639c8a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad0e26ee774d2f0f1aa149009e2639c8a">&#9670;&nbsp;</a></span>CastToBool()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool MCP06::CastToBool </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="namespace_m_c_p06.html#aa3a3f1f0ff9a6f0c68cbc7401abd0dfd">valtype</a> &amp;&#160;</td>
+          <td class="paramname"><em>vch</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="script_functions_8cpp_source.html#l00018">18</a> of file <a class="el" href="script_functions_8cpp_source.html">scriptFunctions.cpp</a>.</p>
+<div class="dynheader">
+Here is the caller graph for this function:</div>
+<div class="dyncontent">
+<div class="center"><img src="namespace_m_c_p06_ad0e26ee774d2f0f1aa149009e2639c8a_icgraph.png" border="0" usemap="#namespace_m_c_p06_ad0e26ee774d2f0f1aa149009e2639c8a_icgraph" alt=""/></div>
+<map name="namespace_m_c_p06_ad0e26ee774d2f0f1aa149009e2639c8a_icgraph" id="namespace_m_c_p06_ad0e26ee774d2f0f1aa149009e2639c8a_icgraph">
+<area shape="rect" id="node2" href="namespace_m_c_p06.html#a9b85506415dacda93990e22407a5ebad" title="MCP06::set_error" alt="" coords="193,97,317,123"/>
+<area shape="rect" id="node4" href="class_m_c_p06_1_1script_interpreter.html#a3eafe91afef52589c930523a3622ceff" title="MCP06::scriptInterpreter\l::evalScript" alt="" coords="891,161,1053,203"/>
+<area shape="rect" id="node5" href="class_m_c_p06_1_1script_interpreter.html#ad5ba77a236bf73c6c07789ce4caa64d9" title="MCP06::scriptInterpreter\l::verifyScript" alt="" coords="1101,161,1264,203"/>
+<area shape="rect" id="node3" href="namespace_m_c_p06.html#a8f6f47053b9a9a2da5611d97476aa4ad" title="MCP06::CheckSignatureEncoding" alt="" coords="624,127,843,154"/>
+<area shape="rect" id="node6" href="namespace_m_c_p06.html#ab7e18c570bf486524a2559808767ea28" title="MCP06::IsLowDERSignature" alt="" coords="377,159,565,186"/>
+<area shape="rect" id="node7" href="namespace_m_c_p06.html#a9550da66e839ff2ba87cfa1fd10329c6" title="MCP06::CheckPubKeyEncoding" alt="" coords="365,34,576,61"/>
+</map>
+</div>
+
+</div>
+</div>
+<a id="ad9b2d4d53f86c27fc8255da6ec3afca9"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad9b2d4d53f86c27fc8255da6ec3afca9">&#9670;&nbsp;</a></span>CheckMinimalPush()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool MCP06::CheckMinimalPush </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="namespace_m_c_p06.html#aa3a3f1f0ff9a6f0c68cbc7401abd0dfd">valtype</a> &amp;&#160;</td>
+          <td class="paramname"><em>data</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="namespace_m_c_p06.html#a4f2e4f5ded453433a8f5a534f622cf55">opcodetype</a>&#160;</td>
+          <td class="paramname"><em>opcode</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="script_functions_8cpp_source.html#l00201">201</a> of file <a class="el" href="script_functions_8cpp_source.html">scriptFunctions.cpp</a>.</p>
+<div class="dynheader">
+Here is the caller graph for this function:</div>
+<div class="dyncontent">
+<div class="center"><img src="namespace_m_c_p06_ad9b2d4d53f86c27fc8255da6ec3afca9_icgraph.png" border="0" usemap="#namespace_m_c_p06_ad9b2d4d53f86c27fc8255da6ec3afca9_icgraph" alt=""/></div>
+<map name="namespace_m_c_p06_ad9b2d4d53f86c27fc8255da6ec3afca9_icgraph" id="namespace_m_c_p06_ad9b2d4d53f86c27fc8255da6ec3afca9_icgraph">
+<area shape="rect" id="node2" href="namespace_m_c_p06.html#a9b85506415dacda93990e22407a5ebad" title="MCP06::set_error" alt="" coords="239,73,363,100"/>
+<area shape="rect" id="node4" href="class_m_c_p06_1_1script_interpreter.html#a3eafe91afef52589c930523a3622ceff" title="MCP06::scriptInterpreter\l::evalScript" alt="" coords="936,128,1099,170"/>
+<area shape="rect" id="node3" href="namespace_m_c_p06.html#a8f6f47053b9a9a2da5611d97476aa4ad" title="MCP06::CheckSignatureEncoding" alt="" coords="669,136,888,162"/>
+<area shape="rect" id="node5" href="class_m_c_p06_1_1script_interpreter.html#ad5ba77a236bf73c6c07789ce4caa64d9" title="MCP06::scriptInterpreter\l::verifyScript" alt="" coords="1147,186,1309,227"/>
+<area shape="rect" id="node6" href="namespace_m_c_p06.html#ab7e18c570bf486524a2559808767ea28" title="MCP06::IsLowDERSignature" alt="" coords="422,73,610,100"/>
+<area shape="rect" id="node7" href="namespace_m_c_p06.html#a9550da66e839ff2ba87cfa1fd10329c6" title="MCP06::CheckPubKeyEncoding" alt="" coords="411,22,621,49"/>
+</map>
+</div>
+
+</div>
+</div>
+<a id="a9550da66e839ff2ba87cfa1fd10329c6"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a9550da66e839ff2ba87cfa1fd10329c6">&#9670;&nbsp;</a></span>CheckPubKeyEncoding()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool MCP06::CheckPubKeyEncoding </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="namespace_m_c_p06.html#aa3a3f1f0ff9a6f0c68cbc7401abd0dfd">valtype</a> &amp;&#160;</td>
+          <td class="paramname"><em>vchPubKey</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">unsigned <a class="el" href="ioapi_8h.html#a787fa3cf048117ba7123753c1e74fcd6">int</a>&#160;</td>
+          <td class="paramname"><em>flags</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="namespace_m_c_p06.html#af26c6b159344fe2a13464ff253c088f2">scriptError</a> *&#160;</td>
+          <td class="paramname"><em>serror</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="script_functions_8cpp_source.html#l00193">193</a> of file <a class="el" href="script_functions_8cpp_source.html">scriptFunctions.cpp</a>.</p>
+<div class="dynheader">
+Here is the call graph for this function:</div>
+<div class="dyncontent">
+<div class="center"><img src="namespace_m_c_p06_a9550da66e839ff2ba87cfa1fd10329c6_cgraph.png" border="0" usemap="#namespace_m_c_p06_a9550da66e839ff2ba87cfa1fd10329c6_cgraph" alt=""/></div>
+<map name="namespace_m_c_p06_a9550da66e839ff2ba87cfa1fd10329c6_cgraph" id="namespace_m_c_p06_a9550da66e839ff2ba87cfa1fd10329c6_cgraph">
+<area shape="rect" id="node2" href="namespace_m_c_p06.html#a808e9f68fd0767b1fea80d97dbbb0e41" title="MCP06::IsCompressedOrUncompressed\lPubKey" alt="" coords="436,5,693,47"/>
+<area shape="rect" id="node3" href="namespace_m_c_p06.html#a9b85506415dacda93990e22407a5ebad" title="MCP06::set_error" alt="" coords="264,274,388,301"/>
+<area shape="rect" id="node4" href="namespace_m_c_p06.html#a22bdcf198c2bdec05c91ea1ac39514a9" title="MCP06::scriptErrorString" alt="" coords="481,223,648,250"/>
+<area shape="rect" id="node5" href="namespace_m_c_p06.html#ad0e26ee774d2f0f1aa149009e2639c8a" title="MCP06::CastToBool" alt="" coords="495,274,635,301"/>
+<area shape="rect" id="node6" href="namespace_m_c_p06.html#a8f6f47053b9a9a2da5611d97476aa4ad" title="MCP06::CheckSignatureEncoding" alt="" coords="455,450,674,477"/>
+<area shape="rect" id="node7" href="namespace_m_c_p06.html#a2d608b9b2395b6737872f77525e4fec2" title="MCP06::IsValidSignatureEncoding" alt="" coords="977,387,1199,414"/>
+<area shape="rect" id="node8" href="namespace_m_c_p06.html#ab7e18c570bf486524a2559808767ea28" title="MCP06::IsLowDERSignature" alt="" coords="741,387,929,414"/>
+<area shape="rect" id="node9" href="namespace_m_c_p06.html#a130afa47660cdb19760167ff8b7ec735" title="MCP06::IsDefinedHashtype\lSignature" alt="" coords="745,492,926,533"/>
+<area shape="rect" id="node10" href="namespace_m_c_p06.html#a5838467c749ff2d4a3e313885879de4a" title="MCP06::IsCompressedPubKey" alt="" coords="463,71,666,98"/>
+<area shape="rect" id="node11" href="namespace_m_c_p06.html#ad9b2d4d53f86c27fc8255da6ec3afca9" title="MCP06::CheckMinimalPush" alt="" coords="472,122,657,149"/>
+<area shape="rect" id="node12" href="namespace_m_c_p06.html#aa9fd34ce6b1659d69d5697dfb941c361" title="MCP06::signatureHash" alt="" coords="487,173,643,199"/>
+<area shape="rect" id="node13" href="uint256_8h.html#a52e679560cc1ebf68f878ed69e38f259" title="uint256S" alt="" coords="799,143,872,170"/>
+<area shape="rect" id="node15" href="class_m_c_p03_1_1cr_transaction.html#afac6ce20474c5c7670eabca341ed9b14" title="MCP03::crTransaction\l::calcHash" alt="" coords="760,195,911,236"/>
+<area shape="rect" id="node14" href="classbase__blob.html#a5ec1f681a2830f4e180fe664c0eb4dd0" title="base_blob::SetHex" alt="" coords="1022,143,1154,170"/>
+<area shape="rect" id="node16" href="class_s_h_a3.html#a13f576c2f05cc9a826067e04c6a4dd6f" title="SHA3::hash256" alt="" coords="1031,202,1145,229"/>
+<area shape="rect" id="node17" href="class_s_h_a3.html#a5f7389b5995e1f7fcfa603312909187b" title="SHA3::hash" alt="" coords="1247,202,1339,229"/>
+<area shape="rect" id="node18" href="class_s_h_a3.html#abdef02bf296d177311943602ddf41a28" title="SHA3::shakeCreate" alt="" coords="1391,75,1529,102"/>
+<area shape="rect" id="node19" href="class_s_h_a3.html#abee8dad3de624f240790d2866e148c24" title="SHA3::keccakCreate" alt="" coords="1388,126,1532,153"/>
+<area shape="rect" id="node20" href="class_s_h_a3.html#a73366807c0e51843ccea1cf85107c9b1" title="SHA3::keccakUpdate" alt="" coords="1387,227,1533,254"/>
+<area shape="rect" id="node26" href="class_s_h_a3.html#a7d8a29c9f21aa0cacc571fe49ab0afec" title="SHA3::keccakDigest" alt="" coords="1389,278,1531,305"/>
+<area shape="rect" id="node29" href="class_s_h_a3.html#a2ae9bd8b90a901d36a8021127da39c8a" title="SHA3::shakeDigest" alt="" coords="1392,177,1528,203"/>
+<area shape="rect" id="node31" href="class_s_h_a3.html#a386b029a35588716aa48a81067a1994e" title="SHA3::sha3Digest" alt="" coords="1395,329,1525,355"/>
+<area shape="rect" id="node21" href="class_s_h_a3.html#a5a5205699123a4288b30f0f9ccab1ab8" title="SHA3::keccakProcessBuffer" alt="" coords="1581,227,1768,254"/>
+<area shape="rect" id="node22" href="endian_8h.html#aac7228dc3b0fe1141e61ca04e370ad6e" title="htole64" alt="" coords="1839,329,1903,355"/>
+<area shape="rect" id="node23" href="class_s_h_a3.html#a11ba8b247bd7d31abc23d6915cb1e04f" title="SHA3::keccakf" alt="" coords="1816,227,1925,254"/>
+<area shape="rect" id="node24" href="class_s_h_a3.html#a9a98993ded432c03e83c68add6d3a55d" title="SHA3::index" alt="" coords="1973,202,2068,229"/>
+<area shape="rect" id="node25" href="sha3_8cpp.html#a4fe6356aedd5a4f3d3045a8ad14c7790" title="rotateLeft" alt="" coords="1983,253,2059,279"/>
+<area shape="rect" id="node27" href="class_s_h_a3.html#ac1dbeeeb54715914a96dbf77f1cea2ef" title="SHA3::keccakAddPadding" alt="" coords="1587,329,1763,355"/>
+<area shape="rect" id="node28" href="class_s_h_a3.html#a319d3cb0a2700d5c35d4a1d6fcd2a93a" title="SHA3::keccakReset" alt="" coords="1605,278,1745,305"/>
+<area shape="rect" id="node30" href="class_s_h_a3.html#a7d951d5193dd120fa6f344282d41decd" title="SHA3::shakeAddPadding" alt="" coords="1590,177,1759,203"/>
+<area shape="rect" id="node32" href="class_s_h_a3.html#a76e18fa0fbc382c7b9a4a0b7084a9c83" title="SHA3::sha3AddPadding" alt="" coords="1593,481,1756,507"/>
+</map>
+</div>
+<div class="dynheader">
+Here is the caller graph for this function:</div>
+<div class="dyncontent">
+<div class="center"><img src="namespace_m_c_p06_a9550da66e839ff2ba87cfa1fd10329c6_icgraph.png" border="0" usemap="#namespace_m_c_p06_a9550da66e839ff2ba87cfa1fd10329c6_icgraph" alt=""/></div>
+<map name="namespace_m_c_p06_a9550da66e839ff2ba87cfa1fd10329c6_icgraph" id="namespace_m_c_p06_a9550da66e839ff2ba87cfa1fd10329c6_icgraph">
+<area shape="rect" id="node2" href="namespace_m_c_p06.html#a9b85506415dacda93990e22407a5ebad" title="MCP06::set_error" alt="" coords="264,100,388,127"/>
+<area shape="rect" id="node4" href="class_m_c_p06_1_1script_interpreter.html#a3eafe91afef52589c930523a3622ceff" title="MCP06::scriptInterpreter\l::evalScript" alt="" coords="939,102,1101,143"/>
+<area shape="rect" id="node3" href="namespace_m_c_p06.html#a8f6f47053b9a9a2da5611d97476aa4ad" title="MCP06::CheckSignatureEncoding" alt="" coords="672,68,891,95"/>
+<area shape="rect" id="node5" href="class_m_c_p06_1_1script_interpreter.html#ad5ba77a236bf73c6c07789ce4caa64d9" title="MCP06::scriptInterpreter\l::verifyScript" alt="" coords="1149,14,1312,55"/>
+<area shape="rect" id="node6" href="namespace_m_c_p06.html#ab7e18c570bf486524a2559808767ea28" title="MCP06::IsLowDERSignature" alt="" coords="436,100,624,127"/>
+</map>
+</div>
+
+</div>
+</div>
+<a id="a8f6f47053b9a9a2da5611d97476aa4ad"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a8f6f47053b9a9a2da5611d97476aa4ad">&#9670;&nbsp;</a></span>CheckSignatureEncoding()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool MCP06::CheckSignatureEncoding </td>
+          <td>(</td>
+          <td class="paramtype">const std::vector&lt; unsigned char &gt; &amp;&#160;</td>
+          <td class="paramname"><em>vchSig</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">unsigned <a class="el" href="ioapi_8h.html#a787fa3cf048117ba7123753c1e74fcd6">int</a>&#160;</td>
+          <td class="paramname"><em>flags</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="namespace_m_c_p06.html#af26c6b159344fe2a13464ff253c088f2">scriptError</a> *&#160;</td>
+          <td class="paramname"><em>serror</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="script_functions_8cpp_source.html#l00033">33</a> of file <a class="el" href="script_functions_8cpp_source.html">scriptFunctions.cpp</a>.</p>
+<div class="dynheader">
+Here is the call graph for this function:</div>
+<div class="dyncontent">
+<div class="center"><img src="namespace_m_c_p06_a8f6f47053b9a9a2da5611d97476aa4ad_cgraph.png" border="0" usemap="#namespace_m_c_p06_a8f6f47053b9a9a2da5611d97476aa4ad_cgraph" alt=""/></div>
+<map name="namespace_m_c_p06_a8f6f47053b9a9a2da5611d97476aa4ad_cgraph" id="namespace_m_c_p06_a8f6f47053b9a9a2da5611d97476aa4ad_cgraph">
+<area shape="rect" id="node2" href="namespace_m_c_p06.html#a2d608b9b2395b6737872f77525e4fec2" title="MCP06::IsValidSignatureEncoding" alt="" coords="721,32,942,59"/>
+<area shape="rect" id="node3" href="namespace_m_c_p06.html#a9b85506415dacda93990e22407a5ebad" title="MCP06::set_error" alt="" coords="272,235,396,261"/>
+<area shape="rect" id="node6" href="namespace_m_c_p06.html#ab7e18c570bf486524a2559808767ea28" title="MCP06::IsLowDERSignature" alt="" coords="455,32,643,59"/>
+<area shape="rect" id="node9" href="namespace_m_c_p06.html#a130afa47660cdb19760167ff8b7ec735" title="MCP06::IsDefinedHashtype\lSignature" alt="" coords="459,489,640,530"/>
+<area shape="rect" id="node4" href="namespace_m_c_p06.html#a22bdcf198c2bdec05c91ea1ac39514a9" title="MCP06::scriptErrorString" alt="" coords="466,184,633,211"/>
+<area shape="rect" id="node5" href="namespace_m_c_p06.html#ad0e26ee774d2f0f1aa149009e2639c8a" title="MCP06::CastToBool" alt="" coords="479,285,619,312"/>
+<area shape="rect" id="node7" href="namespace_m_c_p06.html#a808e9f68fd0767b1fea80d97dbbb0e41" title="MCP06::IsCompressedOrUncompressed\lPubKey" alt="" coords="703,354,960,395"/>
+<area shape="rect" id="node8" href="namespace_m_c_p06.html#a5838467c749ff2d4a3e313885879de4a" title="MCP06::IsCompressedPubKey" alt="" coords="448,437,651,464"/>
+<area shape="rect" id="node10" href="namespace_m_c_p06.html#a9550da66e839ff2ba87cfa1fd10329c6" title="MCP06::CheckPubKeyEncoding" alt="" coords="444,336,655,363"/>
+<area shape="rect" id="node11" href="namespace_m_c_p06.html#ad9b2d4d53f86c27fc8255da6ec3afca9" title="MCP06::CheckMinimalPush" alt="" coords="457,133,642,160"/>
+<area shape="rect" id="node12" href="namespace_m_c_p06.html#aa9fd34ce6b1659d69d5697dfb941c361" title="MCP06::signatureHash" alt="" coords="471,235,627,261"/>
+<area shape="rect" id="node13" href="uint256_8h.html#a52e679560cc1ebf68f878ed69e38f259" title="uint256S" alt="" coords="795,264,868,291"/>
+<area shape="rect" id="node15" href="class_m_c_p03_1_1cr_transaction.html#afac6ce20474c5c7670eabca341ed9b14" title="MCP03::crTransaction\l::calcHash" alt="" coords="756,198,907,239"/>
+<area shape="rect" id="node14" href="classbase__blob.html#a5ec1f681a2830f4e180fe664c0eb4dd0" title="base_blob::SetHex" alt="" coords="1008,264,1140,291"/>
+<area shape="rect" id="node16" href="class_s_h_a3.html#a13f576c2f05cc9a826067e04c6a4dd6f" title="SHA3::hash256" alt="" coords="1017,205,1131,232"/>
+<area shape="rect" id="node17" href="class_s_h_a3.html#a5f7389b5995e1f7fcfa603312909187b" title="SHA3::hash" alt="" coords="1188,205,1280,232"/>
+<area shape="rect" id="node18" href="class_s_h_a3.html#abdef02bf296d177311943602ddf41a28" title="SHA3::shakeCreate" alt="" coords="1333,79,1470,105"/>
+<area shape="rect" id="node19" href="class_s_h_a3.html#abee8dad3de624f240790d2866e148c24" title="SHA3::keccakCreate" alt="" coords="1329,129,1473,156"/>
+<area shape="rect" id="node20" href="class_s_h_a3.html#a73366807c0e51843ccea1cf85107c9b1" title="SHA3::keccakUpdate" alt="" coords="1328,231,1475,257"/>
+<area shape="rect" id="node26" href="class_s_h_a3.html#a7d8a29c9f21aa0cacc571fe49ab0afec" title="SHA3::keccakDigest" alt="" coords="1330,281,1473,308"/>
+<area shape="rect" id="node29" href="class_s_h_a3.html#a2ae9bd8b90a901d36a8021127da39c8a" title="SHA3::shakeDigest" alt="" coords="1333,180,1469,207"/>
+<area shape="rect" id="node31" href="class_s_h_a3.html#a386b029a35588716aa48a81067a1994e" title="SHA3::sha3Digest" alt="" coords="1337,332,1466,359"/>
+<area shape="rect" id="node21" href="class_s_h_a3.html#a5a5205699123a4288b30f0f9ccab1ab8" title="SHA3::keccakProcessBuffer" alt="" coords="1523,231,1709,257"/>
+<area shape="rect" id="node22" href="endian_8h.html#aac7228dc3b0fe1141e61ca04e370ad6e" title="htole64" alt="" coords="1780,332,1844,359"/>
+<area shape="rect" id="node23" href="class_s_h_a3.html#a11ba8b247bd7d31abc23d6915cb1e04f" title="SHA3::keccakf" alt="" coords="1757,231,1867,257"/>
+<area shape="rect" id="node24" href="class_s_h_a3.html#a9a98993ded432c03e83c68add6d3a55d" title="SHA3::index" alt="" coords="1915,205,2009,232"/>
+<area shape="rect" id="node25" href="sha3_8cpp.html#a4fe6356aedd5a4f3d3045a8ad14c7790" title="rotateLeft" alt="" coords="1924,256,2000,283"/>
+<area shape="rect" id="node27" href="class_s_h_a3.html#ac1dbeeeb54715914a96dbf77f1cea2ef" title="SHA3::keccakAddPadding" alt="" coords="1528,332,1704,359"/>
+<area shape="rect" id="node28" href="class_s_h_a3.html#a319d3cb0a2700d5c35d4a1d6fcd2a93a" title="SHA3::keccakReset" alt="" coords="1546,281,1686,308"/>
+<area shape="rect" id="node30" href="class_s_h_a3.html#a7d951d5193dd120fa6f344282d41decd" title="SHA3::shakeAddPadding" alt="" coords="1531,180,1701,207"/>
+<area shape="rect" id="node32" href="class_s_h_a3.html#a76e18fa0fbc382c7b9a4a0b7084a9c83" title="SHA3::sha3AddPadding" alt="" coords="1535,484,1697,511"/>
+</map>
+</div>
+<div class="dynheader">
+Here is the caller graph for this function:</div>
+<div class="dyncontent">
+<div class="center"><img src="namespace_m_c_p06_a8f6f47053b9a9a2da5611d97476aa4ad_icgraph.png" border="0" usemap="#namespace_m_c_p06_a8f6f47053b9a9a2da5611d97476aa4ad_icgraph" alt=""/></div>
+<map name="namespace_m_c_p06_a8f6f47053b9a9a2da5611d97476aa4ad_icgraph" id="namespace_m_c_p06_a8f6f47053b9a9a2da5611d97476aa4ad_icgraph">
+<area shape="rect" id="node2" href="namespace_m_c_p06.html#a9b85506415dacda93990e22407a5ebad" title="MCP06::set_error" alt="" coords="272,95,396,121"/>
+<area shape="rect" id="node5" href="class_m_c_p06_1_1script_interpreter.html#a3eafe91afef52589c930523a3622ceff" title="MCP06::scriptInterpreter\l::evalScript" alt="" coords="703,129,865,170"/>
+<area shape="rect" id="node3" href="namespace_m_c_p06.html#ab7e18c570bf486524a2559808767ea28" title="MCP06::IsLowDERSignature" alt="" coords="455,5,643,32"/>
+<area shape="rect" id="node4" href="namespace_m_c_p06.html#a9550da66e839ff2ba87cfa1fd10329c6" title="MCP06::CheckPubKeyEncoding" alt="" coords="444,157,655,184"/>
+<area shape="rect" id="node6" href="class_m_c_p06_1_1script_interpreter.html#ad5ba77a236bf73c6c07789ce4caa64d9" title="MCP06::scriptInterpreter\l::verifyScript" alt="" coords="913,89,1076,130"/>
+</map>
+</div>
+
+</div>
+</div>
 <a id="ac9760b4158b8fe44483b6ead9c0ad759"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#ac9760b4158b8fe44483b6ead9c0ad759">&#9670;&nbsp;</a></span>GetOpName()</h2>
 
@@ -600,27 +939,464 @@ Variables</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="script_8cpp_source.html#l00013">13</a> of file <a class="el" href="script_8cpp_source.html">script.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="script_8cpp_source.html#l00019">19</a> of file <a class="el" href="script_8cpp_source.html">script.cpp</a>.</p>
 
 </div>
 </div>
-<a id="adc529cc0d5ca4ccdf2c9ce5962036539"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#adc529cc0d5ca4ccdf2c9ce5962036539">&#9670;&nbsp;</a></span>ScriptErrorString()</h2>
+<a id="a808e9f68fd0767b1fea80d97dbbb0e41"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a808e9f68fd0767b1fea80d97dbbb0e41">&#9670;&nbsp;</a></span>IsCompressedOrUncompressedPubKey()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">const char * MCP06::ScriptErrorString </td>
+          <td class="memname">bool MCP06::IsCompressedOrUncompressedPubKey </td>
           <td>(</td>
-          <td class="paramtype">const <a class="el" href="namespace_m_c_p06.html#a21d699c8b29cd0a58ec16824378c4a19">ScriptError</a>&#160;</td>
-          <td class="paramname"><em>serror</em></td><td>)</td>
+          <td class="paramtype">const <a class="el" href="namespace_m_c_p06.html#aa3a3f1f0ff9a6f0c68cbc7401abd0dfd">valtype</a> &amp;&#160;</td>
+          <td class="paramname"><em>vchPubKey</em></td><td>)</td>
           <td></td>
         </tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="script__error_8cpp_source.html#l00010">10</a> of file <a class="el" href="script__error_8cpp_source.html">script_error.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="script_functions_8cpp_source.html#l00143">143</a> of file <a class="el" href="script_functions_8cpp_source.html">scriptFunctions.cpp</a>.</p>
+<div class="dynheader">
+Here is the caller graph for this function:</div>
+<div class="dyncontent">
+<div class="center"><img src="namespace_m_c_p06_a808e9f68fd0767b1fea80d97dbbb0e41_icgraph.png" border="0" usemap="#namespace_m_c_p06_a808e9f68fd0767b1fea80d97dbbb0e41_icgraph" alt=""/></div>
+<map name="namespace_m_c_p06_a808e9f68fd0767b1fea80d97dbbb0e41_icgraph" id="namespace_m_c_p06_a808e9f68fd0767b1fea80d97dbbb0e41_icgraph">
+<area shape="rect" id="node2" href="namespace_m_c_p06.html#a9550da66e839ff2ba87cfa1fd10329c6" title="MCP06::CheckPubKeyEncoding" alt="" coords="311,125,521,151"/>
+<area shape="rect" id="node3" href="namespace_m_c_p06.html#a9b85506415dacda93990e22407a5ebad" title="MCP06::set_error" alt="" coords="569,99,693,126"/>
+<area shape="rect" id="node5" href="class_m_c_p06_1_1script_interpreter.html#a3eafe91afef52589c930523a3622ceff" title="MCP06::scriptInterpreter\l::evalScript" alt="" coords="1244,103,1407,144"/>
+<area shape="rect" id="node4" href="namespace_m_c_p06.html#a8f6f47053b9a9a2da5611d97476aa4ad" title="MCP06::CheckSignatureEncoding" alt="" coords="977,69,1196,95"/>
+<area shape="rect" id="node6" href="class_m_c_p06_1_1script_interpreter.html#ad5ba77a236bf73c6c07789ce4caa64d9" title="MCP06::scriptInterpreter\l::verifyScript" alt="" coords="1455,15,1617,56"/>
+<area shape="rect" id="node7" href="namespace_m_c_p06.html#ab7e18c570bf486524a2559808767ea28" title="MCP06::IsLowDERSignature" alt="" coords="741,99,929,126"/>
+</map>
+</div>
+
+</div>
+</div>
+<a id="a5838467c749ff2d4a3e313885879de4a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a5838467c749ff2d4a3e313885879de4a">&#9670;&nbsp;</a></span>IsCompressedPubKey()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool MCP06::IsCompressedPubKey </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="namespace_m_c_p06.html#aa3a3f1f0ff9a6f0c68cbc7401abd0dfd">valtype</a> &amp;&#160;</td>
+          <td class="paramname"><em>vchPubKey</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="script_functions_8cpp_source.html#l00168">168</a> of file <a class="el" href="script_functions_8cpp_source.html">scriptFunctions.cpp</a>.</p>
+<div class="dynheader">
+Here is the caller graph for this function:</div>
+<div class="dyncontent">
+<div class="center"><img src="namespace_m_c_p06_a5838467c749ff2d4a3e313885879de4a_icgraph.png" border="0" usemap="#namespace_m_c_p06_a5838467c749ff2d4a3e313885879de4a_icgraph" alt=""/></div>
+<map name="namespace_m_c_p06_a5838467c749ff2d4a3e313885879de4a_icgraph" id="namespace_m_c_p06_a5838467c749ff2d4a3e313885879de4a_icgraph">
+<area shape="rect" id="node2" href="namespace_m_c_p06.html#a9b85506415dacda93990e22407a5ebad" title="MCP06::set_error" alt="" coords="256,100,380,127"/>
+<area shape="rect" id="node3" href="namespace_m_c_p06.html#a8f6f47053b9a9a2da5611d97476aa4ad" title="MCP06::CheckSignatureEncoding" alt="" coords="687,100,905,127"/>
+<area shape="rect" id="node4" href="class_m_c_p06_1_1script_interpreter.html#a3eafe91afef52589c930523a3622ceff" title="MCP06::scriptInterpreter\l::evalScript" alt="" coords="953,130,1116,171"/>
+<area shape="rect" id="node5" href="class_m_c_p06_1_1script_interpreter.html#ad5ba77a236bf73c6c07789ce4caa64d9" title="MCP06::scriptInterpreter\l::verifyScript" alt="" coords="1164,178,1327,219"/>
+<area shape="rect" id="node6" href="namespace_m_c_p06.html#ab7e18c570bf486524a2559808767ea28" title="MCP06::IsLowDERSignature" alt="" coords="439,131,627,157"/>
+<area shape="rect" id="node7" href="namespace_m_c_p06.html#a9550da66e839ff2ba87cfa1fd10329c6" title="MCP06::CheckPubKeyEncoding" alt="" coords="428,5,639,32"/>
+</map>
+</div>
+
+</div>
+</div>
+<a id="a130afa47660cdb19760167ff8b7ec735"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a130afa47660cdb19760167ff8b7ec735">&#9670;&nbsp;</a></span>IsDefinedHashtypeSignature()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool MCP06::IsDefinedHashtypeSignature </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="namespace_m_c_p06.html#aa3a3f1f0ff9a6f0c68cbc7401abd0dfd">valtype</a> &amp;&#160;</td>
+          <td class="paramname"><em>vchSig</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="script_functions_8cpp_source.html#l00181">181</a> of file <a class="el" href="script_functions_8cpp_source.html">scriptFunctions.cpp</a>.</p>
+<div class="dynheader">
+Here is the caller graph for this function:</div>
+<div class="dyncontent">
+<div class="center"><img src="namespace_m_c_p06_a130afa47660cdb19760167ff8b7ec735_icgraph.png" border="0" usemap="#namespace_m_c_p06_a130afa47660cdb19760167ff8b7ec735_icgraph" alt=""/></div>
+<map name="namespace_m_c_p06_a130afa47660cdb19760167ff8b7ec735_icgraph" id="namespace_m_c_p06_a130afa47660cdb19760167ff8b7ec735_icgraph">
+<area shape="rect" id="node2" href="namespace_m_c_p06.html#a8f6f47053b9a9a2da5611d97476aa4ad" title="MCP06::CheckSignatureEncoding" alt="" coords="235,125,453,151"/>
+<area shape="rect" id="node3" href="namespace_m_c_p06.html#a9b85506415dacda93990e22407a5ebad" title="MCP06::set_error" alt="" coords="501,74,625,101"/>
+<area shape="rect" id="node6" href="class_m_c_p06_1_1script_interpreter.html#a3eafe91afef52589c930523a3622ceff" title="MCP06::scriptInterpreter\l::evalScript" alt="" coords="932,45,1095,87"/>
+<area shape="rect" id="node4" href="namespace_m_c_p06.html#ab7e18c570bf486524a2559808767ea28" title="MCP06::IsLowDERSignature" alt="" coords="685,125,873,151"/>
+<area shape="rect" id="node5" href="namespace_m_c_p06.html#a9550da66e839ff2ba87cfa1fd10329c6" title="MCP06::CheckPubKeyEncoding" alt="" coords="673,74,884,101"/>
+<area shape="rect" id="node7" href="class_m_c_p06_1_1script_interpreter.html#ad5ba77a236bf73c6c07789ce4caa64d9" title="MCP06::scriptInterpreter\l::verifyScript" alt="" coords="1143,5,1305,47"/>
+</map>
+</div>
+
+</div>
+</div>
+<a id="ab7e18c570bf486524a2559808767ea28"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab7e18c570bf486524a2559808767ea28">&#9670;&nbsp;</a></span>IsLowDERSignature()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool MCP06::IsLowDERSignature </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="namespace_m_c_p06.html#aa3a3f1f0ff9a6f0c68cbc7401abd0dfd">valtype</a> &amp;&#160;</td>
+          <td class="paramname"><em>vchSig</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="namespace_m_c_p06.html#af26c6b159344fe2a13464ff253c088f2">scriptError</a> *&#160;</td>
+          <td class="paramname"><em>serror</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="script_functions_8cpp_source.html#l00053">53</a> of file <a class="el" href="script_functions_8cpp_source.html">scriptFunctions.cpp</a>.</p>
+<div class="dynheader">
+Here is the call graph for this function:</div>
+<div class="dyncontent">
+<div class="center"><img src="namespace_m_c_p06_ab7e18c570bf486524a2559808767ea28_cgraph.png" border="0" usemap="#namespace_m_c_p06_ab7e18c570bf486524a2559808767ea28_cgraph" alt=""/></div>
+<map name="namespace_m_c_p06_ab7e18c570bf486524a2559808767ea28_cgraph" id="namespace_m_c_p06_ab7e18c570bf486524a2559808767ea28_cgraph">
+<area shape="rect" id="node2" href="namespace_m_c_p06.html#a2d608b9b2395b6737872f77525e4fec2" title="MCP06::IsValidSignatureEncoding" alt="" coords="698,28,919,54"/>
+<area shape="rect" id="node3" href="namespace_m_c_p06.html#a9b85506415dacda93990e22407a5ebad" title="MCP06::set_error" alt="" coords="241,205,365,232"/>
+<area shape="rect" id="node4" href="namespace_m_c_p06.html#a22bdcf198c2bdec05c91ea1ac39514a9" title="MCP06::scriptErrorString" alt="" coords="439,332,606,358"/>
+<area shape="rect" id="node5" href="namespace_m_c_p06.html#ad0e26ee774d2f0f1aa149009e2639c8a" title="MCP06::CastToBool" alt="" coords="453,382,593,409"/>
+<area shape="rect" id="node6" href="namespace_m_c_p06.html#a8f6f47053b9a9a2da5611d97476aa4ad" title="MCP06::CheckSignatureEncoding" alt="" coords="413,28,632,54"/>
+<area shape="rect" id="node7" href="namespace_m_c_p06.html#a130afa47660cdb19760167ff8b7ec735" title="MCP06::IsDefinedHashtype\lSignature" alt="" coords="718,126,899,167"/>
+<area shape="rect" id="node8" href="namespace_m_c_p06.html#a808e9f68fd0767b1fea80d97dbbb0e41" title="MCP06::IsCompressedOrUncompressed\lPubKey" alt="" coords="680,316,937,358"/>
+<area shape="rect" id="node9" href="namespace_m_c_p06.html#a5838467c749ff2d4a3e313885879de4a" title="MCP06::IsCompressedPubKey" alt="" coords="421,129,624,156"/>
+<area shape="rect" id="node10" href="namespace_m_c_p06.html#a9550da66e839ff2ba87cfa1fd10329c6" title="MCP06::CheckPubKeyEncoding" alt="" coords="417,281,628,308"/>
+<area shape="rect" id="node11" href="namespace_m_c_p06.html#ad9b2d4d53f86c27fc8255da6ec3afca9" title="MCP06::CheckMinimalPush" alt="" coords="430,230,615,257"/>
+<area shape="rect" id="node12" href="namespace_m_c_p06.html#aa9fd34ce6b1659d69d5697dfb941c361" title="MCP06::signatureHash" alt="" coords="445,484,601,510"/>
+<area shape="rect" id="node13" href="uint256_8h.html#a52e679560cc1ebf68f878ed69e38f259" title="uint256S" alt="" coords="772,454,845,481"/>
+<area shape="rect" id="node15" href="class_m_c_p03_1_1cr_transaction.html#afac6ce20474c5c7670eabca341ed9b14" title="MCP03::crTransaction\l::calcHash" alt="" coords="733,506,884,547"/>
+<area shape="rect" id="node14" href="classbase__blob.html#a5ec1f681a2830f4e180fe664c0eb4dd0" title="base_blob::SetHex" alt="" coords="985,454,1117,481"/>
+<area shape="rect" id="node16" href="class_s_h_a3.html#a13f576c2f05cc9a826067e04c6a4dd6f" title="SHA3::hash256" alt="" coords="995,513,1108,540"/>
+<area shape="rect" id="node17" href="class_s_h_a3.html#a5f7389b5995e1f7fcfa603312909187b" title="SHA3::hash" alt="" coords="1165,513,1257,540"/>
+<area shape="rect" id="node18" href="class_s_h_a3.html#abdef02bf296d177311943602ddf41a28" title="SHA3::shakeCreate" alt="" coords="1310,386,1447,413"/>
+<area shape="rect" id="node19" href="class_s_h_a3.html#abee8dad3de624f240790d2866e148c24" title="SHA3::keccakCreate" alt="" coords="1307,437,1451,464"/>
+<area shape="rect" id="node20" href="class_s_h_a3.html#a73366807c0e51843ccea1cf85107c9b1" title="SHA3::keccakUpdate" alt="" coords="1305,538,1452,565"/>
+<area shape="rect" id="node26" href="class_s_h_a3.html#a7d8a29c9f21aa0cacc571fe49ab0afec" title="SHA3::keccakDigest" alt="" coords="1307,488,1450,514"/>
+<area shape="rect" id="node29" href="class_s_h_a3.html#a2ae9bd8b90a901d36a8021127da39c8a" title="SHA3::shakeDigest" alt="" coords="1311,589,1447,616"/>
+<area shape="rect" id="node31" href="class_s_h_a3.html#a386b029a35588716aa48a81067a1994e" title="SHA3::sha3Digest" alt="" coords="1314,640,1443,666"/>
+<area shape="rect" id="node21" href="class_s_h_a3.html#a5a5205699123a4288b30f0f9ccab1ab8" title="SHA3::keccakProcessBuffer" alt="" coords="1500,538,1687,565"/>
+<area shape="rect" id="node22" href="endian_8h.html#aac7228dc3b0fe1141e61ca04e370ad6e" title="htole64" alt="" coords="1757,614,1821,641"/>
+<area shape="rect" id="node23" href="class_s_h_a3.html#a11ba8b247bd7d31abc23d6915cb1e04f" title="SHA3::keccakf" alt="" coords="1735,538,1844,565"/>
+<area shape="rect" id="node24" href="class_s_h_a3.html#a9a98993ded432c03e83c68add6d3a55d" title="SHA3::index" alt="" coords="1892,513,1987,540"/>
+<area shape="rect" id="node25" href="sha3_8cpp.html#a4fe6356aedd5a4f3d3045a8ad14c7790" title="rotateLeft" alt="" coords="1901,564,1977,590"/>
+<area shape="rect" id="node27" href="class_s_h_a3.html#ac1dbeeeb54715914a96dbf77f1cea2ef" title="SHA3::keccakAddPadding" alt="" coords="1505,437,1681,464"/>
+<area shape="rect" id="node28" href="class_s_h_a3.html#a319d3cb0a2700d5c35d4a1d6fcd2a93a" title="SHA3::keccakReset" alt="" coords="1523,589,1663,616"/>
+<area shape="rect" id="node30" href="class_s_h_a3.html#a7d951d5193dd120fa6f344282d41decd" title="SHA3::shakeAddPadding" alt="" coords="1509,690,1678,717"/>
+<area shape="rect" id="node32" href="class_s_h_a3.html#a76e18fa0fbc382c7b9a4a0b7084a9c83" title="SHA3::sha3AddPadding" alt="" coords="1512,792,1675,818"/>
+</map>
+</div>
+<div class="dynheader">
+Here is the caller graph for this function:</div>
+<div class="dyncontent">
+<div class="center"><img src="namespace_m_c_p06_ab7e18c570bf486524a2559808767ea28_icgraph.png" border="0" usemap="#namespace_m_c_p06_ab7e18c570bf486524a2559808767ea28_icgraph" alt=""/></div>
+<map name="namespace_m_c_p06_ab7e18c570bf486524a2559808767ea28_icgraph" id="namespace_m_c_p06_ab7e18c570bf486524a2559808767ea28_icgraph">
+<area shape="rect" id="node2" href="namespace_m_c_p06.html#a8f6f47053b9a9a2da5611d97476aa4ad" title="MCP06::CheckSignatureEncoding" alt="" coords="241,97,460,123"/>
+<area shape="rect" id="node3" href="namespace_m_c_p06.html#a9b85506415dacda93990e22407a5ebad" title="MCP06::set_error" alt="" coords="508,34,632,61"/>
+<area shape="rect" id="node5" href="class_m_c_p06_1_1script_interpreter.html#a3eafe91afef52589c930523a3622ceff" title="MCP06::scriptInterpreter\l::evalScript" alt="" coords="939,56,1101,97"/>
+<area shape="rect" id="node4" href="namespace_m_c_p06.html#a9550da66e839ff2ba87cfa1fd10329c6" title="MCP06::CheckPubKeyEncoding" alt="" coords="680,34,891,61"/>
+<area shape="rect" id="node6" href="class_m_c_p06_1_1script_interpreter.html#ad5ba77a236bf73c6c07789ce4caa64d9" title="MCP06::scriptInterpreter\l::verifyScript" alt="" coords="1149,5,1312,47"/>
+</map>
+</div>
+
+</div>
+</div>
+<a id="a2d608b9b2395b6737872f77525e4fec2"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2d608b9b2395b6737872f77525e4fec2">&#9670;&nbsp;</a></span>IsValidSignatureEncoding()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool MCP06::IsValidSignatureEncoding </td>
+          <td>(</td>
+          <td class="paramtype">const std::vector&lt; unsigned char &gt; &amp;&#160;</td>
+          <td class="paramname"><em>sig</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>A canonical signature exists of: &lt;30&gt; &lt;total len&gt;=""&gt; &lt;02&gt; &lt;len r&gt;=""&gt; &lt;R&gt; &lt;02&gt; &lt;len s&gt;=""&gt; &lt;S&gt; &lt;hashtype&gt; Where R and S are not negative (their first byte has its highest bit not set), and not excessively padded (do not start with a 0 byte, unless an otherwise negative number follows, in which case a single 0 byte is necessary and even required).</p>
+<p>See <a href="https://bitcointalk.org/index.php?topic=8392.msg127623#msg127623">https://bitcointalk.org/index.php?topic=8392.msg127623#msg127623</a></p>
+<p>This function is consensus-critical since BIP66. </p>
+
+<p class="definition">Definition at line <a class="el" href="script_functions_8cpp_source.html#l00077">77</a> of file <a class="el" href="script_functions_8cpp_source.html">scriptFunctions.cpp</a>.</p>
+<div class="dynheader">
+Here is the caller graph for this function:</div>
+<div class="dyncontent">
+<div class="center"><img src="namespace_m_c_p06_a2d608b9b2395b6737872f77525e4fec2_icgraph.png" border="0" usemap="#namespace_m_c_p06_a2d608b9b2395b6737872f77525e4fec2_icgraph" alt=""/></div>
+<map name="namespace_m_c_p06_a2d608b9b2395b6737872f77525e4fec2_icgraph" id="namespace_m_c_p06_a2d608b9b2395b6737872f77525e4fec2_icgraph">
+<area shape="rect" id="node2" href="namespace_m_c_p06.html#a8f6f47053b9a9a2da5611d97476aa4ad" title="MCP06::CheckSignatureEncoding" alt="" coords="275,81,493,108"/>
+<area shape="rect" id="node3" href="namespace_m_c_p06.html#a9b85506415dacda93990e22407a5ebad" title="MCP06::set_error" alt="" coords="541,107,665,133"/>
+<area shape="rect" id="node4" href="namespace_m_c_p06.html#ab7e18c570bf486524a2559808767ea28" title="MCP06::IsLowDERSignature" alt="" coords="725,5,913,32"/>
+<area shape="rect" id="node6" href="class_m_c_p06_1_1script_interpreter.html#a3eafe91afef52589c930523a3622ceff" title="MCP06::scriptInterpreter\l::evalScript" alt="" coords="972,129,1135,170"/>
+<area shape="rect" id="node5" href="namespace_m_c_p06.html#a9550da66e839ff2ba87cfa1fd10329c6" title="MCP06::CheckPubKeyEncoding" alt="" coords="713,157,924,184"/>
+<area shape="rect" id="node7" href="class_m_c_p06_1_1script_interpreter.html#ad5ba77a236bf73c6c07789ce4caa64d9" title="MCP06::scriptInterpreter\l::verifyScript" alt="" coords="1183,89,1345,130"/>
+</map>
+</div>
+
+</div>
+</div>
+<a id="a22bdcf198c2bdec05c91ea1ac39514a9"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a22bdcf198c2bdec05c91ea1ac39514a9">&#9670;&nbsp;</a></span>scriptErrorString()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::string MCP06::scriptErrorString </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="namespace_m_c_p06.html#af26c6b159344fe2a13464ff253c088f2">scriptError</a>&#160;</td>
+          <td class="paramname"><em>err</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="script_error_8cpp_source.html#l00011">11</a> of file <a class="el" href="script_error_8cpp_source.html">scriptError.cpp</a>.</p>
+<div class="dynheader">
+Here is the caller graph for this function:</div>
+<div class="dyncontent">
+<div class="center"><img src="namespace_m_c_p06_a22bdcf198c2bdec05c91ea1ac39514a9_icgraph.png" border="0" usemap="#namespace_m_c_p06_a22bdcf198c2bdec05c91ea1ac39514a9_icgraph" alt=""/></div>
+<map name="namespace_m_c_p06_a22bdcf198c2bdec05c91ea1ac39514a9_icgraph" id="namespace_m_c_p06_a22bdcf198c2bdec05c91ea1ac39514a9_icgraph">
+<area shape="rect" id="node2" href="namespace_m_c_p06.html#a9b85506415dacda93990e22407a5ebad" title="MCP06::set_error" alt="" coords="220,100,344,127"/>
+<area shape="rect" id="node3" href="namespace_m_c_p06.html#a8f6f47053b9a9a2da5611d97476aa4ad" title="MCP06::CheckSignatureEncoding" alt="" coords="651,100,869,127"/>
+<area shape="rect" id="node4" href="class_m_c_p06_1_1script_interpreter.html#a3eafe91afef52589c930523a3622ceff" title="MCP06::scriptInterpreter\l::evalScript" alt="" coords="917,130,1080,171"/>
+<area shape="rect" id="node5" href="class_m_c_p06_1_1script_interpreter.html#ad5ba77a236bf73c6c07789ce4caa64d9" title="MCP06::scriptInterpreter\l::verifyScript" alt="" coords="1128,178,1291,219"/>
+<area shape="rect" id="node6" href="namespace_m_c_p06.html#ab7e18c570bf486524a2559808767ea28" title="MCP06::IsLowDERSignature" alt="" coords="403,131,591,157"/>
+<area shape="rect" id="node7" href="namespace_m_c_p06.html#a9550da66e839ff2ba87cfa1fd10329c6" title="MCP06::CheckPubKeyEncoding" alt="" coords="392,5,603,32"/>
+</map>
+</div>
+
+</div>
+</div>
+<a id="a9b85506415dacda93990e22407a5ebad"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a9b85506415dacda93990e22407a5ebad">&#9670;&nbsp;</a></span>set_error()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool MCP06::set_error </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="namespace_m_c_p06.html#af26c6b159344fe2a13464ff253c088f2">scriptError</a> *&#160;</td>
+          <td class="paramname"><em>ret</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const <a class="el" href="namespace_m_c_p06.html#af26c6b159344fe2a13464ff253c088f2">scriptError</a>&#160;</td>
+          <td class="paramname"><em>serror</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="script_functions_8h_source.html#l00038">38</a> of file <a class="el" href="script_functions_8h_source.html">scriptFunctions.h</a>.</p>
+<div class="dynheader">
+Here is the call graph for this function:</div>
+<div class="dyncontent">
+<div class="center"><img src="namespace_m_c_p06_a9b85506415dacda93990e22407a5ebad_cgraph.png" border="0" usemap="#namespace_m_c_p06_a9b85506415dacda93990e22407a5ebad_cgraph" alt=""/></div>
+<map name="namespace_m_c_p06_a9b85506415dacda93990e22407a5ebad_cgraph" id="namespace_m_c_p06_a9b85506415dacda93990e22407a5ebad_cgraph">
+<area shape="rect" id="node2" href="namespace_m_c_p06.html#a22bdcf198c2bdec05c91ea1ac39514a9" title="MCP06::scriptErrorString" alt="" coords="203,5,370,32"/>
+<area shape="rect" id="node3" href="namespace_m_c_p06.html#ad0e26ee774d2f0f1aa149009e2639c8a" title="MCP06::CastToBool" alt="" coords="217,56,357,83"/>
+<area shape="rect" id="node4" href="namespace_m_c_p06.html#a8f6f47053b9a9a2da5611d97476aa4ad" title="MCP06::CheckSignatureEncoding" alt="" coords="177,232,396,259"/>
+<area shape="rect" id="node5" href="namespace_m_c_p06.html#a2d608b9b2395b6737872f77525e4fec2" title="MCP06::IsValidSignatureEncoding" alt="" coords="749,169,971,196"/>
+<area shape="rect" id="node6" href="namespace_m_c_p06.html#ab7e18c570bf486524a2559808767ea28" title="MCP06::IsLowDERSignature" alt="" coords="479,169,667,196"/>
+<area shape="rect" id="node7" href="namespace_m_c_p06.html#a130afa47660cdb19760167ff8b7ec735" title="MCP06::IsDefinedHashtype\lSignature" alt="" coords="482,274,663,315"/>
+<area shape="rect" id="node8" href="namespace_m_c_p06.html#a808e9f68fd0767b1fea80d97dbbb0e41" title="MCP06::IsCompressedOrUncompressed\lPubKey" alt="" coords="444,371,701,413"/>
+<area shape="rect" id="node9" href="namespace_m_c_p06.html#a5838467c749ff2d4a3e313885879de4a" title="MCP06::IsCompressedPubKey" alt="" coords="185,384,388,411"/>
+<area shape="rect" id="node10" href="namespace_m_c_p06.html#a9550da66e839ff2ba87cfa1fd10329c6" title="MCP06::CheckPubKeyEncoding" alt="" coords="181,333,392,360"/>
+<area shape="rect" id="node11" href="namespace_m_c_p06.html#ad9b2d4d53f86c27fc8255da6ec3afca9" title="MCP06::CheckMinimalPush" alt="" coords="194,485,379,512"/>
+<area shape="rect" id="node12" href="namespace_m_c_p06.html#aa9fd34ce6b1659d69d5697dfb941c361" title="MCP06::signatureHash" alt="" coords="209,536,365,563"/>
+<area shape="rect" id="node13" href="uint256_8h.html#a52e679560cc1ebf68f878ed69e38f259" title="uint256S" alt="" coords="536,565,609,592"/>
+<area shape="rect" id="node15" href="class_m_c_p03_1_1cr_transaction.html#afac6ce20474c5c7670eabca341ed9b14" title="MCP03::crTransaction\l::calcHash" alt="" coords="497,499,648,541"/>
+<area shape="rect" id="node14" href="classbase__blob.html#a5ec1f681a2830f4e180fe664c0eb4dd0" title="base_blob::SetHex" alt="" coords="794,565,926,592"/>
+<area shape="rect" id="node16" href="class_s_h_a3.html#a13f576c2f05cc9a826067e04c6a4dd6f" title="SHA3::hash256" alt="" coords="803,507,917,533"/>
+<area shape="rect" id="node17" href="class_s_h_a3.html#a5f7389b5995e1f7fcfa603312909187b" title="SHA3::hash" alt="" coords="1019,507,1111,533"/>
+<area shape="rect" id="node18" href="class_s_h_a3.html#abdef02bf296d177311943602ddf41a28" title="SHA3::shakeCreate" alt="" coords="1163,380,1301,407"/>
+<area shape="rect" id="node19" href="class_s_h_a3.html#abee8dad3de624f240790d2866e148c24" title="SHA3::keccakCreate" alt="" coords="1160,431,1304,457"/>
+<area shape="rect" id="node20" href="class_s_h_a3.html#a73366807c0e51843ccea1cf85107c9b1" title="SHA3::keccakUpdate" alt="" coords="1159,532,1305,559"/>
+<area shape="rect" id="node26" href="class_s_h_a3.html#a7d8a29c9f21aa0cacc571fe49ab0afec" title="SHA3::keccakDigest" alt="" coords="1161,481,1303,508"/>
+<area shape="rect" id="node29" href="class_s_h_a3.html#a2ae9bd8b90a901d36a8021127da39c8a" title="SHA3::shakeDigest" alt="" coords="1164,583,1300,609"/>
+<area shape="rect" id="node31" href="class_s_h_a3.html#a386b029a35588716aa48a81067a1994e" title="SHA3::sha3Digest" alt="" coords="1167,633,1297,660"/>
+<area shape="rect" id="node21" href="class_s_h_a3.html#a5a5205699123a4288b30f0f9ccab1ab8" title="SHA3::keccakProcessBuffer" alt="" coords="1353,532,1540,559"/>
+<area shape="rect" id="node22" href="endian_8h.html#aac7228dc3b0fe1141e61ca04e370ad6e" title="htole64" alt="" coords="1611,608,1675,635"/>
+<area shape="rect" id="node23" href="class_s_h_a3.html#a11ba8b247bd7d31abc23d6915cb1e04f" title="SHA3::keccakf" alt="" coords="1588,532,1697,559"/>
+<area shape="rect" id="node24" href="class_s_h_a3.html#a9a98993ded432c03e83c68add6d3a55d" title="SHA3::index" alt="" coords="1745,507,1840,533"/>
+<area shape="rect" id="node25" href="sha3_8cpp.html#a4fe6356aedd5a4f3d3045a8ad14c7790" title="rotateLeft" alt="" coords="1755,557,1831,584"/>
+<area shape="rect" id="node27" href="class_s_h_a3.html#ac1dbeeeb54715914a96dbf77f1cea2ef" title="SHA3::keccakAddPadding" alt="" coords="1359,431,1535,457"/>
+<area shape="rect" id="node28" href="class_s_h_a3.html#a319d3cb0a2700d5c35d4a1d6fcd2a93a" title="SHA3::keccakReset" alt="" coords="1377,583,1517,609"/>
+<area shape="rect" id="node30" href="class_s_h_a3.html#a7d951d5193dd120fa6f344282d41decd" title="SHA3::shakeAddPadding" alt="" coords="1362,684,1531,711"/>
+<area shape="rect" id="node32" href="class_s_h_a3.html#a76e18fa0fbc382c7b9a4a0b7084a9c83" title="SHA3::sha3AddPadding" alt="" coords="1365,785,1528,812"/>
+</map>
+</div>
+<div class="dynheader">
+Here is the caller graph for this function:</div>
+<div class="dyncontent">
+<div class="center"><img src="namespace_m_c_p06_a9b85506415dacda93990e22407a5ebad_icgraph.png" border="0" usemap="#namespace_m_c_p06_a9b85506415dacda93990e22407a5ebad_icgraph" alt=""/></div>
+<map name="namespace_m_c_p06_a9b85506415dacda93990e22407a5ebad_icgraph" id="namespace_m_c_p06_a9b85506415dacda93990e22407a5ebad_icgraph">
+<area shape="rect" id="node2" href="namespace_m_c_p06.html#a8f6f47053b9a9a2da5611d97476aa4ad" title="MCP06::CheckSignatureEncoding" alt="" coords="436,100,655,127"/>
+<area shape="rect" id="node3" href="class_m_c_p06_1_1script_interpreter.html#a3eafe91afef52589c930523a3622ceff" title="MCP06::scriptInterpreter\l::evalScript" alt="" coords="703,130,865,171"/>
+<area shape="rect" id="node4" href="class_m_c_p06_1_1script_interpreter.html#ad5ba77a236bf73c6c07789ce4caa64d9" title="MCP06::scriptInterpreter\l::verifyScript" alt="" coords="913,178,1076,219"/>
+<area shape="rect" id="node5" href="namespace_m_c_p06.html#ab7e18c570bf486524a2559808767ea28" title="MCP06::IsLowDERSignature" alt="" coords="189,131,377,157"/>
+<area shape="rect" id="node6" href="namespace_m_c_p06.html#a9550da66e839ff2ba87cfa1fd10329c6" title="MCP06::CheckPubKeyEncoding" alt="" coords="177,5,388,32"/>
+</map>
+</div>
+
+</div>
+</div>
+<a id="a56eda09246d69ce8440d635b797102f6"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a56eda09246d69ce8440d635b797102f6">&#9670;&nbsp;</a></span>set_success()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool MCP06::set_success </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="namespace_m_c_p06.html#af26c6b159344fe2a13464ff253c088f2">scriptError</a> *&#160;</td>
+          <td class="paramname"><em>ret</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="script_functions_8h_source.html#l00030">30</a> of file <a class="el" href="script_functions_8h_source.html">scriptFunctions.h</a>.</p>
+<div class="dynheader">
+Here is the caller graph for this function:</div>
+<div class="dyncontent">
+<div class="center"><img src="namespace_m_c_p06_a56eda09246d69ce8440d635b797102f6_icgraph.png" border="0" usemap="#namespace_m_c_p06_a56eda09246d69ce8440d635b797102f6_icgraph" alt=""/></div>
+<map name="namespace_m_c_p06_a56eda09246d69ce8440d635b797102f6_icgraph" id="namespace_m_c_p06_a56eda09246d69ce8440d635b797102f6_icgraph">
+<area shape="rect" id="node2" href="class_m_c_p06_1_1script_interpreter.html#a3eafe91afef52589c930523a3622ceff" title="MCP06::scriptInterpreter\l::evalScript" alt="" coords="200,5,363,47"/>
+<area shape="rect" id="node3" href="class_m_c_p06_1_1script_interpreter.html#ad5ba77a236bf73c6c07789ce4caa64d9" title="MCP06::scriptInterpreter\l::verifyScript" alt="" coords="411,35,573,76"/>
+</map>
+</div>
+
+</div>
+</div>
+<a id="aa9fd34ce6b1659d69d5697dfb941c361"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa9fd34ce6b1659d69d5697dfb941c361">&#9670;&nbsp;</a></span>signatureHash()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classuint256.html">uint256</a> MCP06::signatureHash </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="class_m_c_p06_1_1_c_script.html">CScript</a> &amp;&#160;</td>
+          <td class="paramname"><em>scriptCode</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const <a class="el" href="class_m_c_p03_1_1cr_transaction.html">MCP03::crTransaction</a> &amp;&#160;</td>
+          <td class="paramname"><em>txTo</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">unsigned <a class="el" href="ioapi_8h.html#a787fa3cf048117ba7123753c1e74fcd6">int</a>&#160;</td>
+          <td class="paramname"><em>nIn</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="ioapi_8h.html#a787fa3cf048117ba7123753c1e74fcd6">int</a>&#160;</td>
+          <td class="paramname"><em>nHashType</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="script_functions_8cpp_source.html#l00230">230</a> of file <a class="el" href="script_functions_8cpp_source.html">scriptFunctions.cpp</a>.</p>
+<div class="dynheader">
+Here is the call graph for this function:</div>
+<div class="dyncontent">
+<div class="center"><img src="namespace_m_c_p06_aa9fd34ce6b1659d69d5697dfb941c361_cgraph.png" border="0" usemap="#namespace_m_c_p06_aa9fd34ce6b1659d69d5697dfb941c361_cgraph" alt=""/></div>
+<map name="namespace_m_c_p06_aa9fd34ce6b1659d69d5697dfb941c361_cgraph" id="namespace_m_c_p06_aa9fd34ce6b1659d69d5697dfb941c361_cgraph">
+<area shape="rect" id="node2" href="uint256_8h.html#a52e679560cc1ebf68f878ed69e38f259" title="uint256S" alt="" coords="248,73,321,100"/>
+<area shape="rect" id="node4" href="class_m_c_p03_1_1cr_transaction.html#afac6ce20474c5c7670eabca341ed9b14" title="MCP03::crTransaction\l::calcHash" alt="" coords="209,125,360,166"/>
+<area shape="rect" id="node3" href="classbase__blob.html#a5ec1f681a2830f4e180fe664c0eb4dd0" title="base_blob::SetHex" alt="" coords="408,73,540,100"/>
+<area shape="rect" id="node5" href="class_s_h_a3.html#a13f576c2f05cc9a826067e04c6a4dd6f" title="SHA3::hash256" alt="" coords="417,132,531,159"/>
+<area shape="rect" id="node6" href="class_s_h_a3.html#a5f7389b5995e1f7fcfa603312909187b" title="SHA3::hash" alt="" coords="588,132,680,159"/>
+<area shape="rect" id="node7" href="class_s_h_a3.html#abdef02bf296d177311943602ddf41a28" title="SHA3::shakeCreate" alt="" coords="733,5,870,32"/>
+<area shape="rect" id="node8" href="class_s_h_a3.html#abee8dad3de624f240790d2866e148c24" title="SHA3::keccakCreate" alt="" coords="729,56,873,83"/>
+<area shape="rect" id="node9" href="class_s_h_a3.html#a73366807c0e51843ccea1cf85107c9b1" title="SHA3::keccakUpdate" alt="" coords="728,157,875,184"/>
+<area shape="rect" id="node15" href="class_s_h_a3.html#a7d8a29c9f21aa0cacc571fe49ab0afec" title="SHA3::keccakDigest" alt="" coords="730,208,873,235"/>
+<area shape="rect" id="node18" href="class_s_h_a3.html#a2ae9bd8b90a901d36a8021127da39c8a" title="SHA3::shakeDigest" alt="" coords="733,107,869,133"/>
+<area shape="rect" id="node20" href="class_s_h_a3.html#a386b029a35588716aa48a81067a1994e" title="SHA3::sha3Digest" alt="" coords="737,259,866,285"/>
+<area shape="rect" id="node10" href="class_s_h_a3.html#a5a5205699123a4288b30f0f9ccab1ab8" title="SHA3::keccakProcessBuffer" alt="" coords="923,157,1109,184"/>
+<area shape="rect" id="node11" href="endian_8h.html#aac7228dc3b0fe1141e61ca04e370ad6e" title="htole64" alt="" coords="1180,259,1244,285"/>
+<area shape="rect" id="node12" href="class_s_h_a3.html#a11ba8b247bd7d31abc23d6915cb1e04f" title="SHA3::keccakf" alt="" coords="1157,157,1267,184"/>
+<area shape="rect" id="node13" href="class_s_h_a3.html#a9a98993ded432c03e83c68add6d3a55d" title="SHA3::index" alt="" coords="1315,132,1409,159"/>
+<area shape="rect" id="node14" href="sha3_8cpp.html#a4fe6356aedd5a4f3d3045a8ad14c7790" title="rotateLeft" alt="" coords="1324,183,1400,209"/>
+<area shape="rect" id="node16" href="class_s_h_a3.html#ac1dbeeeb54715914a96dbf77f1cea2ef" title="SHA3::keccakAddPadding" alt="" coords="928,259,1104,285"/>
+<area shape="rect" id="node17" href="class_s_h_a3.html#a319d3cb0a2700d5c35d4a1d6fcd2a93a" title="SHA3::keccakReset" alt="" coords="946,208,1086,235"/>
+<area shape="rect" id="node19" href="class_s_h_a3.html#a7d951d5193dd120fa6f344282d41decd" title="SHA3::shakeAddPadding" alt="" coords="931,107,1101,133"/>
+<area shape="rect" id="node21" href="class_s_h_a3.html#a76e18fa0fbc382c7b9a4a0b7084a9c83" title="SHA3::sha3AddPadding" alt="" coords="935,411,1097,437"/>
+</map>
+</div>
+<div class="dynheader">
+Here is the caller graph for this function:</div>
+<div class="dyncontent">
+<div class="center"><img src="namespace_m_c_p06_aa9fd34ce6b1659d69d5697dfb941c361_icgraph.png" border="0" usemap="#namespace_m_c_p06_aa9fd34ce6b1659d69d5697dfb941c361_icgraph" alt=""/></div>
+<map name="namespace_m_c_p06_aa9fd34ce6b1659d69d5697dfb941c361_icgraph" id="namespace_m_c_p06_aa9fd34ce6b1659d69d5697dfb941c361_icgraph">
+<area shape="rect" id="node2" href="namespace_m_c_p06.html#a9b85506415dacda93990e22407a5ebad" title="MCP06::set_error" alt="" coords="235,119,359,146"/>
+<area shape="rect" id="node8" href="class_m_c_p06_1_1signature_checker.html#a450b5fe2999d72b06a43f55add97c24c" title="MCP06::signatureChecker\l::checkSignature" alt="" coords="209,284,384,325"/>
+<area shape="rect" id="node3" href="namespace_m_c_p06.html#a8f6f47053b9a9a2da5611d97476aa4ad" title="MCP06::CheckSignatureEncoding" alt="" coords="691,119,909,146"/>
+<area shape="rect" id="node4" href="class_m_c_p06_1_1script_interpreter.html#a3eafe91afef52589c930523a3622ceff" title="MCP06::scriptInterpreter\l::evalScript" alt="" coords="957,112,1120,153"/>
+<area shape="rect" id="node5" href="class_m_c_p06_1_1script_interpreter.html#ad5ba77a236bf73c6c07789ce4caa64d9" title="MCP06::scriptInterpreter\l::verifyScript" alt="" coords="1168,56,1331,97"/>
+<area shape="rect" id="node6" href="namespace_m_c_p06.html#ab7e18c570bf486524a2559808767ea28" title="MCP06::IsLowDERSignature" alt="" coords="443,182,631,209"/>
+<area shape="rect" id="node7" href="namespace_m_c_p06.html#a9550da66e839ff2ba87cfa1fd10329c6" title="MCP06::CheckPubKeyEncoding" alt="" coords="432,57,643,83"/>
+<area shape="rect" id="node9" href="class_m_c_p06_1_1signature_checker.html#a4d35c751f4029a98489dd82ad5638b2a" title="MCP06::signatureChecker\l::signatureChecker" alt="" coords="450,284,625,325"/>
+</map>
+</div>
 
 </div>
 </div>
@@ -642,7 +1418,7 @@ template&lt;typename T &gt; </div>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="script_8h_source.html#l00043">43</a> of file <a class="el" href="script_8h_source.html">script.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="script_8h_source.html#l00049">49</a> of file <a class="el" href="script_8h_source.html">script.h</a>.</p>
 
 </div>
 </div>
@@ -667,7 +1443,7 @@ template&lt;typename T &gt; </div>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="script_8h_source.html#l00040">40</a> of file <a class="el" href="script_8h_source.html">script.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="script_8h_source.html#l00046">46</a> of file <a class="el" href="script_8h_source.html">script.h</a>.</p>
 
 </div>
 </div>
@@ -691,7 +1467,7 @@ template&lt;typename T &gt; </div>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="script_8h_source.html#l00196">196</a> of file <a class="el" href="script_8h_source.html">script.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="script_8h_source.html#l00204">204</a> of file <a class="el" href="script_8h_source.html">script.h</a>.</p>
 
 </div>
 </div>
@@ -715,7 +1491,7 @@ template&lt;typename T &gt; </div>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="script_8h_source.html#l00027">27</a> of file <a class="el" href="script_8h_source.html">script.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="script_8h_source.html#l00033">33</a> of file <a class="el" href="script_8h_source.html">script.h</a>.</p>
 
 </div>
 </div>
@@ -739,7 +1515,7 @@ template&lt;typename T &gt; </div>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="script_8h_source.html#l00030">30</a> of file <a class="el" href="script_8h_source.html">script.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="script_8h_source.html#l00036">36</a> of file <a class="el" href="script_8h_source.html">script.h</a>.</p>
 
 </div>
 </div>
@@ -763,7 +1539,7 @@ template&lt;typename T &gt; </div>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="script_8h_source.html#l00024">24</a> of file <a class="el" href="script_8h_source.html">script.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="script_8h_source.html#l00030">30</a> of file <a class="el" href="script_8h_source.html">script.h</a>.</p>
 
 </div>
 </div>
@@ -787,7 +1563,7 @@ template&lt;typename T &gt; </div>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="script_8h_source.html#l00033">33</a> of file <a class="el" href="script_8h_source.html">script.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="script_8h_source.html#l00039">39</a> of file <a class="el" href="script_8h_source.html">script.h</a>.</p>
 
 </div>
 </div>
@@ -811,7 +1587,7 @@ template&lt;typename T &gt; </div>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="script_8h_source.html#l00036">36</a> of file <a class="el" href="script_8h_source.html">script.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="script_8h_source.html#l00042">42</a> of file <a class="el" href="script_8h_source.html">script.h</a>.</p>
 
 </div>
 </div>

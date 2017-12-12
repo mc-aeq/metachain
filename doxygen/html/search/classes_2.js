@@ -24,7 +24,6 @@ var searchData=
   ['cscheduler',['CScheduler',['../class_c_scheduler.html',1,'']]],
   ['cscript',['CScript',['../class_m_c_p06_1_1_c_script.html',1,'MCP06']]],
   ['cscriptnum',['CScriptNum',['../class_m_c_p06_1_1_c_script_num.html',1,'MCP06']]],
-  ['cscriptwitness',['CScriptWitness',['../struct_m_c_p06_1_1_c_script_witness.html',1,'MCP06']]],
   ['csemaphore',['cSemaphore',['../classc_semaphore.html',1,'']]],
   ['csemaphoregrant',['cSemaphoreGrant',['../classc_semaphore_grant.html',1,'']]],
   ['cservice',['CService',['../class_c_service.html',1,'']]],

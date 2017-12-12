@@ -1,21 +1,21 @@
-<map id="src/MCP/MCP02/Stub.cpp" name="src/MCP/MCP02/Stub.cpp">
-<area shape="rect" id="node2" href="$_m_c_p02_2_stub_8h.html" title="Stub.h" alt="" coords="2054,87,2114,114"/>
-<area shape="rect" id="node4" href="$_sub_chain_8h.html" title="SubChain.h" alt="" coords="1149,169,1238,196"/>
-<area shape="rect" id="node9" href="$defines_8h.html" title="../../defines.h" alt="" coords="2172,251,2271,278"/>
-<area shape="rect" id="node23" href="$_block_8h.html" title="../MCP03/Block.h" alt="" coords="488,661,613,688"/>
-<area shape="rect" id="node29" href="$_po_p_interface_8h.html" title="../MCP04/PoPInterface.h" alt="" coords="398,251,565,278"/>
-<area shape="rect" id="node35" href="$_storage_manager_8h.html" title="io/StorageManager.h" alt="" coords="1122,408,1265,435"/>
-<area shape="rect" id="node41" href="$db_engine_8h.html" title="db/dbEngine.h" alt="" coords="1374,490,1479,517"/>
-<area shape="rect" id="node42" href="$_sub_chain_manager_8h.html" title="../MCP/MCP02/SubChainManager.h" alt="" coords="182,490,413,517"/>
-<area shape="rect" id="node26" href="$uint256_8h.html" title="../../uint256.h" alt="" coords="487,743,585,770"/>
-<area shape="rect" id="node28" href="$common_8h.html" title="crypto/common.h" alt="" coords="417,833,540,859"/>
-<area shape="rect" id="node30" href="$_meta_chain_8h.html" title="../../MetaChain.h" alt="" coords="998,333,1117,360"/>
-<area shape="rect" id="node47" href="$_transaction_8h.html" title="../Transaction.h" alt="" coords="352,661,464,688"/>
-<area shape="rect" id="node32" href="$_network_manager_8h.html" title="network/NetworkManager.h" alt="" coords="1289,408,1468,435"/>
-<area shape="rect" id="node45" href="$scheduler_8h.html" title="scheduler.h" alt="" coords="823,408,913,435"/>
-<area shape="rect" id="node46" href="$_account_8h.html" title="MCP/MCP01/Account.h" alt="" coords="937,408,1098,435"/>
-<area shape="rect" id="node33" href="$c_critical_section_8h.html" title="../cCriticalSection.h" alt="" coords="1211,579,1347,606"/>
-<area shape="rect" id="node34" href="$_simple_ini_8h.html" title="SimpleIni.h" alt="" coords="1506,579,1593,606"/>
-<area shape="rect" id="node44" href="$sm_s_c_8h.html" title="smSC.h" alt="" coords="955,490,1024,517"/>
-<area shape="rect" id="node43" href="$mc_block_8h.html" title="../MCP03/MC/mcBlock.h" alt="" coords="94,579,261,606"/>
+<map id="D:/Office/metachain/src/MCP/MCP02/Stub.cpp" name="D:/Office/metachain/src/MCP/MCP02/Stub.cpp">
+<area shape="rect" id="node2" href="$_m_c_p02_2_stub_8h.html" title="Stub.h" alt="" coords="2158,102,2218,129"/>
+<area shape="rect" id="node4" href="$_sub_chain_8h.html" title="SubChain.h" alt="" coords="1443,184,1533,211"/>
+<area shape="rect" id="node9" href="$defines_8h.html" title="../../defines.h" alt="" coords="747,266,845,293"/>
+<area shape="rect" id="node23" href="$_block_8h.html" title="../MCP03/Block.h" alt="" coords="1565,676,1691,703"/>
+<area shape="rect" id="node29" href="$_po_p_interface_8h.html" title="../MCP04/PoPInterface.h" alt="" coords="1538,266,1705,293"/>
+<area shape="rect" id="node35" href="$_storage_manager_8h.html" title="io/StorageManager.h" alt="" coords="2466,423,2609,449"/>
+<area shape="rect" id="node41" href="$db_engine_8h.html" title="db/dbEngine.h" alt="" coords="2594,505,2699,531"/>
+<area shape="rect" id="node42" href="$_sub_chain_manager_8h.html" title="../MCP/MCP02/SubChainManager.h" alt="" coords="1373,505,1603,531"/>
+<area shape="rect" id="node26" href="$uint256_8h.html" title="../../uint256.h" alt="" coords="1724,758,1823,785"/>
+<area shape="rect" id="node28" href="$common_8h.html" title="crypto/common.h" alt="" coords="1655,847,1777,874"/>
+<area shape="rect" id="node30" href="$_meta_chain_8h.html" title="../../MetaChain.h" alt="" coords="2195,348,2314,375"/>
+<area shape="rect" id="node47" href="$_transaction_8h.html" title="../Transaction.h" alt="" coords="1715,676,1827,703"/>
+<area shape="rect" id="node32" href="$_network_manager_8h.html" title="network/NetworkManager.h" alt="" coords="2263,423,2441,449"/>
+<area shape="rect" id="node45" href="$scheduler_8h.html" title="scheduler.h" alt="" coords="1781,423,1870,449"/>
+<area shape="rect" id="node46" href="$_account_8h.html" title="MCP/MCP01/Account.h" alt="" coords="2077,423,2238,449"/>
+<area shape="rect" id="node33" href="$c_critical_section_8h.html" title="../cCriticalSection.h" alt="" coords="2173,594,2309,621"/>
+<area shape="rect" id="node34" href="$_simple_ini_8h.html" title="SimpleIni.h" alt="" coords="2663,594,2750,621"/>
+<area shape="rect" id="node44" href="$sm_s_c_8h.html" title="smSC.h" alt="" coords="2348,505,2417,531"/>
+<area shape="rect" id="node43" href="$mc_block_8h.html" title="../MCP03/MC/mcBlock.h" alt="" coords="1437,594,1603,621"/>
 </map>

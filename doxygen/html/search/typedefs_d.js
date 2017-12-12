@@ -1,6 +1,5 @@
 var searchData=
 [
-  ['scripterror',['ScriptError',['../namespace_m_c_p06.html#a21d699c8b29cd0a58ec16824378c4a19',1,'MCP06']]],
   ['short_5fhash',['short_hash',['../namespace_m_c_p39.html#ac3f4da706fe62652928dd6a8937e216f',1,'MCP39']]],
   ['si_5fchar_5ft',['SI_CHAR_T',['../class_c_simple_ini_templ.html#ad7ffad7e87da2303a05b885e95bc74fa',1,'CSimpleIniTempl']]],
   ['size',['size',['../ioapi_8h.html#a014d89bd76f74ef3a29c8f04b473eb76',1,'ioapi.h']]],

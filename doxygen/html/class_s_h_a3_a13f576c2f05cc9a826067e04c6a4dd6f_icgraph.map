@@ -1,6 +1,15 @@
 <map id="SHA3::hash256" name="SHA3::hash256">
-<area shape="rect" id="node2" href="$class_m_c_p03_1_1cr_block.html#ad086ad7913326244dda013dcf733c22b" title="MCP03::crBlock::calcMerkleRoot" alt="" coords="173,5,388,32"/>
-<area shape="rect" id="node3" href="$class_m_c_p03_1_1cr_transaction.html#afac6ce20474c5c7670eabca341ed9b14" title="MCP03::crTransaction\l::calcHash" alt="" coords="205,57,356,98"/>
-<area shape="rect" id="node4" href="$class_m_c_p03_1_1_meta_chain_1_1mc_block.html#aad598986a27c69c0fda134f9627f6d35" title="MCP03::MetaChain::mcBlock\l::calcMerkleRoot" alt="" coords="183,122,378,163"/>
-<area shape="rect" id="node5" href="$class_m_c_p03_1_1_meta_chain_1_1mc_transaction.html#a405c661b1f0665d633df398033daba3c" title="MCP03::MetaChain::mcTransaction\l::calcHash" alt="" coords="167,187,395,229"/>
+<area shape="rect" id="node2" href="$class_m_c_p03_1_1cr_block.html#ad086ad7913326244dda013dcf733c22b" title="MCP03::crBlock::calcMerkleRoot" alt="" coords="173,147,388,174"/>
+<area shape="rect" id="node3" href="$class_m_c_p03_1_1cr_transaction.html#afac6ce20474c5c7670eabca341ed9b14" title="MCP03::crTransaction\l::calcHash" alt="" coords="205,199,356,240"/>
+<area shape="rect" id="node13" href="$class_m_c_p03_1_1_meta_chain_1_1mc_block.html#aad598986a27c69c0fda134f9627f6d35" title="MCP03::MetaChain::mcBlock\l::calcMerkleRoot" alt="" coords="183,264,378,305"/>
+<area shape="rect" id="node14" href="$class_m_c_p03_1_1_meta_chain_1_1mc_transaction.html#a405c661b1f0665d633df398033daba3c" title="MCP03::MetaChain::mcTransaction\l::calcHash" alt="" coords="167,329,395,371"/>
+<area shape="rect" id="node4" href="$namespace_m_c_p06.html#aa9fd34ce6b1659d69d5697dfb941c361" title="MCP06::signatureHash" alt="" coords="443,206,599,233"/>
+<area shape="rect" id="node5" href="$namespace_m_c_p06.html#a9b85506415dacda93990e22407a5ebad" title="MCP06::set_error" alt="" coords="672,119,796,146"/>
+<area shape="rect" id="node11" href="$class_m_c_p06_1_1signature_checker.html#a450b5fe2999d72b06a43f55add97c24c" title="MCP06::signatureChecker\l::checkSignature" alt="" coords="647,284,821,325"/>
+<area shape="rect" id="node6" href="$namespace_m_c_p06.html#a8f6f47053b9a9a2da5611d97476aa4ad" title="MCP06::CheckSignatureEncoding" alt="" coords="1128,119,1347,146"/>
+<area shape="rect" id="node7" href="$class_m_c_p06_1_1script_interpreter.html#a3eafe91afef52589c930523a3622ceff" title="MCP06::scriptInterpreter\l::evalScript" alt="" coords="1395,112,1557,153"/>
+<area shape="rect" id="node8" href="$class_m_c_p06_1_1script_interpreter.html#ad5ba77a236bf73c6c07789ce4caa64d9" title="MCP06::scriptInterpreter\l::verifyScript" alt="" coords="1605,56,1768,97"/>
+<area shape="rect" id="node9" href="$namespace_m_c_p06.html#ab7e18c570bf486524a2559808767ea28" title="MCP06::IsLowDERSignature" alt="" coords="881,182,1069,209"/>
+<area shape="rect" id="node10" href="$namespace_m_c_p06.html#a9550da66e839ff2ba87cfa1fd10329c6" title="MCP06::CheckPubKeyEncoding" alt="" coords="869,57,1080,83"/>
+<area shape="rect" id="node12" href="$class_m_c_p06_1_1signature_checker.html#a4d35c751f4029a98489dd82ad5638b2a" title="MCP06::signatureChecker\l::signatureChecker" alt="" coords="887,284,1062,325"/>
 </map>

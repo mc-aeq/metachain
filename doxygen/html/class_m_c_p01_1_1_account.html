@@ -115,6 +115,8 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:aa65e5b63ba01e49e157aace776da845a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:af301e3fa40da5a8d80d0a783db761a8a"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_m_c_p01_1_1_account.html#af301e3fa40da5a8d80d0a783db761a8a">Account</a> (uint8_t *keyPriv, uint8_t *keyPub, <a class="el" href="class_m_c_p01_1_1_account.html#a39efe8f4d8b3fc41fadba5b30cf3a8d1">ECDSA</a> ecdsaPubKey)</td></tr>
 <tr class="separator:af301e3fa40da5a8d80d0a783db761a8a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab1404927fde97577a5fdd11ec6957c07"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_m_c_p01_1_1_account.html#ab1404927fde97577a5fdd11ec6957c07">Account</a> (const std::vector&lt; unsigned char &gt; &amp;_vch)</td></tr>
+<tr class="separator:ab1404927fde97577a5fdd11ec6957c07"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a331ee31167ff63daca18a8bafbfe2a84"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_m_c_p01_1_1_account.html#a331ee31167ff63daca18a8bafbfe2a84">~Account</a> ()</td></tr>
 <tr class="separator:a331ee31167ff63daca18a8bafbfe2a84"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a8f4295b0296cbaac2a8d1f7caec811af"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_m_c_p01_1_1_account.html#a8f4295b0296cbaac2a8d1f7caec811af">calcPubKey</a> (<a class="el" href="class_m_c_p01_1_1_account.html#a39efe8f4d8b3fc41fadba5b30cf3a8d1">ECDSA</a> type)</td></tr>
@@ -139,6 +141,8 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:a497e78be4ab878ea67bfeee3b5771317"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a9d85665d6d8c337981b05c451e971f6a"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_m_c_p01_1_1_account.html#a9d85665d6d8c337981b05c451e971f6a">verifyWalletAddress</a> (std::string)</td></tr>
 <tr class="separator:a9d85665d6d8c337981b05c451e971f6a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2f1e040186dc25aeb65e8cfa5013f391"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_m_c_p01_1_1_account.html#a2f1e040186dc25aeb65e8cfa5013f391">verify</a> (const <a class="el" href="classuint256.html">uint256</a> &amp;hash, const std::vector&lt; unsigned char &gt; &amp;vchSig)</td></tr>
+<tr class="separator:a2f1e040186dc25aeb65e8cfa5013f391"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a94f7405b1077834f6002e38b3d489420"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_m_c_p01_1_1_account.html#a94f7405b1077834f6002e38b3d489420">isTestNet</a> ()</td></tr>
 <tr class="separator:a94f7405b1077834f6002e38b3d489420"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa3fc58059784e432aa372ed4a2ac2630"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_m_c_p01_1_1_account.html#aa3fc58059784e432aa372ed4a2ac2630">isSECPk1</a> ()</td></tr>
@@ -159,6 +163,8 @@ Private Member Functions</h2></td></tr>
 <tr class="separator:a12db5be1fc23efa3f2297db1e5536da3"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a04fbeb2f133769c606f96f2b8da11618"><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_m_c_p01_1_1_account.html#a04fbeb2f133769c606f96f2b8da11618">untokenize</a> (std::string strWalletAddress)</td></tr>
 <tr class="separator:a04fbeb2f133769c606f96f2b8da11618"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa42336f84992125e6ab9e1bb5f8396c3"><td class="memItemLeft" align="right" valign="top"><a class="el" href="ioapi_8h.html#a787fa3cf048117ba7123753c1e74fcd6">int</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_m_c_p01_1_1_account.html#aa42336f84992125e6ab9e1bb5f8396c3">ecdsa_signature_parse_der_lax</a> (const secp256k1_context *ctx, secp256k1_ecdsa_signature *sig, const unsigned char *input, size_t inputlen)</td></tr>
+<tr class="separator:aa42336f84992125e6ab9e1bb5f8396c3"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:afa9a75778e01a0daa895b6608f5642dc"><td class="memTemplParams" colspan="2">template&lt;class Archive &gt; </td></tr>
 <tr class="memitem:afa9a75778e01a0daa895b6608f5642dc"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="class_m_c_p01_1_1_account.html#afa9a75778e01a0daa895b6608f5642dc">serialize</a> (Archive &amp;ar, const unsigned <a class="el" href="ioapi_8h.html#a787fa3cf048117ba7123753c1e74fcd6">int</a> version)</td></tr>
 <tr class="separator:afa9a75778e01a0daa895b6608f5642dc"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -187,7 +193,7 @@ Friends</h2></td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock">
-<p class="definition">Definition at line <a class="el" href="_account_8h_source.html#l00034">34</a> of file <a class="el" href="_account_8h_source.html">Account.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="_account_8h_source.html#l00036">36</a> of file <a class="el" href="_account_8h_source.html">Account.h</a>.</p>
 </div><h2 class="groupheader">Member Enumeration Documentation</h2>
 <a id="a39efe8f4d8b3fc41fadba5b30cf3a8d1"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a39efe8f4d8b3fc41fadba5b30cf3a8d1">&#9670;&nbsp;</a></span>ECDSA</h2>
@@ -206,13 +212,13 @@ Friends</h2></td></tr>
 <tr><td class="fieldname"><a id="a39efe8f4d8b3fc41fadba5b30cf3a8d1aad6d25e4b48d01b61d560d7baef5feec"></a>not_calculated&#160;</td><td class="fielddoc"></td></tr>
 </table>
 
-<p class="definition">Definition at line <a class="el" href="_account_8h_source.html#l00037">37</a> of file <a class="el" href="_account_8h_source.html">Account.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="_account_8h_source.html#l00039">39</a> of file <a class="el" href="_account_8h_source.html">Account.h</a>.</p>
 
 </div>
 </div>
 <h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
 <a id="a7055d1210f99b06e0e63e0635d0e9364"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a7055d1210f99b06e0e63e0635d0e9364">&#9670;&nbsp;</a></span>Account() <span class="overload">[1/4]</span></h2>
+<h2 class="memtitle"><span class="permalink"><a href="#a7055d1210f99b06e0e63e0635d0e9364">&#9670;&nbsp;</a></span>Account() <span class="overload">[1/5]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -226,12 +232,12 @@ Friends</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="_account_8cpp_source.html#l00019">19</a> of file <a class="el" href="_account_8cpp_source.html">Account.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="_account_8cpp_source.html#l00018">18</a> of file <a class="el" href="_account_8cpp_source.html">Account.cpp</a>.</p>
 
 </div>
 </div>
 <a id="a829222fd2e290b30acbd8c94d16e1616"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a829222fd2e290b30acbd8c94d16e1616">&#9670;&nbsp;</a></span>Account() <span class="overload">[2/4]</span></h2>
+<h2 class="memtitle"><span class="permalink"><a href="#a829222fd2e290b30acbd8c94d16e1616">&#9670;&nbsp;</a></span>Account() <span class="overload">[2/5]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -246,12 +252,12 @@ Friends</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="_account_8cpp_source.html#l00024">24</a> of file <a class="el" href="_account_8cpp_source.html">Account.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="_account_8cpp_source.html#l00023">23</a> of file <a class="el" href="_account_8cpp_source.html">Account.cpp</a>.</p>
 
 </div>
 </div>
 <a id="aa65e5b63ba01e49e157aace776da845a"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aa65e5b63ba01e49e157aace776da845a">&#9670;&nbsp;</a></span>Account() <span class="overload">[3/4]</span></h2>
+<h2 class="memtitle"><span class="permalink"><a href="#aa65e5b63ba01e49e157aace776da845a">&#9670;&nbsp;</a></span>Account() <span class="overload">[3/5]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -266,12 +272,12 @@ Friends</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="_account_8cpp_source.html#l00034">34</a> of file <a class="el" href="_account_8cpp_source.html">Account.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="_account_8cpp_source.html#l00033">33</a> of file <a class="el" href="_account_8cpp_source.html">Account.cpp</a>.</p>
 
 </div>
 </div>
 <a id="af301e3fa40da5a8d80d0a783db761a8a"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#af301e3fa40da5a8d80d0a783db761a8a">&#9670;&nbsp;</a></span>Account() <span class="overload">[4/4]</span></h2>
+<h2 class="memtitle"><span class="permalink"><a href="#af301e3fa40da5a8d80d0a783db761a8a">&#9670;&nbsp;</a></span>Account() <span class="overload">[4/5]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -302,7 +308,27 @@ Friends</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="_account_8cpp_source.html#l00039">39</a> of file <a class="el" href="_account_8cpp_source.html">Account.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="_account_8cpp_source.html#l00038">38</a> of file <a class="el" href="_account_8cpp_source.html">Account.cpp</a>.</p>
+
+</div>
+</div>
+<a id="ab1404927fde97577a5fdd11ec6957c07"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab1404927fde97577a5fdd11ec6957c07">&#9670;&nbsp;</a></span>Account() <span class="overload">[5/5]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">MCP01::Account::Account </td>
+          <td>(</td>
+          <td class="paramtype">const std::vector&lt; unsigned char &gt; &amp;&#160;</td>
+          <td class="paramname"><em>_vch</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="_account_8cpp_source.html#l00050">50</a> of file <a class="el" href="_account_8cpp_source.html">Account.cpp</a>.</p>
 
 </div>
 </div>
@@ -321,7 +347,7 @@ Friends</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="_account_8cpp_source.html#l00051">51</a> of file <a class="el" href="_account_8cpp_source.html">Account.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="_account_8cpp_source.html#l00056">56</a> of file <a class="el" href="_account_8cpp_source.html">Account.cpp</a>.</p>
 
 </div>
 </div>
@@ -342,7 +368,7 @@ Friends</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="_account_8cpp_source.html#l00058">58</a> of file <a class="el" href="_account_8cpp_source.html">Account.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="_account_8cpp_source.html#l00063">63</a> of file <a class="el" href="_account_8cpp_source.html">Account.cpp</a>.</p>
 <div class="dynheader">
 Here is the call graph for this function:</div>
 <div class="dyncontent">
@@ -387,7 +413,7 @@ Here is the call graph for this function:</div>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="_account_8cpp_source.html#l00098">98</a> of file <a class="el" href="_account_8cpp_source.html">Account.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="_account_8cpp_source.html#l00103">103</a> of file <a class="el" href="_account_8cpp_source.html">Account.cpp</a>.</p>
 <div class="dynheader">
 Here is the call graph for this function:</div>
 <div class="dyncontent">
@@ -422,6 +448,73 @@ Here is the caller graph for this function:</div>
 
 </div>
 </div>
+<a id="aa42336f84992125e6ab9e1bb5f8396c3"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa42336f84992125e6ab9e1bb5f8396c3">&#9670;&nbsp;</a></span>ecdsa_signature_parse_der_lax()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="ioapi_8h.html#a787fa3cf048117ba7123753c1e74fcd6">int</a> MCP01::Account::ecdsa_signature_parse_der_lax </td>
+          <td>(</td>
+          <td class="paramtype">const secp256k1_context *&#160;</td>
+          <td class="paramname"><em>ctx</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">secp256k1_ecdsa_signature *&#160;</td>
+          <td class="paramname"><em>sig</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const unsigned char *&#160;</td>
+          <td class="paramname"><em>input</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">size_t&#160;</td>
+          <td class="paramname"><em>inputlen</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>This function is taken from the libsecp256k1 distribution and implements DER parsing for ECDSA signatures, while supporting an arbitrary subset of format violations.</p>
+<p>Supported violations include negative integers, excessive padding, garbage at the end, and overly long length descriptors. This is safe to use in Bitcoin because since the activation of BIP66, signatures are verified to be strict DER before being passed to this module, and we know it supports all violations present in the blockchain before that point. </p>
+
+<p class="definition">Definition at line <a class="el" href="_account_8cpp_source.html#l00301">301</a> of file <a class="el" href="_account_8cpp_source.html">Account.cpp</a>.</p>
+<div class="dynheader">
+Here is the caller graph for this function:</div>
+<div class="dyncontent">
+<div class="center"><img src="class_m_c_p01_1_1_account_aa42336f84992125e6ab9e1bb5f8396c3_icgraph.png" border="0" usemap="#class_m_c_p01_1_1_account_aa42336f84992125e6ab9e1bb5f8396c3_icgraph" alt=""/></div>
+<map name="class_m_c_p01_1_1_account_aa42336f84992125e6ab9e1bb5f8396c3_icgraph" id="class_m_c_p01_1_1_account_aa42336f84992125e6ab9e1bb5f8396c3_icgraph">
+<area shape="rect" id="node2" href="class_m_c_p01_1_1_account.html#a2f1e040186dc25aeb65e8cfa5013f391" title="MCP01::Account::verify" alt="" coords="224,37,383,63"/>
+<area shape="rect" id="node3" href="class_m_c_p01_1_1_account.html#a497e78be4ab878ea67bfeee3b5771317" title="MCP01::Account::verifyWallet\lAddress" alt="" coords="431,29,625,71"/>
+<area shape="rect" id="node5" href="class_m_c_p06_1_1signature_checker.html#aadcef40359490915273045d434a81164" title="MCP06::signatureChecker\l::verifySignature" alt="" coords="441,95,615,136"/>
+<area shape="rect" id="node4" href="class_meta_chain.html#afc0194a2093aa570c4f9512a14892c3c" title="MetaChain::initialize" alt="" coords="691,37,830,63"/>
+<area shape="rect" id="node6" href="class_m_c_p06_1_1signature_checker.html#a450b5fe2999d72b06a43f55add97c24c" title="MCP06::signatureChecker\l::checkSignature" alt="" coords="673,95,848,136"/>
+<area shape="rect" id="node7" href="class_m_c_p06_1_1script_interpreter.html#a3eafe91afef52589c930523a3622ceff" title="MCP06::scriptInterpreter\l::evalScript" alt="" coords="902,61,1065,103"/>
+<area shape="rect" id="node9" href="class_m_c_p06_1_1signature_checker.html#a4d35c751f4029a98489dd82ad5638b2a" title="MCP06::signatureChecker\l::signatureChecker" alt="" coords="896,127,1071,168"/>
+<area shape="rect" id="node8" href="class_m_c_p06_1_1script_interpreter.html#ad5ba77a236bf73c6c07789ce4caa64d9" title="MCP06::scriptInterpreter\l::verifyScript" alt="" coords="1119,61,1281,103"/>
+</map>
+</div>
+
+</div>
+</div>
 <a id="a8ff9a80ad481f8cd9cf3d29ab05a96a4"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a8ff9a80ad481f8cd9cf3d29ab05a96a4">&#9670;&nbsp;</a></span>getPrivKey()</h2>
 
@@ -445,7 +538,7 @@ Here is the caller graph for this function:</div>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="_account_8h_source.html#l00051">51</a> of file <a class="el" href="_account_8h_source.html">Account.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="_account_8h_source.html#l00054">54</a> of file <a class="el" href="_account_8h_source.html">Account.h</a>.</p>
 
 </div>
 </div>
@@ -472,7 +565,7 @@ Here is the caller graph for this function:</div>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="_account_8h_source.html#l00052">52</a> of file <a class="el" href="_account_8h_source.html">Account.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="_account_8h_source.html#l00055">55</a> of file <a class="el" href="_account_8h_source.html">Account.h</a>.</p>
 <div class="dynheader">
 Here is the call graph for this function:</div>
 <div class="dyncontent">
@@ -515,7 +608,7 @@ Here is the caller graph for this function:</div>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="_account_8h_source.html#l00053">53</a> of file <a class="el" href="_account_8h_source.html">Account.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="_account_8h_source.html#l00056">56</a> of file <a class="el" href="_account_8h_source.html">Account.h</a>.</p>
 
 </div>
 </div>
@@ -542,7 +635,7 @@ Here is the caller graph for this function:</div>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="_account_8h_source.html#l00054">54</a> of file <a class="el" href="_account_8h_source.html">Account.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="_account_8h_source.html#l00057">57</a> of file <a class="el" href="_account_8h_source.html">Account.h</a>.</p>
 <div class="dynheader">
 Here is the call graph for this function:</div>
 <div class="dyncontent">
@@ -577,7 +670,7 @@ Here is the call graph for this function:</div>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="_account_8h_source.html#l00057">57</a> of file <a class="el" href="_account_8h_source.html">Account.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="_account_8h_source.html#l00060">60</a> of file <a class="el" href="_account_8h_source.html">Account.h</a>.</p>
 <div class="dynheader">
 Here is the caller graph for this function:</div>
 <div class="dyncontent">
@@ -615,7 +708,7 @@ Here is the caller graph for this function:</div>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="_account_8cpp_source.html#l00147">147</a> of file <a class="el" href="_account_8cpp_source.html">Account.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="_account_8cpp_source.html#l00152">152</a> of file <a class="el" href="_account_8cpp_source.html">Account.cpp</a>.</p>
 <div class="dynheader">
 Here is the call graph for this function:</div>
 <div class="dyncontent">
@@ -672,7 +765,7 @@ Here is the call graph for this function:</div>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="_account_8h_source.html#l00066">66</a> of file <a class="el" href="_account_8h_source.html">Account.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="_account_8h_source.html#l00070">70</a> of file <a class="el" href="_account_8h_source.html">Account.h</a>.</p>
 <div class="dynheader">
 Here is the caller graph for this function:</div>
 <div class="dyncontent">
@@ -707,7 +800,7 @@ Here is the caller graph for this function:</div>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="_account_8h_source.html#l00064">64</a> of file <a class="el" href="_account_8h_source.html">Account.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="_account_8h_source.html#l00068">68</a> of file <a class="el" href="_account_8h_source.html">Account.h</a>.</p>
 
 </div>
 </div>
@@ -734,7 +827,7 @@ Here is the caller graph for this function:</div>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="_account_8h_source.html#l00065">65</a> of file <a class="el" href="_account_8h_source.html">Account.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="_account_8h_source.html#l00069">69</a> of file <a class="el" href="_account_8h_source.html">Account.h</a>.</p>
 
 </div>
 </div>
@@ -761,7 +854,7 @@ Here is the caller graph for this function:</div>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="_account_8h_source.html#l00063">63</a> of file <a class="el" href="_account_8h_source.html">Account.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="_account_8h_source.html#l00067">67</a> of file <a class="el" href="_account_8h_source.html">Account.h</a>.</p>
 <div class="dynheader">
 Here is the caller graph for this function:</div>
 <div class="dyncontent">
@@ -809,7 +902,7 @@ template&lt;class Archive &gt; </div>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="_account_8h_source.html#l00091">91</a> of file <a class="el" href="_account_8h_source.html">Account.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="_account_8h_source.html#l00097">97</a> of file <a class="el" href="_account_8h_source.html">Account.h</a>.</p>
 
 </div>
 </div>
@@ -837,7 +930,7 @@ template&lt;class Archive &gt; </div>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="_account_8h_source.html#l00056">56</a> of file <a class="el" href="_account_8h_source.html">Account.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="_account_8h_source.html#l00059">59</a> of file <a class="el" href="_account_8h_source.html">Account.h</a>.</p>
 <div class="dynheader">
 Here is the caller graph for this function:</div>
 <div class="dyncontent">
@@ -873,7 +966,7 @@ Here is the caller graph for this function:</div>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="_account_8cpp_source.html#l00177">177</a> of file <a class="el" href="_account_8cpp_source.html">Account.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="_account_8cpp_source.html#l00182">182</a> of file <a class="el" href="_account_8cpp_source.html">Account.cpp</a>.</p>
 <div class="dynheader">
 Here is the caller graph for this function:</div>
 <div class="dyncontent">
@@ -909,13 +1002,67 @@ Here is the caller graph for this function:</div>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="_account_8cpp_source.html#l00191">191</a> of file <a class="el" href="_account_8cpp_source.html">Account.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="_account_8cpp_source.html#l00196">196</a> of file <a class="el" href="_account_8cpp_source.html">Account.cpp</a>.</p>
 <div class="dynheader">
 Here is the caller graph for this function:</div>
 <div class="dyncontent">
 <div class="center"><img src="class_m_c_p01_1_1_account_a04fbeb2f133769c606f96f2b8da11618_icgraph.png" border="0" usemap="#class_m_c_p01_1_1_account_a04fbeb2f133769c606f96f2b8da11618_icgraph" alt=""/></div>
 <map name="class_m_c_p01_1_1_account_a04fbeb2f133769c606f96f2b8da11618_icgraph" id="class_m_c_p01_1_1_account_a04fbeb2f133769c606f96f2b8da11618_icgraph">
 <area shape="rect" id="node2" href="class_m_c_p01_1_1_account.html#a9d85665d6d8c337981b05c451e971f6a" title="MCP01::Account::verifyWallet\lAddress" alt="" coords="245,5,440,47"/>
+</map>
+</div>
+
+</div>
+</div>
+<a id="a2f1e040186dc25aeb65e8cfa5013f391"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2f1e040186dc25aeb65e8cfa5013f391">&#9670;&nbsp;</a></span>verify()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool MCP01::Account::verify </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="classuint256.html">uint256</a> &amp;&#160;</td>
+          <td class="paramname"><em>hash</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const std::vector&lt; unsigned char &gt; &amp;&#160;</td>
+          <td class="paramname"><em>vchSig</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="_account_8cpp_source.html#l00266">266</a> of file <a class="el" href="_account_8cpp_source.html">Account.cpp</a>.</p>
+<div class="dynheader">
+Here is the call graph for this function:</div>
+<div class="dyncontent">
+<div class="center"><img src="class_m_c_p01_1_1_account_a2f1e040186dc25aeb65e8cfa5013f391_cgraph.png" border="0" usemap="#class_m_c_p01_1_1_account_a2f1e040186dc25aeb65e8cfa5013f391_cgraph" alt=""/></div>
+<map name="class_m_c_p01_1_1_account_a2f1e040186dc25aeb65e8cfa5013f391_cgraph" id="class_m_c_p01_1_1_account_a2f1e040186dc25aeb65e8cfa5013f391_cgraph">
+<area shape="rect" id="node2" href="class_m_c_p01_1_1_account.html#a497e78be4ab878ea67bfeee3b5771317" title="MCP01::Account::verifyWallet\lAddress" alt="" coords="212,29,407,71"/>
+<area shape="rect" id="node3" href="class_m_c_p01_1_1_account.html#aa42336f84992125e6ab9e1bb5f8396c3" title="MCP01::Account::ecdsa\l_signature_parse_der_lax" alt="" coords="224,95,395,136"/>
+<area shape="rect" id="node4" href="classbase__blob.html#aeee68e00ceeacf49086e98b661e017ff" title="base_blob::begin" alt="" coords="249,161,369,187"/>
+</map>
+</div>
+<div class="dynheader">
+Here is the caller graph for this function:</div>
+<div class="dyncontent">
+<div class="center"><img src="class_m_c_p01_1_1_account_a2f1e040186dc25aeb65e8cfa5013f391_icgraph.png" border="0" usemap="#class_m_c_p01_1_1_account_a2f1e040186dc25aeb65e8cfa5013f391_icgraph" alt=""/></div>
+<map name="class_m_c_p01_1_1_account_a2f1e040186dc25aeb65e8cfa5013f391_icgraph" id="class_m_c_p01_1_1_account_a2f1e040186dc25aeb65e8cfa5013f391_icgraph">
+<area shape="rect" id="node2" href="class_m_c_p01_1_1_account.html#a497e78be4ab878ea67bfeee3b5771317" title="MCP01::Account::verifyWallet\lAddress" alt="" coords="212,29,407,71"/>
+<area shape="rect" id="node4" href="class_m_c_p06_1_1signature_checker.html#aadcef40359490915273045d434a81164" title="MCP06::signatureChecker\l::verifySignature" alt="" coords="222,95,397,136"/>
+<area shape="rect" id="node3" href="class_meta_chain.html#afc0194a2093aa570c4f9512a14892c3c" title="MetaChain::initialize" alt="" coords="473,37,611,63"/>
+<area shape="rect" id="node5" href="class_m_c_p06_1_1signature_checker.html#a450b5fe2999d72b06a43f55add97c24c" title="MCP06::signatureChecker\l::checkSignature" alt="" coords="455,95,629,136"/>
+<area shape="rect" id="node6" href="class_m_c_p06_1_1script_interpreter.html#a3eafe91afef52589c930523a3622ceff" title="MCP06::scriptInterpreter\l::evalScript" alt="" coords="683,61,846,103"/>
+<area shape="rect" id="node8" href="class_m_c_p06_1_1signature_checker.html#a4d35c751f4029a98489dd82ad5638b2a" title="MCP06::signatureChecker\l::signatureChecker" alt="" coords="677,127,852,168"/>
+<area shape="rect" id="node7" href="class_m_c_p06_1_1script_interpreter.html#ad5ba77a236bf73c6c07789ce4caa64d9" title="MCP06::scriptInterpreter\l::verifyScript" alt="" coords="900,61,1063,103"/>
 </map>
 </div>
 
@@ -944,18 +1091,29 @@ Here is the caller graph for this function:</div>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="_account_8h_source.html#l00059">59</a> of file <a class="el" href="_account_8h_source.html">Account.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="_account_8h_source.html#l00062">62</a> of file <a class="el" href="_account_8h_source.html">Account.h</a>.</p>
 <div class="dynheader">
 Here is the call graph for this function:</div>
 <div class="dyncontent">
 <div class="center"><img src="class_m_c_p01_1_1_account_a497e78be4ab878ea67bfeee3b5771317_cgraph.png" border="0" usemap="#class_m_c_p01_1_1_account_a497e78be4ab878ea67bfeee3b5771317_cgraph" alt=""/></div>
+<map name="class_m_c_p01_1_1_account_a497e78be4ab878ea67bfeee3b5771317_cgraph" id="class_m_c_p01_1_1_account_a497e78be4ab878ea67bfeee3b5771317_cgraph">
+<area shape="rect" id="node2" href="class_m_c_p01_1_1_account.html#a2f1e040186dc25aeb65e8cfa5013f391" title="MCP01::Account::verify" alt="" coords="248,42,407,69"/>
+<area shape="rect" id="node3" href="class_m_c_p01_1_1_account.html#aa42336f84992125e6ab9e1bb5f8396c3" title="MCP01::Account::ecdsa\l_signature_parse_der_lax" alt="" coords="455,5,625,47"/>
+<area shape="rect" id="node4" href="classbase__blob.html#aeee68e00ceeacf49086e98b661e017ff" title="base_blob::begin" alt="" coords="480,71,600,98"/>
+</map>
 </div>
 <div class="dynheader">
 Here is the caller graph for this function:</div>
 <div class="dyncontent">
 <div class="center"><img src="class_m_c_p01_1_1_account_a497e78be4ab878ea67bfeee3b5771317_icgraph.png" border="0" usemap="#class_m_c_p01_1_1_account_a497e78be4ab878ea67bfeee3b5771317_icgraph" alt=""/></div>
 <map name="class_m_c_p01_1_1_account_a497e78be4ab878ea67bfeee3b5771317_icgraph" id="class_m_c_p01_1_1_account_a497e78be4ab878ea67bfeee3b5771317_icgraph">
-<area shape="rect" id="node2" href="class_meta_chain.html#afc0194a2093aa570c4f9512a14892c3c" title="MetaChain::initialize" alt="" coords="248,37,387,63"/>
+<area shape="rect" id="node2" href="class_m_c_p01_1_1_account.html#a2f1e040186dc25aeb65e8cfa5013f391" title="MCP01::Account::verify" alt="" coords="248,46,407,73"/>
+<area shape="rect" id="node8" href="class_meta_chain.html#afc0194a2093aa570c4f9512a14892c3c" title="MetaChain::initialize" alt="" coords="258,97,397,123"/>
+<area shape="rect" id="node3" href="class_m_c_p06_1_1signature_checker.html#aadcef40359490915273045d434a81164" title="MCP06::signatureChecker\l::verifySignature" alt="" coords="455,39,629,80"/>
+<area shape="rect" id="node4" href="class_m_c_p06_1_1signature_checker.html#a450b5fe2999d72b06a43f55add97c24c" title="MCP06::signatureChecker\l::checkSignature" alt="" coords="677,39,852,80"/>
+<area shape="rect" id="node5" href="class_m_c_p06_1_1script_interpreter.html#a3eafe91afef52589c930523a3622ceff" title="MCP06::scriptInterpreter\l::evalScript" alt="" coords="906,5,1069,47"/>
+<area shape="rect" id="node7" href="class_m_c_p06_1_1signature_checker.html#a4d35c751f4029a98489dd82ad5638b2a" title="MCP06::signatureChecker\l::signatureChecker" alt="" coords="900,71,1075,112"/>
+<area shape="rect" id="node6" href="class_m_c_p06_1_1script_interpreter.html#ad5ba77a236bf73c6c07789ce4caa64d9" title="MCP06::scriptInterpreter\l::verifyScript" alt="" coords="1123,5,1285,47"/>
 </map>
 </div>
 
@@ -977,7 +1135,7 @@ Here is the caller graph for this function:</div>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="_account_8cpp_source.html#l00196">196</a> of file <a class="el" href="_account_8cpp_source.html">Account.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="_account_8cpp_source.html#l00201">201</a> of file <a class="el" href="_account_8cpp_source.html">Account.cpp</a>.</p>
 <div class="dynheader">
 Here is the call graph for this function:</div>
 <div class="dyncontent">
@@ -1031,7 +1189,7 @@ Here is the call graph for this function:</div>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="_account_8h_source.html#l00087">87</a> of file <a class="el" href="_account_8h_source.html">Account.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="_account_8h_source.html#l00093">93</a> of file <a class="el" href="_account_8h_source.html">Account.h</a>.</p>
 
 </div>
 </div>
@@ -1056,7 +1214,7 @@ Here is the call graph for this function:</div>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="_account_8h_source.html#l00074">74</a> of file <a class="el" href="_account_8h_source.html">Account.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="_account_8h_source.html#l00078">78</a> of file <a class="el" href="_account_8h_source.html">Account.h</a>.</p>
 
 </div>
 </div>
@@ -1080,7 +1238,7 @@ Here is the call graph for this function:</div>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="_account_8h_source.html#l00072">72</a> of file <a class="el" href="_account_8h_source.html">Account.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="_account_8h_source.html#l00076">76</a> of file <a class="el" href="_account_8h_source.html">Account.h</a>.</p>
 
 </div>
 </div>
@@ -1104,7 +1262,7 @@ Here is the call graph for this function:</div>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="_account_8h_source.html#l00073">73</a> of file <a class="el" href="_account_8h_source.html">Account.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="_account_8h_source.html#l00077">77</a> of file <a class="el" href="_account_8h_source.html">Account.h</a>.</p>
 
 </div>
 </div>
@@ -1128,7 +1286,7 @@ Here is the call graph for this function:</div>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="_account_8h_source.html#l00077">77</a> of file <a class="el" href="_account_8h_source.html">Account.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="_account_8h_source.html#l00081">81</a> of file <a class="el" href="_account_8h_source.html">Account.h</a>.</p>
 
 </div>
 </div>
@@ -1152,7 +1310,7 @@ Here is the call graph for this function:</div>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="_account_8h_source.html#l00080">80</a> of file <a class="el" href="_account_8h_source.html">Account.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="_account_8h_source.html#l00084">84</a> of file <a class="el" href="_account_8h_source.html">Account.h</a>.</p>
 
 </div>
 </div>
@@ -1176,7 +1334,7 @@ Here is the call graph for this function:</div>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="_account_8h_source.html#l00078">78</a> of file <a class="el" href="_account_8h_source.html">Account.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="_account_8h_source.html#l00082">82</a> of file <a class="el" href="_account_8h_source.html">Account.h</a>.</p>
 
 </div>
 </div>
@@ -1200,7 +1358,7 @@ Here is the call graph for this function:</div>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="_account_8h_source.html#l00079">79</a> of file <a class="el" href="_account_8h_source.html">Account.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="_account_8h_source.html#l00083">83</a> of file <a class="el" href="_account_8h_source.html">Account.h</a>.</p>
 
 </div>
 </div>
@@ -1216,13 +1374,13 @@ Here is the call graph for this function:</div>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="_account_8h_source.html#l00066">66</a> of file <a class="el" href="_account_8h_source.html">Account.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="_account_8h_source.html#l00070">70</a> of file <a class="el" href="_account_8h_source.html">Account.h</a>.</p>
 
 </div>
 </div>
 <hr/>The documentation for this class was generated from the following files:<ul>
-<li>src/MCP/MCP01/<a class="el" href="_account_8h_source.html">Account.h</a></li>
-<li>src/MCP/MCP01/<a class="el" href="_account_8cpp_source.html">Account.cpp</a></li>
+<li>D:/Office/metachain/src/MCP/MCP01/<a class="el" href="_account_8h_source.html">Account.h</a></li>
+<li>D:/Office/metachain/src/MCP/MCP01/<a class="el" href="_account_8cpp_source.html">Account.cpp</a></li>
 </ul>
 </div><!-- contents -->
 </div><!-- doc-content -->
