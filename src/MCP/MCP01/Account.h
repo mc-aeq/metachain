@@ -15,6 +15,8 @@
 #include <boost/serialization/unordered_map.hpp>
 #include "../MCP39/Mnemonic.h"
 #include "../base16.h"
+#include "../../../dependencies/secp256k1/include/secp256k1.h"
+#include "../../uint256.h"
 
 namespace MCP01
 {
@@ -43,6 +45,7 @@ namespace MCP01
 																		Account(uint8_t *keyPriv);
 																		Account(MCP39::long_hash keyPriv);
 																		Account(uint8_t *keyPriv, uint8_t *keyPub, ECDSA ecdsaPubKey);
+																		Account(const std::vector<unsigned char>& _vch);
 																		~Account();
 
 			bool														calcPubKey(ECDSA type);
@@ -58,6 +61,7 @@ namespace MCP01
 			std::string													getWalletAddress(std::string strChainIdentifier, bool bTestNet = false);
 			bool														verifyWalletAddress() { return verifyWalletAddress(m_strWalletAddress); };
 			bool														verifyWalletAddress(std::string);
+			bool														verify(const uint256 &hash, const std::vector<unsigned char>& vchSig);
 
 			// getter
 			bool														isTestNet() { return m_uiFlags & BITFIELD_TESTNET; };
@@ -81,6 +85,8 @@ namespace MCP01
 
 			std::string													tokenize(std::string strWalletAddress);
 			std::string													untokenize(std::string strWalletAddress);
+
+			int															ecdsa_signature_parse_der_lax(const secp256k1_context* ctx, secp256k1_ecdsa_signature* sig, const unsigned char *input, size_t inputlen);
 
 
 			// required to have serialization overrides

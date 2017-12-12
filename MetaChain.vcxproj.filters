@@ -363,11 +363,20 @@
     <ClInclude Include="src\MCP\MCP06\script.h">
       <Filter>Headerdateien\MCP\MCP06</Filter>
     </ClInclude>
-    <ClInclude Include="src\MCP\MCP06\script_error.h">
-      <Filter>Headerdateien\MCP\MCP06</Filter>
-    </ClInclude>
     <ClInclude Include="src\io\rest\restManager.h">
       <Filter>Headerdateien\IO\rest</Filter>
+    </ClInclude>
+    <ClInclude Include="src\MCP\MCP06\scriptInterpreter.h">
+      <Filter>Headerdateien\MCP\MCP06</Filter>
+    </ClInclude>
+    <ClInclude Include="src\MCP\MCP06\signatureChecker.h">
+      <Filter>Headerdateien\MCP\MCP06</Filter>
+    </ClInclude>
+    <ClInclude Include="src\MCP\MCP06\scriptError.h">
+      <Filter>Headerdateien\MCP\MCP06</Filter>
+    </ClInclude>
+    <ClInclude Include="src\MCP\MCP06\scriptFunctions.h">
+      <Filter>Headerdateien\MCP\MCP06</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -542,11 +551,20 @@
     <ClCompile Include="src\MCP\MCP06\script.cpp">
       <Filter>Quelldateien\MCP\MCP06</Filter>
     </ClCompile>
-    <ClCompile Include="src\MCP\MCP06\script_error.cpp">
-      <Filter>Quelldateien\MCP\MCP06</Filter>
-    </ClCompile>
     <ClCompile Include="src\io\rest\restManager.cpp">
       <Filter>Quelldateien\IO\rest</Filter>
+    </ClCompile>
+    <ClCompile Include="src\MCP\MCP06\scriptInterpreter.cpp">
+      <Filter>Quelldateien\MCP\MCP06</Filter>
+    </ClCompile>
+    <ClCompile Include="src\MCP\MCP06\signatureChecker.cpp">
+      <Filter>Quelldateien\MCP\MCP06</Filter>
+    </ClCompile>
+    <ClCompile Include="src\MCP\MCP06\scriptError.cpp">
+      <Filter>Quelldateien\MCP\MCP06</Filter>
+    </ClCompile>
+    <ClCompile Include="src\MCP\MCP06\scriptFunctions.cpp">
+      <Filter>Quelldateien\MCP\MCP06</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

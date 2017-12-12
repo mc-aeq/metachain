@@ -207,7 +207,10 @@
     <ClInclude Include="src\MCP\MCP04\PoT.h" />
     <ClInclude Include="src\MCP\MCP04\stub.h" />
     <ClInclude Include="src\MCP\MCP06\script.h" />
-    <ClInclude Include="src\MCP\MCP06\script_error.h" />
+    <ClInclude Include="src\MCP\MCP06\scriptFunctions.h" />
+    <ClInclude Include="src\MCP\MCP06\scriptInterpreter.h" />
+    <ClInclude Include="src\MCP\MCP06\scriptError.h" />
+    <ClInclude Include="src\MCP\MCP06\signatureChecker.h" />
     <ClInclude Include="src\MCP\MCP39\dictionairy.h" />
     <ClInclude Include="src\MCP\MCP39\Mnemonic.h" />
     <ClInclude Include="src\prevector.h" />
@@ -276,7 +279,10 @@
     <ClCompile Include="src\MCP\MCP04\PoS.cpp" />
     <ClCompile Include="src\MCP\MCP04\PoT.cpp" />
     <ClCompile Include="src\MCP\MCP06\script.cpp" />
-    <ClCompile Include="src\MCP\MCP06\script_error.cpp" />
+    <ClCompile Include="src\MCP\MCP06\scriptFunctions.cpp" />
+    <ClCompile Include="src\MCP\MCP06\scriptInterpreter.cpp" />
+    <ClCompile Include="src\MCP\MCP06\scriptError.cpp" />
+    <ClCompile Include="src\MCP\MCP06\signatureChecker.cpp" />
     <ClCompile Include="src\MCP\MCP39\dictionairy.cpp" />
     <ClCompile Include="src\MCP\MCP39\Mnemonic.cpp" />
     <ClCompile Include="src\random.cpp" />

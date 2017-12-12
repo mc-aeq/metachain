@@ -3,6 +3,12 @@
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
+/*********************************************************************
+* Copyright (c) 2017 TCT DEVs	                                     *
+* Distributed under the GPLv3.0 software license					 *
+* contact us before using our code									 *
+**********************************************************************/
+
 #include "script.h"
 
 #include "../../tinyformat.h"
@@ -121,7 +127,6 @@ namespace MCP06
 		case OP_RIPEMD160: return "OP_RIPEMD160";
 		case OP_SHA1: return "OP_SHA1";
 		case OP_SHA256: return "OP_SHA256";
-		case OP_HASH160: return "OP_HASH160";
 		case OP_HASH256: return "OP_HASH256";
 		case OP_CODESEPARATOR: return "OP_CODESEPARATOR";
 		case OP_CHECKSIG: return "OP_CHECKSIG";
@@ -181,7 +186,7 @@ namespace MCP06
 	{
 		if (!IsPayToScriptHash())
 			return GetSigOpCount(true);
-
+		
 		// This is a pay-to-script-hash scriptPubKey;
 		// get the last item that the scriptSig
 		// pushes onto the stack:
@@ -203,37 +208,15 @@ namespace MCP06
 
 	bool CScript::IsPayToScriptHash() const
 	{
+		// pay-to-script-hash deactivated, publish later
+		return false;
+
+		/*
 		// Extra-fast test for pay-to-script-hash CScripts:
 		return (this->size() == 23 &&
 			(*this)[0] == OP_HASH160 &&
 			(*this)[1] == 0x14 &&
-			(*this)[22] == OP_EQUAL);
-	}
-
-	bool CScript::IsPayToWitnessScriptHash() const
-	{
-		// Extra-fast test for pay-to-witness-script-hash CScripts:
-		return (this->size() == 34 &&
-			(*this)[0] == OP_0 &&
-			(*this)[1] == 0x20);
-	}
-
-	// A witness program is any valid CScript that consists of a 1-byte push opcode
-	// followed by a data push between 2 and 40 bytes.
-	bool CScript::IsWitnessProgram(int& version, std::vector<unsigned char>& program) const
-	{
-		if (this->size() < 4 || this->size() > 42) {
-			return false;
-		}
-		if ((*this)[0] != OP_0 && ((*this)[0] < OP_1 || (*this)[0] > OP_16)) {
-			return false;
-		}
-		if ((size_t)((*this)[1] + 2) == this->size()) {
-			version = DecodeOP_N((opcodetype)(*this)[0]);
-			program = std::vector<unsigned char>(this->begin() + 2, this->end());
-			return true;
-		}
-		return false;
+			(*this)[22] == OP_EQUAL);*/
 	}
 
 	bool CScript::IsPushOnly(const_iterator pc) const
@@ -256,18 +239,6 @@ namespace MCP06
 	bool CScript::IsPushOnly() const
 	{
 		return this->IsPushOnly(begin());
-	}
-
-	std::string CScriptWitness::ToString() const
-	{
-		std::string ret = "CScriptWitness(";
-		for (unsigned int i = 0; i < stack.size(); i++) {
-			if (i) {
-				ret += ", ";
-			}
-			ret += HexStr(stack[i]);
-		}
-		return ret + ")";
 	}
 
 	bool CScript::HasValidOps() const
