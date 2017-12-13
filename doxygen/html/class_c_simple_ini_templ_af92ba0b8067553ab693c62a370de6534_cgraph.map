@@ -1,9 +1,0 @@
-<map id="CSimpleIniTempl::SetDoubleValue" name="CSimpleIniTempl::SetDoubleValue">
-<area shape="rect" id="node2" href="$class_c_simple_ini_templ.html#a8c2b8c3e6f6811321a8258182c61f629" title="CSimpleIniTempl::AddEntry" alt="" coords="240,107,421,133"/>
-<area shape="rect" id="node3" href="$class_c_simple_ini_templ.html#a9b2282a0371907316ab4e9300dac0cac" title="CSimpleIniTempl::IsComment" alt="" coords="469,5,663,32"/>
-<area shape="rect" id="node4" href="$class_c_simple_ini_templ.html#ac34744773856c5a50ece49f70c2ea110" title="CSimpleIniTempl::CopyString" alt="" coords="471,56,661,83"/>
-<area shape="rect" id="node5" href="$class_c_simple_ini_templ.html#a705eaa8e6c0fb8c1ce2648e71ad681f7" title="CSimpleIniTempl::IsLess" alt="" coords="973,132,1138,159"/>
-<area shape="rect" id="node6" href="$class_c_simple_ini_templ.html#aeb846a531063a0b71d8784672c3d2dc8" title="CSimpleIniTempl::DeleteString" alt="" coords="956,183,1155,209"/>
-<area shape="rect" id="node7" href="$class_c_simple_ini_templ.html#aa5c1cdd0b306434d9e9f1422888049da" title="CSimpleIniTempl::Delete" alt="" coords="484,157,648,184"/>
-<area shape="rect" id="node8" href="$class_c_simple_ini_templ.html#a04551ae6c3e92475b2a823d2729652d6" title="CSimpleIniTempl::DeleteValue" alt="" coords="711,157,908,184"/>
-</map>

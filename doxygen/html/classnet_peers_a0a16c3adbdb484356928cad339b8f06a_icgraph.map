@@ -1,7 +1,0 @@
-<map id="netPeers::markDestroy" name="netPeers::markDestroy">
-<area shape="rect" id="node2" href="$classnet_peers.html#a21b3606bbbab486cd96a5d78b5a32128" title="netPeers::netPeers" alt="" coords="245,5,380,32"/>
-<area shape="rect" id="node3" href="$class_network_manager.html#ac0b1d84b9a23c78586d18e2d8ca8e344" title="NetworkManager::ThreadSocket\lHandler" alt="" coords="209,57,416,98"/>
-<area shape="rect" id="node4" href="$class_network_manager.html#af7326c9d0cefa365670eb3f9ec6d0e27" title="NetworkManager::startThreads" alt="" coords="464,64,663,91"/>
-<area shape="rect" id="node5" href="$class_network_manager.html#af06f1b25c87391d423a243f1bd2cbc3d" title="NetworkManager::initialize" alt="" coords="711,64,885,91"/>
-<area shape="rect" id="node6" href="$class_meta_chain.html#afc0194a2093aa570c4f9512a14892c3c" title="MetaChain::initialize" alt="" coords="933,64,1072,91"/>
-</map>

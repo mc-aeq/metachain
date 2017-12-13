@@ -1,4 +1,0 @@
-<map id="GetExtNetwork" name="GetExtNetwork">
-<area shape="rect" id="node2" href="$class_c_net_addr.html#aa68c7d6112b22759dcd280ddad30808f" title="CNetAddr::GetReachabilityFrom" alt="" coords="164,5,372,32"/>
-<area shape="rect" id="node3" href="$class_c_net_addr.html#ac394b27d03f9fb5053e0d771e6270495" title="CNetAddr::GetBytes" alt="" coords="420,5,561,32"/>
-</map>

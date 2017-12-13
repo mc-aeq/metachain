@@ -1,5 +1,0 @@
-<map id="MCP04::PoS::createInstance" name="MCP04::PoS::createInstance">
-<area shape="rect" id="node2" href="$class_m_c_p04_1_1_po_s.html#a61467f5746d60193fdca0ed4f3f401d9" title="MCP04::PoS::registerFactory" alt="" coords="244,13,437,39"/>
-<area shape="rect" id="node3" href="$class_m_c_p02_1_1_sub_chain_manager.html#a32f8ba435d4934abc5d96d7ee07e1f10" title="MCP02::SubChainManager\l::initPoPFactories" alt="" coords="485,5,664,47"/>
-<area shape="rect" id="node4" href="$class_m_c_p02_1_1_sub_chain_manager.html#a77066505435ab10bf052ce71266afb50" title="MCP02::SubChainManager\l::SubChainManager" alt="" coords="712,5,891,47"/>
-</map>

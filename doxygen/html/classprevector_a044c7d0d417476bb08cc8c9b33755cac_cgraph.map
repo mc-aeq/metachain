@@ -1,8 +1,0 @@
-<map id="prevector::prevector" name="prevector::prevector">
-<area shape="rect" id="node2" href="$classprevector.html#a0e673654d3b7d8d6f79534e17f68741a" title="prevector::change_capacity" alt="" coords="188,117,368,144"/>
-<area shape="rect" id="node6" href="$classprevector.html#a626f7d206dbc24e5610631809762758b" title="prevector::size" alt="" coords="436,187,543,213"/>
-<area shape="rect" id="node7" href="$classprevector.html#a59f1d7bcbc751cfa0faddd7ffa184846" title="prevector::item_ptr" alt="" coords="213,41,343,68"/>
-<area shape="rect" id="node3" href="$classprevector.html#a933e204a7e29c6bbc85479d023c00ff8" title="prevector::is_direct" alt="" coords="611,136,741,163"/>
-<area shape="rect" id="node4" href="$classprevector.html#ae3343cc65be9fd678b4a6f8305624de6" title="prevector::indirect_ptr" alt="" coords="416,85,563,112"/>
-<area shape="rect" id="node5" href="$classprevector.html#a20150a43dd87c33f0e855a55bd3418e8" title="prevector::direct_ptr" alt="" coords="421,35,557,61"/>
-</map>

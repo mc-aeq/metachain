@@ -1,5 +1,0 @@
-<map id="MCP02::Trust::createInstance" name="MCP02::Trust::createInstance">
-<area shape="rect" id="node2" href="$class_m_c_p02_1_1_trust.html#a2563c2d6bf907f12e0b72a0478a83613" title="MCP02::Trust::registerFactory" alt="" coords="248,13,445,39"/>
-<area shape="rect" id="node3" href="$class_m_c_p02_1_1_sub_chain_manager.html#ae22abe1fa36cb97a60485ceedf62d7a8" title="MCP02::SubChainManager\l::initSCFactories" alt="" coords="493,5,672,47"/>
-<area shape="rect" id="node4" href="$class_m_c_p02_1_1_sub_chain_manager.html#a77066505435ab10bf052ce71266afb50" title="MCP02::SubChainManager\l::SubChainManager" alt="" coords="720,5,899,47"/>
-</map>

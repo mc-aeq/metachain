@@ -1,8 +1,0 @@
-<map id="CNetAddr::IsValid" name="CNetAddr::IsValid">
-<area shape="rect" id="node2" href="$class_c_net_addr.html#a4e3b2fea2a6151c76684b3812df4a5c3" title="CNetAddr::IsRoutable" alt="" coords="179,31,325,57"/>
-<area shape="rect" id="node7" href="$class_c_sub_net.html#af84fa02ebca222739c55e9d2cd7d38a3" title="CSubNet::Match" alt="" coords="193,81,311,108"/>
-<area shape="rect" id="node3" href="$class_c_net_addr.html#ad0162f2629f552a65acf934e1629c1db" title="CNetAddr::GetNetwork" alt="" coords="373,5,528,32"/>
-<area shape="rect" id="node5" href="$class_c_net_addr.html#aa68c7d6112b22759dcd280ddad30808f" title="CNetAddr::GetReachabilityFrom" alt="" coords="735,31,943,57"/>
-<area shape="rect" id="node4" href="$_c_net_addr_8cpp.html#a41643eb4f91cec29059acd8ef44d4bde" title="GetExtNetwork" alt="" coords="576,5,687,32"/>
-<area shape="rect" id="node6" href="$class_c_net_addr.html#ac394b27d03f9fb5053e0d771e6270495" title="CNetAddr::GetBytes" alt="" coords="991,31,1132,57"/>
-</map>

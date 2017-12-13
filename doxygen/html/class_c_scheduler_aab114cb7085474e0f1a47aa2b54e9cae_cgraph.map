@@ -1,5 +1,0 @@
-<map id="CScheduler::scheduleEvery" name="CScheduler::scheduleEvery">
-<area shape="rect" id="node2" href="$class_c_scheduler.html#a9e6aac0524218996342cdf494e10d61b" title="CScheduler::scheduleFromNow" alt="" coords="345,5,549,32"/>
-<area shape="rect" id="node4" href="$scheduler_8cpp.html#a68d2e0ab80a8fdc2dbe451030e0d2b35" title="Repeat" alt="" coords="235,31,297,57"/>
-<area shape="rect" id="node3" href="$class_c_scheduler.html#a14747dc42599cc0a17f45f1767932d6e" title="CScheduler::schedule" alt="" coords="597,5,747,32"/>
-</map>

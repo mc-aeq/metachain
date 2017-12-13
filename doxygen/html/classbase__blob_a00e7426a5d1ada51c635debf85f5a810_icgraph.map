@@ -1,6 +1,0 @@
-<map id="base_blob::size" name="base_blob::size">
-<area shape="rect" id="node2" href="$hash_8h.html#a391c1a6a1f947abbc53cc51fc709110e" title="BIP32Hash" alt="" coords="221,5,307,32"/>
-<area shape="rect" id="node4" href="$class_m_c_p03_1_1cr_block.html#aea9f5f10982a4ea2f81ba708bf4b3f2a" title="MCP03::crBlock::calcHash" alt="" coords="175,56,353,83"/>
-<area shape="rect" id="node5" href="$class_m_c_p03_1_1_meta_chain_1_1mc_block.html#a9f48c0b80de879c2cc7ba59e55e72cd2" title="MCP03::MetaChain::mcBlock\l::calcHash" alt="" coords="167,107,361,149"/>
-<area shape="rect" id="node3" href="$class_c_hash_verifier.html#a773ceef69a4dbcfde85c07e43ccbb589" title="CHashVerifier::ignore" alt="" coords="409,5,553,32"/>
-</map>

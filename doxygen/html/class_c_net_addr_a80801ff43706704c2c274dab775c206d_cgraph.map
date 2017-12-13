@@ -1,9 +1,0 @@
-<map id="CNetAddr::toString" name="CNetAddr::toString">
-<area shape="rect" id="node2" href="$class_c_net_addr.html#a09168d1f3620bcb0ef396359d5764e54" title="CNetAddr::toStringIP" alt="" coords="184,182,327,208"/>
-<area shape="rect" id="node3" href="$class_c_service.html#ac4c6d655fab3af40937f0b0c65581745" title="CService::GetSockAddr" alt="" coords="375,80,533,107"/>
-<area shape="rect" id="node4" href="$class_c_net_addr.html#a7021b79e9a33c342b68db09dbb6c2293" title="CNetAddr::IsIPv4" alt="" coords="780,55,900,82"/>
-<area shape="rect" id="node8" href="$class_c_net_addr.html#a626b15adc4a6921e63756f1c1be16990" title="CNetAddr::GetByte" alt="" coords="387,232,521,259"/>
-<area shape="rect" id="node5" href="$class_c_net_addr.html#a4f73432c55d4acb6b9e4c54833eefea6" title="CNetAddr::GetInAddr" alt="" coords="585,30,729,56"/>
-<area shape="rect" id="node6" href="$class_c_net_addr.html#aad5f7a372c56ccf4d773f728b6b46e18" title="CNetAddr::IsIPv6" alt="" coords="597,80,717,107"/>
-<area shape="rect" id="node7" href="$class_c_net_addr.html#a3616012f94b27148e5b8e27d943d4884" title="CNetAddr::GetIn6Addr" alt="" coords="581,131,732,158"/>
-</map>

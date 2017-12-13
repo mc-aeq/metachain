@@ -1,9 +1,0 @@
-<map id="prevector::push_back" name="prevector::push_back">
-<area shape="rect" id="node2" href="$classprevector.html#a626f7d206dbc24e5610631809762758b" title="prevector::size" alt="" coords="447,5,553,32"/>
-<area shape="rect" id="node4" href="$classprevector.html#a833f4c9e5c4804fb8ac57b708657af24" title="prevector::capacity" alt="" coords="223,233,354,260"/>
-<area shape="rect" id="node5" href="$classprevector.html#a0e673654d3b7d8d6f79534e17f68741a" title="prevector::change_capacity" alt="" coords="199,107,379,133"/>
-<area shape="rect" id="node8" href="$classprevector.html#a59f1d7bcbc751cfa0faddd7ffa184846" title="prevector::item_ptr" alt="" coords="224,157,353,184"/>
-<area shape="rect" id="node3" href="$classprevector.html#a933e204a7e29c6bbc85479d023c00ff8" title="prevector::is_direct" alt="" coords="621,132,752,159"/>
-<area shape="rect" id="node6" href="$classprevector.html#ae3343cc65be9fd678b4a6f8305624de6" title="prevector::indirect_ptr" alt="" coords="427,107,573,133"/>
-<area shape="rect" id="node7" href="$classprevector.html#a20150a43dd87c33f0e855a55bd3418e8" title="prevector::direct_ptr" alt="" coords="432,157,568,184"/>
-</map>

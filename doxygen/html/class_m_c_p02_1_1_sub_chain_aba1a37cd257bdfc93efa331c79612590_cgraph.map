@@ -1,6 +1,0 @@
-<map id="MCP02::SubChain::checkBlock" name="MCP02::SubChain::checkBlock">
-<area shape="rect" id="node2" href="$class_m_c_p03_1_1_block.html#a0b7e0db1d123df05a71c2d0c205a5c2f" title="MCP03::Block::checkSize" alt="" coords="261,5,435,32"/>
-<area shape="rect" id="node4" href="$class_m_c_p03_1_1_block.html#ace02d73ed9c7331d7a4e1a1436f0f829" title="MCP03::Block::checkHash" alt="" coords="259,56,437,83"/>
-<area shape="rect" id="node3" href="$class_m_c_p03_1_1_block.html#ad193ed52359c1b1b911caea9f984811f" title="MCP03::Block::calcSize" alt="" coords="487,5,651,32"/>
-<area shape="rect" id="node5" href="$class_m_c_p03_1_1_block.html#a7fcd930135688ffea446c07fdf72d776" title="MCP03::Block::calcHash" alt="" coords="485,56,653,83"/>
-</map>

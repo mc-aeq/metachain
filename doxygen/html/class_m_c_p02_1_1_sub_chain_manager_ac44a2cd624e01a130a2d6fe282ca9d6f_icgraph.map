@@ -1,9 +1,0 @@
-<map id="MCP02::SubChainManager::getChainIdentifier" name="MCP02::SubChainManager::getChainIdentifier">
-<area shape="rect" id="node2" href="$class_storage_manager.html#ae5856187aae1962b356e7fb618b7d30b" title="StorageManager::getChain\lIdentifier" alt="" coords="233,71,409,112"/>
-<area shape="rect" id="node5" href="$class_m_c_p02_1_1_sub_chain_manager.html#a487bebb83517483fc30da6fd39ad279d" title="MCP02::SubChainManager\l::addSubChain" alt="" coords="232,136,411,177"/>
-<area shape="rect" id="node3" href="$class_m_c_p01_1_1_account.html#a0b1b85049f91e95ced549cbc8e0c6778" title="MCP01::Account::getWallet\lAddress" alt="" coords="464,5,648,47"/>
-<area shape="rect" id="node4" href="$class_m_c_p01_1_1_account.html#a9d85665d6d8c337981b05c451e971f6a" title="MCP01::Account::verifyWallet\lAddress" alt="" coords="459,71,653,112"/>
-<area shape="rect" id="node6" href="$class_m_c_p02_1_1_sub_chain_manager.html#a1da8de089d4a240c31b2f1f7c9c52866" title="MCP02::SubChainManager\l::init" alt="" coords="467,136,645,177"/>
-<area shape="rect" id="node7" href="$class_storage_manager.html#a84456aa2441fafccadc3d4db9f850413" title="StorageManager::initialize" alt="" coords="701,143,873,170"/>
-<area shape="rect" id="node8" href="$class_meta_chain.html#afc0194a2093aa570c4f9512a14892c3c" title="MetaChain::initialize" alt="" coords="921,143,1060,170"/>
-</map>

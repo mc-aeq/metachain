@@ -1,6 +1,0 @@
-<map id="long" name="long">
-<area shape="rect" id="node2" href="$common_8h.html#ab9f60266810cb488fccb44c86754defb" title="CountBits" alt="" coords="158,13,237,39"/>
-<area shape="rect" id="node4" href="$struct_s_i___generic_case.html#a786f2c11709bb935c13d9c6ce6a21f7a" title="SI_GenericCase::operator()" alt="" coords="108,63,287,90"/>
-<area shape="rect" id="node5" href="$struct_s_i___generic_no_case.html#aed14252d999472455a769b104afe6c3a" title="SI_GenericNoCase::operator()" alt="" coords="100,114,295,141"/>
-<area shape="rect" id="node3" href="$class_fast_random_context.html#aa000c668f222d36db387034f6bf98f8f" title="FastRandomContext::\lrandrange" alt="" coords="343,5,492,47"/>
-</map>

@@ -1,7 +1,0 @@
-<map id="prevector::rbegin" name="prevector::rbegin">
-<area shape="rect" id="node2" href="$classprevector.html#a59f1d7bcbc751cfa0faddd7ffa184846" title="prevector::item_ptr" alt="" coords="171,56,300,83"/>
-<area shape="rect" id="node6" href="$classprevector.html#a626f7d206dbc24e5610631809762758b" title="prevector::size" alt="" coords="182,5,289,32"/>
-<area shape="rect" id="node3" href="$classprevector.html#a933e204a7e29c6bbc85479d023c00ff8" title="prevector::is_direct" alt="" coords="356,5,487,32"/>
-<area shape="rect" id="node4" href="$classprevector.html#a20150a43dd87c33f0e855a55bd3418e8" title="prevector::direct_ptr" alt="" coords="353,56,489,83"/>
-<area shape="rect" id="node5" href="$classprevector.html#ae3343cc65be9fd678b4a6f8305624de6" title="prevector::indirect_ptr" alt="" coords="348,107,495,133"/>
-</map>

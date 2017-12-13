@@ -1,4 +1,0 @@
-<map id="LeaveCritical" name="LeaveCritical">
-<area shape="rect" id="node2" href="$classc_mutex_lock.html#aee99a9115042a26adbe6fd7acbc64152" title="cMutexLock::TryEnter" alt="" coords="163,5,313,32"/>
-<area shape="rect" id="node3" href="$classc_mutex_lock.html#a1bdd5ba7f8712954d394433be3842b27" title="cMutexLock::~cMutexLock" alt="" coords="148,56,328,83"/>
-</map>

@@ -1,5 +1,0 @@
-<map id="CService::Init" name="CService::Init">
-<area shape="rect" id="node2" href="$class_c_service.html#a3003da1c50f2135123ebb3109340b9b2" title="CService::CService" alt="" coords="152,5,284,32"/>
-<area shape="rect" id="node3" href="$class_c_service.html#a77782219f5d85f326b4c089cb2636e6f" title="CService::SetSockAddr" alt="" coords="332,5,491,32"/>
-<area shape="rect" id="node4" href="$classnet_peers.html#a21b3606bbbab486cd96a5d78b5a32128" title="netPeers::netPeers" alt="" coords="539,5,673,32"/>
-</map>

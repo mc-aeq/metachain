@@ -1,5 +1,0 @@
-<map id="MCP02::SubChainManager::registerSCFactory" name="MCP02::SubChainManager::registerSCFactory">
-<area shape="rect" id="node2" href="$class_m_c_p02_1_1_mine.html#ac79086896c85cc34f1c27ea2ac2edd16" title="MCP02::Mine::registerFactory" alt="" coords="233,5,429,32"/>
-<area shape="rect" id="node3" href="$class_m_c_p02_1_1_stub.html#a21782ed71c38f9ac68b5abbcc83abe76" title="MCP02::Stub::registerFactory" alt="" coords="233,56,428,83"/>
-<area shape="rect" id="node4" href="$class_m_c_p02_1_1_trust.html#a31062d5c0cf675b32dbc8af1347107ee" title="MCP02::Trust::registerFactory" alt="" coords="232,107,429,133"/>
-</map>

@@ -1,7 +1,0 @@
-<map id="restManager::handleRequest" name="restManager::handleRequest">
-<area shape="rect" id="node2" href="$classrest_manager.html#af3cced21ce957c3eddc9b186260a0542" title="restManager::processVersion" alt="" coords="241,5,433,32"/>
-<area shape="rect" id="node3" href="$classrest_manager.html#ae456f9c393b2eb6fd9b0ae9bc1a93a6e" title="restManager::processTime" alt="" coords="249,56,425,83"/>
-<area shape="rect" id="node4" href="$classrest_manager.html#acac4120d38073f73a7ea9d3eb23a1699" title="restManager::processInfo" alt="" coords="253,107,421,133"/>
-<area shape="rect" id="node5" href="$classrest_manager.html#a9d67a4a398104e8465699efd6ef8f642" title="restManager::processPost\lExample" alt="" coords="250,158,425,199"/>
-<area shape="rect" id="node6" href="$classrest_manager.html#a53e9847118b1bdad873006f4fadbd90a" title="restManager::handleError" alt="" coords="481,165,649,192"/>
-</map>

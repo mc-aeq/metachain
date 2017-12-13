@@ -1,9 +1,0 @@
-<map id="unz64local_getLong" name="unz64local_getLong">
-<area shape="rect" id="node2" href="$ioapi_8h.html#a50e9e9d5c30e481de822ad68fe537986" title="uLong" alt="" coords="761,56,819,83"/>
-<area shape="rect" id="node3" href="$zlib__unzip_8c.html#a4fdc20c5d880511c727c425b1f11ef68" title="unz64local_getByte" alt="" coords="389,107,525,133"/>
-<area shape="rect" id="node6" href="$zlib__unzip_8c.html#aa8884fa294aac2bc70a31c17af6a69ac" title="OF" alt="" coords="770,5,810,32"/>
-<area shape="rect" id="node7" href="$ioapi_8h.html#a39ab6d73c1cd44bc17064c2dcbb3e753" title="voidpf" alt="" coords="763,208,817,235"/>
-<area shape="rect" id="node8" href="$zlib__unzip_8c.html#a65165fb74a10780ee7b66e9c6c57da3c" title="unz64local_getLong64" alt="" coords="191,107,341,133"/>
-<area shape="rect" id="node4" href="$ioapi_8h.html#a787fa3cf048117ba7123753c1e74fcd6" title="int" alt="" coords="624,107,663,133"/>
-<area shape="rect" id="node5" href="$zlib__unzip_8c.html#aca92d6709924f9c82ce13f0c18cc26b1" title="unz64local_getShort" alt="" coords="573,157,713,184"/>
-</map>

@@ -1,7 +1,0 @@
-<map id="NetworkManager::WakeMessageHandler" name="NetworkManager::WakeMessageHandler">
-<area shape="rect" id="node2" href="$class_network_manager.html#a336caef94fed1e40fae5a1126029a5c4" title="NetworkManager::handlePeers" alt="" coords="268,13,467,39"/>
-<area shape="rect" id="node3" href="$class_network_manager.html#ac0b1d84b9a23c78586d18e2d8ca8e344" title="NetworkManager::ThreadSocket\lHandler" alt="" coords="515,5,721,47"/>
-<area shape="rect" id="node4" href="$class_network_manager.html#af7326c9d0cefa365670eb3f9ec6d0e27" title="NetworkManager::startThreads" alt="" coords="769,13,968,39"/>
-<area shape="rect" id="node5" href="$class_network_manager.html#af06f1b25c87391d423a243f1bd2cbc3d" title="NetworkManager::initialize" alt="" coords="1016,13,1191,39"/>
-<area shape="rect" id="node6" href="$class_meta_chain.html#afc0194a2093aa570c4f9512a14892c3c" title="MetaChain::initialize" alt="" coords="1239,13,1377,39"/>
-</map>

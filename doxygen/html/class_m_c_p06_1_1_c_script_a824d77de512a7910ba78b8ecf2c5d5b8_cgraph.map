@@ -1,6 +1,0 @@
-<map id="MCP06::CScript::GetOp2" name="MCP06::CScript::GetOp2">
-<area shape="rect" id="node2" href="$common_8h.html#a2d16135fe5ad0be1b5ae2525bf8a6ae0" title="ReadLE16" alt="" coords="223,5,305,32"/>
-<area shape="rect" id="node4" href="$common_8h.html#a95b035f2729461d80d2f09d776ea07d2" title="ReadLE32" alt="" coords="223,56,305,83"/>
-<area shape="rect" id="node3" href="$endian_8h.html#a43af2810e0abe8dcaefe0920e64a99f4" title="le16toh" alt="" coords="353,5,417,32"/>
-<area shape="rect" id="node5" href="$endian_8h.html#a3b4e83868bbf53b2572b736fc146a319" title="le32toh" alt="" coords="353,56,417,83"/>
-</map>

@@ -1,6 +1,0 @@
-<map id="anonymous_namespace{sha256::cpp}::sha256::Round" name="anonymous_namespace{sha256::cpp}::sha256::Round">
-<area shape="rect" id="node2" href="$namespaceanonymous__namespace_02sha256_8cpp_03_1_1sha256.html#a84ebafc16f994bc06fd71160dbf24413" title="anonymous_namespace\l\{sha256::cpp\}::sha256\l::Sigma1" alt="" coords="225,5,387,61"/>
-<area shape="rect" id="node3" href="$namespaceanonymous__namespace_02sha256_8cpp_03_1_1sha256.html#a686efacff0c70b691c3ce4c5d80facbf" title="anonymous_namespace\l\{sha256::cpp\}::sha256::Ch" alt="" coords="219,86,393,127"/>
-<area shape="rect" id="node4" href="$namespaceanonymous__namespace_02sha256_8cpp_03_1_1sha256.html#ab00615fcc7db7a8285925bf93cdf0677" title="anonymous_namespace\l\{sha256::cpp\}::sha256\l::Sigma0" alt="" coords="225,152,387,208"/>
-<area shape="rect" id="node5" href="$namespaceanonymous__namespace_02sha256_8cpp_03_1_1sha256.html#a1103a335a0ea68300e0cb0cf81650a06" title="anonymous_namespace\l\{sha256::cpp\}::sha256::Maj" alt="" coords="216,233,396,274"/>
-</map>

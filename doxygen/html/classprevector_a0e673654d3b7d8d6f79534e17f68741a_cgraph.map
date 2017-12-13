@@ -1,6 +1,0 @@
-<map id="prevector::change_capacity" name="prevector::change_capacity">
-<area shape="rect" id="node2" href="$classprevector.html#a933e204a7e29c6bbc85479d023c00ff8" title="prevector::is_direct" alt="" coords="428,52,559,79"/>
-<area shape="rect" id="node3" href="$classprevector.html#ae3343cc65be9fd678b4a6f8305624de6" title="prevector::indirect_ptr" alt="" coords="233,27,380,54"/>
-<area shape="rect" id="node4" href="$classprevector.html#a20150a43dd87c33f0e855a55bd3418e8" title="prevector::direct_ptr" alt="" coords="239,78,375,104"/>
-<area shape="rect" id="node5" href="$classprevector.html#a626f7d206dbc24e5610631809762758b" title="prevector::size" alt="" coords="253,128,360,155"/>
-</map>

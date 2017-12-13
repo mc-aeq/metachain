@@ -1,8 +1,0 @@
-<map id="CScheduler::schedule" name="CScheduler::schedule">
-<area shape="rect" id="node2" href="$class_c_scheduler.html#a9e6aac0524218996342cdf494e10d61b" title="CScheduler::scheduleFromNow" alt="" coords="203,31,407,57"/>
-<area shape="rect" id="node3" href="$scheduler_8cpp.html#a68d2e0ab80a8fdc2dbe451030e0d2b35" title="Repeat" alt="" coords="455,5,517,32"/>
-<area shape="rect" id="node4" href="$class_c_scheduler.html#aab114cb7085474e0f1a47aa2b54e9cae" title="CScheduler::scheduleEvery" alt="" coords="565,31,747,57"/>
-<area shape="rect" id="node5" href="$class_network_manager.html#af7326c9d0cefa365670eb3f9ec6d0e27" title="NetworkManager::startThreads" alt="" coords="795,31,993,57"/>
-<area shape="rect" id="node6" href="$class_network_manager.html#af06f1b25c87391d423a243f1bd2cbc3d" title="NetworkManager::initialize" alt="" coords="1041,31,1216,57"/>
-<area shape="rect" id="node7" href="$class_meta_chain.html#afc0194a2093aa570c4f9512a14892c3c" title="MetaChain::initialize" alt="" coords="1264,31,1403,57"/>
-</map>

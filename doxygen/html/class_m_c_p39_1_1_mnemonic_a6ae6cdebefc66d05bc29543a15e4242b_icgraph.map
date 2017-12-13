@@ -1,5 +1,0 @@
-<map id="MCP39::Mnemonic::normal_form" name="MCP39::Mnemonic::normal_form">
-<area shape="rect" id="node2" href="$class_m_c_p39_1_1_mnemonic.html#a2f350eb6d1a7e6c052589d40ef3805f7" title="MCP39::Mnemonic::validate\l_localization" alt="" coords="265,5,449,47"/>
-<area shape="rect" id="node3" href="$class_m_c_p39_1_1_mnemonic.html#a386ead3ac5d12c81fdc0a463f9b552d6" title="MCP39::Mnemonic::toNormalForm" alt="" coords="497,42,720,69"/>
-<area shape="rect" id="node4" href="$class_m_c_p39_1_1_mnemonic.html#a2273870442ab1179757afff629f58db3" title="MCP39::Mnemonic::decode" alt="" coords="768,42,951,69"/>
-</map>

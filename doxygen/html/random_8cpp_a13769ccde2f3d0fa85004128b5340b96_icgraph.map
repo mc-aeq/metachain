@@ -1,5 +1,0 @@
-<map id="GetDevURandom" name="GetDevURandom">
-<area shape="rect" id="node2" href="$random_8h.html#ad5a1de953fbf69ebdf3db0387a8271d3" title="GetOSRand" alt="" coords="175,31,267,57"/>
-<area shape="rect" id="node3" href="$random_8h.html#aa65e9af42fdb369289f81d8c401fb814" title="GetStrongRandBytes" alt="" coords="317,5,463,32"/>
-<area shape="rect" id="node4" href="$random_8h.html#a7fb6c441a23070a7f510fd48b5ca2a18" title="Random_SanityCheck" alt="" coords="315,56,465,83"/>
-</map>

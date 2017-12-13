@@ -1,6 +1,0 @@
-<map id="MCP03::txOut::isEmpty" name="MCP03::txOut::isEmpty">
-<area shape="rect" id="node2" href="$class_m_c_p03_1_1tx_out.html#ae46034adec24e918364783f2cf00ec79" title="MCP03::txOut::toString" alt="" coords="223,5,382,32"/>
-<area shape="rect" id="node4" href="$class_m_c_p03_1_1tx_out.html#a325d44144dce7ca8535d39ab6d3d77a0" title="MCP03::txOut::operator==" alt="" coords="215,56,391,83"/>
-<area shape="rect" id="node5" href="$class_m_c_p03_1_1tx_out.html#af3c6fea85fa37dee762f68db5332b375" title="MCP03::txOut::operator!=" alt="" coords="217,107,388,133"/>
-<area shape="rect" id="node3" href="$class_m_c_p01_1_1base58.html#a349ff2f67ea3fc744a1f969cd2121752" title="MCP01::base58::encode" alt="" coords="439,5,604,32"/>
-</map>

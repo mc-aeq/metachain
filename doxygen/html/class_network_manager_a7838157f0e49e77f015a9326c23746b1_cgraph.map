@@ -1,9 +1,0 @@
-<map id="NetworkManager::ThreadOpenConnections" name="NetworkManager::ThreadOpenConnections">
-<area shape="rect" id="node2" href="$class_c_thread_interrupt.html#a6118393076e75866a688bb64ef4a1e63" title="CThreadInterrupt::sleep_for" alt="" coords="273,5,451,32"/>
-<area shape="rect" id="node3" href="$class_network_manager.html#a4da105c858ea073006e18d60cdadd300" title="NetworkManager::getNextOutNode" alt="" coords="251,56,473,83"/>
-<area shape="rect" id="node6" href="$classc_semaphore_grant.html#a21a3839adddb64863b2125238659dbd9" title="cSemaphoreGrant::MoveTo" alt="" coords="273,107,451,133"/>
-<area shape="rect" id="node4" href="$functions_8cpp.html#a46fac5fba8ba905b5f9acb364f5d8c6f" title="GetTime" alt="" coords="577,56,648,83"/>
-<area shape="rect" id="node5" href="$functions_8cpp.html#a0188bbd06a456e28473cd9d35bdb93ce" title="For unit testing. " alt="" coords="771,56,861,83"/>
-<area shape="rect" id="node7" href="$classc_semaphore_grant.html#a335e018be1e68c7ca46a7c05547339de" title="cSemaphoreGrant::Release" alt="" coords="521,107,704,133"/>
-<area shape="rect" id="node8" href="$classc_semaphore.html#a98052d60faa45f1f4b2cba19fa3a831f" title="cSemaphore::post" alt="" coords="752,107,880,133"/>
-</map>

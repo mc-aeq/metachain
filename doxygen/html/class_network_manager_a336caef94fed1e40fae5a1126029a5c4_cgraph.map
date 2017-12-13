@@ -1,5 +1,0 @@
-<map id="NetworkManager::handlePeers" name="NetworkManager::handlePeers">
-<area shape="rect" id="node2" href="$functions_8cpp.html#a8ddb7d8d6e5b5cfabfdeea132f556977" title="NetworkErrorString" alt="" coords="294,5,425,32"/>
-<area shape="rect" id="node3" href="$class_c_thread_interrupt.html#a6118393076e75866a688bb64ef4a1e63" title="CThreadInterrupt::sleep_for" alt="" coords="271,56,448,83"/>
-<area shape="rect" id="node4" href="$class_network_manager.html#a68c600feeef71671d133c88c7c32da4a" title="NetworkManager::WakeMessage\lHandler" alt="" coords="252,107,467,149"/>
-</map>

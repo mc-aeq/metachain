@@ -1,9 +1,0 @@
-<map id="zip64local_SearchCentralDir" name="zip64local_SearchCentralDir">
-<area shape="rect" id="node2" href="$zlib__zip_8c.html#a44da2707a5a0031b9c263f9373918f29" title="LoadCentralDirectoryRecord" alt="" coords="239,81,423,108"/>
-<area shape="rect" id="node3" href="$zlib__zip_8c.html#a7b8827be59c2d88ae6cafed4a32656bd" title="zipOpen3" alt="" coords="471,81,548,108"/>
-<area shape="rect" id="node4" href="$zlib__zip_8c.html#a07449509c0da16867d0a8ec94a4d50ae" title="zipOpen2" alt="" coords="607,5,684,32"/>
-<area shape="rect" id="node5" href="$zlib__zip_8c.html#a91768e957bb8930ab843aebe4489a7a5" title="zipOpen2_64" alt="" coords="596,56,695,83"/>
-<area shape="rect" id="node6" href="$zlib__zip_8c.html#ae0bf5ebf414b17a1c343c418d26c1a37" title="zipOpen" alt="" coords="610,107,681,133"/>
-<area shape="rect" id="node7" href="$zlib__zip_8c.html#afe7bbafff91fba994da2597f646e9548" title="zipOpen64" alt="" coords="603,157,687,184"/>
-<area shape="rect" id="node8" href="$class_z_i_p_1_1_zip.html#a4e7f4d82c2860fdcea9e44fe38422830" title="ZIP::Zip::open" alt="" coords="743,157,845,184"/>
-</map>

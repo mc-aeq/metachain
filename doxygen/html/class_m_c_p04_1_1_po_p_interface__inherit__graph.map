@@ -1,6 +1,0 @@
-<map id="MCP04::PoPInterface" name="MCP04::PoPInterface">
-<area shape="rect" id="node2" href="$class_m_c_p04_1_1_po_m_c.html" title="MCP04::PoMC" alt="" coords="5,80,115,107"/>
-<area shape="rect" id="node3" href="$class_m_c_p04_1_1_po_s.html" title="MCP04::PoS" alt="" coords="139,80,237,107"/>
-<area shape="rect" id="node4" href="$class_m_c_p04_1_1_po_t.html" title="MCP04::PoT" alt="" coords="261,80,357,107"/>
-<area shape="rect" id="node5" href="$class_m_c_p04_1_1_s_t_u_b.html" title="MCP04::STUB" alt="" coords="381,80,488,107"/>
-</map>

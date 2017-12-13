@@ -1,9 +1,0 @@
-<map id="CThreadInterrupt::sleep_for" name="CThreadInterrupt::sleep_for">
-<area shape="rect" id="node2" href="$class_c_thread_interrupt.html#a1ecbc36ae7cca014e4dd0fda18f338c1" title="CThreadInterrupt::sleep_for" alt="" coords="241,5,419,32"/>
-<area shape="rect" id="node3" href="$class_network_manager.html#ac0b1d84b9a23c78586d18e2d8ca8e344" title="NetworkManager::ThreadSocket\lHandler" alt="" coords="477,85,684,126"/>
-<area shape="rect" id="node7" href="$class_network_manager.html#a336caef94fed1e40fae5a1126029a5c4" title="NetworkManager::handlePeers" alt="" coords="231,107,429,133"/>
-<area shape="rect" id="node8" href="$class_network_manager.html#a7838157f0e49e77f015a9326c23746b1" title="NetworkManager::ThreadOpen\lConnections" alt="" coords="482,150,679,191"/>
-<area shape="rect" id="node4" href="$class_network_manager.html#af7326c9d0cefa365670eb3f9ec6d0e27" title="NetworkManager::startThreads" alt="" coords="732,125,931,152"/>
-<area shape="rect" id="node5" href="$class_network_manager.html#af06f1b25c87391d423a243f1bd2cbc3d" title="NetworkManager::initialize" alt="" coords="979,125,1153,152"/>
-<area shape="rect" id="node6" href="$class_meta_chain.html#afc0194a2093aa570c4f9512a14892c3c" title="MetaChain::initialize" alt="" coords="1201,125,1340,152"/>
-</map>

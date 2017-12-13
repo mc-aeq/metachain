@@ -1,8 +1,0 @@
-<map id="ipContainer::writeContents" name="ipContainer::writeContents">
-<area shape="rect" id="node2" href="$classip_container.html#adaf04c2626bd34bc45f0e29d63596353" title="ipContainer\&lt; CNetAddr\l \&gt;::setFileName" alt="" coords="245,5,399,47"/>
-<area shape="rect" id="node3" href="$class_network_manager.html#ad19c25f249c8f7e21436fdd0914c5635" title="NetworkManager::DumpData" alt="" coords="228,71,416,98"/>
-<area shape="rect" id="node4" href="$class_network_manager.html#af7326c9d0cefa365670eb3f9ec6d0e27" title="NetworkManager::startThreads" alt="" coords="464,42,663,69"/>
-<area shape="rect" id="node7" href="$class_network_manager.html#a2cfe4223139cf58587a9f066b956cb23" title="NetworkManager::~Network\lManager" alt="" coords="472,93,655,135"/>
-<area shape="rect" id="node5" href="$class_network_manager.html#af06f1b25c87391d423a243f1bd2cbc3d" title="NetworkManager::initialize" alt="" coords="711,42,885,69"/>
-<area shape="rect" id="node6" href="$class_meta_chain.html#afc0194a2093aa570c4f9512a14892c3c" title="MetaChain::initialize" alt="" coords="933,42,1072,69"/>
-</map>

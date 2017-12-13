@@ -1,9 +1,0 @@
-<map id="prevector::erase" name="prevector::erase">
-<area shape="rect" id="node2" href="$classprevector.html#aab7f6e13a3cac85cc340fc6b90c5365c" title="prevector::end" alt="" coords="168,71,271,98"/>
-<area shape="rect" id="node3" href="$classprevector_1_1iterator.html#ae9dd2b5e8d96f866e4b05d6b7535f285" title="prevector::iterator\l::iterator" alt="" coords="322,5,445,47"/>
-<area shape="rect" id="node4" href="$classprevector.html#a59f1d7bcbc751cfa0faddd7ffa184846" title="prevector::item_ptr" alt="" coords="319,122,448,149"/>
-<area shape="rect" id="node8" href="$classprevector.html#a626f7d206dbc24e5610631809762758b" title="prevector::size" alt="" coords="330,71,437,98"/>
-<area shape="rect" id="node5" href="$classprevector.html#a933e204a7e29c6bbc85479d023c00ff8" title="prevector::is_direct" alt="" coords="504,71,635,98"/>
-<area shape="rect" id="node6" href="$classprevector.html#a20150a43dd87c33f0e855a55bd3418e8" title="prevector::direct_ptr" alt="" coords="501,122,637,149"/>
-<area shape="rect" id="node7" href="$classprevector.html#ae3343cc65be9fd678b4a6f8305624de6" title="prevector::indirect_ptr" alt="" coords="496,173,643,199"/>
-</map>

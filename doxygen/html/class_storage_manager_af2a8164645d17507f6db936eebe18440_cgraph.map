@@ -1,5 +1,0 @@
-<map id="StorageManager::createDBEngine" name="StorageManager::createDBEngine">
-<area shape="rect" id="node2" href="$class_c_simple_ini_templ.html#a74e3f5d22f50b70b2a20c89ec7e2c737" title="CSimpleIniTempl::GetValue" alt="" coords="272,5,453,32"/>
-<area shape="rect" id="node4" href="$classdb_engine_r_d_b.html#aa48713c296c8fa7d43fdb3c38e48b9d3" title="dbEngineRDB::initialize" alt="" coords="283,56,442,83"/>
-<area shape="rect" id="node3" href="$class_c_simple_ini_templ.html#a705eaa8e6c0fb8c1ce2648e71ad681f7" title="CSimpleIniTempl::IsLess" alt="" coords="501,5,667,32"/>
-</map>

@@ -1,9 +1,0 @@
-<map id="MCP01::Account::verifyWalletAddress" name="MCP01::Account::verifyWalletAddress">
-<area shape="rect" id="node2" href="$class_m_c_p01_1_1_account.html#a2f1e040186dc25aeb65e8cfa5013f391" title="MCP01::Account::verify" alt="" coords="248,46,407,73"/>
-<area shape="rect" id="node8" href="$class_meta_chain.html#afc0194a2093aa570c4f9512a14892c3c" title="MetaChain::initialize" alt="" coords="258,97,397,123"/>
-<area shape="rect" id="node3" href="$class_m_c_p06_1_1signature_checker.html#aadcef40359490915273045d434a81164" title="MCP06::signatureChecker\l::verifySignature" alt="" coords="455,39,629,80"/>
-<area shape="rect" id="node4" href="$class_m_c_p06_1_1signature_checker.html#a450b5fe2999d72b06a43f55add97c24c" title="MCP06::signatureChecker\l::checkSignature" alt="" coords="677,39,852,80"/>
-<area shape="rect" id="node5" href="$class_m_c_p06_1_1script_interpreter.html#a3eafe91afef52589c930523a3622ceff" title="MCP06::scriptInterpreter\l::evalScript" alt="" coords="906,5,1069,47"/>
-<area shape="rect" id="node7" href="$class_m_c_p06_1_1signature_checker.html#a4d35c751f4029a98489dd82ad5638b2a" title="MCP06::signatureChecker\l::signatureChecker" alt="" coords="900,71,1075,112"/>
-<area shape="rect" id="node6" href="$class_m_c_p06_1_1script_interpreter.html#ad5ba77a236bf73c6c07789ce4caa64d9" title="MCP06::scriptInterpreter\l::verifyScript" alt="" coords="1123,5,1285,47"/>
-</map>

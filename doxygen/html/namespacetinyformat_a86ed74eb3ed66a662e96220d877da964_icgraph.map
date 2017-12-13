@@ -1,7 +1,0 @@
-<map id="tinyformat::vformat" name="tinyformat::vformat">
-<area shape="rect" id="node2" href="$classtinyformat_1_1_format_list.html#a4dc93948fa7b945665800b5c147037c3" title="tinyformat::FormatList\l::FormatList" alt="" coords="181,15,331,57"/>
-<area shape="rect" id="node3" href="$namespacetinyformat.html#a05144619d8b16e2b31b2594ca9c6bf1d" title="Format list of arguments to the stream according to given format string. " alt="" coords="195,81,317,108"/>
-<area shape="rect" id="node6" href="$namespacetinyformat.html#a3621ecff051629bf09d87813104568eb" title="tinyformat::printfln" alt="" coords="549,107,675,133"/>
-<area shape="rect" id="node4" href="$namespacetinyformat.html#aa2768ebf94f6989dfcea052b3d3f9b9f" title="tinyformat::format" alt="" coords="379,5,501,32"/>
-<area shape="rect" id="node5" href="$namespacetinyformat.html#a72cec9a050602495fc65c8f321e43478" title="Format list of arguments to std::cout, according to the given format string. " alt="" coords="383,56,497,83"/>
-</map>

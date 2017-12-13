@@ -1,6 +1,0 @@
-<map id="CSubNet::Match" name="CSubNet::Match">
-<area shape="rect" id="node2" href="$class_c_net_addr.html#a6fe20b8da9701ca5dc2af078e2e8ac25" title="CNetAddr::IsValid" alt="" coords="172,31,297,57"/>
-<area shape="rect" id="node3" href="$class_c_net_addr.html#a7bf8bc283323c0cd9be42f921469c90f" title="CNetAddr::IsRFC3849" alt="" coords="345,5,496,32"/>
-<area shape="rect" id="node5" href="$class_c_net_addr.html#a7021b79e9a33c342b68db09dbb6c2293" title="CNetAddr::IsIPv4" alt="" coords="361,56,481,83"/>
-<area shape="rect" id="node4" href="$class_c_net_addr.html#a626b15adc4a6921e63756f1c1be16990" title="CNetAddr::GetByte" alt="" coords="544,5,679,32"/>
-</map>

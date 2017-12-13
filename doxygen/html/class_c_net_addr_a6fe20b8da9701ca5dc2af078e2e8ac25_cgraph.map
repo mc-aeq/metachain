@@ -1,5 +1,0 @@
-<map id="CNetAddr::IsValid" name="CNetAddr::IsValid">
-<area shape="rect" id="node2" href="$class_c_net_addr.html#a7bf8bc283323c0cd9be42f921469c90f" title="CNetAddr::IsRFC3849" alt="" coords="179,5,329,32"/>
-<area shape="rect" id="node4" href="$class_c_net_addr.html#a7021b79e9a33c342b68db09dbb6c2293" title="CNetAddr::IsIPv4" alt="" coords="194,56,314,83"/>
-<area shape="rect" id="node3" href="$class_c_net_addr.html#a626b15adc4a6921e63756f1c1be16990" title="CNetAddr::GetByte" alt="" coords="377,5,512,32"/>
-</map>

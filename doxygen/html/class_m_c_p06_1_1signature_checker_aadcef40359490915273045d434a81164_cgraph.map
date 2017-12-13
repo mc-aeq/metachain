@@ -1,6 +1,0 @@
-<map id="MCP06::signatureChecker::verifySignature" name="MCP06::signatureChecker::verifySignature">
-<area shape="rect" id="node2" href="$class_m_c_p01_1_1_account.html#a2f1e040186dc25aeb65e8cfa5013f391" title="MCP01::Account::verify" alt="" coords="228,70,387,97"/>
-<area shape="rect" id="node3" href="$class_m_c_p01_1_1_account.html#a497e78be4ab878ea67bfeee3b5771317" title="MCP01::Account::verifyWallet\lAddress" alt="" coords="435,29,629,71"/>
-<area shape="rect" id="node4" href="$class_m_c_p01_1_1_account.html#aa42336f84992125e6ab9e1bb5f8396c3" title="MCP01::Account::ecdsa\l_signature_parse_der_lax" alt="" coords="447,95,617,136"/>
-<area shape="rect" id="node5" href="$classbase__blob.html#aeee68e00ceeacf49086e98b661e017ff" title="base_blob::begin" alt="" coords="472,161,592,187"/>
-</map>

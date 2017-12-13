@@ -1,5 +1,0 @@
-<map id="MCP02::Trust::registerFactory" name="MCP02::Trust::registerFactory">
-<area shape="rect" id="node2" href="$class_m_c_p02_1_1_trust.html#a6c0cab873a6eef2b8ec7a21ed833b6db" title="MCP02::Trust::createInstance" alt="" coords="251,31,445,57"/>
-<area shape="rect" id="node3" href="$class_m_c_p02_1_1_trust.html#a0be4f48eeb73e26c4056820610f8f559" title="MCP02::Trust::initGenesis" alt="" coords="501,5,675,32"/>
-<area shape="rect" id="node4" href="$class_m_c_p02_1_1_trust.html#a7dc226c06d0bdf757388bb96c0b90b39" title="MCP02::Trust::processBlock" alt="" coords="493,56,683,83"/>
-</map>

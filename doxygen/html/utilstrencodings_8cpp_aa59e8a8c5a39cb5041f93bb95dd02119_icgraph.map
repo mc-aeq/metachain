@@ -1,6 +1,0 @@
-<map id="HexDigit" name="HexDigit">
-<area shape="rect" id="node2" href="$classbase__blob.html#a5ec1f681a2830f4e180fe664c0eb4dd0" title="base_blob\&lt; 256 \&gt;::SetHex" alt="" coords="124,5,301,32"/>
-<area shape="rect" id="node3" href="$utilstrencodings_8h.html#a9f23401f4b871ed693f7a96a9ba40c58" title="IsHex" alt="" coords="185,56,240,83"/>
-<area shape="rect" id="node4" href="$utilstrencodings_8h.html#a5a787187ddd5c52baae692350ec5a2cb" title="ParseHex" alt="" coords="173,107,252,133"/>
-<area shape="rect" id="node5" href="$utilstrencodings_8h.html#a0fc7535fb01fcf081fd8791173688939" title="ParseHex" alt="" coords="349,107,428,133"/>
-</map>

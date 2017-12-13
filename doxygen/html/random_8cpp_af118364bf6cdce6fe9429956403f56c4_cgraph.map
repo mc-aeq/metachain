@@ -1,8 +1,0 @@
-<map id="RandAddSeedPerfmon" name="RandAddSeedPerfmon">
-<area shape="rect" id="node2" href="$random_8cpp.html#ab699fbdf803610a4e2060fd87787f7e0" title="RandAddSeed" alt="" coords="207,5,312,32"/>
-<area shape="rect" id="node5" href="$functions_8cpp.html#a5a4afb85dd16ecc1f6019c782db78663" title="memory_cleanse" alt="" coords="380,56,501,83"/>
-<area shape="rect" id="node7" href="$functions_8cpp.html#a46fac5fba8ba905b5f9acb364f5d8c6f" title="GetTime" alt="" coords="224,107,295,133"/>
-<area shape="rect" id="node3" href="$random_8cpp.html#a4018f69d23d8c061fb5d2c7c4d72bf19" title="GetPerformanceCounter" alt="" coords="360,5,521,32"/>
-<area shape="rect" id="node4" href="$random_8cpp.html#a3094c2181858ab8d8331bb1cc71f1050" title="RDRandInit" alt="" coords="571,5,657,32"/>
-<area shape="rect" id="node6" href="$functions_8cpp.html#a0188bbd06a456e28473cd9d35bdb93ce" title="For unit testing. " alt="" coords="569,81,659,108"/>
-</map>

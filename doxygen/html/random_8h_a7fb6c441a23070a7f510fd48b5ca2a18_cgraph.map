@@ -1,7 +1,0 @@
-<map id="Random_SanityCheck" name="Random_SanityCheck">
-<area shape="rect" id="node2" href="$random_8cpp.html#a4018f69d23d8c061fb5d2c7c4d72bf19" title="GetPerformanceCounter" alt="" coords="204,5,365,32"/>
-<area shape="rect" id="node4" href="$random_8cpp.html#ad5a1de953fbf69ebdf3db0387a8271d3" title="GetOSRand" alt="" coords="239,56,331,83"/>
-<area shape="rect" id="node3" href="$random_8cpp.html#a3094c2181858ab8d8331bb1cc71f1050" title="RDRandInit" alt="" coords="431,5,517,32"/>
-<area shape="rect" id="node5" href="$random_8cpp.html#ac2fd3df4be152041d5339aafd81e5d17" title="RandFailure" alt="" coords="583,81,673,108"/>
-<area shape="rect" id="node6" href="$random_8cpp.html#a13769ccde2f3d0fa85004128b5340b96" title="GetDevURandom" alt="" coords="413,107,535,133"/>
-</map>

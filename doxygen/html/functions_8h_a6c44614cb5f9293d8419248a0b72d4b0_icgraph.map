@@ -1,7 +1,0 @@
-<map id="SetSocketNonBlocking" name="SetSocketNonBlocking">
-<area shape="rect" id="node2" href="$classnet_peers.html#aab5231b77c63002db381aaa50cff280f" title="netPeers::tryConnectOutbound" alt="" coords="211,5,413,32"/>
-<area shape="rect" id="node4" href="$class_network_manager.html#a3dc6503bbd3b96fa973d699fbb38e06e" title="NetworkManager::startListening\lSocket" alt="" coords="209,57,415,98"/>
-<area shape="rect" id="node3" href="$classnet_peers.html#a1609b4f0b11992449f2eb0dcfcfa6207" title="netPeers::validConnection" alt="" coords="464,5,636,32"/>
-<area shape="rect" id="node5" href="$class_network_manager.html#af06f1b25c87391d423a243f1bd2cbc3d" title="NetworkManager::initialize" alt="" coords="463,64,637,91"/>
-<area shape="rect" id="node6" href="$class_meta_chain.html#afc0194a2093aa570c4f9512a14892c3c" title="MetaChain::initialize" alt="" coords="685,64,824,91"/>
-</map>

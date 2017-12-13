@@ -1,6 +1,0 @@
-<map id="NetworkManager::handlePeers" name="NetworkManager::handlePeers">
-<area shape="rect" id="node2" href="$class_network_manager.html#ac0b1d84b9a23c78586d18e2d8ca8e344" title="NetworkManager::ThreadSocket\lHandler" alt="" coords="252,5,459,47"/>
-<area shape="rect" id="node3" href="$class_network_manager.html#af7326c9d0cefa365670eb3f9ec6d0e27" title="NetworkManager::startThreads" alt="" coords="507,13,705,39"/>
-<area shape="rect" id="node4" href="$class_network_manager.html#af06f1b25c87391d423a243f1bd2cbc3d" title="NetworkManager::initialize" alt="" coords="753,13,928,39"/>
-<area shape="rect" id="node5" href="$class_meta_chain.html#afc0194a2093aa570c4f9512a14892c3c" title="MetaChain::initialize" alt="" coords="976,13,1115,39"/>
-</map>

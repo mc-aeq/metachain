@@ -1,6 +1,0 @@
-<map id="Write_EndOfCentralDirectoryRecord" name="Write_EndOfCentralDirectoryRecord">
-<area shape="rect" id="node2" href="$zlib__zip_8c.html#a4fda7a41fa2f57d105ffc7d1cbcf53cc" title="zipClose" alt="" coords="243,31,315,57"/>
-<area shape="rect" id="node3" href="$class_z_i_p_1_1_zip.html#aea19e6b65f285d3788f6c2823e1fdafd" title="ZIP::Zip::close" alt="" coords="363,31,468,57"/>
-<area shape="rect" id="node4" href="$class_z_i_p_1_1_zip.html#a0fa12080797cab4af0bc57bda603efcc" title="ZIP::Zip::~Zip" alt="" coords="518,5,617,32"/>
-<area shape="rect" id="node5" href="$class_z_i_p_1_1_zip.html#a4e7f4d82c2860fdcea9e44fe38422830" title="ZIP::Zip::open" alt="" coords="516,56,619,83"/>
-</map>

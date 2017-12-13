@@ -1,5 +1,0 @@
-<map id="MCP06::signatureChecker::checkSignature" name="MCP06::signatureChecker::checkSignature">
-<area shape="rect" id="node2" href="$class_m_c_p06_1_1script_interpreter.html#a3eafe91afef52589c930523a3622ceff" title="MCP06::scriptInterpreter\l::evalScript" alt="" coords="234,5,397,47"/>
-<area shape="rect" id="node4" href="$class_m_c_p06_1_1signature_checker.html#a4d35c751f4029a98489dd82ad5638b2a" title="MCP06::signatureChecker\l::signatureChecker" alt="" coords="228,71,403,112"/>
-<area shape="rect" id="node3" href="$class_m_c_p06_1_1script_interpreter.html#ad5ba77a236bf73c6c07789ce4caa64d9" title="MCP06::scriptInterpreter\l::verifyScript" alt="" coords="451,5,613,47"/>
-</map>

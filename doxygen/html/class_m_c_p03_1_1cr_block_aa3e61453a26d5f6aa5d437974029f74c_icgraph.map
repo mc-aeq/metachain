@@ -1,7 +1,0 @@
-<map id="MCP03::crBlock::toString" name="MCP03::crBlock::toString">
-<area shape="rect" id="node2" href="$class_m_c_p02_1_1_mine.html#a54c774dacb50d45f2bc836a73eb84940" title="MCP02::Mine::initGenesis" alt="" coords="224,13,399,39"/>
-<area shape="rect" id="node3" href="$class_m_c_p02_1_1_mine.html#ac08f96c0ca77120d0a8b63c46d39e152" title="MCP02::Mine::createInstance" alt="" coords="447,13,641,39"/>
-<area shape="rect" id="node4" href="$class_m_c_p02_1_1_mine.html#a39ce2c01275596ef6ac84e21cff09634" title="MCP02::Mine::registerFactory" alt="" coords="689,13,885,39"/>
-<area shape="rect" id="node5" href="$class_m_c_p02_1_1_sub_chain_manager.html#ae22abe1fa36cb97a60485ceedf62d7a8" title="MCP02::SubChainManager\l::initSCFactories" alt="" coords="933,5,1112,47"/>
-<area shape="rect" id="node6" href="$class_m_c_p02_1_1_sub_chain_manager.html#a77066505435ab10bf052ce71266afb50" title="MCP02::SubChainManager\l::SubChainManager" alt="" coords="1160,5,1339,47"/>
-</map>

@@ -1,5 +1,0 @@
-<map id="SetSocketNoDelay" name="SetSocketNoDelay">
-<area shape="rect" id="node2" href="$classnet_peers.html#a21b3606bbbab486cd96a5d78b5a32128" title="netPeers::netPeers" alt="" coords="219,5,353,32"/>
-<area shape="rect" id="node3" href="$classnet_peers.html#aab5231b77c63002db381aaa50cff280f" title="netPeers::tryConnectOutbound" alt="" coords="185,56,387,83"/>
-<area shape="rect" id="node4" href="$classnet_peers.html#a1609b4f0b11992449f2eb0dcfcfa6207" title="netPeers::validConnection" alt="" coords="435,56,607,83"/>
-</map>

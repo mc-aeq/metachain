@@ -1,9 +1,0 @@
-<map id="atoi" name="atoi">
-<area shape="rect" id="node2" href="$_args_manager_8cpp.html#adcbab0c1a0f7f85a15bcf661621a08f5" title="InterpretBool" alt="" coords="187,31,281,57"/>
-<area shape="rect" id="node8" href="$utilstrencodings_8h.html#aa5ce96ec36f4413f820cec9c1831c070" title="atoi" alt="" coords="96,68,139,95"/>
-<area shape="rect" id="node3" href="$_args_manager_8cpp.html#aae6e67b71558adbf06eaa20bcf04e812" title="InterpretNegativeSetting" alt="" coords="337,5,496,32"/>
-<area shape="rect" id="node6" href="$class_args_manager.html#a6be07c83ff48dca0d2f59fe8b134edb0" title="ArgsManager::GetBoolArg" alt="" coords="329,56,504,83"/>
-<area shape="rect" id="node4" href="$class_args_manager.html#a351a790533f47687188f032478d09fc0" title="ArgsManager::ParseParameters" alt="" coords="552,5,760,32"/>
-<area shape="rect" id="node5" href="$_args_manager_8h.html#ae8d03fa26a071b131c518d9ff871cb4e" title="ParseParameters" alt="" coords="808,5,931,32"/>
-<area shape="rect" id="node7" href="$_args_manager_8h.html#a1a4d8648a2edaa5b598bcccd2438ab59" title="GetBoolArg" alt="" coords="611,56,701,83"/>
-</map>

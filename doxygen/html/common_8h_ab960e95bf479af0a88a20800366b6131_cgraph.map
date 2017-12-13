@@ -1,4 +1,0 @@
-<map id="WriteBE64" name="WriteBE64">
-<area shape="rect" id="node2" href="$endian_8h.html#a55844e5fbe9a8ab3e9793335a16e2efc" title="htobe64" alt="" coords="139,5,207,32"/>
-<area shape="rect" id="node3" href="$byteswap_8h.html#aaf6a6e8515061fb001505d3b9f6164e2" title="bswap_64" alt="" coords="255,5,335,32"/>
-</map>

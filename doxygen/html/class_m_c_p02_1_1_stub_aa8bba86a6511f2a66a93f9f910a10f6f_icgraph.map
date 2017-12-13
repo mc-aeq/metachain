@@ -1,6 +1,0 @@
-<map id="MCP02::Stub::initGenesis" name="MCP02::Stub::initGenesis">
-<area shape="rect" id="node2" href="$class_m_c_p02_1_1_stub.html#a9ba8b78131ec1eb488c6e18dbd832d44" title="MCP02::Stub::createInstance" alt="" coords="227,13,420,39"/>
-<area shape="rect" id="node3" href="$class_m_c_p02_1_1_stub.html#a3d0b6d28a36141ac164c652d64360b3c" title="MCP02::Stub::registerFactory" alt="" coords="468,13,663,39"/>
-<area shape="rect" id="node4" href="$class_m_c_p02_1_1_sub_chain_manager.html#ae22abe1fa36cb97a60485ceedf62d7a8" title="MCP02::SubChainManager\l::initSCFactories" alt="" coords="711,5,889,47"/>
-<area shape="rect" id="node5" href="$class_m_c_p02_1_1_sub_chain_manager.html#a77066505435ab10bf052ce71266afb50" title="MCP02::SubChainManager\l::SubChainManager" alt="" coords="937,5,1116,47"/>
-</map>
