@@ -74,4 +74,5 @@ win32-build
 test/config.ini
 test/cache/*
 
-/doc/doxygen/
+# doxygen generated output 
+/doxygen/html
