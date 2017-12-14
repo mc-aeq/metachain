@@ -34,6 +34,10 @@ A quick overview of the different MCPs
 - MCP06: Transaction Scripts and Signatures
 - MCP39: based on BIP39 mnemonic generation
 
+@section api API for external applications
+
+A documentation of the REST API can be found in the restManager class. All functions are documented with corresponding GET and POST functions, as well as their return values in JSON encoded format
+
 @section licence GPLv3.0 LICENCE
 
 Please refer to the GPLv3.0 license on which this development is based: https://www.gnu.org/licenses/gpl-3.0.html

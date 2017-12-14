@@ -122,6 +122,14 @@ void restManager::handleError(pplx::task<void>& t)
 	}
 }
 
+/**
+@brief get the version number\n
+@detail
+\b Method: GET\n
+\b URI: /version\n
+@param none
+@return version => version number
+*/
 void restManager::processVersion(web::http::http_request *req)
 {
 	// assemble json response
@@ -132,6 +140,14 @@ void restManager::processVersion(web::http::http_request *req)
 	req->reply(web::http::status_codes::OK, obj);
 }
 
+/**
+@brief get the current time\n
+@detail
+\b Method: GET\n
+\b URI: /time\n
+@param none
+@return time => unix timestamp
+*/
 void restManager::processTime(web::http::http_request *req)
 {
 	// prepare response
@@ -145,6 +161,15 @@ void restManager::processTime(web::http::http_request *req)
 	req->reply(web::http::status_codes::OK, obj);
 }
 
+/**
+@brief get general information\n
+@detail
+\b Method: GET\n
+\b URI: /info\n
+@param none
+@return version => version number
+@return time => unix timestamp
+*/
 void restManager::processInfo(web::http::http_request *req)
 {
 	// prepare response

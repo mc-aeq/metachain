@@ -9,12 +9,7 @@
 #ifndef __RESTMANAGER_H__
 #define __RESTMANAGER_H__ 1
 
-/*
-this class represents our REST api server. All requests that are sent to our REST api must be JSON encoded in order to get processed
-*/
-
-// remove U macro from cpprestsdk
-//#define _TURN_OFF_PLATFORM_STRING 1
+// force async IO to enable the http listener
 #define CPPREST_FORCE_HTTP_LISTENER_ASIO 1
 
 #include <cpprest/uri.h>
@@ -24,6 +19,22 @@ this class represents our REST api server. All requests that are sent to our RES
 
 #include "../../network/CService.h"
 
+/**
+@brief This is the REST API server. More development information are in the <em>Detailed Descriptions</em>
+
+This class handles all external requests. The default listening URI is <em>http://127.0.0.1:10016/api/</em>\n
+Every function either uses POST or GET to retrieve possible parameters. Use the corresponding request method, otherwise your request will result in an error.\n
+All parameters must be JSON encoded arrays and return values will also always be JSON encoded arrays.\n\n
+
+@note For standardized documentation purposes, every function call will be documented as follows:\n
+\b Method: POST or GET\n
+\b URI: <em>path that needs to be called</em>\n
+\b Parameters: <em>list of params</em>\n
+\b Returns: <em>list of return values on success, key => value</em>\n
+
+@warning If a request method doesn't match the documented standard (POST, GET), params are missing or invalid, the status code will contain the corresponding error number and the body of the document will be a description of the error itself. This value is not JSON encoded, it's sent plain.
+
+*/
 class restManager
 {
 	private:
