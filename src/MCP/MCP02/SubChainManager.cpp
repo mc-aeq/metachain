@@ -450,6 +450,13 @@ namespace MCP02
 			return nullptr;
 	}
 
+	void SubChainManager::listSubChains(std::unordered_map< unsigned int, std::string> *umapChains)
+	{
+		umapChains->reserve(m_mapSubChains.size());
+		for (auto &it : m_mapSubChains)
+			umapChains->emplace(it.first, it.second->getChainName());
+	}
+
 	void SubChainManager::printSCInfo()
 	{
 		LOG("Number of loaded SubChains: " + std::to_string(m_mapSubChains.size()), "SCM");

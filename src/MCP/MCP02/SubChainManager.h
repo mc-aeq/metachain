@@ -73,6 +73,7 @@ namespace MCP02
 			dbEngine*														getDBEngine(unsigned short usChainIdentifier);
 			MCP04::PoPInterface*											getPoPInstance(std::string strPoPFactory) { return m_mapPoPFactories[strPoPFactory](); };
 			MCP02::SubChain*												getSubChain(std::string strChainName);
+			void															listSubChains(std::unordered_map< unsigned int, std::string> *umapChains);
 	};	
 }
 

@@ -52,6 +52,7 @@ class restManager
 		void													processVersion(web::http::http_request *req);
 		void													processTime(web::http::http_request *req);
 		void													processInfo(web::http::http_request *req);
+		void													processGetAllSubchains(web::http::http_request *req);
 
 		// single command handlers _POST
 		void													processMetachainHeight(web::http::http_request req);

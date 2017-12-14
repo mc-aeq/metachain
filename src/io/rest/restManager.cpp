@@ -6,6 +6,7 @@
 
 // it's important that the MetaChain.h file is included first before the cpprestsdk files due to incompabilities of boost and the U macro from cpprestsdk. If cpprestsdk is included before boost, boost will throw a syntax error C2187 in type_traits.hpp(757)
 #include "../../MetaChain.h"
+#include <unordered_map>
 #include "restManager.h"
 #include "../../logger.h"
 #include "../../tinyformat.h"
@@ -94,13 +95,26 @@ void restManager::handleRequest(web::http::http_request req)
 		// handle GET calls
 		if (req.method() == U("GET"))
 		{
-			// processing the request
-			if (vecPaths[0] == U("version"))
-				processVersion(&req);
-			else if (vecPaths[0] == U("time"))
-				processTime(&req);
-			else if (vecPaths[0] == U("info"))
-				processInfo(&req);
+			// general commands
+			if (vecPaths[0] == U("general"))
+			{
+				if (vecPaths[1] == U("version"))
+					processVersion(&req);
+				else if (vecPaths[1] == U("time"))
+					processTime(&req);
+				else if (vecPaths[1] == U("info"))
+					processInfo(&req);
+				else
+					req.reply(web::http::status_codes::NotFound, U("API GET Method not found"));
+			}
+			// metachain and subchain commands
+			if (vecPaths[0] == U("metachain"))
+			{
+				if (vecPaths[1] == U("getAllSubchains"))
+					processGetAllSubchains(&req);
+				else
+					req.reply(web::http::status_codes::NotFound, U("API GET Method not found"));
+			}
 			else
 				req.reply(web::http::status_codes::NotFound, U("API GET Method not found"));
 		}
@@ -109,7 +123,7 @@ void restManager::handleRequest(web::http::http_request req)
 		{
 			// metachain and subchain relevant basic commands
 			if (vecPaths[0] == U("metachain") )
-			{
+			{				
 				if( vecPaths[1] == U("height"))
 					processMetachainHeight(req);
 				else
@@ -145,7 +159,7 @@ void restManager::handleError(pplx::task<void>& t)
 @brief get the version number\n
 @detail
 \b Method: GET\n
-\b URI: /version\n
+\b URI: /general/version\n
 @param none
 @return version => version number
 */
@@ -163,7 +177,7 @@ void restManager::processVersion(web::http::http_request *req)
 @brief get the current time\n
 @detail
 \b Method: GET\n
-\b URI: /time\n
+\b URI: /general/time\n
 @param none
 @return time => unix timestamp
 */
@@ -184,7 +198,7 @@ void restManager::processTime(web::http::http_request *req)
 @brief get general information\n
 @detail
 \b Method: GET\n
-\b URI: /info\n
+\b URI: /general/info\n
 @param none
 @return version => version number
 @return time => unix timestamp
@@ -198,6 +212,30 @@ void restManager::processInfo(web::http::http_request *req)
 	web::json::value obj;
 	obj[L"version"] = web::json::value::number(g_cuint32tVersion);
 	obj[L"time"] = web::json::value::number(ts);
+
+	// send response
+	req->reply(web::http::status_codes::OK, obj);
+}
+
+/**
+@brief get general information\n
+@detail
+\b Method: GET\n
+\b URI: /metachain/getAllSubchains\n
+@param none
+@return chains array( chainidentifier (string) => chainname (string) )
+*/
+void restManager::processGetAllSubchains(web::http::http_request *req)
+{
+	// prepare response
+	std::unordered_map< unsigned int, std::string > umapChains;
+	MetaChain::getInstance().getStorageManager()->getSubChainManager()->listSubChains(&umapChains);
+
+	// assemble json response
+	web::json::value obj;
+	obj[U("chains")] = web::json::value::object();
+	for( auto &it: umapChains )
+		obj[U("chains")][utility::conversions::to_string_t(std::to_string(it.first))] = web::json::value::string(utility::conversions::to_string_t(it.second));
 
 	// send response
 	req->reply(web::http::status_codes::OK, obj);
