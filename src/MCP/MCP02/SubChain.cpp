@@ -86,7 +86,7 @@ namespace MCP02
 		strBuffer = strprintf("SC #%u - '%.5s'\n", m_uint16ChainIdentifier + 1, m_caChainName);
 		strBuffer += strprintf("   SubChain Class Name: %.50s\n", m_caSubChainClassName);
 		strBuffer += strprintf("   PoP: '%.5s'\n", m_caPoP);
-		strBuffer += strprintf("   Height: %u\n", m_pDB->get("last_block", (unsigned int)0));
+		strBuffer += strprintf("   Height: %u\n", getHeight());
 #ifdef _DEBUG
 		strBuffer += strprintf("   Instance Address: %p\n", this);
 		strBuffer += strprintf("   DB Address: %p\n", m_pDB);

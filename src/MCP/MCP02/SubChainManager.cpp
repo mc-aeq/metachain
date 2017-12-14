@@ -440,6 +440,16 @@ namespace MCP02
 			return nullptr;
 	}
 
+	MCP02::SubChain* SubChainManager::getSubChain(std::string strChainName)
+	{
+		unsigned short usChainIdentifier = getChainIdentifier(strChainName);
+
+		if (m_mapSubChains.count(usChainIdentifier) == 1)
+			return m_mapSubChains[usChainIdentifier];
+		else
+			return nullptr;
+	}
+
 	void SubChainManager::printSCInfo()
 	{
 		LOG("Number of loaded SubChains: " + std::to_string(m_mapSubChains.size()), "SCM");

@@ -4,8 +4,14 @@
 * contact us before using our code									 *
 **********************************************************************/
 
+// it's important that the MetaChain.h file is included first before the cpprestsdk files due to incompabilities of boost and the U macro from cpprestsdk. If cpprestsdk is included before boost, boost will throw a syntax error C2187 in type_traits.hpp(757)
+#include "../../MetaChain.h"
 #include "restManager.h"
 #include "../../logger.h"
+#include "../../tinyformat.h"
+
+// define a macro for faster string extraction of JSON parameters
+#define getString(x) utility::conversions::to_utf8string(obj.at(U(x)).as_string())
 
 restManager::restManager(CService IP, bool bSSL)
 		: m_bInitialized(false),
@@ -83,29 +89,42 @@ void restManager::handleRequest(web::http::http_request req)
 		return;
 	}
 
-	// handle GET calls
-	if (req.method() == U("GET"))
+	try
 	{
-		// processing the request
-		if (vecPaths[0] == U("version"))
-			processVersion(&req);
-		else if (vecPaths[0] == U("time"))
-			processTime(&req);
-		else if (vecPaths[0] == U("info"))
-			processInfo(&req);
+		// handle GET calls
+		if (req.method() == U("GET"))
+		{
+			// processing the request
+			if (vecPaths[0] == U("version"))
+				processVersion(&req);
+			else if (vecPaths[0] == U("time"))
+				processTime(&req);
+			else if (vecPaths[0] == U("info"))
+				processInfo(&req);
+			else
+				req.reply(web::http::status_codes::NotFound, U("API GET Method not found"));
+		}
+		// handle POST calls
+		else if (req.method() == U("POST"))
+		{
+			// metachain and subchain relevant basic commands
+			if (vecPaths[0] == U("metachain") )
+			{
+				if( vecPaths[1] == U("height"))
+					processMetachainHeight(req);
+				else
+					req.reply(web::http::status_codes::NotFound, U("API POST Method not found"));
+			}
+			else
+				req.reply(web::http::status_codes::NotFound, U("API POST Method not found"));
+		}
 		else
-			req.reply(web::http::status_codes::NotFound, U("API GET Method not found"));
+			req.reply(web::http::status_codes::BadRequest, U("Not supported http_request type"));
 	}
-	// handle POST calls
-	else if (req.method() == U("POST"))
+	catch (web::json::json_exception e)
 	{
-		if (vecPaths[0] == U("test"))
-			processPostExample(req);
-		else
-			req.reply(web::http::status_codes::NotFound, U("API POST Method not found"));
+		req.reply(web::http::status_codes::PreconditionFailed, strprintf("JSON Exception: %s", e.what()) );
 	}
-	else
-		req.reply(web::http::status_codes::BadRequest, U("Not supported http_request type"));
 }
 
 void restManager::handleError(pplx::task<void>& t)
@@ -184,13 +203,31 @@ void restManager::processInfo(web::http::http_request *req)
 	req->reply(web::http::status_codes::OK, obj);
 }
 
-void restManager::processPostExample(web::http::http_request req)
+/**
+@brief get block height of different chains\n
+@detail
+\b Method: POST\n
+\b URI: /metachain/height\n
+@param identifier => string identifier of the targeted chain
+@return height => block number
+*/
+void restManager::processMetachainHeight(web::http::http_request req)
 {
 	req.extract_json().then([=](const web::json::value& obj)
 	{
-		// posting back the same json as received for testing purposes
-		req.reply(web::http::status_codes::OK, obj);
+		MCP02::SubChain *ptr = MetaChain::getInstance().getStorageManager()->getSubChainManager()->getSubChain(getString("identifier"));
+		if (ptr)
+		{
+			// assemble json response
+			web::json::value ret;
+			ret[L"height"] = web::json::value::number(ptr->getHeight());
 
+			// send response
+			req.reply(web::http::status_codes::OK, ret);
+		}
+		else
+			req.reply(web::http::status_codes::BadRequest, U("Unable to find chain with the specified identifier"));
+		
 		// we're done processing, return needs to be here otherwise we create a second reply statement
 		return;
 	}).then([](pplx::task<void> t) { handleError(t); }).wait();

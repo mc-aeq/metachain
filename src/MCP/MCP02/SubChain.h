@@ -98,6 +98,7 @@ namespace MCP02
 			std::string										getChainName() { return m_caChainName; };
 			uint16_t										getChainIdentifier() { return m_uint16ChainIdentifier; };
 			dbEngine*										getDBEngine() { return m_pDB; };
+			unsigned int									getHeight() { return m_pDB->get("last_block", (unsigned int)0); };
 			virtual std::string								toString();
 	};
 }

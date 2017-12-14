@@ -54,7 +54,7 @@ class restManager
 		void													processInfo(web::http::http_request *req);
 
 		// single command handlers _POST
-		void													processPostExample(web::http::http_request req);
+		void													processMetachainHeight(web::http::http_request req);
 
 		// don't allow copy constructors
 																restManager(restManager const& copy);	// not implemented
