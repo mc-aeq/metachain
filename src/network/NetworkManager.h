@@ -27,7 +27,7 @@
 
 class MetaChain;
 
-/*
+/**
 This is the main class that'll hold all information about the chain and handle all it's core parts.
 */
 class NetworkManager

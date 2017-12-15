@@ -651,9 +651,18 @@ void NetworkManager::handleMessage(ipContainer< netPeers> *peers, cCriticalSecti
 	}
 }
 
+/**
+@brief processes network messages and acts accordingly
+
+@detail This function processes a network message for a certain peer and handles accordingly. New network connections are verified in the following sequence:\n
+\image html network_initialization.svg "New Network Connection"\n
+As soon as the configured node.ini number of connections to fullnodes are established, the following sequence to sync the metachain and subchains is triggered:\n
+\image html sync_subchain.svg "SubChain Sync Process"\n
+
+@return true on success, false on error. false implies that the network connection will be terminated.
+*/
 bool NetworkManager::ProcessMessage(netMessage msg, std::list< netPeers >::iterator peer, bool bInbound)
 {
-
 	// security check: when we receive a package that is not NET_VERSION in subject and validConnection() == false, it means we didnt receive the version string and the connection is possibly malicious. 
 	// we skip all messages and destroy the connection for security reasons
 	if (!peer->validConnection() && (msg.getHeader().ui16tSubject != netMessage::SUBJECT::NET_VERSION))

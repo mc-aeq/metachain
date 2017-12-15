@@ -19,20 +19,20 @@
 #include "../network/netMessage.h"
 #include "../network/CService.h"
 
-/*
+/**
 this class is used as template type for ipContainer. Especially to store and retrieve all relevant information about peers
 */
 class netPeers
 {
 private:
-	bool							m_bConnected;				// this value shows whether the socket is connected or not.
-	bool							m_bValidConnection;			// true when the initial communication with the version number worked and checked out
-	bool							m_bToDestroy;				// this marks whether this peer has to be destroyed. this will result in a delete of this instance
-	int64_t							m_timeLastTry;				// timestamp of the last connection try	
-	unsigned short					m_usConnectionTries;		// variable that counts connection tries. over a certain limit we throw this peer away as unusable
-	int								m_iUsageCounter;			// counter that shows if this peer is still used. needed for safe destruction
-	bool							m_bNodeMode;				// flag that indicates if the peer is a Full Node (m_bNodeMode) or a Client (!m_bNodeMode)
-	unsigned short					m_usListeningPort;			// the listening port of the peer - only relevant when peer is FN
+	bool							m_bConnected;				/// this value shows whether the socket is connected or not.
+	bool							m_bValidConnection;			/// true when the initial communication with the version number worked and checked out
+	bool							m_bToDestroy;				/// this marks whether this peer has to be destroyed. this will result in a delete of this instance
+	int64_t							m_timeLastTry;				/// timestamp of the last connection try	
+	unsigned short					m_usConnectionTries;		/// variable that counts connection tries. over a certain limit we throw this peer away as unusable
+	int								m_iUsageCounter;			/// counter that shows if this peer is still used. needed for safe destruction
+	bool							m_bNodeMode;				/// flag that indicates if the peer is a Full Node (m_bNodeMode) or a Client (!m_bNodeMode)
+	unsigned short					m_usListeningPort;			/// the listening port of the peer - only relevant when peer is FN
 
 	// variables used for receiving messages and storing them
 	cCriticalSection				*m_pcsvRecv;
@@ -86,9 +86,9 @@ public:
 	// flagging functions
 	void							markDestroy() { m_bToDestroy = true; };
 	bool							toDestroy() { return m_bToDestroy; };
-	void							mark() { m_iUsageCounter++; };					// mark this peer as currently used by a process.
-	void							unmark() { m_iUsageCounter--; };				// remove the marking or atleast decrement the number of processes using this peer
-	bool							inUse() { return (m_iUsageCounter != 0); };		// check whether a process is using this peer right now
+	void							mark() { m_iUsageCounter++; };					/// mark this peer as currently used by a process.
+	void							unmark() { m_iUsageCounter--; };				/// remove the marking or atleast decrement the number of processes using this peer
+	bool							inUse() { return (m_iUsageCounter != 0); };		/// check whether a process is using this peer right now
 };
 
 #endif
