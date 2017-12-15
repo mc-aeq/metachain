@@ -75,4 +75,4 @@ test/config.ini
 test/cache/*
 
 # doxygen generated output 
-/doxygen/html
+/docs/html
