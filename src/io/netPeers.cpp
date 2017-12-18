@@ -22,7 +22,8 @@ netPeers::netPeers() :
 	m_timeLastTry(0),
 	m_iUsageCounter(0),
 	m_bNodeMode(false),
-	m_usListeningPort(0)
+	m_usListeningPort(0),
+	bPingPong(true)
 {
 	pcshSocket = new cCriticalSection();
 	m_pcsvRecv = new cCriticalSection();
@@ -41,6 +42,7 @@ netPeers::netPeers(SOCKET *listenSocket, cSemaphore *semaphore)
 	m_iUsageCounter = 0;
 	m_bNodeMode = false;
 	m_usListeningPort = 0;
+	bPingPong = true;
 	pcshSocket = new cCriticalSection();
 	m_pcsvRecv = new cCriticalSection();
 	pcsvQueue = new cCriticalSection();
@@ -122,6 +124,7 @@ void netPeers::makeDeepCopy(const netPeers & obj)
 	m_iUsageCounter = obj.m_iUsageCounter;
 	m_queueMessages = obj.m_queueMessages;
 	listSend = obj.listSend;
+	bPingPong = obj.bPingPong;
 
 	((cSemaphoreGrant)(obj.semaphoreGrant)).MoveTo(semaphoreGrant);
 }

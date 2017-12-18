@@ -20,7 +20,7 @@
 class NetworkManager;
 class StorageManager;
 
-/*
+/**
 This is the main class that'll hold all information about the chain and handle all it's core parts.
 It's also a singleton to provide direct access to the relevant metachain parts throughout the project. There can only be one MetaChain!
 */

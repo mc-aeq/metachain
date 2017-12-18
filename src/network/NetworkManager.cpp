@@ -28,11 +28,13 @@ NetworkManager::NetworkManager(MetaChain *mc) :
 	m_pMC(mc),
 	m_iNetConnectTimeout(NET_DEFAULT_CONNECT_TIMEOUT),
 	m_bActiveNetwork(false),
+	m_bSync(false),
 	m_iTimeBetweenConnects(0),
 	m_pSemOutbound(NULL),
 	m_pSemInbound(NULL),
-	m_iMaxOutboundConnections(0),
-	m_iMaxInboundConnections(0)
+	m_usMaxOutboundConnections(0),
+	m_usMinOutboundConnections(0),
+	m_usMaxInboundConnections(0)
 {
 #ifdef _DEBUG
 	LOG_DEBUG("instantiate NetworkManager", "NET");
@@ -52,14 +54,20 @@ bool NetworkManager::initialize(CSimpleIniA* iniFile)
 	m_iTimeBetweenConnects = iniFile->GetLongValue("network", "time_between_unsuccessfull_connects", NET_DEFAULT_TIME_BETWEEN_UNSUCCESSFUL);
 
 	// read the max outbound connections
-	m_iMaxOutboundConnections = iniFile->GetLongValue("network", "max_outgoing_connections", NET_DEFAULT_MAX_OUTGOING_CONNECTIONS);
+	m_usMaxOutboundConnections = iniFile->GetLongValue("network", "max_outgoing_connections", NET_DEFAULT_MAX_OUTGOING_CONNECTIONS);
+
+	// read the min outbound connections before we are active and can make a sync
+	m_usMinOutboundConnections = iniFile->GetLongValue("network", "min_outgoing_connections", NET_DEFAULT_MIN_OUTGOING_CONNECTIONS);
+
+	// we have min and max value of outbound connections. We need a hysteresis that defines when we call our nodes for new nodes if we fall short on connections
+	m_usHysteresisOutboundConnections = m_usMinOutboundConnections + ceil((m_usMaxOutboundConnections - m_usMinOutboundConnections)*0.66);
 
 	// read the max total connections
-	m_iMaxInboundConnections = iniFile->GetLongValue("network", "max_incoming_connections", NET_DEFAULT_MAX_INCOMING_CONNECTIONS);
+	m_usMaxInboundConnections = iniFile->GetLongValue("network", "max_incoming_connections", NET_DEFAULT_MAX_INCOMING_CONNECTIONS);
 
 	// initialize the semaphores
-	m_pSemOutbound = new cSemaphore(m_iMaxOutboundConnections);
-	m_pSemInbound = new cSemaphore(m_iMaxInboundConnections);
+	m_pSemOutbound = new cSemaphore(m_usMaxOutboundConnections);
+	m_pSemInbound = new cSemaphore(m_usMaxInboundConnections);
 
 #ifdef _WIN32
 	// Initialize Windows Sockets
@@ -220,6 +228,9 @@ void NetworkManager::startThreads()
 
 	// Dump network addresses with a lightweight scheduler
 	m_pMC->getScheduler()->scheduleEvery(std::bind(&NetworkManager::DumpData, this), DUMP_INTERVAL * 1000);
+
+	// do maintaining functions every 60 seconds
+	m_pMC->getScheduler()->scheduleEvery(std::bind(&NetworkManager::Maintainer, this), 60000);
 }
 
 void NetworkManager::ThreadSocketHandler()
@@ -897,11 +908,26 @@ bool NetworkManager::ProcessMessage(netMessage msg, std::list< netPeers >::itera
 			break;
 		}
 
+		case netMessage::SUBJECT::NET_NODE_PING:
+		{
+			// we received a PING request, answer with PONG
+			peer->listSend.emplace_back(netMessage::SUBJECT::NET_NODE_PONG, (void*)NULL, 0, true);
+			break;
+		}
+
+		case netMessage::SUBJECT::NET_NODE_PONG:
+		{
+			// we received the answer from our PING command, so we update the flag of this node to be active and dismiss the command
+			peer->bPingPong = true;
+			break;
+		}
 		// the default statement as well as the ban list statements. We don't support sending ban lists, everyone has to build them theirselfs right now
 		case netMessage::SUBJECT::NET_BAN_LIST_GET:
 		case netMessage::SUBJECT::NET_BAN_LIST_SEND:
 		default:
 			return false;
+
+		// todo: add random payload that is defined with MCP05 - pass it over to the instance of the subchain and let it handle itself. important: check for m_bSync == true. If m_bSync != true discard the message since we're not sync yet.
 	}
 
 	return true;
@@ -923,7 +949,6 @@ std::list< netPeers >::iterator NetworkManager::getNextOutNode(bool bConnected, 
 	return m_lstPeerListOut.lstIP.end();
 }
 
-
 void NetworkManager::DumpData()
 {
 	// write the ban list
@@ -934,6 +959,85 @@ void NetworkManager::DumpData()
 	LOCK(m_csPeerListIn);
 	m_lstPeerListOut.writeContents();
 	m_lstPeerListIn.writeContents(true);
+}
+
+/**
+@brief 60 second scheduler that does maintaining
+
+@detail This function gets called from a lightweight scheduler thread every 60 seconds. \n
+This maintaining function consists of four tasks:\n
+-# PingPong: send a PING command to all active connections which need to return PONG until the next Maintainer is called.\n
+This helps us to filter out dead, overloaded, inactive or bad connectivity nodes. If PONG wasn't send since the last PING, the connection gets terminated.
+-# Active connection tracking: if there are too few good active connections, NET_PEER_LIST_SEND gets triggered to all remaining connections to achieve more good connections. This is done up to a certain hysteresis
+-# (one time only) Full Sync: as soon as enough good connections are established, this function triggers a fullsync. This is a one-time only function and deactivates itself after the sync is finished
+-# Cleanup: cleanup functions that remove old, stale or inactive connections
+*/
+void NetworkManager::Maintainer()
+{
+	// Step 1: PingPong
+	// we use m_lstPeerListOut for activity checking of our outgoing connections
+	for (auto &it : m_lstPeerListOut.lstIP)
+	{
+		// if the node was already marked to destroy, we skip it
+		if (it.toDestroy())
+			continue;
+
+		// check if the connection is valid
+		if (it.bPingPong)
+		{
+			// send new PingPong cmd
+			it.listSend.emplace_back(netMessage::SUBJECT::NET_NODE_PING, (void*)NULL, 0, true);
+
+			// reset bPingPong
+			it.bPingPong = false;
+		}
+		else
+		{
+			// when we reached this point the node we pinged didn't respond within a minute. we mark this connection to be destroyed
+			it.markDestroy();
+		}
+	}
+
+	unsigned short usActiveOutgoing = 0;
+	// Step 2: connectivity tracking
+	{
+		// count the number of active outgoing connections of fullnodes
+		for (auto &it : m_lstPeerListOut.lstIP)
+		{
+			if (it.validConnection() && it.isFN())
+				usActiveOutgoing++;
+		}
+
+		if (usActiveOutgoing <= m_usHysteresisOutboundConnections)
+		{
+			// since we have less than our hysteresis requires, we're requesting the node lists from our peers
+			for (auto &it : m_lstPeerListOut.lstIP)
+			{
+				if (it.validConnection())
+					it.listSend.emplace_back(netMessage::SUBJECT::NET_PEER_LIST_SEND, (void*)NULL, 0, true);
+			}
+		}
+	}
+
+	// Step 3: full sync
+	if (!m_bSync && usActiveOutgoing >= m_usMinOutboundConnections)
+	{
+		// todo: implement step 3 full sync
+
+		m_bSync = true;
+	}
+
+	// Step 4: clean up and remove old nodes	
+	{
+		LOCK(m_csPeerListOut);
+		for (std::list< netPeers >::iterator it = m_lstPeerListOut.lstIP.begin(); it != m_lstPeerListOut.lstIP.end(); )
+		{
+			if ((it->toDestroy() || ((it->hSocket == INVALID_SOCKET) && it->isConnected())) && !it->inUse())
+				it = m_lstPeerListOut.lstIP.erase(it);
+			else
+				it++;
+		}
+	}
 }
 
 NetworkManager::~NetworkManager()

@@ -22,8 +22,10 @@ netMessage::netMessage():
 {
 }
 
-// this constructor will most of the time be called by emplace_back. When called by emplace_back bDirectSend must be true to assemble the data correctly
-// when it's not constructed through emplace_back, bDirectSend shall be false and the data needs to be assembled manually
+/**
+this constructor will most of the time be called by emplace_back. When called by emplace_back bDirectSend must be true to assemble the data correctly
+when it's not constructed through emplace_back, bDirectSend shall be false and the data needs to be assembled manually
+*/
 netMessage::netMessage(netMessage::SUBJECT subj, void *ptrData, uint32_t uiDataSize, bool bDirectSend) :
 	m_bComplete(false),
 	m_bHeaderComplete(false),

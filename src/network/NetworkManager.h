@@ -37,9 +37,12 @@ class NetworkManager
 		CService							*m_pServiceLocal;
 		int									m_iNetConnectTimeout;
 		int									m_iTimeBetweenConnects;
-		int									m_iMaxOutboundConnections;
-		int									m_iMaxInboundConnections;
+		unsigned short						m_usMaxOutboundConnections;
+		unsigned short						m_usMinOutboundConnections;
+		unsigned short						m_usHysteresisOutboundConnections;
+		unsigned short						m_usMaxInboundConnections;
 		bool								m_bActiveNetwork;
+		bool								m_bSync;
 
 		// thread interrupts and message processing variables
 		CThreadInterrupt					m_interruptNet;
@@ -62,12 +65,15 @@ class NetworkManager
 		void								ThreadOpenConnections();
 		void								ThreadMessageHandler();
 
-		// message handling
+		/// message handling
 		inline void							handleMessage(ipContainer< netPeers> *peers, cCriticalSection *cs, bool bInbound);
 		bool								ProcessMessage(netMessage msg, std::list< netPeers >::iterator peer, bool bInbound);
 
-		// functions to update the peers and ban lists
+		/// functions to update the peers and ban lists
 		void								DumpData();
+
+		/// function that does maintaining tasks every 60 seconds
+		void								Maintainer();
 
 		// functions and variables for our peers list and their management
 		ipContainer< netPeers >				m_lstPeerListOut;
@@ -79,7 +85,7 @@ class NetworkManager
 		std::list< netPeers >::iterator		getNextOutNode(bool bConnected = true, bool bCheckTimeDelta = true);
 		inline void							handlePeers(ipContainer< netPeers> *peers, cCriticalSection *cs);
 
-		// functions and variables for our banned list and their management
+		/// functions and variables for our banned list and their management
 		ipContainer< CNetAddr >				m_lstBanList;
 
 		// destructor functions

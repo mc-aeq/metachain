@@ -16,8 +16,10 @@
 #include "../cDataStream.h"
 #include "../crypto/cHash256.h"
 
-// the struct of the header
-// only needed in this class, thus no single file
+/**
+the struct of the header
+only needed in this class, thus no single file
+*/
 struct sHeader {
 	uint32_t		ui32tPayloadSize;
 	uint32_t		ui32tChainIdentifier;
@@ -25,7 +27,7 @@ struct sHeader {
 	uint8_t			ui8tChecksum[CHECKSUM_SIZE];
 };
 
-// our communication message which is delivered via network
+/// our communication message which is delivered via network
 class netMessage
 {
 	private:
@@ -44,37 +46,62 @@ class netMessage
 
 	public:
 		// these are the communication definers we use as ui16tSubject
-		/*
-		* we use a hex coding scheme to categorize our actions for easier splitting into groups.
-		* the following binary scheme will be used globally and updated every single time we add new categories and subjects
-		* the first bit in the category is reserved for special communications within the SC modules. To use special communications set the first bit to 1
-		*
-		* 0 0 0 0		0 0 0 0		0 0 0 0		0 0 0 0
-		*	8bit CATEGORY		 |	8bit SUBJECT
-		*
-		* LIST:
-		* 0 0 0 0		0 0 0 1		->		GENERAL NET COMMUNICATION
-		*							0 0 0 0		0 0 0 1		->		0x0101		VERSION NUMBER
-		*							0 0 0 0		0 0 1 0		->		0x0102		NEWER VERSION AVAILABLE
-		*							0 0 0 0		0 0 1 1		->		0x0103		NODE MODE
-		*							0 0 0 0		0 1 0 0		->		0x0104		LISTENING PORT GET (for FN)
-		*							0 0 0 0		0 1 0 1		->		0x0105		LISTENING PORT SEND (for FN)
-		*
-		* 0 0 0 0		0 0 1 0		->		PEER AND BAN LIST COMMUNICATION
-		*							0 0 0 0		0 0 0 1		->		0x0201		GET PEER LIST
-		*							0 0 0 0		0 0 1 0		->		0x0202		SEND PEER LIST
-		*							0 0 0 0		0 0 1 1		->		0x0203		GET BAN LIST
-		*							0 0 0 0		0 1 0 0		->		0x0204		SEND BAN LIST
-		*
-		* 0 0 0 0		0 0 1 1		->		TESTNET COMMUNICATION
-		*							0 0 0 0		0 0 0 1		->		0x0301		TESTNET FLAG IDENTIFIER
-		*/
+/**
+we use a hex coding scheme to categorize our actions for easier splitting into groups.\n
+the following binary scheme will be used globally and updated every single time we add new categories and subjects\n
+the first bit in the category is reserved for special communications within the SC modules. To use special communications set the first bit to 1\n
+
+<table>
+<caption id="ui16tSubject">Network communication Bits</caption>
+<tr>
+<th colspan="2">8bit CATEGORY</th>
+<th colspan="2">8bit SUBJECT</th>
+<th>Hex Value</th>
+<th>Name</th>
+</tr>
+<tr>
+<th>0 0 0 0</th>
+<th>0 0 0 1</th>
+<th>&nbsp;</th>
+<th>&nbsp;</th>
+<th colspan="2">GENERAL NET COMMUNICATION</th>
+</tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>0 0 0 0</td><td>0 0 0 1</td><td>0x0101</td><td>VERSION NUMBER</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>0 0 0 0</td><td>0 0 1 0</td><td>0x0102</td><td>NEWER VERSION AVAILABLE</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>0 0 0 0</td><td>0 0 1 1</td><td>0x0103</td><td>NODE MODE</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>0 0 0 0</td><td>0 1 0 0</td><td>0x0104</td><td>LISTENING PORT GET (for FN)</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>0 0 0 0</td><td>0 1 0 1</td><td>0x0105</td><td>LISTENING PORT SEND (for FN)</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>0 0 0 0</td><td>1 0 0 0</td><td>0x0108</td><td>PING</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>0 0 0 0</td><td>1 0 0 0</td><td>0x0109</td><td>PONG</td></tr>
+<tr>
+<th>0 0 0 0</th>
+<th>0 0 1 0</th>
+<th>&nbsp;</th>
+<th>&nbsp;</th>
+<th colspan="2">PEER AND BAN LIST COMMUNICATION</th>
+</tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>0 0 0 0</td><td>0 0 0 1</td><td>0x0201</td><td>GET PEER LIST</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>0 0 0 0</td><td>0 0 1 0</td><td>0x0202</td><td>SEND PEER LIST</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>0 0 0 0</td><td>0 0 1 1</td><td>0x0203</td><td>GET BAN LIST</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>0 0 0 0</td><td>0 1 0 0</td><td>0x0204</td><td>SEND BAN LIST</td></tr>
+<tr>
+<th>0 0 0 0</th>
+<th>0 0 1 1</th>
+<th>&nbsp;</th>
+<th>&nbsp;</th>
+<th colspan="2">TESTNET COMMUNICATION</th>
+</tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>0 0 0 0</td><td>0 0 0 1</td><td>0x0301</td><td>TESTNET FLAG IDENTIFIER</td></tr>
+</table>
+*/
 		enum SUBJECT {
 			NET_VERSION						= 0x0101,
 			NET_VERSION_NEWER				= 0x0102,
 			NET_NODEMODE					= 0x0103,
 			NET_NODE_LISTENING_PORT_GET		= 0x0104,
 			NET_NODE_LISTENING_PORT_SEND	= 0x0105,
+			NET_NODE_PING					= 0x0108,
+			NET_NODE_PONG					= 0x0109,
 
 			NET_PEER_LIST_GET				= 0x0201,
 			NET_PEER_LIST_SEND				= 0x0202,
