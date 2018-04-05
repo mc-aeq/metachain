@@ -95,7 +95,7 @@ tmp_dir = tmp 								; relative or absolute path to a temporary directory used 
 ; the pop_load defines what proof of process modules will be loaded and thus provided service for (using * as wildcard, comma seperated value, PoMC must always be loaded!)
 pop_load = PoMC, PoS, PoT, *
 
-; subchain_* defines what subchains are allowed in this node. use * as wildcard, comma seperated values, MC must be allowed, TCT should be allowed, case sensitive!
+; subchain_* defines what subchains are allowed in this node. use * as wildcard, comma seperated values, MC must be allowed, AEQ should be allowed, case sensitive!
 ; all entries in _whitelist are allowed, all entries in _blacklist are forbidden
 ; use _whitelist * to allow all subchains and new subchains to be worked with.
 ; use _whitelist *, _blacklist <name> to allow all except <name>
@@ -123,7 +123,7 @@ connection_type = socket				; "socket" for socket connection, "tcp" for [host]:[
 socket = /var/lib/mysql/mysql.sock
 host = localhost
 port = 3306
-username = tct
+username = mc
 password = supersecretpw
 database = metachain
 ```
