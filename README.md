@@ -1,18 +1,17 @@
-# TrustChainTechnologies - MetaChain
+# MetaChain
 
-[![TrustChainTechnologies](https://www.trustchaintechnologies.io/logo.png)](https://www.trustchaintechnologies.io/)
+<img align="left" width="100" height="100" src="https://aequator.io/AEC_Logo_Final_RGB.svg">
 
-These are the MetaChain sources of the TCT blockchain technology. It features block signing, PoT with PtA and an extensive MetaChain API.
+These are the MetaChain sources of a new blockchain technology. It features block signing, PoT with PtA and a complete makeover of the single blockchain principle.
 
 ### Important links
- - The [roadmap] can be found in our forums and will be updated frequently.
- - More info in the [whitepaper].
+- Under heavy developement, please don't fork in this current stage. Every help is appreciated!
  - Technical info in the [techpaper].
 
 ### Development
 
 You want to contribute? Have the guts to tackle crypto development?
-Perfect, then register in our [forum] and get in touch with us!
+Perfect, then get in touch with us!
 
 # Installation
 
@@ -41,7 +40,7 @@ We provide forks of all the needed dependencies in our github organization accou
 g++ (Version > 6.2), openssl-devel, openssl libs, boost-devel, boost-libs, pkg-config, automake and autoconf as well as regular dev tools are required!
 Clone the github repository:
 ```sh
-$ git clone https://github.com/TrustChainTechnologies/metachain.git
+$ git clone https://github.com/mc-aeq/metachain.git
 $ cd metachain
 $ ./configure ## --enable-debug for debug-build
 $ ./make
@@ -89,7 +88,7 @@ enable_ssl = false							; enable SSL encryption for api
 ticks_until_update_triggered = 10           ; how many nodes need to have a newer version to trigger update
 do_autoupdate = true                        ; autoupdate? if false, node exits automatically
 enable = true								; enable or disable in general
-cdn_url	= https://cdn.tct.io/				; when enabled, where to download binary packages from
+cdn_url	= https://cdn.aequator.io/				; when enabled, where to download binary packages from
 tmp_dir = tmp 								; relative or absolute path to a temporary directory used for extraction
 
 [subchains]
@@ -102,7 +101,7 @@ pop_load = PoMC, PoS, PoT, *
 ; use _whitelist *, _blacklist <name> to allow all except <name>
 ; use _whitelist <name>, _blacklist "" to allow only <name>
 ; _blacklist overrides _whitelist! -> _blacklist_ * means no subchains will work.
-subchain_whitelist = MC, TCT, *
+subchain_whitelist = MC, AEQ, *
 subchain_blacklist = 
 
 ; data configuration
@@ -126,7 +125,7 @@ host = localhost
 port = 3306
 username = tct
 password = supersecretpw
-database = trustchain
+database = metachain
 ```
 
 # External resources used in the source code
@@ -139,15 +138,10 @@ License
 GPLv3
 
 
-**(c) the TCT-Devs**
+**(c) the MC-Devs**
 
 [//]: # (These are reference links used in the body of this note and get stripped out when the markdown processor does its job. There is no need to format nicely because it shouldn't be seen. Thanks SO - http://stackoverflow.com/questions/4823468/store-comments-in-markdown-syntax)
 
-
-   [roadmap]: <https://forum.trustchaintechnologies.io/showthread.php?tid=13&pid=21#pid21>
-   [whitepaper]: <https://backoffice.trustchaintechnologies.io/downloads/whitepaper.pdf>
-   [techpaper]: <https://backoffice.trustchaintechnologies.io/downloads/techpaper.pdf>
-   [forum]: <https://forum.trustchaintechnologies.io>
    [brofield/simpleini]: <https://github.com/brofield/simpleini>
    [bitcoin/bitcoin]: <https://github.com/bitcoin/bitcoin>
    [boost]: <http://www.boost.org/>
